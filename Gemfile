@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.1'
+ruby '3.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '>= 6.x'
@@ -35,7 +35,7 @@ gem 'ancestry'
 gem 'puma', '>= 3.11'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker'
+gem 'webpacker', '6.0.0.beta.6'
 
 # Use Redis adapter to run Action Cable in production
 gem 'delayed_job_active_record'
@@ -110,6 +110,7 @@ group :development do
   gem 'web-console', '>= 3.3.0', require: false
   # Code linting
   gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
   gem 'rubocop-performance', require: false
   gem 'bullet'
   # Security
