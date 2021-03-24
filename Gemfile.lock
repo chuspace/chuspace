@@ -5,6 +5,15 @@ GIT
     babosa (1.0.2)
 
 GIT
+  remote: https://github.com/linchus/omniauth-gitlab.git
+  revision: 4d5bc7b350579631a2988c6c7ed136de96697ddf
+  branch: master
+  specs:
+    omniauth-gitlab (3.0.0)
+      omniauth (~> 2.0)
+      omniauth-oauth2 (~> 1.7.1)
+
+GIT
   remote: https://github.com/omniauth/omniauth-github.git
   revision: 1f772263c6cc00e84dabbc02beb755ba4c95f7d1
   branch: master
@@ -246,6 +255,9 @@ GEM
     omniauth-oauth2 (1.7.1)
       oauth2 (~> 1.4)
       omniauth (>= 1.9, < 3)
+    omniauth-rails_csrf_protection (1.0.0)
+      actionpack (>= 4.2)
+      omniauth (~> 2.0)
     parallel (1.20.1)
     parser (3.0.0.0)
       ast (~> 2.4.1)
@@ -458,6 +470,8 @@ DEPENDENCIES
   octicons_helper
   octokit
   omniauth-github!
+  omniauth-gitlab!
+  omniauth-rails_csrf_protection
   pg (>= 1.x)
   pry-rails
   puma (>= 3.11)

@@ -29,7 +29,7 @@ module Authentication
 
   def authenticate
     authenticated_user = User.find_by(id: cookies.encrypted[:user_id])
-    logout if authenticated_user.blank?
+    signout if authenticated_user.blank?
     Current.user = authenticated_user
   end
 

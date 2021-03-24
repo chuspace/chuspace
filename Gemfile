@@ -60,7 +60,8 @@ gem 'view_component'
 
 # Omninauth
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
-
+gem 'omniauth-gitlab', github: 'linchus/omniauth-gitlab', branch: 'master'
+gem 'omniauth-rails_csrf_protection'
 # Security
 gem 'rack-attack'
 

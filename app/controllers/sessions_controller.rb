@@ -5,12 +5,18 @@ class SessionsController < ApplicationController
     puts auth_hash.inspect
 
     @user =
-      User.find_or_create_by(provider: auth_hash['provider'], uid: auth_hash['uid']).tap do |user|
-        user.provider_token = auth_hash['credentials']['token']
-        user.provider_secret = auth_hash['credentials']['secret']
+      User.find_or_initialize_by(provider: auth_hash['provider'], uid: auth_hash['uid']).tap do |user|
+        user.token = auth_hash['credentials']['token']
+        user.secret = auth_hash['credentials']['secret']
+        user.name = auth_hash['info']['name']
+        user.username = auth_hash['info']['nickname']
       end
 
-    login(@user)
+    @user.set_tracked_fields(request)
+
+    if @user.save
+      signin(@user)
+    end
 
     redirect_to root_path
   end
