@@ -6,6 +6,7 @@ module Authentication
   included do
     COOKIE_DOMAINS = %w[chuspace.com]
     before_action :authenticate
+    helper_method :signed_in?
   end
 
   def signin(user)
