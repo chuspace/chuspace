@@ -2,8 +2,6 @@
 
 class SessionsController < ApplicationController
   def create
-    puts auth_hash.inspect
-
     @user =
       User.find_or_initialize_by(provider: auth_hash['provider'], uid: auth_hash['uid']).tap do |user|
         user.token = auth_hash['credentials']['token']
@@ -18,6 +16,11 @@ class SessionsController < ApplicationController
       signin(@user)
     end
 
+    redirect_to root_path
+  end
+
+  def destroy
+    signout
     redirect_to root_path
   end
 

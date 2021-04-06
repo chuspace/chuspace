@@ -2,6 +2,7 @@
 
 <% if signed_in? %>
   <%= Current.user&.name %>
+  <%= button_to 'Logout', logout_path(Current.user), method: :delete %>
 <% else %>
   <%= button_to 'Login with github', '/auth/github' %>
   <%= button_to 'Login with gitlab', '/auth/gitlab' %>
