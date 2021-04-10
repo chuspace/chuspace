@@ -82,7 +82,9 @@ gem 'ahoy_matey'
 gem 'maxminddb'
 
 # Error tracking
-gem 'sentry-raven'
+gem 'sentry-ruby'
+gem "sentry-rails"
+gem "sentry-delayed_job"
 
 # Cron jobs
 gem 'whenever', require: false
