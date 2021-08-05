@@ -1,0 +1,6 @@
+export { default as isNodeActive } from './is-node-active'
+export { default as getMarkAttrs } from './get-mark-attrs'
+export { default as getMarkRange } from './get-mark-range'
+export { default as isMarkActive } from './is-mark-active'
+export { default as findParentNode } from './find-parent-node'
+export { default as nodeEqualsType } from './node-equals-type'

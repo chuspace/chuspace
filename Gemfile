@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.0'
+ruby '3.0.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '>= 6.x'
@@ -25,6 +25,9 @@ gem 'ruby-vips'
 gem 'shrine'
 gem 'shrine-memory', require: false
 
+# Form
+gem 'simple_form'
+
 # SES
 gem 'aws-ses', require: 'aws/ses'
 
@@ -35,7 +38,7 @@ gem 'ancestry'
 gem 'puma', '>= 3.11'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '6.0.0.beta.6'
+gem 'webpacker', '6.0.0.beta.7'
 
 # Use Redis adapter to run Action Cable in production
 gem 'delayed_job_active_record'
@@ -50,7 +53,7 @@ gem 'aasm'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 # Turblinks
-gem 'turbolinks'
+gem 'turbo-rails'
 
 # Instrumentation
 gem 'yabeda'
@@ -60,7 +63,6 @@ gem 'view_component'
 
 # Omninauth
 gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
-gem 'omniauth-gitlab', github: 'linchus/omniauth-gitlab', branch: 'master'
 gem 'omniauth-rails_csrf_protection'
 # Security
 gem 'rack-attack'
@@ -72,7 +74,8 @@ gem 'commonmarker'
 gem 'babosa', github: 'empathyby/babosa'
 
 # Github data
-gem 'octokit', require: false
+gem 'faraday-http-cache'
+gem 'octokit'
 
 #  SEO
 gem 'meta-tags'
@@ -83,8 +86,8 @@ gem 'maxminddb'
 
 # Error tracking
 gem 'sentry-ruby'
-gem "sentry-rails"
-gem "sentry-delayed_job"
+gem 'sentry-rails'
+gem 'sentry-delayed_job'
 
 # Cron jobs
 gem 'whenever', require: false
@@ -101,6 +104,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec_junit_formatter'
+  gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'coveralls', require: false

@@ -6,11 +6,17 @@ class CreateUsers < ActiveRecord::Migration[6.0]
 
     create_table :users do |t|
       t.string :name
-      t.citext :username
+      t.citext :username, index: { unique: true }
+      t.string :email, index: { unique: true }
       t.string :uid, index: true
       t.string :provider, index: true
       t.text :token
-      t.text :secret
+
+      # Git repository settings
+      t.string :git_repository_fullname, index: { unique: true }
+      t.string :git_repository_posts_folder
+      t.string :git_repository_drafts_folder
+      t.string :git_repository_assets_folder
 
       t.index %i[uid provider], unique: true
 

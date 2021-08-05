@@ -1,0 +1,30 @@
+<div class='mt-8'>
+  <auto-refresh-form>
+    <%= turbo_frame_tag(blog) do %>
+      <%= simple_form_for(blog, html: { data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" } }) do |form| %>
+        <% if type == :connect %>
+          <auto-complete src="<%= github_repos_path %>" for="repos-popup" class='relative block' data-action='auto-complete-change:auto-refresh-form#refresh'>
+            <%= form.input :full_repo_name, autofocus: true, input_html: { 'data-action': 'input:auto-refresh-form#reset' }, wrapper_html: { class: 'relative' } %>
+            <ul id="repos-popup" class='absolute z-10 bg-white border border-gray-100 w-full'></ul>
+          </auto-complete>
+        <% elsif type == :new %>
+          <%= form.input :name, required: true %>
+          <%= form.input :description, as: :text, required: true %>
+          <%= form.input :private, as: :boolean, input_html: { checked: false }, checked_value: true, unchecked_value: false %>
+          <%= form.input :owner, as: :hidden, input_html: { value: Current.user.username } %>
+        <% end %>
+
+        <div data-target='auto-refresh-form.loader'>
+          <% if repo_folders.any? %>
+            <%= form.input :posts_folder, as: :select, collection: repo_folders %>
+            <%= form.input :drafts_folder, as: :select, collection: repo_folders %>
+            <%= form.input :assets_folder, as: :select, collection: repo_folders %>
+          <% end %>
+        </div>
+
+        <%= form.input :type, as: :hidden, input_html: { value: type } %>
+        <%= form.button :submit, 'Start writing', class: 'mt-12' %>
+      <% end %>
+    <% end %>
+  </auto-refresh-form>
+</div>

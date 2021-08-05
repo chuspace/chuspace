@@ -1,0 +1,68 @@
+.link
+  @apply underline
+
+  &.link--default
+    @apply text-gray-800
+
+  &.link--default:hover
+    @apply text-gray-400
+
+  &.link--active
+    @apply text-blue-darker
+
+  &.link--active:hover
+    @apply text-blue
+
+  &.link--danger
+    @apply text-red
+
+  &.link--danger:hover
+    @apply text-red-light
+
+  &.link--disabled
+    @apply text-gray-200 pointer-events-none cursor-not-allowed
+
+  &[data-method="delete"]
+    @apply text-red
+    &:hover
+      @apply text-red-lighter
+
+.button
+  @apply py-2 px-3 inline-block text-sm rounded no-underline text-center border bg-white cursor-pointer font-medium
+
+  &.button--default
+    @apply border-black text-black
+
+    &:hover
+      @apply border-gray-600 text-gray-600
+
+    &[aria-selected="true"]
+      @apply bg-black text-white
+
+      &:hover
+        @apply bg-gray-800
+
+  &.button--slim
+    @apply py-1
+
+  &.button--active
+    @apply border-blue-darker text-white text-blue-darker
+
+  &.button--active:hover
+    @apply border-blue text-blue
+
+  &.button--fill
+    @apply text-white bg-black shadow-md border-black
+
+  &.button--fill:hover
+    @apply bg-gray-800
+
+  &.button--danger
+    @apply border-red-light text-red-dark bg-red-lightest
+
+  &.button--danger:hover
+    @apply border-red-lighter text-red-light
+
+  &.button--disabled
+    @apply pointer-events-none cursor-not-allowed
+    opacity: 0.8

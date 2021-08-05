@@ -1,0 +1,88 @@
+.form_field__container
+  @apply mt-4
+
+  .input__label
+    @apply block text-sm font-bold
+    transition: color 0.5s ease
+
+    abbr
+      text-decoration: none
+      color: theme('colors.red')
+
+  .input__container
+    @apply w-full relative
+
+    &::after
+      @apply border-b border-blue left-0 right-0 bottom-0 absolute pointer-events-none w-full block
+      content: ''
+
+    &:focus, &:hover
+      &::after
+        @apply border-b-2
+
+    &--borderless
+      &::after
+        @apply border-none
+
+    &__label--floating
+      &::before
+        @apply absolute hidden text-sm border-r pr-2 italic pointer-events-none text-gray-400
+        content: attr(data-label)
+        top: calc(100% / 2 - 0.4rem)
+        right: 110%
+
+      @screen sm
+        &::before
+          @apply block
+
+    &--inline
+      @apply mt-6 flex justify-between
+      &::after
+        content: unset
+
+  &.file
+    .input__container::after
+      @apply border-none
+
+.input
+  @apply py-2 bg-white w-full text-base
+  transition: border-color 0.5s ease
+  box-sizing: border-box
+
+  &:focus, &:hover
+    @apply outline-none shadow-none
+
+  &--slim
+    @apply text-sm shadow-md rounded
+    padding: 0.2rem 0.5rem
+
+  &--inline
+    @apply inline-block w-auto mr-2
+
+.input__error,
+.input__hint
+  @apply mt-2 block text-xs text-gray-default
+  transition: color 0.5s ease
+
+.input__hint
+  @apply block
+
+.input__error
+  @apply hidden
+
+.form_field__container--invalid
+  .input__label
+    @apply text-red
+
+  .input__container
+    &::after
+      @apply border-red border-b-2
+
+  .input__hint
+    @apply hidden
+
+  .input__error
+    @apply text-red block
+
+  input-check
+    @apply block w-full

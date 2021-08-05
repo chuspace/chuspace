@@ -1,0 +1,50 @@
+
+code-editor
+  @apply whitespace-nowrap relative
+  width: 100%
+
+  .code-editor-container
+    @apply rounded shadow-lg pb-4
+
+    .CodeMirror
+      @apply rounded-b max-w-full pt-4 font-normal overflow-y-auto
+      height: auto
+
+      .CodeMirror-scroll
+        max-height: 600px
+
+  .code-editor-toolbar
+    @apply flex items-center p-4 w-full relative rounded-t text-base bg-white text-sm bg-gray-100
+    height: 40px
+
+  .code-editor-toolbar-heading
+    @apply font-bold
+    flex: 1
+
+  .code-editor-toolbar-menu
+    @apply flex items-center justify-end flex-1
+
+  .code-editor-language-switcher-container
+    @apply relative cursor-pointer select-none
+    width: 150px
+
+  .code-editor-language-switcher
+    @apply mr-4 bg-white -m-2 shadow-md rounded list-none absolute z-50 ml-0
+    max-height: 250px
+    top: 40px
+    left: 9px
+    width: 150px
+
+    li
+      @apply px-2 py-1 border-b border-gray-200
+
+      &:hover, &.selected
+        @apply bg-gray-100
+
+      &:last-child
+        @apply border-b-0
+
+  @screen md
+    &
+      width: 750px
+      left: calc((100% - 750px) / 2)

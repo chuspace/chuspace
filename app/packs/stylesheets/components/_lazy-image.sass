@@ -1,0 +1,27 @@
+lazy-image
+	@apply whitespace-nowrap relative block shadow-md rounded overflow-hidden
+
+	&[editable="true"]
+		&.selected, &:hover
+			box-shadow: 0 0 0 3px theme('colors.blue')
+
+	.image__container
+		@apply float-none relative
+
+		figcaption
+			@apply text-gray-default italic py-2 italic text-center text-sm
+
+		.close
+			z-index: 1
+
+		img
+			width: 1240px
+
+			&.blur-up
+				-webkit-filter: blur(5px)
+				filter: blur(5px)
+				transition: filter 400ms, -webkit-filter 400ms
+
+			&.blur-up.lazyloaded
+				-webkit-filter: blur(0)
+				filter: blur(0)

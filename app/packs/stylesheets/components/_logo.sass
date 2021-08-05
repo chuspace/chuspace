@@ -1,0 +1,18 @@
+.logo
+  @apply text-3xl font-bold inline-block text-black
+
+  &__badge
+    &:after
+      content: 'chu'
+
+    &
+      @screen sm
+        &:after
+          content: 'chuspace'
+
+  &__full
+    &:after
+      content: 'chuspace'
+
+  &__version
+    @apply text-gray-default text-xs

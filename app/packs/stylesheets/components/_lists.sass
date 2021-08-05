@@ -1,0 +1,28 @@
+.list
+  @apply p-0 m-0
+
+  .list__item
+    @apply py-6 block
+
+  .list__item--flex
+    @apply flex justify-between items-center flex-wrap
+
+  .list__item--bordered
+    @apply border-b border-gray-200
+
+    &:last-child
+      @apply border-b-0
+
+.horizontal__list
+    li
+      list-style: none
+      display: inline
+
+      &:after
+        content: " \00b7"
+
+      &:last-child:after
+        content: none
+
+.series__list
+  @apply relative mb-8

@@ -5,8 +5,8 @@ class SessionsController < ApplicationController
     @user =
       User.find_or_initialize_by(provider: auth_hash['provider'], uid: auth_hash['uid']).tap do |user|
         user.token = auth_hash['credentials']['token']
-        user.secret = auth_hash['credentials']['secret']
         user.name = auth_hash['info']['name']
+        user.email = auth_hash['info']['email']
         user.username = auth_hash['info']['nickname']
       end
 

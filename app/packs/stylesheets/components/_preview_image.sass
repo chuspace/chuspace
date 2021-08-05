@@ -1,0 +1,24 @@
+.preview__image__container--list
+  width: 150px
+
+  .preview__image
+    @apply rounded cursor-pointer w-full h-full block bg-cover
+    background-origin: border-box
+    background-position: 50% 50%
+
+
+.preview__image__uploader
+  @apply bg-gray-100 block rounded max-w-full
+  width: 150px
+  height: 150px
+
+  .preview__image__uploader__hint
+    @apply absolute
+    width: inherit
+    top: 260px
+
+    &__blank
+      @apply relative flex items-center text-center px-2
+      width: inherit
+      height: inherit
+      top: unset

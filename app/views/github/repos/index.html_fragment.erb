@@ -1,0 +1,17 @@
+<% if params[:q].present? %>
+  <% if @repositories.any? %>
+    <% @repositories.each do |repo| %>
+      <li
+        role="option"
+        class='border-b border-gray-100 py-2 px-4 cursor-pointer last:border-b-0'
+        data-autocomplete-value='<%= repo.full_name.squish %>'
+      >
+        <%= repo.full_name.squish %>
+      </li>
+    <% end %>
+  <% else %>
+    <div class='text-center py-12'>
+      <h2 class='text-gray-600'>No repos found matching <%= tag.strong params[:q] %></h2>
+    </div>
+  <% end %>
+<% end %>

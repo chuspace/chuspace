@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Chuspace</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<html lang='en' class='h-full'>
+  <%= render 'layouts/head' %>
+  <body class="flex flex-col h-full">
+    <%= render 'layouts/header' %>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
-  </head>
+    <section class="container flex-1">
+      <%= yield %>
+    </section>
 
-  <body>
-    <%= yield %>
+    <div class='container mx-auto flex-shrink-0'>
+      <%= render 'layouts/footer' %>
+    </div>
   </body>
 </html>

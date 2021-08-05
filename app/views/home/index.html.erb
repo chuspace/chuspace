@@ -1,9 +1,4 @@
-<h1>Welcome to Chuspace</h1>
-
-<% if signed_in? %>
-  <%= Current.user&.name %>
-  <%= button_to 'Logout', logout_path(Current.user), method: :delete %>
-<% else %>
-  <%= button_to 'Login with github', '/auth/github' %>
-  <%= button_to 'Login with gitlab', '/auth/gitlab' %>
-<% end %>
+<div class='text-center mt-32'>
+  <h1 class='text-4xl'>Welcome to Chuspace</h1>
+  <%= link_to 'Start writing', new_blog_path, class: 'button button--fill mt-4 inline-block' %>
+</div>

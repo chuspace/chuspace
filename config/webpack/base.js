@@ -1,3 +1,32 @@
-const { webpackConfig } = require('@rails/webpacker')
+const { webpackConfig, mergeWithRules } = require('@rails/webpacker')
+const sassRule = require('@rails/webpacker/package/rules/sass')
+const globImporter = require('node-sass-glob-importer')
 
-module.exports = webpackConfig
+sassRule.use[3] = Object.assign({}, sassRule.use[3], {
+  options: {
+    sassOptions: {
+      importer: globImporter()
+    }
+  }
+})
+
+const appWebpackConfig = {
+  name: 'friday',
+  stats: 'minimal',
+  devtool: 'none',
+  performance: {
+    hints: false
+  },
+  module: {
+    rules: [sassRule]
+  }
+}
+
+module.exports = mergeWithRules({
+  module: {
+    rules: {
+      test: 'match',
+      use: 'replace'
+    }
+  }
+})(appWebpackConfig, webpackConfig)
