@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 
-@import '../stylesheets/*.sass';
-@import '../../components/**/*.sass';
+@import '../stylesheets/all.sass';
 
 @tailwind utilities;
