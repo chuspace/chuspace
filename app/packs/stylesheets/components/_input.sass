@@ -2,7 +2,7 @@
   @apply mt-4
 
   .input__label
-    @apply block text-sm font-bold
+    @apply block text-sm font-bold mb-2
     transition: color 0.5s ease
 
     abbr
@@ -11,14 +11,6 @@
 
   .input__container
     @apply w-full relative
-
-    &::after
-      @apply border-b border-blue left-0 right-0 bottom-0 absolute pointer-events-none w-full block
-      content: ''
-
-    &:focus, &:hover
-      &::after
-        @apply border-b-2
 
     &--borderless
       &::after
@@ -45,7 +37,7 @@
       @apply border-none
 
 .input
-  @apply py-2 bg-white w-full text-base
+  @apply py-2 px-4 bg-white w-full text-base border border-black
   transition: border-color 0.5s ease
   box-sizing: border-box
 
