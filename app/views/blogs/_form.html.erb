@@ -4,7 +4,7 @@
       <%= simple_form_for(blog, html: { data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" } }) do |form| %>
         <% if type == :connect %>
           <auto-complete src="<%= github_repos_path %>" for="repos-popup" class='relative block' data-action='auto-complete-change:auto-refresh-form#refresh'>
-            <%= form.input :full_repo_name, autofocus: true, input_html: { 'data-action': 'input:auto-refresh-form#reset' }, wrapper_html: { class: 'relative' } %>
+            <%= form.input :git_repo_name, autofocus: true, input_html: { 'data-action': 'input:auto-refresh-form#reset' }, wrapper_html: { class: 'relative' } %>
             <ul id="repos-popup" class='absolute z-10 bg-white border border-gray-100 w-full'></ul>
           </auto-complete>
         <% elsif type == :new %>

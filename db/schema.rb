@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_13_123213) do
+ActiveRecord::Schema.define(version: 2021_07_11_062216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -86,17 +86,8 @@ ActiveRecord::Schema.define(version: 2021_07_13_123213) do
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
   end
 
-  create_table "blogs", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "full_repo_name"
-    t.string "posts_folder"
-    t.string "drafts_folder"
-    t.string "assets_folder"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["full_repo_name"], name: "index_blogs_on_full_repo_name", unique: true
-    t.index ["user_id"], name: "index_blogs_on_user_id"
-  end
+# Could not dump table "blogs" because of following StandardError
+#   Unknown type 'git_provider_enum_type' for column 'git_provider'
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
@@ -109,33 +100,27 @@ ActiveRecord::Schema.define(version: 2021_07_13_123213) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
+# Could not dump table "identities" because of following StandardError
+#   Unknown type 'identity_provider_enum_type' for column 'provider'
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.citext "username"
-    t.string "email"
-    t.string "uid"
-    t.string "provider"
-    t.text "token"
-    t.string "git_repository_fullname"
-    t.string "git_repository_posts_folder"
-    t.string "git_repository_drafts_folder"
-    t.string "git_repository_assets_folder"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", null: false
-    t.datetime "last_sign_in_at", null: false
-    t.inet "current_sign_in_ip", null: false
-    t.inet "last_sign_in_ip", null: false
+    t.string "email_ciphertext", null: false
+    t.string "email_bidx", null: false
+    t.integer "sign_in_count", default: 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["git_repository_fullname"], name: "index_users_on_git_repository_fullname", unique: true
-    t.index ["provider"], name: "index_users_on_provider"
-    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
-    t.index ["uid"], name: "index_users_on_uid"
+    t.index ["email_bidx"], name: "index_users_on_email_bidx", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "blogs", "users"
+  add_foreign_key "identities", "users"
 end

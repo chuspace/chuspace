@@ -27,6 +27,22 @@ module.exports = {
       black: '#000',
       white: '#fff',
 
+      github: {
+        light: '#151413',
+        dark: '#000'
+      },
+      gitlab: {
+        light: '#e65528',
+        dark: '#c43f17'
+      },
+      bitbucket: {
+        light: '#0047b3',
+        dark: '#003380'
+      },
+      email: {
+        light: 'rgba(0,0,0,0.6)',
+        dark: 'rgba(0,0,0,0.8)'
+      },
       gray: {
         default: 'rgba(0,0,0,0.8)',
         800: 'rgba(0,0,0,0.8)',

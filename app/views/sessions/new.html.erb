@@ -1,0 +1,14 @@
+<div class='text-center mt-32'>
+  <h1 class='text-4xl'>Welcome to Chuspace</h1>
+
+  <div class='card card-default w-1/3 mt-8'>
+    <p>Login with one of the following:</p>
+    <% Identity.providers.each_key do |provider| %>
+      <div>
+        <%= button_to "/auth/#{provider}", class: "flex items-center text-white justify-center mt-2 w-full button #{login_button_colors_classes[provider].join(' ')} text-center", data: { turbo: false } do %>
+          <%= inline_svg_tag "icons/#{provider}", class: 'fill-current' %> <span class='ml-2'><%= provider.humanize %></span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

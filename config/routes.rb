@@ -18,4 +18,6 @@ Rails.application.routes.draw do
 
   delete '/sessions/:id', to: 'sessions#destroy', as: :logout
   get '/auth/:provider/callback', to: 'sessions#create'
+  get '/login', to: 'sessions#new', as: :login
+  get '/auth/email', to: 'sessions#new_email', as: :login_email
 end

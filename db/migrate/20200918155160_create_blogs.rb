@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class CreateBlogs < ActiveRecord::Migration[6.1]
   def change
     create_table :blogs do |t|
       t.references :user, null: false, foreign_key: true
-      t.string :full_repo_name, index: { unique: true}
+      t.string :git_repo_name, index: { unique: true }
       t.string :posts_folder
       t.string :drafts_folder
       t.string :assets_folder
@@ -10,5 +12,7 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+
+    add_column :blogs, :git_provider, :git_provider_enum_type, index: true, null: false
   end
 end

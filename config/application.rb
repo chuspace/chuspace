@@ -14,7 +14,7 @@ require 'action_mailer/railtie'
 # require "action_text/engine"
 require 'action_view/railtie'
 require 'action_cable/engine'
-# require "sprockets/railtie"
+require "sprockets/railtie"
 require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -33,5 +33,7 @@ module Chuspace
       g.helper false
       g.stylesheets false
     end
+
+    StrongMigrations.start_after = 20210713123213
   end
 end

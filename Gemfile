@@ -62,8 +62,11 @@ gem 'yabeda'
 gem 'view_component'
 
 # Omninauth
-gem 'omniauth-github', github: 'omniauth/omniauth-github', branch: 'master'
+gem 'omniauth-github', github: 'omniauth/omniauth-github'
+gem 'omniauth-gitlab', github: 'linchus/omniauth-gitlab'
+gem 'omniauth-atlassian-bitbucket', github: 'gauravtiwari/omniauth-atlassian-bitbucket'
 gem 'omniauth-rails_csrf_protection'
+
 # Security
 gem 'rack-attack'
 
@@ -94,6 +97,13 @@ gem 'whenever', require: false
 
 # Icons
 gem 'octicons_helper'
+
+# SVG
+gem 'inline_svg'
+
+# Lockbox
+gem 'blind_index'
+gem 'lockbox'
 
 group :production do
   # Resource monitoring

@@ -4,6 +4,10 @@ class User < ApplicationRecord
   include Trackable
   has_one_attached :avatar
   has_many :blogs
+  has_many :identities
+
+  encrypts :email
+  blind_index :email, slow: true
 
   AVATAR_VARIANTS = { xs: 32, sm: 48, md: 64, lg: 80, xl: 120, thumb: 150, profile: 250 }.freeze
 
