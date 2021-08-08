@@ -40,19 +40,23 @@ class SessionsController < ApplicationController
       flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{provider} account."
       User.find_by(email: auth_hash.info.email)
     else
-      User.create(name: auth_hash.info.name, username: auth_hash.info.nickname, email: auth_hash.info.email)
+      User.create(user_atts)
     end
   end
 
   def identity_attrs
-    expires_at = auth_hash.credentials.expires_at.present? ? Time.at(auth_hash.credentials.expires_at) : nil
     {
-        provider: auth_hash.provider,
-        uid: auth_hash.uid,
-        expires_at: expires_at,
-        access_token: auth_hash.credentials.token,
-        access_token_secret: auth_hash.credentials.secret,
-    }
+      provider: auth_hash.provider,
+      uid: auth_hash.uid
+    }.freeze
+  end
+
+  def user_atts
+    {
+      name: auth_hash.info.name,
+      username: auth_hash.info.nickname || auth_hash.info.username,
+      email: auth_hash.info.email
+    }.freeze
   end
 
   protected

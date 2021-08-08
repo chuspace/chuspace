@@ -5,12 +5,7 @@ class CreateIdentities < ActiveRecord::Migration[6.1]
     create_table :identities do |t|
       t.text :uid_ciphertext, null: false
       t.text :uid_bidx, null: false
-
       t.references :user, null: false, foreign_key: true
-      t.text :access_token_ciphertext, null: false
-      t.text :access_token_secret_ciphertext
-
-      t.timestamp :expires_at
       t.timestamps
     end
 

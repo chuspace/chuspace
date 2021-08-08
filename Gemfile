@@ -79,6 +79,7 @@ gem 'babosa', github: 'empathyby/babosa'
 # Github data
 gem 'faraday-http-cache'
 gem 'octokit'
+gem 'gitlab', github: 'NARKOZ/gitlab'
 
 #  SEO
 gem 'meta-tags'

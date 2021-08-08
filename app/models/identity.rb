@@ -3,8 +3,8 @@
 class Identity < ApplicationRecord
   belongs_to :user
 
-  encrypts :uid, :access_token, :access_token_secret
-  blind_index :uid, slow: true
+  encrypts :uid
+  blind_index :uid
 
   enum provider: {
     github: 'github',

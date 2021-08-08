@@ -86,8 +86,24 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
   end
 
-# Could not dump table "blogs" because of following StandardError
-#   Unknown type 'git_provider_enum_type' for column 'git_provider'
+  create_table "blogs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "storage_id", null: false
+    t.string "git_repo_name"
+    t.string "framework", null: false
+    t.string "posts_folder", null: false
+    t.string "drafts_folder", null: false
+    t.string "assets_folder", null: false
+    t.boolean "default", default: false, null: false
+    t.boolean "public", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["default"], name: "index_blogs_on_default"
+    t.index ["git_repo_name"], name: "index_blogs_on_git_repo_name", unique: true
+    t.index ["public"], name: "index_blogs_on_public"
+    t.index ["storage_id"], name: "index_blogs_on_storage_id"
+    t.index ["user_id"], name: "index_blogs_on_user_id"
+  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
@@ -102,6 +118,9 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
 
 # Could not dump table "identities" because of following StandardError
 #   Unknown type 'identity_provider_enum_type' for column 'provider'
+
+# Could not dump table "storages" because of following StandardError
+#   Unknown type 'git_storage_provider_enum_type' for column 'provider'
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -121,6 +140,8 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "blogs", "storages"
   add_foreign_key "blogs", "users"
   add_foreign_key "identities", "users"
+  add_foreign_key "storages", "users"
 end

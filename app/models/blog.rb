@@ -2,6 +2,8 @@
 
 class Blog < ApplicationRecord
   belongs_to :user
+  has_one :storage
+
   attr_accessor :name, :description, :private, :owner, :type
   validates_presence_of :git_repo_name, :posts_folder, :drafts_folder, :assets_folder
 
