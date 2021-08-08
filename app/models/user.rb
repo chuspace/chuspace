@@ -2,6 +2,10 @@
 
 class User < ApplicationRecord
   include Trackable
+
+  extend FriendlyId
+  friendly_id :name, use: %i[slugged history finders], slug_column: :username
+
   has_one_attached :avatar
   has_many :blogs
   has_many :identities

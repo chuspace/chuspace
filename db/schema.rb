@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
     t.citext "username"
     t.string "email_ciphertext", null: false
     t.string "email_bidx", null: false
+    t.boolean "onboarded", default: false, null: false
     t.integer "sign_in_count", default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
@@ -135,6 +136,7 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["email_bidx"], name: "index_users_on_email_bidx", unique: true
+    t.index ["onboarded"], name: "index_users_on_onboarded"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 

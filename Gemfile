@@ -6,14 +6,13 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '>= 6.x'
+gem 'rails', github: 'rails/rails'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 1.x'
 gem 'strong_migrations'
 gem 'database_validations'
 gem 'activerecord-clean-db-structure'
-gem 'name_of_person'
 gem 'friendly_id'
 
 # File uploads
@@ -22,8 +21,6 @@ gem 'mini_mime'
 gem 'fastimage'
 gem 'image_processing'
 gem 'ruby-vips'
-gem 'shrine'
-gem 'shrine-memory', require: false
 
 # Form
 gem 'simple_form'
@@ -39,9 +36,6 @@ gem 'puma', '>= 3.11'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '6.0.0.beta.7'
-
-# Use Redis adapter to run Action Cable in production
-gem 'delayed_job_active_record'
 
 # Sitemap
 gem 'sitemap_generator', require: false
@@ -76,7 +70,9 @@ gem 'commonmarker'
 # Friendly urls
 gem 'babosa', github: 'empathyby/babosa'
 
-# Github data
+# Clients
+gem 'down'
+gem 'http'
 gem 'faraday-http-cache'
 gem 'octokit'
 gem 'gitlab', github: 'NARKOZ/gitlab'
@@ -91,20 +87,16 @@ gem 'maxminddb'
 # Error tracking
 gem 'sentry-ruby'
 gem 'sentry-rails'
-gem 'sentry-delayed_job'
-
-# Cron jobs
-gem 'whenever', require: false
-
-# Icons
-gem 'octicons_helper'
 
 # SVG
 gem 'inline_svg'
 
-# Lockbox
+# Encryption
 gem 'blind_index'
 gem 'lockbox'
+
+# Wizard
+gem 'wicked'
 
 group :production do
   # Resource monitoring

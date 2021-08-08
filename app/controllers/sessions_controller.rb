@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
   def create
     ApplicationRecord.transaction do
       identity = Identity.where(provider: auth_hash.provider, uid: auth_hash.uid).first
-      user = set_user
+      user = find_or_create_user
 
       if identity.present?
         identity.update(identity_attrs)
@@ -21,7 +21,12 @@ class SessionsController < ApplicationController
     end
 
     flash[:notice] = "Succefully logged in via #{provider}"
-    redirect_to root_path
+
+    if Current.user.onboarded?
+      redirect_to root_path
+    else
+      redirect_to profile_path
+    end
   end
 
   def destroy
@@ -31,7 +36,7 @@ class SessionsController < ApplicationController
 
   private
 
-  def set_user
+  def find_or_create_user
     if signed_in?
       Current.user
     elsif identity.present?
@@ -54,7 +59,6 @@ class SessionsController < ApplicationController
   def user_atts
     {
       name: auth_hash.info.name,
-      username: auth_hash.info.nickname || auth_hash.info.username,
       email: auth_hash.info.email
     }.freeze
   end

@@ -7,13 +7,17 @@ details
 
 .dropdown
   @apply absolute bg-white border border-gray-200 rounded-sm shadow mt-2 right-0 z-50
-  min-width: 12rem
+  min-width: 16rem
 
   .dropdown__divider
     @apply border-t border-gray-100 block my-1
 
   .dropdown__item
     @apply py-1 px-4 block text-sm cursor-pointer
+
+    input[type="submit"]
+      @apply cursor-pointer
+      background: transparent
 
     .avatar
       @apply mr-2
@@ -29,7 +33,7 @@ details
 
   &:after, &:before
     bottom: 100%
-    right: 10%
+    right: 5%
     border: solid transparent
     content: " "
     height: 0

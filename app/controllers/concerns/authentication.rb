@@ -15,6 +15,7 @@ module Authentication
     }
 
     identity.user.update_tracked_fields!(request)
+    authenticate
   end
 
   def signout

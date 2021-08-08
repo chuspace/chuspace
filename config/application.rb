@@ -14,7 +14,7 @@ require 'action_mailer/railtie'
 # require "action_text/engine"
 require 'action_view/railtie'
 require 'action_cable/engine'
-require "sprockets/railtie"
+require 'sprockets/railtie'
 require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -24,7 +24,7 @@ Bundler.require(*Rails.groups)
 module Chuspace
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
 
     # Customise rails generator
     config.generators do |g|

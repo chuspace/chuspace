@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get 'users/edit'
+  get 'users/update'
+  get 'users/destroy'
   root to: 'home#index'
 
   resources :users
@@ -15,6 +18,8 @@ Rails.application.routes.draw do
   namespace :github do
     resources :repos
   end
+
+  get '/me', to: 'users#show', as: :profile
 
   delete '/sessions/:id', to: 'sessions#destroy', as: :logout
   get '/auth/:provider/callback', to: 'sessions#create'

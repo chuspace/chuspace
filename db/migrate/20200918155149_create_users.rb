@@ -9,6 +9,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.citext :username, index: { unique: true }
       t.string :email_ciphertext, null: false
       t.string :email_bidx, null: false
+      t.boolean :onboarded, null: false, default: false, index: true
 
       # Track logins
       t.integer :sign_in_count, default: 0
