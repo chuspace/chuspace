@@ -3,10 +3,10 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.1'
+ruby '3.0.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 6.x'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 1.x'
@@ -16,16 +16,13 @@ gem 'activerecord-clean-db-structure'
 gem 'friendly_id'
 
 # File uploads
-gem 'aws-sdk-s3'
-gem 'mini_mime'
-gem 'fastimage'
 gem 'image_processing'
 gem 'ruby-vips'
 
 # Form
 gem 'simple_form'
 
-# SES
+# Emails
 gem 'aws-ses', require: 'aws/ses'
 
 # Nested tree
@@ -49,9 +46,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Turblinks
 gem 'turbo-rails'
 
-# Instrumentation
-gem 'yabeda'
-
 # View components
 gem 'view_component'
 
@@ -67,9 +61,6 @@ gem 'rack-attack'
 # Markdown
 gem 'commonmarker'
 
-# Friendly urls
-gem 'babosa', github: 'empathyby/babosa'
-
 # Clients
 gem 'down'
 gem 'http'
@@ -79,10 +70,6 @@ gem 'gitlab', github: 'NARKOZ/gitlab'
 
 #  SEO
 gem 'meta-tags'
-
-# User visit tracking
-gem 'ahoy_matey'
-gem 'maxminddb'
 
 # Error tracking
 gem 'sentry-ruby'

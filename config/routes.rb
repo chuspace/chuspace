@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'users/edit'
-  get 'users/update'
-  get 'users/destroy'
   root to: 'home#index'
 
   resources :users
   resources :articles
+  resources :welcome
 
   resources :blogs, param: :slug do
     collection do
@@ -17,6 +15,14 @@ Rails.application.routes.draw do
 
   namespace :github do
     resources :repos
+  end
+
+  resources :settings, only: %i[index show]
+  resources :storages, only: %i[create update edit destroy]
+
+  namespace :settings do
+    resources :profiles, path: 'profile'
+    resources :storages, path: 'storage'
   end
 
   get '/me', to: 'users#show', as: :profile

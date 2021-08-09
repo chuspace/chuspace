@@ -12,9 +12,6 @@ AllCops:
   Exclude:
     - 'node_modules/**/*'
     - 'vendor/**/*'
-    - 'openssh/**/*'
-    - 'ssh/**/*'
-    - 'circleci/**/*'
     - 'log/**/*'
     - 'tmp/**/*'
     - 'coverage/**/*'

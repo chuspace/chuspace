@@ -99,11 +99,11 @@ export default class ChuEditor extends LitElement {
 
     this.saving = true
 
-    if (this.id) {
-      this.autosave()
-    } else {
-      this.create()
-    }
+    // if (this.id) {
+    //   this.autosave()
+    // } else {
+    //   this.create()
+    // }
   }
 
   get payload() {

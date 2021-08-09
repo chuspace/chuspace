@@ -1,0 +1,7 @@
+<%= simple_form_for(Current.user) do |form| %>
+  <%= form.input :name %>
+  <%= form.input :username %>
+  <%= form.input :avatar %>
+
+  <%= form.button :submit, 'Save', class: 'mt-8' %>
+<% end %>

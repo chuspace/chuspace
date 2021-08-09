@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class CreateStorages < ActiveRecord::Migration[6.1]
   def change
     create_table :storages do |t|
-      t.string :name
       t.text :access_token_ciphertext, null: false
       t.references :user, null: false, foreign_key: true
       t.boolean :default, default: false

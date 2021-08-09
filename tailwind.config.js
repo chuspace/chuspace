@@ -9,7 +9,7 @@ module.exports = {
     './config/initializers/simple_form.rb',
     './app/packs/**/*.js'
   ],
-  darkMode: false,
+  darkMode: 'class',
   theme: {
     container: {
       center: true,
@@ -94,7 +94,7 @@ module.exports = {
         'sans-serif'
       ],
       serif: [
-        'freight-text-pro',
+        'Source Serif Pro',
         'Lucida Grande',
         'Lucida Sans Unicode',
         'Lucida Sans',

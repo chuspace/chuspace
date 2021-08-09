@@ -14,3 +14,16 @@ tab-container
 
       &:last-child
         @apply mr-0
+
+.tabs
+  @apply border block rounded
+
+  .tab[aria-selected="true"]
+    @apply bg-gray-100
+
+    &:after
+      @apply border-l-2 border-blue h-full border-b-0 absolute w-full bottom-0 left-0
+      content: ''
+
+  .tab
+    @apply block relative w-full border-b px-4 py-2 last:border-b-0 cursor-pointer hover:bg-gray-100

@@ -24,7 +24,7 @@ Bundler.require(*Rails.groups)
 module Chuspace
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 6.0
 
     # Customise rails generator
     config.generators do |g|
@@ -33,6 +33,8 @@ module Chuspace
       g.helper false
       g.stylesheets false
     end
+
+    config.active_storage.variant_processor = :vips
 
     StrongMigrations.start_after = 20210713123213
   end

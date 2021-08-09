@@ -1,0 +1,38 @@
+@import url('https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css')
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,2000,3000,4000,6000,7000,9001,2001,3001,4001,6001,7001,900&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400500600700800900&family=Source+Serif+Pro:ital,wght@0,2000,3000,4000,6000,7000,9001,2001,3001,4001,6001,7001,900&display=swap')
+
+html,
+body
+  @apply leading-normal font-serif dark:bg-black dark:text-white text-gray-default
+  width: 100%
+  position: relative
+  font-weight: normal
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+  --x-height-multiplier: 0.375
+  --baseline-multiplier: 0.17
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: greyscale
+  text-rendering: optimizeL segibility
+
+
+*,
+*:before,
+*:after
+  box-sizing: inherit
+
+
+.dialog-open
+  overflow: hidden
+
+dialog::backdrop,
+dialog + .backdrop
+  background-color: rgba(0, 0, 0, 0.3)
+
+hr
+  @apply mb-4 border-gray-200
+
+.button
+  @apply bg-black text-white px-4 py-2 rounded

@@ -7,12 +7,6 @@ GIT
       terminal-table (>= 1.5.1)
 
 GIT
-  remote: https://github.com/empathyby/babosa.git
-  revision: 3eb4c6546647d225f268fcbaa732e0f0a8e6c76a
-  specs:
-    babosa (1.0.2)
-
-GIT
   remote: https://github.com/gauravtiwari/omniauth-atlassian-bitbucket.git
   revision: 3b8a91b7bde7f3b34d952bc31bff20e3a48be29f
   specs:
@@ -35,98 +29,72 @@ GIT
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.7.1)
 
-GIT
-  remote: https://github.com/rails/rails.git
-  revision: c3518b4a9c9cbd5fc264231c7b153ac6f6195019
-  specs:
-    actioncable (7.0.0.alpha)
-      actionpack (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      nio4r (~> 2.0)
-      websocket-driver (>= 0.6.1)
-    actionmailbox (7.0.0.alpha)
-      actionpack (= 7.0.0.alpha)
-      activejob (= 7.0.0.alpha)
-      activerecord (= 7.0.0.alpha)
-      activestorage (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      mail (>= 2.7.1)
-    actionmailer (7.0.0.alpha)
-      actionpack (= 7.0.0.alpha)
-      actionview (= 7.0.0.alpha)
-      activejob (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      mail (~> 2.5, >= 2.5.4)
-      rails-dom-testing (~> 2.0)
-    actionpack (7.0.0.alpha)
-      actionview (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      rack (~> 2.0, >= 2.2.0)
-      rack-test (>= 0.6.3)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actiontext (7.0.0.alpha)
-      actionpack (= 7.0.0.alpha)
-      activerecord (= 7.0.0.alpha)
-      activestorage (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      nokogiri (>= 1.8.5)
-    actionview (7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      builder (~> 3.1)
-      erubi (~> 1.4)
-      rails-dom-testing (~> 2.0)
-      rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activejob (7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      globalid (>= 0.3.6)
-    activemodel (7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-    activerecord (7.0.0.alpha)
-      activemodel (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-    activestorage (7.0.0.alpha)
-      actionpack (= 7.0.0.alpha)
-      activejob (= 7.0.0.alpha)
-      activerecord (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      marcel (~> 1.0.0)
-      mini_mime (>= 1.1.0)
-    activesupport (7.0.0.alpha)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 1.6, < 2)
-      minitest (>= 5.1)
-      tzinfo (~> 2.0)
-      zeitwerk (~> 2.5.0.beta)
-    rails (7.0.0.alpha)
-      actioncable (= 7.0.0.alpha)
-      actionmailbox (= 7.0.0.alpha)
-      actionmailer (= 7.0.0.alpha)
-      actionpack (= 7.0.0.alpha)
-      actiontext (= 7.0.0.alpha)
-      actionview (= 7.0.0.alpha)
-      activejob (= 7.0.0.alpha)
-      activemodel (= 7.0.0.alpha)
-      activerecord (= 7.0.0.alpha)
-      activestorage (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      bundler (>= 1.15.0)
-      railties (= 7.0.0.alpha)
-      sprockets-rails (>= 2.0.0)
-    railties (7.0.0.alpha)
-      actionpack (= 7.0.0.alpha)
-      activesupport (= 7.0.0.alpha)
-      method_source
-      rake (>= 0.13)
-      thor (~> 1.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
     aasm (5.2.0)
       concurrent-ruby (~> 1.0)
+    actioncable (6.1.4)
+      actionpack (= 6.1.4)
+      activesupport (= 6.1.4)
+      nio4r (~> 2.0)
+      websocket-driver (>= 0.6.1)
+    actionmailbox (6.1.4)
+      actionpack (= 6.1.4)
+      activejob (= 6.1.4)
+      activerecord (= 6.1.4)
+      activestorage (= 6.1.4)
+      activesupport (= 6.1.4)
+      mail (>= 2.7.1)
+    actionmailer (6.1.4)
+      actionpack (= 6.1.4)
+      actionview (= 6.1.4)
+      activejob (= 6.1.4)
+      activesupport (= 6.1.4)
+      mail (~> 2.5, >= 2.5.4)
+      rails-dom-testing (~> 2.0)
+    actionpack (6.1.4)
+      actionview (= 6.1.4)
+      activesupport (= 6.1.4)
+      rack (~> 2.0, >= 2.0.9)
+      rack-test (>= 0.6.3)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.2.0)
+    actiontext (6.1.4)
+      actionpack (= 6.1.4)
+      activerecord (= 6.1.4)
+      activestorage (= 6.1.4)
+      activesupport (= 6.1.4)
+      nokogiri (>= 1.8.5)
+    actionview (6.1.4)
+      activesupport (= 6.1.4)
+      builder (~> 3.1)
+      erubi (~> 1.4)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    activejob (6.1.4)
+      activesupport (= 6.1.4)
+      globalid (>= 0.3.6)
+    activemodel (6.1.4)
+      activesupport (= 6.1.4)
+    activerecord (6.1.4)
+      activemodel (= 6.1.4)
+      activesupport (= 6.1.4)
     activerecord-clean-db-structure (0.4.0)
       activerecord (>= 4.2)
+    activestorage (6.1.4)
+      actionpack (= 6.1.4)
+      activejob (= 6.1.4)
+      activerecord (= 6.1.4)
+      activesupport (= 6.1.4)
+      marcel (~> 1.0.0)
+      mini_mime (>= 1.1.0)
+    activesupport (6.1.4)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     ahoy_matey (3.2.0)
@@ -136,32 +104,14 @@ GEM
       safely_block (>= 0.2.1)
     ancestry (4.1.0)
       activerecord (>= 5.2.6)
-    anyway_config (2.1.0)
-      ruby-next-core (>= 0.11.0)
     argon2-kdf (0.1.6)
     ast (2.4.2)
     awesome_print (1.9.2)
-    aws-eventstream (1.1.1)
-    aws-partitions (1.484.0)
-    aws-sdk-core (3.119.0)
-      aws-eventstream (~> 1, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.239.0)
-      aws-sigv4 (~> 1.1)
-      jmespath (~> 1.0)
-    aws-sdk-kms (1.46.0)
-      aws-sdk-core (~> 3, >= 3.119.0)
-      aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.98.0)
-      aws-sdk-core (~> 3, >= 3.119.0)
-      aws-sdk-kms (~> 1)
-      aws-sigv4 (~> 1.1)
     aws-ses (0.7.1)
       builder
       mail (> 2.2.5)
       mime-types
       xml-simple
-    aws-sigv4 (1.2.4)
-      aws-eventstream (~> 1, >= 1.0.2)
     bindex (0.8.1)
     blind_index (2.2.0)
       activesupport (>= 5)
@@ -207,7 +157,6 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     down (5.2.3)
       addressable (~> 2.8)
-    dry-initializer (3.0.4)
     easymon (1.4.2)
       redis
     errbase (0.2.1)
@@ -240,7 +189,6 @@ GEM
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
-    fastimage (2.2.4)
     ffi (1.15.3)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -271,7 +219,6 @@ GEM
     inline_svg (1.7.2)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
-    jmespath (1.4.0)
     jwt (2.2.3)
     llhttp-ffi (0.3.1)
       ffi-compiler (~> 1.0)
@@ -284,8 +231,8 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (1.0.1)
     maxminddb (0.1.22)
-    meta-tags (2.2.0)
-      actionpack (>= 3.2.0)
+    meta-tags (2.15.0)
+      actionpack (>= 3.2.0, < 6.2)
     method_source (1.0.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
@@ -346,6 +293,21 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
+    rails (6.1.4)
+      actioncable (= 6.1.4)
+      actionmailbox (= 6.1.4)
+      actionmailer (= 6.1.4)
+      actionpack (= 6.1.4)
+      actiontext (= 6.1.4)
+      actionview (= 6.1.4)
+      activejob (= 6.1.4)
+      activemodel (= 6.1.4)
+      activerecord (= 6.1.4)
+      activestorage (= 6.1.4)
+      activesupport (= 6.1.4)
+      bundler (>= 1.15.0)
+      railties (= 6.1.4)
+      sprockets-rails (>= 2.0.0)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -355,6 +317,12 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.3.0)
       loofah (~> 2.3)
+    railties (6.1.4)
+      actionpack (= 6.1.4)
+      activesupport (= 6.1.4)
+      method_source
+      rake (>= 0.13)
+      thor (~> 1.0)
     rainbow (3.0.0)
     rake (13.0.6)
     redis (4.4.0)
@@ -402,7 +370,6 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
-    ruby-next-core (0.12.0)
     ruby-progressbar (1.11.0)
     ruby-vips (2.1.2)
       ffi (~> 1.12)
@@ -491,11 +458,7 @@ GEM
     xml-simple (1.1.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yabeda (0.10.0)
-      anyway_config (>= 1.3, < 3)
-      concurrent-ruby
-      dry-initializer
-    zeitwerk (2.5.0.beta)
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
@@ -506,9 +469,7 @@ DEPENDENCIES
   ahoy_matey
   ancestry
   awesome_print
-  aws-sdk-s3
   aws-ses
-  babosa!
   blind_index
   bootsnap (>= 1.1.0)
   brakeman
@@ -525,7 +486,6 @@ DEPENDENCIES
   factory_bot_rails
   faker
   faraday-http-cache
-  fastimage
   friendly_id
   gitlab!
   http
@@ -534,7 +494,6 @@ DEPENDENCIES
   lockbox
   maxminddb
   meta-tags
-  mini_mime
   minitest
   octokit
   omniauth-atlassian-bitbucket!
@@ -547,7 +506,7 @@ DEPENDENCIES
   rack-attack
   rack-mini-profiler
   rack-proxy
-  rails!
+  rails (~> 6.x)
   rails-controller-testing
   rspec-rails
   rspec_junit_formatter
@@ -570,10 +529,9 @@ DEPENDENCIES
   webdrivers
   webpacker (= 6.0.0.beta.7)
   wicked
-  yabeda
 
 RUBY VERSION
-   ruby 3.0.1p64
+   ruby 3.0.2p107
 
 BUNDLED WITH
-   2.2.15
+   2.2.22

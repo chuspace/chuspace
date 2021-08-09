@@ -1,0 +1,16 @@
+<div class='w-full mt-24'>
+  <div class='flex flex-row -px-8'>
+    <div class='w-1/4'>
+      <div class='tabs'>
+        <% %w[profile storage blog].each do |page| %>
+          <% page_path = setting_path(id: page) %>
+          <%= link_to page.humanize, page_path, role: 'tab', class: 'tab', aria: { selected: request.path == page_path } %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class='w-3/4 ml-8'>
+      <%= render "settings/shared/#{params[:id]}" %>
+    </div>
+  </div>
+</div>

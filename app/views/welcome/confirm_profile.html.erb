@@ -1,0 +1,9 @@
+<div class='mt-24'>
+  <h1>Update your profile</h1>
+
+  <%= simple_form_for(@user) do |form| %>
+    <%= form.input :name %>
+    <%= form.input :username %>
+    <%= form.input :avatar %>
+  <% end %>
+</div>
