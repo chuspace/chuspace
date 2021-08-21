@@ -1,31 +1,14 @@
 <%= turbo_frame_tag(:storage_settings, class: 'relative w-full block') do %>
-  <h2 class='border-b pb-2'>Connected storages</h2>
-  <%= link_to 'Add new storage', new_settings_storage_path, class: 'button button--fill absolute right-0 top-0' if Storage.available_providers.any? %>
+  <h3 class='border-b pb-4'>Connected storages</h3>
+  <%= link_to 'Add new storage', new_storage_path, class: 'button button--fill absolute right-0 top-0' %>
 
   <%= turbo_frame_tag :storages do %>
-    <div class='list'>
-      <% Current.user.storages.each do |storage| %>
-        <%= turbo_frame_tag(storage) do %>
-          <div class='list__item list__item--flex list__item--bordered'>
-            <div class='flex items-center flex-1'>
-              <%= inline_svg_tag "icons/#{storage.provider}", class: 'fill-current mr-2 w-8 h-8' %>
-              <%= tag.h3 storage.provider.humanize %>
-
-              <%= content_tag :span, 'primary', class: 'badge badge--open text-xs ml-2' if storage.default? %>
-              <%= content_tag :span, 'connected', class: 'badge badge--merged text-xs ml-2' if storage.connected? %>
-            </div>
-            <div class='flex items-center justify-between flex-end'>
-              <%= link_to edit_storage_path(storage) do %>
-                <%= inline_svg_tag 'icons/pencil' %>
-              <% end %>
-
-              <%= button_to storage_path(storage), method: :delete do %>
-                <%= inline_svg_tag 'icons/trash', class: 'ml-2' %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-<% end %>
+    <% if Current.user.storages.any? %>
+      <div class='list list--table mt-4'>
+        <%= render partial: 'storages/item', collection: Current.user.storages, as: :storage, cached: true %>
+      </div>
+    <% else %>
+      <div class='placeholder text-2xl'>No storages connected</div>
+    <% end %>
+  <% end %>
 <% end %>

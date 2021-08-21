@@ -1,6 +1,6 @@
 // @flow
 
-import { LitElement, customElement, html } from 'lit-element'
+import { LitElement, customElement, html } from 'lit'
 
 import ClipboardJS from 'clipboard'
 import tippy from 'tippy.js'

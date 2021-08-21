@@ -1,28 +1,44 @@
 # frozen_string_literal: true
 
 class StoragesController < ApplicationController
-  before_action :find_storage, except: :create
+  before_action :find_storage, except: %i[new create]
+
+  def index
+    @storages = Current.user.storages
+  end
+
+  def new
+    @storage = Current.user.storages.build(provider: :github)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html
+    end
+  end
 
   def create
-    @storage = Current.user.storages.build(storage_params)
+    @storage = Current.user.storages.build(storage_params.delete_if { |key, value| value.blank? })
 
     if @storage.save
       redirect_to setting_path(id: :storage)
     else
-      redirect_to new_storage_path
+      redirect_to setting_path(id: :storage)
     end
   end
 
   def edit
   end
 
+  def update
+    @storage.update(storage_params.except(:provider))
+
+    redirect_to setting_path(id: :storage)
+  end
+
   def destroy
     @storage.destroy
 
-    respond_to do |format|
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(@storage) }
-      format.html { redirect_to setting_path(id: :storage) }
-    end
+    redirect_to setting_path(id: :storage)
   end
 
   private
@@ -32,6 +48,6 @@ class StoragesController < ApplicationController
   end
 
   def storage_params
-    params.require(:storage).permit(:provider, :access_token, :default)
+    params.require(:storage).permit(:description, :endpoint, :provider, :access_token, :default)
   end
 end

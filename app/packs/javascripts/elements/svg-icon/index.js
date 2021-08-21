@@ -1,6 +1,6 @@
 // @flow
 
-import { LitElement, customElement, svg } from 'lit-element'
+import { LitElement, customElement, svg } from 'lit'
 
 import icons from './icons.json'
 

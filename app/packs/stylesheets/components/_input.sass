@@ -1,9 +1,12 @@
 .form_field__container
-  @apply mt-4
+  @apply mt-4 relative
 
   .input__label
     @apply block text-sm font-bold mb-2
-    transition: color 0.5s ease
+    transition: color 0.5s
+
+    &--inline
+      @apply inline-block ml-2
 
     abbr
       text-decoration: none
@@ -49,11 +52,11 @@
     padding: 0.2rem 0.5rem
 
   &--inline
-    @apply inline-block w-auto mr-2
+    @apply inline-block w-auto mr-2 invisible
 
 .input__error,
 .input__hint
-  @apply mt-2 block text-xs text-gray-default
+  @apply mt-2 block text-xs text-gray-400
   transition: color 0.5s ease
 
 .input__hint
@@ -78,3 +81,38 @@
 
   input-check
     @apply block w-full
+
+[type='checkbox']:not(:checked) + label::before,
+[type='checkbox']:checked + label::before
+  position: absolute
+  top: 4px
+  left: 0
+  height: 16px
+  width: 16px
+  border-radius: 2px
+  content: ''
+  background-color: theme('colors.gray.200')
+
+[type='checkbox']::before:hover
+  background-color: theme('colors.black')
+
+[type='checkbox']:not(:checked) + label::after,
+[type='checkbox']:checked + label::after
+  left: 6px
+  top: 7px
+  width: 4px
+  height: 8px
+  border: solid #fff
+  border-width: 0 2px 2px 0
+  transform: rotate(45deg)
+  content: ''
+  position: absolute
+
+[type='checkbox']:not(:checked) + label::after
+  opacity: 0
+
+[type='checkbox']:checked + label::after
+  opacity: 1
+
+[type='checkbox']:checked + label::before
+  background-color: theme('colors.black')

@@ -2,29 +2,43 @@
 
 class Storage < ApplicationRecord
   belongs_to :user
-  encrypts :access_token
+  encrypts :access_token, :endpoint
 
-  SCOPES = {
-    github: ['admin:repo_hook', 'repo', 'workflow']
-  }.with_indifferent_access.freeze
+  validates :description, :provider, :access_token, presence: true
+  validates :provider, uniqueness: { scope: :user_id, message: :one_provider_per_user }
 
-  enum provider: {
-    github: 'github',
-    gitlab: 'gitlab',
-    bitbucket: 'bitbucket'
-  }
+  enum provider: GitStorageConfig.providers_enum
 
-  class << self
-    def available_providers
-      Storage.providers.values - Storage.pluck(:provider)
-    end
-  end
+  before_validation :set_endpoint, on: :create
 
   def connected?
-    SCOPES[provider] == api.scopes
+    true
+    #  Add logic
   end
 
   def api
-    @api ||= Octokit::Client.new(access_token: access_token)
+    @api ||= client
+  end
+
+  private
+
+  def set_endpoint
+    self.endpoint ||= GitStorageConfig.new.send(provider).dig(:endpoint)
+  end
+
+  def client
+    case provider.to_sym
+    when :github
+      Octokit::Client.new(access_token: access_token, api_endpoint: endpoint)
+    when :gitlab
+      Gitlab.client(
+        endpoint: endpoint,
+        private_token: access_token,
+        httparty: {
+          headers: { 'Cookie' => 'gitlab_canary=true' }
+        }
+      )
+    when :bitbucket
+    end
   end
 end

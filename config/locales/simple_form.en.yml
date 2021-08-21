@@ -8,7 +8,10 @@ en:
       html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: 'Please review the problems below:'
-
+    placeholders:
+      storage:
+        description: What's this storage for?
+        endpoint: API endpoint for self-hosted or enterprise instances
     labels:
       defaults:
         password: 'Password'
@@ -17,6 +20,8 @@ en:
     hints:
       publication:
         git_repository_fullname: 'This repository will be used to store articles for your blog'
+      storage:
+        access_token: the access token should have following scopes
 
     include_blanks:
       defaults:

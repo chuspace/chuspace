@@ -1,6 +1,6 @@
 // @flow
 
-import { svg } from 'lit-element'
+import { svg } from 'lit'
 
 type Props = {
   destroy: () => void

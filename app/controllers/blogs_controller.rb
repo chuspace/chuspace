@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class BlogsController < ApplicationController
+  before_action :authenticate!, except: :show
+
   def new
     @blog = Blog.new
     @repo_folders = []

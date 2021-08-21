@@ -1,0 +1,16 @@
+<storage-form data-providers='<%= GitStorageConfig.defaults.to_json %>'>
+  <%= simple_form_for(storage) do |form| %>
+    <%= form.input :description %>
+    <%= form.input :endpoint %>
+    <%= form.input :provider, as: :select, collection: Storage.providers, input_html: { data: { action: 'change:storage-form#changeScopes', target: 'storage-form.select' } }, selected: storage.provider unless storage.persisted? %>
+    <%= form.input :access_token %>
+    <%= tag.pre GitStorageConfig.new.send(storage.provider)[:scopes], class: 'text-sm whitespace-pre-wrap break-words text-red mt-2', data: { target: 'storage-form.scopes' } %>
+
+    <%= form.input :default %>
+
+    <div class='flex items-center mt-8'>
+      <%= form.button :submit, storage.persisted? ? 'Save' : 'Create', class: 'button button--fill' %>
+      <%= link_to 'Cancel', setting_path(id: 'storage'), class: 'button button--fill ml-2' %>
+    </div>
+  <% end %>
+</storage-form>

@@ -1,6 +1,6 @@
 // @flow
 
-import { LitElement, customElement, html, svg } from 'lit-element'
+import { LitElement, customElement, html, svg } from 'lit'
 
 import { customAlphabet } from 'nanoid'
 
@@ -117,9 +117,8 @@ export default class ContentLoader extends LitElement {
             }" stop-opacity="${props.secondaryOpacity}">
               <animate
                 attributeName="offset"
-                values=${`${-props.gradientRatio / 2}; ${
-                  -props.gradientRatio / 2
-                }; ${1 + props.gradientRatio / 2}`}
+                values=${`${-props.gradientRatio / 2}; ${-props.gradientRatio /
+                  2}; ${1 + props.gradientRatio / 2}`}
                 keyTimes=${keyTimes}
                 dur=${dur}
                 repeatCount="indefinite"

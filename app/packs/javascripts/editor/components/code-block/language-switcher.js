@@ -1,7 +1,7 @@
 // @flow
 
 import { LANGUAGE_MODE_HASH, MODES } from 'editor/modes'
-import { LitElement, customElement, html } from 'lit-element'
+import { LitElement, customElement, html } from 'lit'
 
 import type { ModeType } from 'editor/modes/modes'
 import autoComplete from '@tarekraafat/autocomplete.js'
@@ -46,7 +46,9 @@ export default class LanguageSwitcher extends LitElement {
           source.removeAttribute('id')
           source.className = 'code-editor-language-switcher arrow'
         },
-        destination: this.querySelector('.code-editor-language-switcher-container '),
+        destination: this.querySelector(
+          '.code-editor-language-switcher-container '
+        ),
         position: 'beforeend',
         element: 'ul'
       },
@@ -57,7 +59,7 @@ export default class LanguageSwitcher extends LitElement {
         },
         element: 'li'
       },
-      onSelection: feedback => this.add(feedback.selection.value)
+      onSelection: (feedback) => this.add(feedback.selection.value)
     })
   }
 

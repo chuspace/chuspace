@@ -1,6 +1,6 @@
 // @flow
 
-import { LitElement, customElement, html } from 'lit-element'
+import { LitElement, customElement, html } from 'lit'
 
 export default class AlertNotification extends LitElement {
   static get properties() {

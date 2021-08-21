@@ -1,6 +1,6 @@
-<div class='w-full mt-24'>
+<div class='w-full mt-32'>
   <div class='flex flex-row -px-8'>
-    <div class='w-1/4'>
+    <div class='w-1/3'>
       <div class='tabs'>
         <% %w[profile storage blog].each do |page| %>
           <% page_path = setting_path(id: page) %>
@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class='w-3/4 ml-8'>
+    <div class='w-2/3 ml-16 flex-shrink-0'>
       <%= render "settings/shared/#{params[:id]}" %>
     </div>
   </div>

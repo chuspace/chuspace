@@ -2,7 +2,7 @@
 
 import * as Rails from '@rails/ujs'
 
-import { LitElement, customElement, html } from 'lit-element'
+import { LitElement, customElement, html } from 'lit'
 
 export default class LazyImage extends LitElement {
   static get properties() {

@@ -32,7 +32,7 @@ gem 'ancestry'
 gem 'puma', '>= 3.11'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '6.0.0.beta.7'
+gem 'webpacker', '6.0.0.rc.1'
 
 # Sitemap
 gem 'sitemap_generator', require: false
@@ -84,6 +84,9 @@ gem 'lockbox'
 
 # Wizard
 gem 'wicked'
+
+# App configs
+gem 'anyway_config'
 
 group :production do
   # Resource monitoring
