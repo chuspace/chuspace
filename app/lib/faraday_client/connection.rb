@@ -11,6 +11,10 @@ module FaradayClient
       builder.use FaradayClient::Middleware::FollowRedirects
       builder.use FaradayClient::Middleware::RaiseError
       builder.use FaradayClient::Middleware::FeedParser
+      builder.response :logger, nil, { headers: true, bodies: true } do |logger|
+        logger.filter(/(token )(\w+)/, '\1[REMOVED]')
+        logger.filter(/(Bearer )(\w+)/, '\1[REMOVED]')
+      end
       builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache,  logger: Rails.logger
       builder.adapter Faraday.default_adapter
     end
@@ -113,7 +117,12 @@ module FaradayClient
         http.headers[:accept] = default_media_type
         http.headers[:content_type] = 'application/json'
         http.headers[:user_agent] = user_agent
-        http.authorization 'token', @access_token
+        case name
+        when 'github'
+          http.authorization 'token', @access_token
+        when 'gitlab'
+          http.authorization 'Bearer', @access_token
+        end
       end
     end
 

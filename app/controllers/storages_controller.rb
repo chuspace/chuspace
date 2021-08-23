@@ -17,13 +17,8 @@ class StoragesController < ApplicationController
   end
 
   def create
-    @storage = Current.user.storages.build(storage_params.delete_if { |key, value| value.blank? })
-
-    if @storage.save
-      redirect_to setting_path(id: :storage)
-    else
-      redirect_to setting_path(id: :storage)
-    end
+    @storage = Current.user.storages.create(storage_params.delete_if { |key, value| value.blank? })
+    redirect_to setting_path(id: :storage)
   end
 
   def edit

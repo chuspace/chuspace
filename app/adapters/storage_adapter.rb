@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StorageAdapter
-  include FaradayClient::Connection
   class MethodNotImplementedError < StandardError; end
   class StorageAdapterNotFoundError < StandardError; end
 
@@ -12,6 +11,8 @@ class StorageAdapter
   }.freeze
 
   REQUIRED_METHODS = %i[
+    name
+    user
     repositories
     create_repository
     delete_repository
@@ -33,6 +34,11 @@ class StorageAdapter
 
     @adapter = adapter_klass.new(endpoint: @storage.endpoint, access_token: @storage.access_token)
   end
+
+  # @!method repositories
+  # List repositories for a user on choosen storage
+  # @param user
+  # @abstract This should be implemented by the adapter.
 
   # @!method create_repository
   # Creates a repository on choosen storage

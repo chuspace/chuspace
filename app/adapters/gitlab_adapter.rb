@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-class GitlabAdapter < StorageAdapter
+class GitlabAdapter
+  include FaradayClient::Connection
+
   attr_reader :endpoint, :access_token
+  delegate :username, to: :user
 
   def initialize(endpoint:, access_token:)
     @endpoint = endpoint
@@ -12,6 +15,11 @@ class GitlabAdapter < StorageAdapter
     'gitlab'
   end
 
-  def repositories
+  def user(options = {})
+    @user ||= get 'user', options
+  end
+
+  def repositories(options: {})
+    @repositories ||= paginate "users/#{username}/projects", options
   end
 end

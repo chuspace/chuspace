@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-class BitbucketAdapter < StorageAdapter
+class BitbucketAdapter
+  include FaradayClient::Connection
   attr_reader :endpoint, :access_token
 
   def initialize(endpoint:, access_token:)
