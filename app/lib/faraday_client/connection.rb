@@ -11,10 +11,14 @@ module FaradayClient
       builder.use FaradayClient::Middleware::FollowRedirects
       builder.use FaradayClient::Middleware::RaiseError
       builder.use FaradayClient::Middleware::FeedParser
-      builder.response :logger, nil, { headers: true, bodies: true } do |logger|
-        logger.filter(/(token )(\w+)/, '\1[REMOVED]')
-        logger.filter(/(Bearer )(\w+)/, '\1[REMOVED]')
+
+      unless Rails.env.production?
+        builder.response :logger, nil, { headers: true, bodies: true } do |logger|
+          logger.filter(/(token )(\w+)/, '\1[REMOVED]')
+          logger.filter(/(Bearer )(\w+)/, '\1[REMOVED]')
+        end
       end
+
       builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache,  logger: Rails.logger
       builder.adapter Faraday.default_adapter
     end
