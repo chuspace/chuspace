@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/NARKOZ/gitlab.git
-  revision: cfd0d9a988c87dc48c732a204969742c741688df
-  specs:
-    gitlab (4.17.0)
-      httparty (~> 0.18)
-      terminal-table (>= 1.5.1)
-
-GIT
   remote: https://github.com/gauravtiwari/omniauth-atlassian-bitbucket.git
   revision: 3b8a91b7bde7f3b34d952bc31bff20e3a48be29f
   specs:
@@ -202,9 +194,6 @@ GEM
     http-cookie (1.0.4)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
-    httparty (0.18.1)
-      mime-types (~> 3.0)
-      multi_xml (>= 0.5.2)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.1)
@@ -249,9 +238,6 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    octokit (4.21.0)
-      faraday (>= 0.9)
-      sawyer (~> 0.8.0, >= 0.5.3)
     omniauth (2.0.4)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
@@ -410,8 +396,6 @@ GEM
     sync (0.5.0)
     term-ansicolor (1.7.1)
       tins (~> 1.0)
-    terminal-table (3.0.1)
-      unicode-display_width (>= 1.1.1, < 3)
     thor (1.1.0)
     tins (1.29.1)
       sync
@@ -477,16 +461,15 @@ DEPENDENCIES
   easymon
   factory_bot_rails
   faker
+  faraday
   faraday-http-cache
   friendly_id
-  gitlab!
   http
   image_processing
   inline_svg
   lockbox
   meta-tags
   minitest
-  octokit
   omniauth-atlassian-bitbucket!
   omniauth-github!
   omniauth-gitlab!
@@ -505,6 +488,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   ruby-vips
+  sawyer
   selenium-webdriver
   sentry-rails
   sentry-ruby

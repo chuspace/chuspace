@@ -1,37 +1,18 @@
-class GithubAdapter
-  attr_reader :client
+# frozen_string_literal: true
+
+class GithubAdapter < StorageAdapter
+  attr_reader :endpoint, :access_token
 
   def initialize(endpoint:, access_token:)
     @endpoint = endpoint
-    @token = token
-    @client = Octokit::Client.new(access_token: access_token, api_endpoint: endpoint)
+    @access_token = access_token
   end
 
-  def create()
-    client.create_repository_from_template('gauravtiwari/blog-template', params[:blog][:name], accept: Octokit::Preview::PREVIEW_TYPES[:template_repositories], private: params[:blog][:private] == 'true', **create_blog_params)
+  def name
+    'github'
   end
 
-  def delete
-  end
-
-  def update
-  end
-
-  def blob
-  end
-
-  def commit
-  end
-
-  def contribute
-  end
-
-  def merge
-  end
-
-  def rebase
-  end
-
-  def contributors
+  def repositories(options: {})
+    paginate 'repositories', options
   end
 end

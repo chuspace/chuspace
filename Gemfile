@@ -64,9 +64,9 @@ gem 'commonmarker'
 # Clients
 gem 'down'
 gem 'http'
+gem 'faraday'
+gem 'sawyer'
 gem 'faraday-http-cache'
-gem 'octokit'
-gem 'gitlab', github: 'NARKOZ/gitlab'
 
 #  SEO
 gem 'meta-tags'

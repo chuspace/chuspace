@@ -8,6 +8,7 @@ class CreateStorages < ActiveRecord::Migration[6.1]
       t.text :access_token_ciphertext, null: false
       t.references :user, null: false, foreign_key: true
       t.boolean :default, default: false
+      t.boolean :system, default: false, null: false
 
       t.timestamps
     end

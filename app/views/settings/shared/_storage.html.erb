@@ -1,5 +1,5 @@
 <%= turbo_frame_tag(:storage_settings, class: 'relative w-full block') do %>
-  <h3 class='border-b pb-4'>Connected storages</h3>
+  <h3 class='border-b pb-4'>Blog storages</h3>
   <%= link_to 'Add new storage', new_storage_path, class: 'button button--fill absolute right-0 top-0' %>
 
   <%= turbo_frame_tag :storages do %>

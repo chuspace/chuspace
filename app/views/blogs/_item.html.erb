@@ -1,0 +1,19 @@
+<% cache storage do %>
+  <div class='list__item list__item--flex list__item--bordered'>
+    <%= turbo_frame_tag(blog, class: 'flex') do %>
+      <div class='flex items-center flex-1'>
+        <%= inline_svg_tag "icons/#{blog.storage.provider}", class: 'fill-current mr-2 w-8 h-8' %>
+        <%= tag.h3 blog.git_repo_name %>
+      </div>
+      <div class='flex items-center justify-between flex-end'>
+        <%= link_to edit_blog_path(blog) do %>
+          <%= inline_svg_tag 'icons/pencil' %>
+        <% end %>
+
+        <%= button_to blog_path(blog), method: :delete do %>
+          <%= inline_svg_tag 'icons/trash', class: 'ml-2' %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

@@ -5,18 +5,18 @@
   </div>
 
   <div role="tabpanel" class='mt-8'>
-    <h1 class='text-3xl'>
-      Connect an existing Github repository
-    </h1>
-    <p class='text-gray-600 text-sm mt-1'>
-      The selected repository must support publishing posts using markdown.
+    <h3>
+      Connect to an existing repository from a storage
+    </h3>
+    <div class='text-gray-600 text-sm mt-1'>
+      <p>The selected git repository must support publishing posts using markdown.</p>
       <strong>Example: Jekyll, Hugo or Astro</strong>
-    </p>
+    </div>
 
     <%= render 'blogs/form', blog: blog, repo_folders: repo_folders, type: :connect %>
   </div>
   <div role="tabpanel" class='mt-8' hidden>
-    <h1 class='text-3xl'>Create a new Github repository</h1>
+    <h3>Create a new Github repository</h3>
     <p class='text-gray-600 text-sm mt-1'>
       New Github repository will be created using default
       <%= link_to 'blog template', 'https://github.com/chuspace/blog-template', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
