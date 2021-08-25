@@ -1,8 +1,9 @@
 // @flow
 
-import { Node, Plugin, PluginKey } from 'prosemirror-state'
+import { Plugin, PluginKey } from 'prosemirror-state'
 
 import { Element } from 'editor/base'
+import { Node } from 'prosemirror-model'
 import { nodeEqualsType } from 'editor/helpers'
 
 export default class TrailingNode extends Element {
@@ -25,7 +26,7 @@ export default class TrailingNode extends Element {
       new Plugin({
         key: plugin,
         view: () => ({
-          update: view => {
+          update: (view) => {
             const { state } = view
 
             const insertNodeAtEnd = plugin.getState(state)
@@ -43,9 +44,14 @@ export default class TrailingNode extends Element {
         state: {
           init: (_, state) => {
             const lastNode = state.tr.doc.lastChild
-            const hasTrailingNode = !nodeEqualsType({ node: lastNode, types: disabledNodes })
+            const hasTrailingNode = !nodeEqualsType({
+              node: lastNode,
+              types: disabledNodes
+            })
             const isImageNode =
-              lastNode.type.name === 'paragraph' && lastNode.firstChild && lastNode.firstChild.type.name === 'image'
+              lastNode.type.name === 'paragraph' &&
+              lastNode.firstChild &&
+              lastNode.firstChild.type.name === 'image'
 
             return hasTrailingNode || isImageNode
           },
@@ -57,9 +63,14 @@ export default class TrailingNode extends Element {
 
             const lastNode = tr.doc.lastChild
 
-            const hasTrailingNode = !nodeEqualsType({ node: lastNode, types: disabledNodes })
+            const hasTrailingNode = !nodeEqualsType({
+              node: lastNode,
+              types: disabledNodes
+            })
             const isImageNode =
-              lastNode.type.name === 'paragraph' && lastNode.firstChild && lastNode.firstChild.type.name === 'image'
+              lastNode.type.name === 'paragraph' &&
+              lastNode.firstChild &&
+              lastNode.firstChild.type.name === 'image'
 
             return hasTrailingNode || isImageNode
           }

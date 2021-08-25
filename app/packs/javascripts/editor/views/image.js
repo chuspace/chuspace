@@ -3,7 +3,7 @@
 import * as Rails from '@rails/ujs'
 
 import { Node as ProsemirrorNode, Schema } from 'prosemirror-model'
-import { html, render } from 'lit-html'
+import { html, render } from 'lit'
 
 import BaseView from './base'
 import type { BaseViewPropType } from './base'

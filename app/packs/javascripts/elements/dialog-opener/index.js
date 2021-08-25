@@ -1,6 +1,6 @@
 // @flow
 
-import { LitElement, customElement, html } from 'lit'
+import { LitElement, html } from 'lit'
 
 import Dialog from '../../helpers/dialog'
 

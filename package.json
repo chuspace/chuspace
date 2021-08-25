@@ -2,6 +2,10 @@
   "name": "chuspace",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "snowpack dev --polyfill-node",
+    "build": "snowpack build  --polyfill-node"
+  },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.14.5",
     "@babel/plugin-transform-flow-strip-types": "^7.14.5",
@@ -30,7 +34,6 @@
     "is-url": "^1.2.4",
     "lazysizes": "^5.3.2",
     "lit": "^2.0.0-rc.3",
-    "lit-html": "^1.4.1",
     "lodash.includes": "^4.3.0",
     "mini-css-extract-plugin": "^2.2.0",
     "node-sass-glob-importer": "^5.3.2",
@@ -59,7 +62,8 @@
     "tippy.js": "^6.3.1",
     "tohash": "^1.0.2",
     "webpack": "^5.51.1",
-    "webpack-cli": "^4.8.0"
+    "webpack-cli": "^4.8.0",
+    "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
     "@webpack-cli/serve": "^1.5.2",

@@ -16,10 +16,10 @@ class GitlabAdapter
   end
 
   def user(options = {})
-    @user ||= get 'user', options
+    @user ||= get('user', options)
   end
 
   def repositories(options: {})
-    @repositories ||= paginate "users/#{username}/projects", options
+    @repositories ||= paginate("users/#{username}/projects", options)
   end
 end

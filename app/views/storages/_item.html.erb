@@ -1,26 +1,30 @@
 <% cache storage do %>
-  <div class='list__item list__item--bordered'>
+  <div class='list__item list__item--bordered <%= 'bg-gray-100' if storage.system? %>'>
     <%= turbo_frame_tag(storage, class: 'flex') do %>
       <div class='flex flex-1'>
         <%= inline_svg_tag "icons/#{storage.provider}", class: 'fill-current mr-2 w-6 h-6' %>
         <div>
           <div class='flex items-center'>
-            <%= tag.h4 storage.provider.humanize %>
+            <%= tag.h4 storage.provider_name %>
             <%= tag.span '–', class: 'mx-2' %>
             <%= tag.span storage.description, class: 'text-xs' %>
           </div>
           <div class='mt-2'>
+            <%= content_tag :span, 'system', class: 'badge badge--closed text-gray-400 text-xs mr-2' if storage.system? %>
             <%= content_tag :span, 'primary', class: 'badge badge--open text-gray-400 text-xs mr-2' if storage.default? %>
             <%= content_tag :span, 'connected', class: 'badge badge--merged text-gray-400 text-xs' if storage.connected? %>
           </div>
         </div>
       </div>
-      <div class='flex items-center justify-between flex-end'>
-        <%= link_to 'Edit', edit_storage_path(storage), class: 'button button--slim button--fill', data: { 'turbo-frame': :storage_settings } %>
-        <%= button_to storage_path(storage), method: :delete, class: 'button button--slim button--danger ml-3' do %>
-          <%= tag.span 'Delete' %>
-        <% end %>
-      </div>
+
+      <% unless storage.system? %>
+        <div class='flex items-center justify-between flex-end'>
+          <%= link_to 'Edit', edit_storage_path(storage), class: 'button button--slim button--fill', data: { 'turbo-frame': :storage_settings } %>
+          <%= button_to storage_path(storage), method: :delete, class: 'button button--slim button--danger ml-3' do %>
+            <%= tag.span 'Delete' %>
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 <% end %>

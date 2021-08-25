@@ -5,7 +5,7 @@
         <%= form.input :storage, as: :select, collection: Current.user.storages.pluck(:provider, :id) %>
 
         <% if type == :connect %>
-          <auto-complete src="<%= github_repos_path %>" for="repos-popup" class='relative block' data-action='auto-complete-change:auto-refresh-form#refresh'>
+          <auto-complete src="<%= storage_repos_path(blog.storage) %>" for="repos-popup" class='relative block' data-action='auto-complete-change:auto-refresh-form#refresh'>
             <%= form.input :git_repo_name, autofocus: true, input_html: { 'data-action': 'input:auto-refresh-form#reset' }, wrapper_html: { class: 'relative' } %>
             <ul id="repos-popup" class='absolute z-10 bg-white border border-gray-100 w-full'></ul>
           </auto-complete>

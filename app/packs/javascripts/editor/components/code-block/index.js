@@ -15,7 +15,7 @@ import './language-switcher'
 
 import * as CodeMirror from 'codemirror'
 
-import { LitElement, customElement, html } from 'lit'
+import { LitElement, html } from 'lit'
 import { MODES, loadMode } from 'editor/modes'
 
 import ClipboardJS from 'clipboard'

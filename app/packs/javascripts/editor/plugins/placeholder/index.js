@@ -1,9 +1,10 @@
 // @flow
 
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view'
-import { Node, Plugin } from 'prosemirror-state'
 
 import { Element } from 'editor/base'
+import { Node } from 'prosemirror-model'
+import { Plugin } from 'prosemirror-state'
 import includes from 'lodash/includes'
 
 export default class Placeholder extends Element {
@@ -46,7 +47,9 @@ export default class Placeholder extends Element {
       new Plugin({
         props: {
           decorations: ({ doc, plugins }) => {
-            const editablePlugin = plugins.find((plugin) => plugin.key.startsWith('editable$'))
+            const editablePlugin = plugins.find((plugin) =>
+              plugin.key.startsWith('editable$')
+            )
             const editable = editablePlugin.props.editable()
 
             if (!editable) {
@@ -57,7 +60,10 @@ export default class Placeholder extends Element {
 
             doc.descendants((node, pos) => {
               const [firstChild, secondChild] = doc.content.content
-              const hasPlaceholder = includes(['heading', 'paragraph'], node.type.name)
+              const hasPlaceholder = includes(
+                ['heading', 'paragraph'],
+                node.type.name
+              )
 
               if (!hasPlaceholder) {
                 return
@@ -65,7 +71,10 @@ export default class Placeholder extends Element {
 
               const isTitle = firstChild === node && node.attrs.level === 1
               const isSummary = secondChild === node && node.attrs.level === 2
-              const isEmptyBody = secondChild === node && node.type.name === 'paragraph' && doc.childCount <= 3
+              const isEmptyBody =
+                secondChild === node &&
+                node.type.name === 'paragraph' &&
+                doc.childCount <= 3
 
               if (isTitle || isSummary || isEmptyBody) {
                 decorations.push(this.getDecoration(node, pos))

@@ -1,7 +1,7 @@
 // @flow
 
 import { LANGUAGE_MODE_HASH, MODES } from 'editor/modes'
-import { LitElement, customElement, html } from 'lit'
+import { LitElement, html } from 'lit'
 
 import type { ModeType } from 'editor/modes/modes'
 import autoComplete from '@tarekraafat/autocomplete.js'

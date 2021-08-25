@@ -18,7 +18,9 @@ Rails.application.routes.draw do
   end
 
   resources :settings, only: %i[index show]
-  resources :storages
+  resources :storages do
+    resources :repos
+  end
 
   namespace :settings do
     resources :profiles, path: 'profile'

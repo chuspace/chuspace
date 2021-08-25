@@ -1,6 +1,6 @@
 // @flow
 
-import { LitElement, customElement, html, svg } from 'lit'
+import { LitElement, html, svg } from 'lit'
 
 import { customAlphabet } from 'nanoid'
 

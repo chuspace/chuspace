@@ -2,7 +2,7 @@
 
 import 'whatwg-fetch'
 
-import * as Rails from 'rails-ujs'
+import * as Rails from '@rails/ujs'
 
 type ConfigObj = {
   headers: ?any,

@@ -1,6 +1,6 @@
 // @flow
 
-import { LitElement, customElement, html } from 'lit'
+import { LitElement, html } from 'lit'
 
 const ACCEPTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
 

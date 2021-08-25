@@ -1,7 +1,7 @@
 // @flow
 
 import { Element, Node } from 'editor/base'
-import { Fragment, NodeSpec, Node as PMNode, Schema } from 'prosemirror-model'
+import { Fragment, Node as PMNode, Schema } from 'prosemirror-model'
 import { Plugin, PluginKey, Selection } from 'prosemirror-state'
 import { nodeInputRule, toggleBlockType } from 'editor/commands'
 
@@ -19,7 +19,7 @@ const removeLastNewLine = (dom: HTMLElement): HTMLElement => {
 export default class CodeBlock extends Node {
   name = 'code_block'
 
-  get schema(): NodeSpec {
+  get schema(): PMNode {
     return {
       content: 'text*',
       attrs: { language: { default: 'auto' } },
@@ -55,8 +55,8 @@ export default class CodeBlock extends Node {
           getContent: (domNode: PMNode, schema: Schema) => {
             const dom = domNode
             const code = Array.from(dom.children)
-              .map(child => child.textContent)
-              .filter(x => x !== undefined)
+              .map((child) => child.textContent)
+              .filter((x) => x !== undefined)
               .join('\n')
             return code ? Fragment.from(schema.text(code)) : Fragment.empty
           }
@@ -79,7 +79,10 @@ export default class CodeBlock extends Node {
             // TODO: ED-5604 Fix it inside `react-syntax-highlighter`
             // Remove line numbers
             const linesCode = dom.querySelector('code')
-            if (linesCode && linesCode.querySelector('.react-syntax-highlighter-line-number')) {
+            if (
+              linesCode &&
+              linesCode.querySelector('.react-syntax-highlighter-line-number')
+            ) {
               // It's possible to copy without the line numbers too hence this
               // `react-syntax-highlighter-line-number` check, so that we don't remove real code
               linesCode.remove()
@@ -137,7 +140,9 @@ export default class CodeBlock extends Node {
                 const text = matches[0]
 
                 if (matches[0]) {
-                  const node = schema.nodes.code_block.create({ language })
+                  const node = schema.nodes.code_block.create({
+                    language
+                  })
 
                   tr.replaceWith(pos - matches[0].length - 1, pos, node)
                     .setMeta(this, {

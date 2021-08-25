@@ -16,10 +16,10 @@ class GithubAdapter
   end
 
   def user(options = {})
-    @user ||= get 'user', options
+    @user ||= get('user', options)
   end
 
   def repositories(options: {})
-    @repositories ||= paginate 'user/repos', options
+    @repositories ||= paginate('user/repos', options)
   end
 end

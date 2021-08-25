@@ -2,7 +2,7 @@
 
 import { Node as ProsemirrorNode, Schema } from 'prosemirror-model'
 import { Selection, TextSelection } from 'prosemirror-state'
-import { html, render } from 'lit-html'
+import { html, render } from 'lit'
 import { redo, undo } from 'prosemirror-history'
 
 import BaseView from './base'
@@ -28,7 +28,9 @@ export default class CodeBlockView extends BaseView {
   constructor(props: BaseViewPropType & { theme: string, editable: boolean }) {
     // Call super but don't render the view
     super(props, false)
-    const { mode } = LANGUAGE_MODE_HASH[this.node.attrs.language] || { mode: 'auto' }
+    const { mode } = LANGUAGE_MODE_HASH[this.node.attrs.language] || {
+      mode: 'auto'
+    }
 
     // Custom attrs for code block node view
     this.mode = mode
@@ -88,7 +90,13 @@ export default class CodeBlockView extends BaseView {
   onLanguageChange = (mode: string) => {
     this.cm.setOption('mode', mode)
     this.node.attrs.language = mode
-    this.outerView.dispatch(this.outerView.state.tr.setNodeMarkup(this.getPos(), null, this.node.attrs))
+    this.outerView.dispatch(
+      this.outerView.state.tr.setNodeMarkup(
+        this.getPos(),
+        null,
+        this.node.attrs
+      )
+    )
   }
 
   /**
@@ -101,7 +109,9 @@ export default class CodeBlockView extends BaseView {
     let selection = this.asProseMirrorSelection(state.doc)
 
     if (!selection.eq(state.selection)) {
-      this.outerView.dispatch(state.tr.setSelection(selection).setMeta('foo', 'bar'))
+      this.outerView.dispatch(
+        state.tr.setSelection(selection).setMeta('foo', 'bar')
+      )
     }
   }
 
@@ -151,7 +161,10 @@ export default class CodeBlockView extends BaseView {
 
     this.cm.focus()
     this.updating = true
-    this.cm.setSelection(this.cm.posFromIndex(anchor), this.cm.posFromIndex(head))
+    this.cm.setSelection(
+      this.cm.posFromIndex(anchor),
+      this.cm.posFromIndex(head)
+    )
     this.updating = false
   }
 
@@ -191,14 +204,20 @@ export default class CodeBlockView extends BaseView {
     if (
       this.cm.somethingSelected() ||
       pos.line !== (dir < 0 ? this.cm.firstLine() : this.cm.lastLine()) ||
-      (unit === 'char' && pos.ch !== (dir < 0 ? 0 : this.cm.getLine(pos.line).length))
+      (unit === 'char' &&
+        pos.ch !== (dir < 0 ? 0 : this.cm.getLine(pos.line).length))
     ) {
       return CodeMirror.Pass
     }
     this.outerView.focus()
     let targetPos = this.getPos() + (dir < 0 ? 0 : this.node.nodeSize)
-    let selection = Selection.near(this.outerView.state.doc.resolve(targetPos), dir)
-    this.outerView.dispatch(this.outerView.state.tr.setSelection(selection).scrollIntoView())
+    let selection = Selection.near(
+      this.outerView.state.doc.resolve(targetPos),
+      dir
+    )
+    this.outerView.dispatch(
+      this.outerView.state.tr.setSelection(selection).scrollIntoView()
+    )
     this.outerView.focus()
   }
 
@@ -216,7 +235,11 @@ export default class CodeBlockView extends BaseView {
     let change = computeChange(this.cm.getValue(), node.textContent)
     if (change) {
       this.updating = true
-      this.cm.replaceRange(change.text, this.cm.posFromIndex(change.from), this.cm.posFromIndex(change.to))
+      this.cm.replaceRange(
+        change.text,
+        this.cm.posFromIndex(change.from),
+        this.cm.posFromIndex(change.to)
+      )
       this.updating = false
     }
     return true
@@ -232,10 +255,17 @@ function computeChange(oldVal: string, newVal: string) {
   let oldEnd = oldVal.length
 
   let newEnd = newVal.length
-  while (start < oldEnd && oldVal.charCodeAt(start) === newVal.charCodeAt(start)) {
+  while (
+    start < oldEnd &&
+    oldVal.charCodeAt(start) === newVal.charCodeAt(start)
+  ) {
     ++start
   }
-  while (oldEnd > start && newEnd > start && oldVal.charCodeAt(oldEnd - 1) === newVal.charCodeAt(newEnd - 1)) {
+  while (
+    oldEnd > start &&
+    newEnd > start &&
+    oldVal.charCodeAt(oldEnd - 1) === newVal.charCodeAt(newEnd - 1)
+  ) {
     oldEnd--
     newEnd--
   }

@@ -6,3 +6,5 @@ en:
           attributes:
             provider:
               one_provider_per_user: 'this storage provider already exists'
+              one_system_storage_allowed: 'one system storage allowed'
+              one_default_storage_allowed: 'one default storage allowed'

@@ -2,7 +2,7 @@
 
 import * as Rails from '@rails/ujs'
 
-import { LitElement, customElement, html } from 'lit'
+import { LitElement, html } from 'lit'
 
 import ActioncableClient from '../../helpers/actioncable-client'
 import Editor from '../../editor'
