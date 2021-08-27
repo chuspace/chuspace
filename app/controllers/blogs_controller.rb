@@ -4,7 +4,7 @@ class BlogsController < ApplicationController
   before_action :authenticate!, except: :show
 
   def new
-    @blog = Blog.new
+    @blog = Current.user.blogs.build(storage: Current.user.storages.default_or_internal)
     @repo_folders = []
   end
 

@@ -6,14 +6,14 @@ class CreateStorages < ActiveRecord::Migration[6.1]
       t.string :description, null: false
       t.text :endpoint_ciphertext
       t.text :access_token_ciphertext, null: false
+      t.string :provider_user_id, index: true
       t.references :user, null: false, foreign_key: true
       t.boolean :default, default: false
-      t.boolean :system, default: false, null: false
 
       t.timestamps
     end
 
     add_column :storages, :provider, :git_storage_provider_enum_type, index: true, null: false
-    add_index :storages, %i[user_id provider], unique: true
+    add_index :storages, %i[user_id provider_user_id provider], unique: true
   end
 end

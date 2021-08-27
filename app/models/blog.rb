@@ -1,23 +1,45 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
+  DEFAULT_FRAMEWORK = 'hugo'
+
+  extend FriendlyId
+  friendly_id :name, use: %i[slugged history finders], slug_column: :git_repo_name
+
   belongs_to :user
-  has_one :storage, required: true
+  belongs_to :storage
+  validates_presence_of :name, :git_repo_name, :posts_folder, :drafts_folder, :assets_folder
 
-  attr_accessor :name, :description, :private, :owner, :type
-  validates_presence_of :git_repo_name, :posts_folder, :drafts_folder, :assets_folder
-  delegate :name, :description, :full_name, :private, :owner, to: :repo, allow_nil: true
+  enum framework: BlogFrameworkConfig.frameworks_enum, _suffix: true
+  enum visibility: {
+    private: 'private',
+    public: 'public',
+    internal: 'internal'
+  }, _suffix: true
 
-  def repo
-    @repo ||= storage.client.repo(git_repo_name) if git_repo_name.present?
+  before_validation :set_defaults
+  before_create :create_repository
+
+  def repository
+    @repository ||= storage.adapter.repository(id: provider_git_repo_id)
   end
 
-  def write_post(name:, body:)
-    storage.client.create_contents(
-      git_repo_name,
-      "#{posts_folder}/#{name}",
-      'Adding content',
-      body
+  private
+
+  def set_defaults
+    self.assign_attributes(BlogFrameworkConfig.send(Blog::DEFAULT_FRAMEWORK).slice(:framework, :posts_folder, :drafts_folder, :assets_folder))
+    self.visibility ||= :private
+  end
+
+  def create_repository
+    repository = storage.adapter.create_repository(
+      name: git_repo_name,
+      user_id: storage.provider_user_id,
+      description: description,
+      visibility: visibility,
+      template_name: framework
     )
+
+    self.provider_git_repo_id = repository.id
   end
 end

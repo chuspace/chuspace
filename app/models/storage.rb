@@ -1,18 +1,23 @@
 # frozen_string_literal: true
 
 class Storage < ApplicationRecord
+  INTERNAL = :chuspace
+
+  has_many :blogs, dependent: :delete_all
   belongs_to :user, optional: true
   encrypts :access_token, :endpoint
 
-  validates :description, :provider, :access_token, :system, presence: true
+  validates :description, :provider, :access_token, presence: true
   validates :provider, uniqueness: { scope: :user_id, message: :one_provider_per_user }
-  validate :one_system_storage_allowed, :one_default_storage_allowed
 
   enum provider: GitStorageConfig.providers_enum
 
   before_validation :set_endpoint, on: :create
-  scope :system, -> { find_by(system: true) }
-  scope :default, -> { find_by(default: true) }
+  before_create :create_internal_storage_user, if: :internal?
+  after_create_commit :create_default_blog_for_internal_storage_user, if: :internal?
+  after_destroy_commit :deactivate_internal_storage_user, if: :internal?
+
+  scope :internal, -> { find_by(provider: :chuspace) }
 
   def connected?
     true
@@ -20,11 +25,23 @@ class Storage < ApplicationRecord
   end
 
   def adapter
-    @adapter ||= StorageAdapter.new(storage_id: id)
+    @adapter ||= StorageAdapter.new(storage: self)
   end
 
-  def provider_name
-    system? ? 'Chuspace' : storage.provider.humanize
+  def internal?
+    provider.to_sym == INTERNAL
+  end
+
+  def self.default_or_internal
+    default || internal
+  end
+
+  def self.default
+    where.not(provider: :chuspace).find_by(default: true)
+  end
+
+  def provider_user
+    @provider_user ||= adapter.user(id: provider_user_id)
   end
 
   private
@@ -33,11 +50,21 @@ class Storage < ApplicationRecord
     self.endpoint ||= GitStorageConfig.new.send(provider).dig(:endpoint)
   end
 
-  def one_system_storage_allowed
-    errors.add(:base, :one_system_storage_allowed) if user.storages.where(system: true).count > 1
+  def create_default_blog_for_internal_storage_user
+    blogs.create!(
+      user: user,
+      name: "#{user.name} blog",
+      git_repo_name: 'blog',
+      default: true
+    )
   end
 
-  def one_default_storage_allowed
-    errors.add(:base, :one_default_storage_allowed) if user.storages.where(default: true).count > 1
+  def create_internal_storage_user
+    storage_user = adapter.create_user(**user.slice(:name, :email, :username).symbolize_keys)
+    self.provider_user_id = storage_user.id
+  end
+
+  def deactivate_internal_storage_user
+    adapter.deactivate_user(**user.slice(:name, :email, :username).symbolize_keys)
   end
 end

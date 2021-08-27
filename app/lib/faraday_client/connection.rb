@@ -10,6 +10,7 @@ module FaradayClient
       builder.use Faraday::Request::Retry, exceptions: [FaradayClient::ServerError]
       builder.use FaradayClient::Middleware::FollowRedirects
       builder.use FaradayClient::Middleware::RaiseError
+      builder.response :logger
       builder.use FaradayClient::Middleware::FeedParser
       builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache,  logger: Rails.logger
       builder.adapter Faraday.default_adapter

@@ -5,6 +5,7 @@ class StorageAdapter
   class StorageAdapterNotFoundError < StandardError; end
 
   ADAPTERS = {
+    chuspace: ChuspaceAdapter,
     github: GithubAdapter,
     gitlab: GitlabAdapter,
     bitbucket: BitbucketAdapter
@@ -13,7 +14,12 @@ class StorageAdapter
   REQUIRED_METHODS = %i[
     name
     user
+    repo
+    repository
+    repos
     repositories
+    create_user
+    create_repo
     create_repository
     delete_repository
     update_repository
@@ -27,8 +33,8 @@ class StorageAdapter
 
   attr_reader :adapter
 
-  def initialize(storage_id:)
-    @storage = Storage.find(storage_id)
+  def initialize(storage:)
+    @storage = storage
     adapter_klass = ADAPTERS[@storage.provider.to_sym]
     fail StorageAdapterNotFoundError, "#{@storage.provider} adapter not found" if adapter_klass.nil?
 

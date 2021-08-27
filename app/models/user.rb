@@ -7,16 +7,14 @@ class User < ApplicationRecord
   friendly_id :name, use: %i[slugged history finders], slug_column: :username
 
   has_one_attached :avatar
-  has_one :system_storage, -> { find_by(system: true) }, class_name: 'Storage'
-  has_one :default_storage, -> { find_by(default: true) }, class_name: 'Storage'
   has_many :blogs, dependent: :delete_all
   has_many :storages, dependent: :delete_all
   has_many :identities, dependent: :delete_all
 
+  after_create_commit :create_internal_storage
+
   encrypts :email
   blind_index :email, slow: true
-
-  after_create_commit :attach_system_storage
 
   enum onboarding_status: {
     profile: 'profile',
@@ -45,7 +43,7 @@ class User < ApplicationRecord
 
   private
 
-  def attach_system_storage
-    storages.create!(Rails.application.credentials.storage[:system])
+  def create_internal_storage
+    storages.create!(Rails.application.credentials.storage[:chuspace])
   end
 end

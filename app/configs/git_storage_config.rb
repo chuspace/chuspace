@@ -12,6 +12,11 @@ class GitStorageConfig < ApplicationConfig
       scopes: 'api,read_repository,write_repository'
     },
 
+    chuspace: {
+      endpoint: 'https://git.chuspace.com/api/v4',
+      scopes: 'api,read_repository,write_repository'
+    },
+
     bitbucket: {
       endpoint: 'https://api.github.com',
       scopes: 'repository,repository:write,repository:admin,pullrequest,pullrequest:write,account:write,account'
