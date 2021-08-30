@@ -64,8 +64,22 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
 # Could not dump table "storages" because of following StandardError
 #   Unknown type 'git_storage_provider_enum_type' for column 'provider'
 
-# Could not dump table "users" because of following StandardError
-#   Unknown type 'onboarding_status_enum_type' for column 'onboarding_status'
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.citext "username"
+    t.string "email_ciphertext", null: false
+    t.string "email_bidx", null: false
+    t.text "bio"
+    t.integer "sign_in_count", default: 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["email_bidx"], name: "index_users_on_email_bidx", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
+  end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"

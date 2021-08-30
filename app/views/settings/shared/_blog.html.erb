@@ -1,6 +1,9 @@
 <%= turbo_frame_tag(:blog_settings, class: 'relative w-full block') do %>
   <h3 class='border-b pb-4'>Blogs</h3>
-  <%= link_to 'Add new blog', new_blog_path, class: 'button button--fill absolute right-0 top-0' %>
+  <div class='absolute right-0 top-0'>
+    <%= link_to 'Connect existing', connect_blogs_path, class: 'button button--fill' %>
+    <%= link_to 'Add new', new_blog_path, class: 'button button--fill  ml-2' %>
+  </div>
 
   <%= turbo_frame_tag :blogs do %>
     <% if Current.user.blogs.any? %>

@@ -1,12 +1,11 @@
 import '@github/details-menu-element'
 import '@github/auto-complete-element'
 import '@github/tab-container-element'
-import 'core-js/stable'
+import 'core-js/es'
 import 'regenerator-runtime/runtime'
 import 'lazysizes/plugins/blur-up/ls.blur-up'
 import 'lazysizes/plugins/parent-fit/ls.parent-fit'
-
-import * as Turbo from '@hotwired/turbo'
+import '@hotwired/turbo-rails'
 
 import lazySizes from 'lazysizes'
 
@@ -19,4 +18,3 @@ function importAll(r) {
 
 importAll(require.context('../javascripts/elements', true, /.(ts)$/))
 
-Turbo.start()

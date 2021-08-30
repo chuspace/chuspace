@@ -5,11 +5,16 @@
       <%= content_tag :span, 'axiom', class: "text-sm" %>
     <% end %>
 
+    <div class='flex items-center'>
+      <%= link_to 'Feed', '#', class: 'link link--default' %>
+      <%= link_to 'How it works?', '#', class: 'link link--default ml-8' %>
+    </div>
+
     <% if Current.user.present?  %>
       <%= render "layouts/user" %>
     <% else %>
       <div class='flex items-center'>
-        <%= button_to 'Sign in github', '/auth/github', class: 'button button--fill', 'data-turbo': false %>
+        <%= button_to 'Get started', login_path, class: 'button button--fill', 'data-turbo': false %>
       </div>
     <% end %>
   </nav>

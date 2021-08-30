@@ -2,9 +2,15 @@
 
 class BlogsController < ApplicationController
   before_action :authenticate!, except: :show
+  before_action :find_blog, except: %i[create index]
 
   def new
     @blog = Current.user.blogs.build(storage: Current.user.storages.default_or_internal)
+    @repo_folders = []
+  end
+
+  def connect
+    @blog = Current.user.blogs.new(storage: Current.user.storages.default)
     @repo_folders = []
   end
 
@@ -40,9 +46,13 @@ class BlogsController < ApplicationController
   end
 
   def edit
+    @blog = Current.user.blogs.find(params[:slug])
   end
 
   def update
+    puts blog_params.inspect
+    @blog.update!(blog_params)
+    redirect_to setting_path(id: :blog)
   end
 
   def destroy
@@ -50,11 +60,15 @@ class BlogsController < ApplicationController
 
   private
 
-  def connect_blog_params
-    params.require(:blog).permit(:full_repo_name, :posts_folder, :drafts_folder, :assets_folder)
+  def blog_params
+    params.require(:blog).permit(:name, :description, :visibility, :posts_folder, :drafts_folder, :assets_folder)
   end
 
   def create_blog_params
     params.require(:blog).permit(:description, :owner)
+  end
+
+  def find_blog
+    @blog = Current.user.blogs.find(params[:slug])
   end
 end

@@ -1,17 +1,22 @@
 <% cache blog do %>
   <div class='list__item list__item--flex list__item--bordered'>
-    <%= turbo_frame_tag(blog, class: 'flex') do %>
-      <div class='flex items-center flex-1'>
-        <%= inline_svg_tag "icons/#{blog.storage.internal? ? 'database' : blog.storage.provider}", class: 'fill-current mr-2 w-8 h-8' %>
-        <%= tag.h3 blog.git_repo_name %>
-      </div>
-      <div class='flex items-center justify-between flex-end'>
-        <%= link_to edit_blog_path(blog) do %>
-          <%= inline_svg_tag 'icons/pencil' %>
-        <% end %>
+    <%= turbo_frame_tag(blog, class: 'flex mx-4') do %>
+      <div class='flex flex-1'>
+        <div>
+          <%= tag.h4 blog.name %>
+          <%= tag.div blog.description, class: 'text-xs text-gray-600 mt-1' %>
 
-        <%= button_to blog_path(blog), method: :delete do %>
-          <%= inline_svg_tag 'icons/trash', class: 'ml-2' %>
+          <div class='mt-2'>
+            <%= content_tag :span, 'internal', class: 'badge badge--closed text-gray-400 text-xs mr-2' if blog.storage.chuspace? %>
+            <%= content_tag :span, 'primary', class: 'badge badge--open text-gray-400 text-xs mr-2' if blog.default? %>
+          </div>
+        </div>
+      </div>
+
+      <div class='flex items-center justify-between flex-end'>
+        <%= link_to 'Edit', edit_blog_path(blog), class: 'button button--slim button--fill', data: { 'turbo-frame': :blog_settings } %>
+        <%= button_to blog_path(blog), method: :delete, class: 'button button--slim button--danger ml-3' do %>
+          <%= tag.span 'Delete' %>
         <% end %>
       </div>
     <% end %>

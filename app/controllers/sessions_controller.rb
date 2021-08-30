@@ -22,11 +22,7 @@ class SessionsController < ApplicationController
 
     flash[:notice] = "Succefully logged in via #{provider}"
 
-    if Current.user.onboarded?
-      redirect_to root_path
-    else
-      redirect_to profile_path
-    end
+    redirect_to root_path
   end
 
   def destroy

@@ -5,16 +5,11 @@ Rails.application.routes.draw do
 
   resources :users
   resources :articles
-  resources :welcome
 
   resources :blogs, param: :slug do
     collection do
       get :connect
     end
-  end
-
-  namespace :github do
-    resources :repos
   end
 
   resources :settings, only: %i[index show]

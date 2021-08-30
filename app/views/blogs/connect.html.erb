@@ -1,0 +1,21 @@
+<%= turbo_frame_tag(:blog_settings) do %>
+  <h3 class='border-b pb-4'>Connect existing repository</h3>
+
+  <div class='absolute right-0 top-0'>
+    <%= link_to 'Add new', new_blog_path, class: 'button button--fill  ml-2' %>
+  </div>
+
+  <% if @blog.storage.present? %>
+    <div class='text-gray-600 text-sm mt-1'>
+      <p>The selected git repository must support publishing posts using markdown.</p>
+      <strong>Example: Jekyll, Hugo or Astro</strong>
+    </div>
+    <%= render 'blogs/form', blog: @blog, type: :connect %>
+  <% else %>
+    <div class='placeholder sm:w-3/4 mx-auto w-full'>
+      <h3>No external storages configured</h4>
+      <p>You can only connect repositories from your own git storage providers</p>
+      <%= link_to 'Connect storage', settings_storages_path, class: 'button button--fill mt-4 inline-block', data: { 'turbo-frame': '_top' } %>
+    </div>
+  <% end %>
+<% end %>

@@ -1,3 +1,11 @@
 <%= turbo_frame_tag(:blog_settings) do %>
-  <%= render 'blogs/tabs', blog: @blog, repo_folders: @repo_folders %>
+  <h3 class='border-b pb-4'>Create a new repository</h3>
+
+  <p class='text-gray-600 text-sm mt-1'>
+    New Github repository will be created using default
+    <%= link_to 'blog template', 'https://github.com/chuspace/blog-template', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
+    based on <%= link_to 'Astro', 'https://astro.build/', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
+  </p>
+
+  <%= render 'blogs/form', blog: @blog, type: :new %>
 <% end %>

@@ -4,11 +4,11 @@ class Blog < ApplicationRecord
   DEFAULT_FRAMEWORK = 'hugo'
 
   extend FriendlyId
-  friendly_id :name, use: %i[slugged history finders], slug_column: :git_repo_name
+  friendly_id :name, use: %i[slugged history finders]
 
   belongs_to :user
   belongs_to :storage
-  validates_presence_of :name, :git_repo_name, :posts_folder, :drafts_folder, :assets_folder
+  validates_presence_of :name, :posts_folder, :drafts_folder, :assets_folder
 
   enum framework: BlogFrameworkConfig.frameworks_enum, _suffix: true
   enum visibility: {
@@ -17,11 +17,17 @@ class Blog < ApplicationRecord
     internal: 'internal'
   }, _suffix: true
 
-  before_validation :set_defaults
+  before_validation :set_defaults, on: :create
   before_create :create_repository
 
+  delegate :provider, to: :storage
+
   def repository
-    @repository ||= storage.adapter.repository(id: provider_git_repo_id)
+    @repository ||= storage.adapter.repository(id: git_repo_id)
+  end
+
+  def repository_folders
+    @repository_folders ||= storage.adapter.repository_folders(id: git_repo_id)
   end
 
   private
@@ -32,14 +38,7 @@ class Blog < ApplicationRecord
   end
 
   def create_repository
-    repository = storage.adapter.create_repository(
-      name: git_repo_name,
-      user_id: storage.provider_user_id,
-      description: description,
-      visibility: visibility,
-      template_name: framework
-    )
-
-    self.provider_git_repo_id = repository.id
+    repository = storage.adapter.create_repository(blog: self)
+    self.git_repo_id = repository.id
   end
 end

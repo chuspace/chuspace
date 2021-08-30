@@ -32,7 +32,6 @@ module.exports = function config(api) {
       '@babel/preset-flow'
     ].filter(Boolean),
     plugins: [
-      'babel-plugin-macros',
       ['@babel/plugin-proposal-decorators', { legacy: true }],
       ['@babel/plugin-proposal-class-properties', { loose: true }],
       ['@babel/plugin-transform-runtime', { helpers: false }],

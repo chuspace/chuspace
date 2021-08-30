@@ -1,16 +1,6 @@
 # frozen_string_literal: true
 
-class GitlabAdapter
-  include FaradayClient::Connection
-
-  attr_reader :endpoint, :access_token
-  delegate :username, to: :user
-
-  def initialize(endpoint:, access_token:)
-    @endpoint = endpoint
-    @access_token = access_token
-  end
-
+class GitlabAdapter < ApplicationAdapter
   def name
     'gitlab'
   end
@@ -19,29 +9,7 @@ class GitlabAdapter
     @current_user ||= get('user')
   end
 
-  def user(id:)
-    @user ||= get("users/#{id}")
-  end
-
-  def create_user(email:, name:, username:)
-    post(
-      'users',
-      {
-        email: email,
-        name: name,
-        username: username,
-        projects_limit: 100,
-        can_create_group: false,
-        private_profile: true,
-        skip_confirmation: true,
-        force_random_password: true
-      }
-    )
-  end
-
-  def deactivate_user(id:)
-    post("users/#{id}/deactivate")
-  end
+  alias user current_user
 
   def repository(id:)
     @repository ||= get("projects/#{id}")
@@ -49,23 +17,31 @@ class GitlabAdapter
 
   alias repo repository
 
-  def repositories(options: {})
-    @repositories ||= paginate("users/#{username}/projects", options)
+  def repositories(storage:)
+    @repositories ||= paginate("users/#{storage.provider_user_id}/projects")
   end
 
   alias repos repositories
 
-  def create_repository(user_id:, name:, description:, visibility: :private, template_name: :hugo)
-    post(
-      "projects/user/#{user_id}",
-      {
-        name: name,
-        description: description,
-        visibility: visibility,
-        template_name: template_name
-      }
+  def create_repository(blog:)
+    project = post(
+      'projects',
+      name: blog.name,
+      path: "#{blog.slug}.chuspace.dev",
+      description: blog.description,
+      visibility: blog.visibility,
+      shared_runners_enabled: true,
+      pages_access_level: 'public',
+      template_name: blog.framework
     )
+
+    post("projects/#{project.id}/triggers", description: 'Deploy pages')
   end
 
   alias create_repo create_repository
+
+  def repository_folders(id:)
+    tree = get("projects/#{id}/repository/tree", { recursive: true })
+    @repository_folders ||= tree.map(&:path)
+  end
 end

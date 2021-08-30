@@ -8,3 +8,10 @@ en:
               one_provider_per_user: 'this storage provider already exists'
               one_system_storage_allowed: 'one system storage allowed'
               one_default_storage_allowed: 'one default storage allowed'
+
+  home:
+    index:
+      heading: Blogging platform for developers
+      intro:
+        Chuspace is a blogging platform built on Git. Publish, learn and collaborate
+        using the tools you love and use everyday.

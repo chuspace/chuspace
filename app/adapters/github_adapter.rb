@@ -1,16 +1,6 @@
 # frozen_string_literal: true
 
-class GithubAdapter
-  include FaradayClient::Connection
-
-  attr_reader :endpoint, :access_token
-  delegate :login, to: :user
-
-  def initialize(endpoint:, access_token:)
-    @endpoint = endpoint
-    @access_token = access_token
-  end
-
+class GithubAdapter < ApplicationAdapter
   def name
     'github'
   end

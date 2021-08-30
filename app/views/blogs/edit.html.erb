@@ -1,0 +1,21 @@
+<%= turbo_frame_tag(:blog_settings) do %>
+  <h3 class='border-b pb-4'>Edit blog</h3>
+
+  <%= turbo_frame_tag(@blog) do %>
+    <%= simple_form_for(@blog, html: { data: { "turbo-frame" => "blog_settings" }  }) do |form| %>
+      <%= form.input :name, required: true %>
+      <%= form.input :description, as: :text, required: true %>
+      <%= form.input :framework, as: :select, collection: Blog.frameworks %>
+      <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
+
+      <% if @blog.persisted? %>
+        <%= form.input :posts_folder, as: :select, collection: @blog.repository_folders %>
+        <%= form.input :drafts_folder, as: :select, collection: @blog.repository_folders %>
+        <%= form.input :assets_folder, as: :select, collection: @blog.repository_folders %>
+      <% end %>
+
+      <%= form.button :submit, 'Create', class: 'mt-12' %>
+      <%= link_to 'Cancel', setting_path(id: 'blog'), class: 'button button--fill ml-2', data: { 'turbo-frame': 'blog_settings' } %>
+    <% end %>
+  <% end %>
+<% end %>

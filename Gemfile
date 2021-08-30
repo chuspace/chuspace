@@ -82,9 +82,6 @@ gem 'inline_svg'
 gem 'blind_index'
 gem 'lockbox'
 
-# Wizard
-gem 'wicked'
-
 # App configs
 gem 'anyway_config'
 

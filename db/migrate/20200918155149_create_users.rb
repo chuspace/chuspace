@@ -8,7 +8,8 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.string :name
       t.citext :username, index: { unique: true }
       t.string :email_ciphertext, null: false
-      t.string :email_bidx, null: false
+      t.string :email_bidx, null: false, index: { unique: true }
+      t.text :bio
 
       # Track logins
       t.integer :sign_in_count, default: 0
@@ -19,8 +20,5 @@ class CreateUsers < ActiveRecord::Migration[6.0]
 
       t.timestamps null: false
     end
-
-    add_column :users, :onboarding_status, :onboarding_status_enum_type, null: false, default: 'profile', index: true
-    add_index :users, :email_bidx, unique: true
   end
 end

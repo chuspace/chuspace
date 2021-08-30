@@ -14,6 +14,7 @@ class StorageAdapter
   REQUIRED_METHODS = %i[
     name
     user
+    current_user
     repo
     repository
     repos
@@ -23,6 +24,7 @@ class StorageAdapter
     create_repository
     delete_repository
     update_repository
+    repository_folders
     find_blob
     commit
     contribute
@@ -31,7 +33,7 @@ class StorageAdapter
     contributors
   ].freeze
 
-  attr_reader :adapter
+  attr_reader :storage, :adapter
 
   def initialize(storage:)
     @storage = storage
@@ -59,6 +61,10 @@ class StorageAdapter
     define_method(method) do |*_args|
       fail MethodNotImplementedError, "#{method} not implemented for #{adapter.name} adapter"
     end
+  end
+
+  def name
+    fail MethodNotImplementedError, "name not implemented for #{adapter.name} adapter"
   end
 
   delegate *REQUIRED_METHODS, to: :adapter

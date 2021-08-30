@@ -19,7 +19,7 @@ module.exports = {
       sm: '576px',
       md: '768px',
       lg: '992px',
-      xl: '1024px'
+      xl: '1160px'
     },
     colors: {
       transparent: 'transparent',

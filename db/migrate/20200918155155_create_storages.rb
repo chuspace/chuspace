@@ -6,7 +6,7 @@ class CreateStorages < ActiveRecord::Migration[6.1]
       t.string :description, null: false
       t.text :endpoint_ciphertext
       t.text :access_token_ciphertext, null: false
-      t.string :provider_user_id, index: true
+      t.string :provider_user_id, null: false, index: true
       t.references :user, null: false, foreign_key: true
       t.boolean :default, default: false
 

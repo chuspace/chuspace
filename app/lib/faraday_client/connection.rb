@@ -117,7 +117,7 @@ module FaradayClient
         case name
         when 'github'
           http.authorization 'token', @access_token
-        when 'gitlab'
+        when 'gitlab', 'chuspace', 'bitbucket'
           http.authorization 'Bearer', @access_token
         end
       end
