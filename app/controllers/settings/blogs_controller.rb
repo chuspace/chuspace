@@ -1,14 +1,9 @@
 module Settings
-  class ProfilesController < ApplicationController
+  class BlogsController < ApplicationController
     layout 'settings'
     before_action :find_blog, only: :edit
 
-    def index
-    end
 
-    def edit
-      render 'blogs/edit'
-    end
 
     private
 

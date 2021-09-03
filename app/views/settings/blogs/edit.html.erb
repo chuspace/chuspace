@@ -1,7 +1,10 @@
 <%= turbo_frame_tag(:blog_settings) do %>
   <h3 class='border-b pb-4'>Edit blog</h3>
-  <h3><%= @blog.name %></h3>
-  <p>Powered by: <%= @blog.framework %>
+
+  <div class='my-4'>
+    <h3><%= @blog.name %></h3>
+    <p>Powered by: <%= @blog.framework %>
+  </div>
 
   <h4>Basics</h4>
   <%= turbo_frame_tag(@blog) do %>
@@ -16,10 +19,22 @@
         <%= form.input :assets_folder, as: :select, collection: @blog.repository_folders %>
       <% end %>
 
-      <%= form.button :submit, 'Create', class: 'mt-12' %>
-      <%= link_to 'Cancel', setting_path(id: 'blog'), class: 'button button--fill ml-2', data: { 'turbo-frame': 'blog_settings' } %>
+      <%= form.button :submit, 'Update', class: 'mt-12' %>
     <% end %>
   <% end %>
 
-  <hr />
+  <% if @blog.storage.chuspace? %>
+    <hr class='my-8' />
+    <h4>Custom domains</h4>
+    <%= turbo_frame_tag(BlogDomain.new) do %>
+      <%= simple_form_for(BlogDomain.new, url: blog_domains_path(@blog), html: { data: { "turbo-frame" => "blog_settings" }  }) do |form| %>
+        <%= form.input :domain, required: true %>
+        <%= form.input :auto_ssl_enabled, as: :boolean, required: true %>
+        <%= form.input :certificate, as: :text %>
+        <%= form.input :key, as: :text %>
+
+        <%= form.button :submit, 'Update', class: 'mt-12' %>
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>

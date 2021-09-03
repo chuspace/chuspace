@@ -1,5 +1,5 @@
 module Settings
-  class ProfilesController < ApplicationController
+  class StoragesController < ApplicationController
     layout 'settings'
     before_action :find_blog, only: :edit
 

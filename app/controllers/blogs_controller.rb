@@ -45,10 +45,6 @@ class BlogsController < ApplicationController
     end
   end
 
-  def edit
-    @blog = Current.user.blogs.find(params[:slug])
-  end
-
   def update
     puts blog_params.inspect
     @blog.update!(blog_params)

@@ -14,7 +14,7 @@
       </div>
 
       <div class='flex items-center justify-between flex-end'>
-        <%= link_to 'Edit', edit_blog_path(blog), class: 'button button--slim button--fill', data: { 'turbo-frame': :blog_settings } %>
+        <%= link_to 'Edit', edit_settings_blog_path(blog), class: 'button button--slim button--fill', data: { 'turbo-frame': :_top } %>
         <%= button_to blog_path(blog), method: :delete, class: 'button button--slim button--danger ml-3' do %>
           <%= tag.span 'Delete' %>
         <% end %>

@@ -10,20 +10,9 @@ class Storage < ApplicationRecord
 
   enum provider: GitStorageConfig.providers_enum
 
-  def connected?
-    true
-    #  Add logic
-  end
-
-  def adapter
-    @adapter ||= StorageAdapter.new(storage: self)
-  end
-
-  def provider
-    super ? ActiveSupport::StringInquirer.new(super) : nil
-  end
-
+  before_save :add_provider_defaults, unless: :chuspace?
   delegate :chuspace?, to: :provider, allow_nil: true
+  delegate :repositories, to: :adapter
 
   class << self
     def chuspace_adapter
@@ -45,5 +34,28 @@ class Storage < ApplicationRecord
     def default_or_chuspace
       default || chuspace
     end
+  end
+
+  def adapter
+    @adapter ||= StorageAdapter.new(storage: self)
+  end
+
+  def provider
+    super ? ActiveSupport::StringInquirer.new(super) : nil
+  end
+
+  def provider_user
+    @provider_user ||= adapter.user
+  end
+
+  def provider_config
+    @provider_config ||= GitStorageConfig.new.send(provider)
+  end
+
+  private
+
+  def add_provider_defaults
+    self.assign_attributes(provider_config.slice(:description, :endpoint))
+    self.provider_user_id = adapter.user.id
   end
 end

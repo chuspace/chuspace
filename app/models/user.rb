@@ -43,7 +43,7 @@ class User < ApplicationRecord
 
     storage.blogs.create!(
       user: self,
-      name: "#{username}-blog",
+      name: "#{self.name} blog",
       default: true
     )
   end

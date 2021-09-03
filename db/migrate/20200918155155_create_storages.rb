@@ -9,6 +9,7 @@ class CreateStorages < ActiveRecord::Migration[6.1]
       t.string :provider_user_id, null: false, index: true
       t.references :user, null: false, foreign_key: true
       t.boolean :default, default: false
+      t.boolean :active, default: true
 
       t.timestamps
     end

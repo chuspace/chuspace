@@ -19,8 +19,7 @@ class Blog < ApplicationRecord
 
   before_validation :set_defaults, on: :create
   before_create :create_repository
-
-  delegate :provider, to: :storage
+  delegate :provider, :provider_user, to: :storage
 
   def repository
     @repository ||= storage.adapter.repository(id: git_repo_id)

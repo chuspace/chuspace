@@ -7,19 +7,23 @@ Rails.application.routes.draw do
   resources :articles
 
   resources :blogs, param: :slug do
+    resources :domains
+
     collection do
       get :connect
     end
   end
 
-  resources :settings, only: %i[index show]
+  resources :settings, only: :index
+
   resources :storages do
     resources :repos
   end
 
   namespace :settings do
-    resources :profiles, path: 'profile'
-    resources :storages, path: 'storage'
+    resources :profiles
+    resources :storages
+    resources :blogs
   end
 
   get '/me', to: 'users#show', as: :profile

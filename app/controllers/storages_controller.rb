@@ -18,7 +18,7 @@ class StoragesController < ApplicationController
 
   def create
     @storage = Current.user.storages.create(storage_params.delete_if { |key, value| value.blank? })
-    redirect_to setting_path(id: :storage)
+    redirect_to settings_storages_path
   end
 
   def edit
@@ -27,13 +27,13 @@ class StoragesController < ApplicationController
   def update
     @storage.update(storage_params.except(:provider))
 
-    redirect_to setting_path(id: :storage)
+    redirect_to settings_storages_path
   end
 
   def destroy
     @storage.destroy
 
-    redirect_to setting_path(id: :storage)
+    redirect_to settings_storages_path
   end
 
   private

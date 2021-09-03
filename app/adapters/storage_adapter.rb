@@ -14,13 +14,9 @@ class StorageAdapter
   REQUIRED_METHODS = %i[
     name
     user
-    current_user
-    repo
     repository
-    repos
     repositories
     create_user
-    create_repo
     create_repository
     delete_repository
     update_repository

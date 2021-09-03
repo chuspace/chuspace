@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class SettingsController < ApplicationController
-  def index
-    redirect_to setting_path(id: :profile)
-  end
+  layout 'settings'
 
-  def show
+  def index
+    redirect_to settings_profiles_path
   end
 end

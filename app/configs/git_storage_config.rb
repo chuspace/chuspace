@@ -3,24 +3,28 @@
 class GitStorageConfig < ApplicationConfig
   attr_config(
     github: {
+      domain: 'github.io',
       endpoint: 'https://api.github.com',
       description: 'Git storage provider from Github.com',
       scopes: 'repo,workflow,admin:public_key,admin:repo_hook,delete_repo'
     },
 
     gitlab: {
+      domain: 'gitlab.io',
       description: 'Git storage provider from Gitlab.com',
       endpoint: 'https://gitlab.com/api/v4',
       scopes: 'api,read_repository,write_repository'
     },
 
     chuspace: {
+      domain: 'chuspace.dev',
       description: 'Default git storage hosted by Chuspace on our servers',
       endpoint: 'https://git.chuspace.com/api/v4',
       scopes: 'api,read_repository,write_repository'
     },
 
     bitbucket: {
+      domain: 'bitbucket.io',
       description: 'Git storage provider from Bitbucket.com',
       endpoint: 'https://api.github.com',
       scopes: 'repository,repository:write,repository:admin,pullrequest,pullrequest:write,account:write,account'

@@ -5,10 +5,6 @@ class ChuspaceAdapter < GitlabAdapter
     'chuspace'
   end
 
-  def current_user
-    @current_user ||= get('user')
-  end
-
   def create_personal_access_token(user_id:)
     post("users/#{user_id}/personal_access_tokens", name: name, scopes: scopes)
   end
