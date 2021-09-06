@@ -4,59 +4,15 @@
 .summary
   @apply text-gray-default text-xl font-normal
 
-.title__label__empty::before,
-.summary__label__empty::before,
-.summary__label__empty
-  @apply italic pointer-events-none text-gray-400 float-left
-  content: attr(data-empty-text)
-  height: 0
-
-.body__label__empty::before
-  @apply italic pointer-events-none text-gray-400 float-left
-  content: attr(data-empty-text)
-  height: 0
-
-.summary__label__empty
-  @apply float-none
-  height: auto
-
-
-.title__label,
-.summary__label,
 .editor__heading_label
   @apply relative
 
   &::before
     @apply absolute text-sm border-r pr-2 italic pointer-events-none text-gray-400 font-normal
-    content: 'Title'
+    content: attr(data-empty-text)
     top: calc(100% / 2 - 0.4rem)
     right: 105%
-    visibility: hidden
 
   @screen sm
     &::before
       @apply block
-
-  &:hover, &:focus
-    &::before
-      visibility: visible
-
-  &--nohover
-    &::before
-      visibility: visible
-
-.summary__label
-  @apply text-gray-400
-
-  &::before
-    @apply hidden
-    content: 'Summary'
-
-    @screen sm
-      @apply block
-
-.editor__heading_label
-  @apply relative
-  &:hover
-    &::before
-      content: attr(data-empty-text)

@@ -5,9 +5,19 @@ import { Decoration, DecorationSet, EditorView } from 'prosemirror-view'
 import { Element } from 'editor/base'
 import { Node } from 'prosemirror-model'
 import { Plugin } from 'prosemirror-state'
+import includes from 'lodash/includes'
 
 export default class Placeholder extends Element {
   name = 'placeholder'
+
+  options = {
+    h1Class: 'title title__label',
+    h2Class: 'summary summary__label',
+    paragraphClass: 'body body__label',
+    h1Text: 'Title',
+    h2Text: 'Summary',
+    paragraphText: 'Write your post here...'
+  }
 
   get update() {
     return (view: EditorView) => {
@@ -15,11 +25,31 @@ export default class Placeholder extends Element {
     }
   }
 
+  getDecoration(node: Node, pos: number) {
+    let option
+    let className
+    let text
+
+    const suffix = node.childCount === 0 ? '__empty' : ''
+    const typePrefix = node.attrs.level ? `h${node.attrs.level}` : 'paragraph'
+
+    className = this.options[`${typePrefix}Class`] + suffix
+    text = this.options[`${typePrefix}Text`]
+
+    return Decoration.node(pos, pos + node.nodeSize, {
+      class: className,
+      'data-empty-text': text
+    })
+  }
+
   get plugins() {
     return [
       new Plugin({
         props: {
-          decorations: ({ doc, plugins }) => {
+          decorations: (state) => {
+            const plugins = state.plugins
+            const doc = state.doc
+
             const editablePlugin = plugins.find((plugin) =>
               plugin.key.startsWith('editable$')
             )
@@ -31,14 +61,35 @@ export default class Placeholder extends Element {
 
             const decorations = []
 
-            if (doc.content.size === 2) {
-              decorations.push(
-                Decoration.node(0, 2, {
-                  class: 'body body__label body__label__empty',
-                  'data-empty-text': 'Write your post...'
-                })
+            doc.descendants((node, pos) => {
+              const [firstChild, secondChild] = doc.content.content
+              const hasPlaceholder = includes(
+                ['heading', 'paragraph'],
+                node.type.name
               )
-            }
+
+              if (!hasPlaceholder) {
+                return
+              }
+
+              if (doc.content.content.size === 2) {
+                decorations.push(
+                  Decoration.node(0, 2, {
+                    'data-empty-text': 'Write your post...',
+                    class: 'body body__label body__label__empty'
+                  })
+                )
+              } else {
+                if (node.type.name == 'heading') {
+                  decorations.push(
+                    Decoration.node(pos, pos + node.nodeSize, {
+                      class: 'editor__heading_label',
+                      'data-empty-text': `h${node.attrs.level}`
+                    })
+                  )
+                }
+              }
+            })
 
             return DecorationSet.create(doc, decorations)
           }
