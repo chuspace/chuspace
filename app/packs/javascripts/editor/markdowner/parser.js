@@ -13,21 +13,26 @@ export default (schema: Schema) =>
     bullet_list: { block: 'bullet_list' },
     ordered_list: {
       block: 'ordered_list',
-      getAttrs: tok => ({ order: +tok.attrGet('order') || 1 })
+      getAttrs: (tok) => ({ order: +tok.attrGet('order') || 1 })
     },
     heading: {
       block: 'heading',
-      getAttrs: tok => ({ level: +tok.tag.slice(1) })
+      getAttrs: (tok) => ({ level: +tok.tag.slice(1) })
     },
-    code_block: { block: 'code_block', getAttrs: (tok: any) => ({ language: (tok.info && tok.info.trim()) || null }) },
+    code_block: {
+      block: 'code_block',
+      getAttrs: (tok: any) => ({
+        language: (tok.info && tok.info.trim()) || null
+      })
+    },
     fence: {
       block: 'code_block',
-      getAttrs: tok => ({ language: (tok.info && tok.info.trim()) || null })
+      getAttrs: (tok) => ({ language: (tok.info && tok.info.trim()) || null })
     },
     hr: { node: 'horizontal_rule' },
     image: {
       node: 'image',
-      getAttrs: tok => {
+      getAttrs: (tok) => {
         return {
           src: tok.attrGet('src'),
           title: tok.attrGet('title') || null,
@@ -40,7 +45,7 @@ export default (schema: Schema) =>
     strong: { mark: 'strong' },
     link: {
       mark: 'link',
-      getAttrs: tok => ({
+      getAttrs: (tok) => ({
         href: tok.attrGet('href'),
         title: tok.attrGet('title') || null
       })

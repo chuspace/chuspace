@@ -4,8 +4,9 @@ class BlogFrameworkConfig < ApplicationConfig
   attr_config(
     astro: {
       framework: 'astro',
+      default: true,
       language: 'javascript',
-      template_url: 'https://git.chuspace.com/chuspace/astro',
+      template_name: 'chuspace-contrib/astro-starter-blog',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -13,6 +14,7 @@ class BlogFrameworkConfig < ApplicationConfig
     bridgetown: {
       framework: 'bridgetown',
       language: 'ruby',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/bridgetown',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -21,6 +23,7 @@ class BlogFrameworkConfig < ApplicationConfig
     gatsby: {
       framework: 'gatsby',
       language: 'javascript',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/gatsby',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -29,6 +32,7 @@ class BlogFrameworkConfig < ApplicationConfig
     jekyll: {
       framework: 'jekyll',
       language: 'ruby',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/jekyll',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -37,6 +41,7 @@ class BlogFrameworkConfig < ApplicationConfig
     hugo: {
       framework: 'hugo',
       language: 'go',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/hugo',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -45,6 +50,7 @@ class BlogFrameworkConfig < ApplicationConfig
     eleventy: {
       framework: 'eleventy',
       language: 'javascript',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/eleventy',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -53,6 +59,7 @@ class BlogFrameworkConfig < ApplicationConfig
     hexo: {
       framework: 'hexo',
       language: 'javascript',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/hexo',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -61,6 +68,7 @@ class BlogFrameworkConfig < ApplicationConfig
     publish: {
       framework: 'publish',
       language: 'javascript',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/publish',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -69,6 +77,7 @@ class BlogFrameworkConfig < ApplicationConfig
     nextjs: {
       framework: 'nextjs',
       language: 'javascript',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/nextjs',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -77,6 +86,7 @@ class BlogFrameworkConfig < ApplicationConfig
     nuxtjs: {
       framework: 'nuxtjs',
       language: 'javascript',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/nuxtjs',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -85,6 +95,7 @@ class BlogFrameworkConfig < ApplicationConfig
     gridsome: {
       framework: 'gridsome',
       language: 'javascript',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/gridsome',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -93,6 +104,7 @@ class BlogFrameworkConfig < ApplicationConfig
     sculpin: {
       framework: 'sculpin',
       language: 'php',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/sculpin',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -101,6 +113,7 @@ class BlogFrameworkConfig < ApplicationConfig
     pelican: {
       framework: 'pelican',
       language: 'python',
+      default: false,
       template_url: 'https://git.chuspace.com/chuspace/pelican',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
@@ -111,6 +124,12 @@ class BlogFrameworkConfig < ApplicationConfig
   def self.frameworks_enum
     defaults.keys.each_with_object({}) do |key, hash|
       hash[key.to_sym] = key
+    end
+  end
+
+  def self.default
+    defaults.values.find do |value|
+      value['default']
     end
   end
 end

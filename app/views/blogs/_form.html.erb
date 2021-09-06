@@ -1,28 +1,56 @@
 <div class='mt-8'>
   <auto-refresh-form>
     <%= turbo_frame_tag(blog) do %>
-      <%= simple_form_for(blog, url: blogs_path, html: { data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" } }) do |form| %>
-        <%= form.input :storage, as: :select, collection: Current.user.storages.pluck(:provider, :id) %>
-
+      <%= simple_form_for(blog, url: blogs_path, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" } }) do |form| %>
         <% if type == :connect %>
-          <auto-complete src="<%= storage_repos_path(blog.storage) %>" for="repos-popup" class='relative block' data-action='auto-complete-change:auto-refresh-form#refresh'>
-            <%= form.input :git_repo_id, autofocus: true, input_html: { 'data-action': 'input:auto-refresh-form#reset' }, wrapper_html: { class: 'relative' } %>
-            <ul id="repos-popup" class='absolute z-10 bg-white border border-gray-100 w-full'></ul>
-          </auto-complete>
-        <% elsif type == :new %>
-          <%= form.input :name, required: true %>
-          <%= form.input :description, as: :text, required: true %>
-          <%= form.input :framework, as: :select, collection: Blog.frameworks %>
-          <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
+          <%= form.input :storage_id, as: :select, collection: Current.user.storages.external.pluck(:provider, :id), input_html: { 'data-action': 'change:auto-refresh-form#refresh' } %>
+          <% if blog.storage.present? %>
+            <auto-complete
+              src="<%= storage_repos_path(blog.storage) %>"
+              for="repos-popup"
+              class='relative block'
+            >
+              <%= form.input(
+                  :git_repo_id,
+                  as: :string,
+                  autofocus: true,
+                  input_html: {
+                    value: blog.repository&.name,
+                    'data-action': 'input:auto-refresh-form#reset',
+                  },
+                  wrapper_html: { class: 'relative' }
+                )
+              %>
+              <ul id="repos-popup" class='absolute z-10 bg-white border border-gray-100 w-full'></ul>
+            </auto-complete>
+
+            <%= form.input(
+                :git_repo_id,
+                as: :hidden,
+                wrapper: false,
+                input_html: {
+                  'data-target': 'auto-refresh-form.autoCompleteInput'
+                }
+              )
+            %>
+          <% end %>
+        <% else %>
+          <%= form.input :storage_id, as: :select, collection: Current.user.storages.pluck(:provider, :id), input_html: { 'data-action': 'change:auto-refresh-form#refresh' } %>
         <% end %>
 
+        <%= form.input :name, required: true %>
+        <%= form.input :description, as: :text, required: true %>
+        <%= form.input :framework, as: :select, collection: Blog.frameworks %>
+        <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
+
         <div data-target='auto-refresh-form.loader'>
-          <% if blog.persisted? %>
-            <%= form.input :posts_folder, as: :select, collection: blog.repository.folders %>
-            <%= form.input :drafts_folder, as: :select, collection: blog.repository.folders %>
-            <%= form.input :assets_folder, as: :select, collection: blog.repository.folders %>
+          <% if blog.repository_folders.any? %>
+            <%= form.input :posts_folder, as: :select, collection: blog.repository_folders %>
+            <%= form.input :drafts_folder, as: :select, collection: blog.repository_folders %>
+            <%= form.input :assets_folder, as: :select, collection: blog.repository_folders %>
           <% end %>
         </div>
+
         <%= form.input :type, as: :hidden, input_html: { value: type } %>
         <%= form.button :submit, 'Create', class: 'mt-12' %>
       <% end %>

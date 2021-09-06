@@ -1,22 +1,18 @@
 # frozen_string_literal: true
 
-module Github
-  class ReposController < ApplicationController
-    before_action :find_storage
-
-    def index
-      @repositories = github_client.search_repos("#{params[:q]} user:#{User.first.username}", query: { sort: 'asc', per_page: 5 }).items
-
-      respond_to do |format|
-        format.json
-        format.html_fragment
-      end
+class ReposController < ApplicationController
+  def index
+    @storage = Current.user.storages.find(params[:storage_id])
+    query = case @storage.provider
+            when 'github' then "#{params[:q]} user:#{@storage.provider_user.login}"
+            else params[:q]
     end
 
-    private
+    @repositories = @storage.adapter.search_repositories(query: query)
 
-    def find_storage
-      @storage = Storage.find(id)
+    respond_to do |format|
+      format.json
+      format.html_fragment
     end
   end
 end

@@ -17,10 +17,13 @@ class StorageAdapter
     repository
     repositories
     create_user
+    search_repositories
     create_repository
     delete_repository
     update_repository
     repository_folders
+    blobs
+    create_blob
     find_blob
     commit
     contribute

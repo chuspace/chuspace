@@ -1,0 +1,10 @@
+<chu-editor
+  class='mt-32 block'
+  data-gramm="false"
+  content='<%= @content.content %>'
+  frontmatter='<%= @content.front_matter.to_json %>'
+>
+  <%= simple_form_for(:article, url: blog_article_path(@blog, @article), method: :put) do |form| %>
+    <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: @content.content } %>
+  <% end %>
+</chu-editor>

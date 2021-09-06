@@ -30,7 +30,7 @@ export default new MarkdownSerializer(
       let start = node.attrs.order || 1
       let maxW = String(start + node.childCount - 1).length
       let space = state.repeat(' ', maxW + 2)
-      state.renderList(node, space, i => {
+      state.renderList(node, space, (i) => {
         let nStr = String(start + i)
         return state.repeat(' ', maxW - nStr.length) + nStr + '. '
       })
@@ -65,9 +65,24 @@ export default new MarkdownSerializer(
     }
   },
   {
-    em: { open: '*', close: '*', mixable: true, expelEnclosingWhitespace: true },
-    strong: { open: '**', close: '**', mixable: true, expelEnclosingWhitespace: true },
-    strike_through: { open: '~', close: '~', mixable: true, expelEnclosingWhitespace: true },
+    em: {
+      open: '*',
+      close: '*',
+      mixable: true,
+      expelEnclosingWhitespace: true
+    },
+    strong: {
+      open: '**',
+      close: '**',
+      mixable: true,
+      expelEnclosingWhitespace: true
+    },
+    strike_through: {
+      open: '~',
+      close: '~',
+      mixable: true,
+      expelEnclosingWhitespace: true
+    },
     link: {
       open(_state, mark, parent, index) {
         return isPlainURL(mark, parent, index, 1) ? '<' : '['
@@ -75,7 +90,10 @@ export default new MarkdownSerializer(
       close(state, mark, parent, index) {
         return isPlainURL(mark, parent, index, -1)
           ? '>'
-          : '](' + state.esc(mark.attrs.href) + (mark.attrs.title ? ' ' + state.quote(mark.attrs.title) : '') + ')'
+          : '](' +
+              state.esc(mark.attrs.href) +
+              (mark.attrs.title ? ' ' + state.quote(mark.attrs.title) : '') +
+              ')'
       }
     },
     code: {
@@ -94,7 +112,8 @@ function backticksFor(node, side) {
   let ticks = /`+/g,
     m,
     len = 0
-  if (node.isText) while ((m = ticks.exec(node.text))) len = Math.max(len, m[0].length)
+  if (node.isText)
+    while ((m = ticks.exec(node.text))) len = Math.max(len, m[0].length)
   let result = len > 0 && side > 0 ? ' `' : '`'
   for (let i = 0; i < len; i++) result += '`'
   if (len > 0 && side < 0) result += ' '
@@ -104,7 +123,11 @@ function backticksFor(node, side) {
 function isPlainURL(link, parent, index, side) {
   if (link.attrs.title) return false
   let content = parent.child(index + (side < 0 ? -1 : 0))
-  if (!content.isText || content.text != link.attrs.href || content.marks[content.marks.length - 1] != link)
+  if (
+    !content.isText ||
+    content.text != link.attrs.href ||
+    content.marks[content.marks.length - 1] != link
+  )
     return false
   if (index == (side < 0 ? 1 : parent.childCount - 1)) return true
   let next = parent.child(index + (side < 0 ? -2 : 1))

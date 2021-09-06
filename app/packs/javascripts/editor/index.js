@@ -64,6 +64,7 @@ export default class Editor {
     this.options = options
     this.element = options.element
     this.manager = new SchemaManager(this)
+
     this.schema = this.manager.schema
     this.markdownParser = markdownParser(this.schema)
     this.markdownSerializer = markdownSerializer
@@ -72,6 +73,7 @@ export default class Editor {
     this.view = this.createView()
     this.view.props.commands = this.manager.commands
     this.setActiveNodesAndMarks()
+
     if (this.options.autoFocus) this.focus()
   }
 

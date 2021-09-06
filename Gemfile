@@ -14,6 +14,7 @@ gem 'strong_migrations'
 gem 'database_validations'
 gem 'activerecord-clean-db-structure'
 gem 'friendly_id'
+gem 'action_policy'
 
 # File uploads
 gem 'image_processing'
@@ -60,6 +61,7 @@ gem 'rack-attack'
 
 # Markdown
 gem 'commonmarker'
+gem 'front_matter_parser'
 
 # Clients
 gem 'down'

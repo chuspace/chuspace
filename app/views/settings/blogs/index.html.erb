@@ -1,8 +1,8 @@
 <%= turbo_frame_tag(:blog_settings, class: 'relative w-full block') do %>
   <h3 class='border-b pb-4'>Blogs</h3>
   <div class='absolute right-0 top-0'>
-    <%= link_to 'Connect existing', connect_blogs_path, class: 'button button--fill' %>
-    <%= link_to 'Add new', new_blog_path, class: 'button button--fill  ml-2' %>
+    <%= link_to 'Connect existing', connect_settings_blogs_path, class: 'button button--fill', data: { 'turbo-frame': :_top } %>
+    <%= link_to 'Add new', new_settings_blog_path, class: 'button button--fill  ml-2', data: { 'turbo-frame': :_top } %>
   </div>
 
   <%= turbo_frame_tag :blogs do %>

@@ -180,29 +180,29 @@ module FaradayClient
     def response_error_summary
       return nil unless data.is_a?(Hash) && !Array(data[:errors]).empty?
 
-      summary = "\nError summary:\n"
-      summary << data[:errors].map do |error|
-        if error.is_a? Hash
+      summary = ["\nError summary:\n"]
+      data[:errors].each do |error|
+        summary << if error.is_a? Hash
           error.map { |k, v| "  #{k}: #{v}" }
         else
           "  #{error}"
         end
-      end.join("\n")
+      end
 
-      summary
+      summary.join("\n")
     end
 
     def build_error_message
       return nil if @response.nil?
 
-      message =  "#{@response[:method].to_s.upcase} "
+      message =  ["#{@response[:method].to_s.upcase} "]
       message << redact_url(@response[:url].to_s) + ': '
       message << "#{@response[:status]} - "
       message << "#{response_message}" unless response_message.nil?
       message << "#{response_error}" unless response_error.nil?
       message << "#{response_error_summary}" unless response_error_summary.nil?
       message << " // See: #{documentation_url}" unless documentation_url.nil?
-      message
+      message.join("\n")
     end
 
     def redact_url(url_string)

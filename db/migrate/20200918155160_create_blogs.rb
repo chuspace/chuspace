@@ -20,7 +20,7 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
-    add_column :blogs, :framework, :blog_framework_enum_type, index: true, null: false, default: Blog::DEFAULT_FRAMEWORK
+    add_column :blogs, :framework, :blog_framework_enum_type, index: true, null: false, default: BlogFrameworkConfig.default[:framework]
     add_column :blogs, :visibility, :blog_visibility_enum_type, index: true, null: false, default: :private
   end
 end

@@ -44,7 +44,9 @@ class User < ApplicationRecord
     storage.blogs.create!(
       user: self,
       name: "#{self.name} blog",
-      default: true
+      default: true,
+      visibility: :internal,
+      **BlogFrameworkConfig.default.slice(:framework, :posts_folder, :drafts_folder, :assets_folder)
     )
   end
 end

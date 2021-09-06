@@ -1,12 +1,12 @@
-<%= turbo_frame_tag(:blog_settings) do %>
+<div class='relative'>
   <h3 class='border-b pb-4'>Connect existing repository</h3>
 
   <div class='absolute right-0 top-0'>
-    <%= link_to 'Add new', new_blog_path, class: 'button button--fill  ml-2' %>
+    <%= link_to 'Add new', new_settings_blog_path, class: 'button button--fill  ml-2', data: { 'turbo-frame': :_top } %>
   </div>
 
-  <% if @blog.storage.present? %>
-    <div class='text-gray-600 text-sm mt-1'>
+  <% if Current.user.storages.external.any? %>
+    <div class='text-gray-600 text-sm mt-2'>
       <p>The selected git repository must support publishing posts using markdown.</p>
       <strong>Example: Jekyll, Hugo or Astro</strong>
     </div>
@@ -18,4 +18,4 @@
       <%= link_to 'Connect storage', settings_storages_path, class: 'button button--fill mt-4 inline-block', data: { 'turbo-frame': '_top' } %>
     </div>
   <% end %>
-<% end %>
+</div>

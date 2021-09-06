@@ -2,66 +2,43 @@
 
 class BlogsController < ApplicationController
   before_action :authenticate!, except: :show
-  before_action :find_blog, except: %i[create index]
+  before_action :find_blog, except: %i[new connect create index]
 
   def new
-    @blog = Current.user.blogs.build(storage: Current.user.storages.default_or_internal)
-    @repo_folders = []
+    @blog = Current.user.blogs.build(storage: Current.user.storages.default_or_chuspace)
   end
 
   def connect
     @blog = Current.user.blogs.new(storage: Current.user.storages.default)
-    @repo_folders = []
   end
 
   def create
-    if params[:blog][:type] == 'connect'
-      @blog = Current.user.blogs.new(connect_blog_params)
-      @repo_folders = []
-
-      begin
-        repo_sha = github_client.commits(@blog.full_repo_name).first.sha
-        tree = github_client.tree(@blog.full_repo_name, repo_sha, recursive: true).tree
-        @repo_folders = tree.select { |item| item.type == 'tree' }.map(&:path).sort
-      rescue Octokit::Conflict
-      end
-    elsif params[:blog][:type] == 'new'
-      repo = github_client.create_repository_from_template('gauravtiwari/blog-template', params[:blog][:name], accept: Octokit::Preview::PREVIEW_TYPES[:template_repositories], private: params[:blog][:private] == 'true', **create_blog_params)
-      @blog = Current.user.blogs.new(full_repo_name: repo.full_name, posts_folder: 'src/pages/posts', drafts_folder: 'src/pages/posts', assets_folder: 'public/assets/blog')
-    end
+    @blog = Current.user.blogs.new(blog_params)
 
     if @blog.save
-      respond_to do |format|
-        format.html { redirect_to root_path }
-        format.turbo_stream { redirect_to root_path }
-      end
+      redirect_to settings_blogs_path
     else
-      @blog = Current.user.blogs.new(connect_blog_params)
-
       respond_to do |format|
         format.html
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: 'blogs/form', locals: { blog: @blog, type: :connect, repo_folders: @repo_folders }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: 'blogs/form', locals: { blog: @blog, type: params[:type] }) }
       end
     end
   end
 
   def update
-    puts blog_params.inspect
     @blog.update!(blog_params)
-    redirect_to setting_path(id: :blog)
+    redirect_to settings_blogs_path
   end
 
   def destroy
+    @blog.destroy
+    redirect_to settings_blogs_path
   end
 
   private
 
   def blog_params
-    params.require(:blog).permit(:name, :description, :visibility, :posts_folder, :drafts_folder, :assets_folder)
-  end
-
-  def create_blog_params
-    params.require(:blog).permit(:description, :owner)
+    params.require(:blog).permit(:name, :description, :storage_id, :framework, :git_repo_id, :visibility, :posts_folder, :drafts_folder, :assets_folder)
   end
 
   def find_blog

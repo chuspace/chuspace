@@ -4,14 +4,10 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   resources :users
-  resources :articles
 
-  resources :blogs, param: :slug do
+  resources :blogs do
     resources :domains
-
-    collection do
-      get :connect
-    end
+    resources :articles
   end
 
   resources :settings, only: :index
@@ -23,7 +19,11 @@ Rails.application.routes.draw do
   namespace :settings do
     resources :profiles
     resources :storages
-    resources :blogs
+    resources :blogs do
+      collection do
+        get :connect
+      end
+    end
   end
 
   get '/me', to: 'users#show', as: :profile

@@ -10,9 +10,13 @@ module FaradayClient
       builder.use Faraday::Request::Retry, exceptions: [FaradayClient::ServerError]
       builder.use FaradayClient::Middleware::FollowRedirects
       builder.use FaradayClient::Middleware::RaiseError
-      builder.response :logger
+      unless Rails.env.production?
+        builder.response :logger do | logger |
+          logger.filter(/(Authorization:)(\s+)(\w+)/, '\1[REMOVED]')
+        end
+      end
       builder.use FaradayClient::Middleware::FeedParser
-      builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache,  logger: Rails.logger
+      builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger
       builder.adapter Faraday.default_adapter
     end
 
