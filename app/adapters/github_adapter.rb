@@ -45,18 +45,16 @@ class GithubAdapter < ApplicationAdapter
   end
 
   def blobs(repo_id:, path:)
-    url = "repositories/#{repo_id}/contents/#{path}"
-    blobs = get url
+    blobs = get "repositories/#{repo_id}/contents/#{path}"
 
     blobs.map do |blob|
-      title = blob.name.tr('-', ' ').tr('.md', '').humanize.titlecase
-      Blob.new(id: blob.sha, title: title, path: blob.path)
+      content = find_blob(repo_id: repo_id, id: blob.sha)
+      Sawyer::Resource.new(agent, content.to_h.merge!(blob))
     end
   end
 
   def find_blob(repo_id:, id:)
-    blob = get "repositories/#{repo_id}/git/blobs/#{id}", {}
-    Blob.new(id: blob.sha, title: 'foo', path: blob.path, content: Base64.decode64(blob.content).force_encoding('UTF-8'))
+    get "repositories/#{repo_id}/git/blobs/#{id}", {}
   end
 
   def create_blob(repo_id:, path:, content:, message: nil)

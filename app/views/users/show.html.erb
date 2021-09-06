@@ -1,4 +1,11 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/edit.html.erb</p>
+<div class='mt-32'>
+  <h1 class='mb-8'><%= @user.name %></h1>
 
-<%= @user.name %>
+  <% if @user.blogs.any? %>
+    <div class='list'>
+      <%= render partial: 'blogs/item', collection: @user.blogs, as: :blog, cached: true %>
+    </div>
+  <% else %>
+    <div class='placeholder text-2xl'>No blogs</div>
+  <% end %>
+</div>

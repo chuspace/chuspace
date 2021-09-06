@@ -17,6 +17,11 @@ const appWebpackConfig = {
   performance: {
     hints: false
   },
+  resolve: {
+    fallback: {
+      assert: false
+    }
+  },
   module: {
     rules: [sassRule]
   }

@@ -59,15 +59,15 @@ class Blog < ApplicationRecord
   end
 
   def article(id:)
-    storage.adapter.find_blob(repo_id: git_repo_id, id: id)
+    Article.from(storage.adapter.find_blob(repo_id: git_repo_id, id: id))
   end
 
   def articles
-    storage.adapter.blobs(repo_id: git_repo_id, path: posts_folder)
+    Article.from(storage.adapter.blobs(repo_id: git_repo_id, path: posts_folder))
   end
 
   def drafts
-    storage.adapter.blobs(repo_id: git_repo_id, path: drafts_folder)
+    Article.from(storage.adapter.blobs(repo_id: git_repo_id, path: drafts_folder))
   end
 
   private

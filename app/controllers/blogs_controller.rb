@@ -25,6 +25,10 @@ class BlogsController < ApplicationController
     end
   end
 
+  def show
+    @articles = @blog.articles
+  end
+
   def update
     @blog.update!(blog_params)
     redirect_to settings_blogs_path
@@ -42,6 +46,6 @@ class BlogsController < ApplicationController
   end
 
   def find_blog
-    @blog = Current.user.blogs.find(params[:slug])
+    @blog = Current.user.blogs.find(params[:id])
   end
 end

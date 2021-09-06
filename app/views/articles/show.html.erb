@@ -1,3 +1,6 @@
-<div class='prose lg:prose-xl mt-32'>
-  <%= CommonMarker.render_html(@article.content).html_safe %>
+<div class='sm:w-3/4 sm:mx-auto w-full mt-32 mx-auto'>
+  <%= render 'header', blog: @blog, article: @article %>
+  <div class='chu-editor mt-8'>
+    <%= MarkdownRenderer.new.render(@markdown_doc).html_safe %>
+  </div>
 </div>

@@ -1,11 +1,11 @@
 <% cache article do %>
-  <%= link_to blog_article_path(blog, article), class: 'list__item list__item--flex list__item--bordered' do %>
-    <%= turbo_frame_tag(article, class: 'flex mx-4') do %>
+  <div class='list__item list__item--flex list__item--bordered'>
+    <%= turbo_frame_tag(article, class: 'flex') do %>
       <div class='flex flex-1'>
-        <div>
+        <%= link_to blog_article_path(blog, article), data: { 'turbo-frame': :_top } do %>
           <%= tag.h4 article.title %>
-          <%= tag.div article.content, class: 'text-xs text-gray-600 mt-1' %>
-        </div>
+          <%= tag.div article.intro, class: 'text-xs text-gray-600 mt-1' %>
+        <% end %>
       </div>
 
       <div class='flex items-center justify-between flex-end'>
@@ -15,5 +15,5 @@
         <% end %>
       </div>
     <% end %>
-  <% end %>
+  </div>
 <% end %>

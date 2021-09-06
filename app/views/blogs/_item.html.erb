@@ -1,16 +1,18 @@
 <% cache blog do %>
   <div class='list__item list__item--flex list__item--bordered'>
-    <%= turbo_frame_tag(blog, class: 'flex mx-4') do %>
+    <%= turbo_frame_tag(blog, class: 'flex') do %>
       <div class='flex flex-1'>
-        <div>
-          <%= tag.h4 blog.name %>
-          <%= tag.div blog.description, class: 'text-xs text-gray-600 mt-1' %>
+        <%= link_to blog_path(blog), 'data-turbo-frame': :_top do %>
+          <div>
+            <%= tag.h4 blog.name %>
+            <%= tag.div blog.description, class: 'text-xs text-gray-600 mt-1' %>
 
-          <div class='mt-2'>
-            <%= content_tag :span, 'internal', class: 'badge badge--closed text-gray-400 text-xs mr-2' if blog.storage.chuspace? %>
-            <%= content_tag :span, 'primary', class: 'badge badge--open text-gray-400 text-xs mr-2' if blog.default? %>
+            <div class='mt-2'>
+              <%= content_tag :span, 'internal', class: 'badge badge--closed text-gray-400 text-xs mr-2' if blog.storage.chuspace? %>
+              <%= content_tag :span, 'primary', class: 'badge badge--open text-gray-400 text-xs mr-2' if blog.default? %>
+            </div>
           </div>
-        </div>
+        <% end %>
       </div>
 
       <div class='flex items-center justify-between flex-end'>

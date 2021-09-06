@@ -8,6 +8,7 @@ class ArticlesController < ApplicationController
 
   def show
     @article = @blog.article(id: params[:id])
+    @markdown_doc ||= CommonMarker.render_doc(@article.content || '')
   end
 
   def index
@@ -16,7 +17,7 @@ class ArticlesController < ApplicationController
 
   def edit
     @article = @blog.article(id: params[:id])
-    @content = FrontMatterParser::Parser.new(:md).call(@article.content)
+    @markdown_doc ||= CommonMarker.render_doc(@article.content || '')
   end
 
   def create

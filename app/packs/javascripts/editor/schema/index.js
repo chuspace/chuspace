@@ -79,8 +79,19 @@ export default class SchemaManager {
   get nodeViews(): {} {
     return {
       code_block: (node, view, getPos) =>
-        new CodeBlockView({ node, view, getPos, editable: this.editor.options.editable }),
-      image: (node, view, getPos) => new ImageView({ node, view, getPos, editable: this.editor.options.editable })
+        new CodeBlockView({
+          node,
+          view,
+          getPos,
+          editable: this.editor.options.editable
+        }),
+      image: (node, view, getPos) =>
+        new ImageView({
+          node,
+          view,
+          getPos,
+          editable: this.editor.options.editable
+        })
     }
   }
 
@@ -171,7 +182,11 @@ export default class SchemaManager {
                 return false
               }
               this.editor.view.focus()
-              return callback(attrs)(this.editor.view.state, this.editor.view.dispatch, this.editor.view)
+              return callback(attrs)(
+                this.editor.view.state,
+                this.editor.view.dispatch,
+                this.editor.view
+              )
             })
         } else if (typeof value === 'function') {
           commands[name] = (attrs) => {
@@ -179,29 +194,43 @@ export default class SchemaManager {
               return false
             }
             this.editor.view.focus()
-            return value(attrs)(this.editor.view.state, this.editor.view.dispatch, this.editor.view)
+            return value(attrs)(
+              this.editor.view.state,
+              this.editor.view.dispatch,
+              this.editor.view
+            )
           }
         } else if (typeof value === 'object') {
-          Object.entries(value).forEach(([commandName, commandValue]: [string, Function]) => {
-            if (Array.isArray(commandValue)) {
-              commands[commandName] = (attrs) =>
-                commandValue.forEach((callback: Function) => {
+          Object.entries(value).forEach(
+            ([commandName, commandValue]: [string, Function]) => {
+              if (Array.isArray(commandValue)) {
+                commands[commandName] = (attrs) =>
+                  commandValue.forEach((callback: Function) => {
+                    if (!this.editor.options.editable) {
+                      return false
+                    }
+                    this.editor.view.focus()
+                    return callback(attrs)(
+                      this.editor.view.state,
+                      this.editor.view.dispatch,
+                      this.editor.view
+                    )
+                  })
+              } else {
+                commands[commandName] = (attrs) => {
                   if (!this.editor.options.editable) {
                     return false
                   }
                   this.editor.view.focus()
-                  return callback(attrs)(this.editor.view.state, this.editor.view.dispatch, this.editor.view)
-                })
-            } else {
-              commands[commandName] = (attrs) => {
-                if (!this.editor.options.editable) {
-                  return false
+                  return commandValue(attrs)(
+                    this.editor.view.state,
+                    this.editor.view.dispatch,
+                    this.editor.view
+                  )
                 }
-                this.editor.view.focus()
-                return commandValue(attrs)(this.editor.view.state, this.editor.view.dispatch, this.editor.view)
               }
             }
-          })
+          )
         }
 
         return {

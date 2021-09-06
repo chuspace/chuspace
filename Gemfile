@@ -14,6 +14,7 @@ gem 'strong_migrations'
 gem 'database_validations'
 gem 'activerecord-clean-db-structure'
 gem 'friendly_id'
+gem 'babosa'
 gem 'action_policy'
 
 # File uploads
