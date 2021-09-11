@@ -4,14 +4,6 @@ class BlogsController < ApplicationController
   before_action :authenticate!, except: :show
   before_action :find_blog, except: %i[new connect create index]
 
-  def new
-    @blog = Current.user.blogs.build(storage: Current.user.storages.default_or_chuspace)
-  end
-
-  def connect
-    @blog = Current.user.blogs.new(storage: Current.user.storages.default)
-  end
-
   def create
     @blog = Current.user.blogs.new(blog_params)
 

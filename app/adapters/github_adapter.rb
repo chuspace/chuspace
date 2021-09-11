@@ -49,7 +49,7 @@ class GithubAdapter < ApplicationAdapter
 
     blobs.map do |blob|
       content = find_blob(repo_id: repo_id, id: blob.sha)
-      Sawyer::Resource.new(agent, content.to_h.merge!(blob))
+      Sawyer::Resource.new(agent, content.to_h.merge!(id: blob.sha, path: blob.path))
     end
   end
 

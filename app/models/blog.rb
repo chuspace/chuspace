@@ -53,7 +53,7 @@ class Blog < ApplicationRecord
     storage.adapter.create_blob(repo_id: git_repo_id, path: path, content: content, message: nil)
   end
 
-  def create_article
+  def create_article(name:, content:)
     path = "#{posts_folder}/#{name.parameterize}.md"
     storage.adapter.create_blob(repo_id: git_repo_id, path: path, content: content, message: nil)
   end

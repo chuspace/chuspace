@@ -15,10 +15,11 @@ class Article
     when Array then response.map { |blob| Article.from(blob) }
     else
       content = Base64.decode64(response.content).force_encoding('UTF-8')
-      parsed = FrontMatterParser::Parser.new(:md).call(content)
+      yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
+      parsed = FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(content)
 
       Article.new(
-        id: response.sha,
+        id: response.id,
         filename: response.name,
         title: parsed.front_matter.dig('title') || parsed.content.first(80),
         intro: parsed.front_matter.dig('description'),
