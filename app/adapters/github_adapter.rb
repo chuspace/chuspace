@@ -63,6 +63,11 @@ class GithubAdapter < ApplicationAdapter
     put "repositories/#{repo_id}/contents/#{path}", { content: content, message: message }
   end
 
+  def delete_blob(repo_id:, path:, id:, message: nil)
+    message ||= "Deleting #{path}"
+    delete "repositories/#{repo_id}/contents/#{path}", { sha: id, message: message }
+  end
+
   private
 
   def search(path, query, options = {})

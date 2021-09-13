@@ -7,8 +7,7 @@ class StorageAdapter
   ADAPTERS = {
     chuspace: ChuspaceAdapter,
     github: GithubAdapter,
-    gitlab: GitlabAdapter,
-    bitbucket: BitbucketAdapter
+    gitlab: GitlabAdapter
   }.freeze
 
   REQUIRED_METHODS = %i[
@@ -25,6 +24,7 @@ class StorageAdapter
     blobs
     create_blob
     find_blob
+    delete_blob
     commit
     contribute
     merge

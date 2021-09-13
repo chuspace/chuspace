@@ -7,12 +7,14 @@ class BlogsController < ApplicationController
   def create
     @blog = Current.user.blogs.new(blog_params)
 
+    puts @blog.inspect
+
     if @blog.save
       redirect_to settings_blogs_path
     else
       respond_to do |format|
         format.html
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: 'blogs/form', locals: { blog: @blog, type: params[:type] }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: 'blogs/form', locals: { blog: @blog, type: params[:type].to_sym }) }
       end
     end
   end

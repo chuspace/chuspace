@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/gauravtiwari/omniauth-atlassian-bitbucket.git
-  revision: 3b8a91b7bde7f3b34d952bc31bff20e3a48be29f
-  specs:
-    omniauth-atlassian-bitbucket (0.1.0)
-      omniauth-oauth2
-
-GIT
   remote: https://github.com/linchus/omniauth-gitlab.git
   revision: 4d5bc7b350579631a2988c6c7ed136de96697ddf
   specs:
@@ -476,7 +469,6 @@ DEPENDENCIES
   lockbox
   meta-tags
   minitest
-  omniauth-atlassian-bitbucket!
   omniauth-github!
   omniauth-gitlab!
   omniauth-rails_csrf_protection

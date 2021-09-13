@@ -14,7 +14,6 @@ export default class TrackState {
 
   apply(tr: Transaction) {
     this.uncommittedSteps = this.uncommittedSteps.concat(tr.steps)
-    console.log(tr)
     return this
   }
 }

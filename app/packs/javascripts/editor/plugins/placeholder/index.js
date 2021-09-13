@@ -61,6 +61,15 @@ export default class Placeholder extends Element {
 
             const decorations = []
 
+            if (doc.content.content.length < 2) {
+              decorations.push(
+                Decoration.node(0, 2, {
+                  'data-empty-text': 'Write your post...',
+                  class: 'body body__label body__label__empty'
+                })
+              )
+            }
+
             doc.descendants((node, pos) => {
               const [firstChild, secondChild] = doc.content.content
               const hasPlaceholder = includes(
@@ -72,22 +81,13 @@ export default class Placeholder extends Element {
                 return
               }
 
-              if (doc.content.content.size === 2) {
+              if (node.type.name == 'heading') {
                 decorations.push(
-                  Decoration.node(0, 2, {
-                    'data-empty-text': 'Write your post...',
-                    class: 'body body__label body__label__empty'
+                  Decoration.node(pos, pos + node.nodeSize, {
+                    class: 'editor__heading_label',
+                    'data-empty-text': `h${node.attrs.level}`
                   })
                 )
-              } else {
-                if (node.type.name == 'heading') {
-                  decorations.push(
-                    Decoration.node(pos, pos + node.nodeSize, {
-                      class: 'editor__heading_label',
-                      'data-empty-text': `h${node.attrs.level}`
-                    })
-                  )
-                }
               }
             })
 

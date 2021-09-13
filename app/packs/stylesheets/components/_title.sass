@@ -16,3 +16,8 @@
   @screen sm
     &::before
       @apply block
+
+.body__label__empty::before
+  @apply italic pointer-events-none text-gray-400 float-left
+  content: attr(data-empty-text)
+  height: 0

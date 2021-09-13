@@ -51,7 +51,7 @@
           <% end %>
         </div>
 
-        <%= form.input :type, as: :hidden, input_html: { value: type } %>
+        <%= form.input :type, as: :hidden, input_html: { value: type, name: 'type' } %>
         <%= form.button :submit, 'Create', class: 'mt-12' %>
       <% end %>
     <% end %>

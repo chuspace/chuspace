@@ -9,7 +9,6 @@ class Identity < ApplicationRecord
   enum provider: {
     github: 'github',
     gitlab: 'gitlab',
-    bitbucket: 'bitbucket',
     email: 'email'
   }, _suffix: true
 end

@@ -20,7 +20,7 @@ class Blog < ApplicationRecord
   after_destroy_commit :delete_repository
 
   delegate :provider, :provider_user, to: :storage
-  delegate :template_name, to: :framework_config
+  delegate :template_name, :template_url, to: :framework_config
 
   scope :default, -> { find_by(default: true) }
 
@@ -48,14 +48,18 @@ class Blog < ApplicationRecord
     super ? ActiveSupport::StringInquirer.new(super) : nil
   end
 
-  def create_draft_article(name:, content:)
-    path = "#{drafts_folder}/#{name.parameterize}.md"
+  def create_draft_article(title:, content:)
+    path = "#{drafts_folder}/#{title.parameterize}.md"
     storage.adapter.create_blob(repo_id: git_repo_id, path: path, content: content, message: nil)
   end
 
-  def create_article(name:, content:)
-    path = "#{posts_folder}/#{name.parameterize}.md"
+  def create_article(title:, content:)
+    path = "#{posts_folder}/#{title.parameterize}.md"
     storage.adapter.create_blob(repo_id: git_repo_id, path: path, content: content, message: nil)
+  end
+
+  def delete_article(id:, path:)
+    storage.adapter.delete_blob(repo_id: git_repo_id, path: path, id: id)
   end
 
   def article(id:)

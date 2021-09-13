@@ -14,12 +14,16 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
 
   def link(node)
     if url_or_mailto?(node.url)
+      out('<link-preview href="', node.url.nil? ? '' : escape_href(node.url), '"')
+      out('>')
       out('<a href="', node.url.nil? ? '' : escape_href(node.url), '"')
       out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?
       out(' target="', '_blank', '"')
+      out(' is="', 'link-preview', '"')
       out(' data-behaviour="', 'has-tooltip', '"')
       out(' rel="', 'noopener noreferrer', '"')
       out('>', :children, '</a>')
+      out('</link-preview>')
     else
       blob_path = node.url.start_with?('/') ? node.url[1..-1] : node.url
       blob_path_with_extension = File.extname(blob_path).blank? ? blob_path + '.md' : blob_path

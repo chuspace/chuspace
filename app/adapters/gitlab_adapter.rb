@@ -31,7 +31,7 @@ class GitlabAdapter < ApplicationAdapter
         visibility: blog.visibility,
         shared_runners_enabled: true,
         pages_access_level: 'public',
-        template_name: blog.framework
+        import_url: blog.template_url
       )
     )
 
@@ -65,6 +65,11 @@ class GitlabAdapter < ApplicationAdapter
   def create_blob(repo_id:, path:, content:, message: nil)
     content = Base64.strict_encode64(content)
     message ||= "Adding #{path}"
-    post "projects/#{repo_id}/repository/files/#{CGI.escape(path)}", { branch: :master, encoding: :base64, content: content, commit_message: message }
+    post "projects/#{repo_id}/repository/files/#{CGI.escape(path)}", { branch: :main, encoding: :base64, content: content, commit_message: message }
+  end
+
+  def delete_blob(repo_id:, path:, id:, message: nil)
+    message ||= "Deleting #{path}"
+    delete "projects/#{repo_id}/repository/files/#{CGI.escape(path)}", { branch: :master, commit_message: message }
   end
 end

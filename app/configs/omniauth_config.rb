@@ -7,9 +7,6 @@ class OmniauthConfig < ApplicationConfig
     },
     gitlab: {
       scope: 'read_user email profile'
-    },
-    bitbucket: {
-      scope: 'email account'
     }
   )
 end

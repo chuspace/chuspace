@@ -35,10 +35,6 @@ module.exports = {
         light: '#e65528',
         dark: '#c43f17'
       },
-      bitbucket: {
-        light: '#0047b3',
-        dark: '#003380'
-      },
       email: {
         light: 'rgba(0,0,0,0.6)',
         dark: 'rgba(0,0,0,0.8)'

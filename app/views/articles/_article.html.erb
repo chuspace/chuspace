@@ -10,7 +10,7 @@
 
       <div class='flex items-center justify-between flex-end'>
         <%= link_to 'Edit', edit_blog_article_path(blog, article), class: 'button button--slim button--fill', data: { 'turbo-frame': :_top } %>
-        <%= button_to blog_article_path(blog, article), method: :delete, class: 'button button--slim button--danger ml-3', data: { 'turbo-frame': :_top } do %>
+        <%= button_to blog_article_path(blog, article, path: article.path), method: :delete, class: 'button button--slim button--danger ml-3', data: { 'turbo-frame': :_top } do %>
           <%= tag.span 'Delete' %>
         <% end %>
       </div>

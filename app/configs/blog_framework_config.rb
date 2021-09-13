@@ -7,6 +7,7 @@ class BlogFrameworkConfig < ApplicationConfig
       default: true,
       language: 'javascript',
       template_name: 'chuspace-contrib/astro-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/astro-starter-blog.git',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -15,7 +16,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'bridgetown',
       language: 'ruby',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/bridgetown',
+      template_name: 'chuspace-contrib/bridgetown-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/bridgetown',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -24,7 +26,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'gatsby',
       language: 'javascript',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/gatsby',
+      template_name: 'chuspace-contrib/gatsby-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/gatsby',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -33,7 +36,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'jekyll',
       language: 'ruby',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/jekyll',
+      template_name: 'chuspace-contrib/jekyll-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/jekyll',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -42,7 +46,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'hugo',
       language: 'go',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/hugo',
+      template_name: 'chuspace-contrib/hugo-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/hugo',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -51,7 +56,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'eleventy',
       language: 'javascript',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/eleventy',
+      template_name: 'chuspace-contrib/eleventy-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/eleventy',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -60,7 +66,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'hexo',
       language: 'javascript',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/hexo',
+      template_name: 'chuspace-contrib/hexo-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/hexo',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -69,7 +76,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'publish',
       language: 'javascript',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/publish',
+      template_name: 'chuspace-contrib/publish-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/publish',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -78,7 +86,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'nextjs',
       language: 'javascript',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/nextjs',
+      template_name: 'chuspace-contrib/nextjs-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/nextjs',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -87,7 +96,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'nuxtjs',
       language: 'javascript',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/nuxtjs',
+      template_name: 'chuspace-contrib/nuxtjs-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/nuxtjs',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -96,7 +106,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'gridsome',
       language: 'javascript',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/gridsome',
+      template_name: 'chuspace-contrib/gridsome-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/gridsome',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -105,7 +116,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'sculpin',
       language: 'php',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/sculpin',
+      template_name: 'chuspace-contrib/sculpin-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/sculpin',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -114,7 +126,8 @@ class BlogFrameworkConfig < ApplicationConfig
       framework: 'pelican',
       language: 'python',
       default: false,
-      template_url: 'https://git.chuspace.com/chuspace/pelican',
+      template_name: 'chuspace-contrib/pelican-starter-blog',
+      template_url: 'https://github.com/chuspace-contrib/pelican',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'

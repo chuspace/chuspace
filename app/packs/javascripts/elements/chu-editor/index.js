@@ -95,9 +95,11 @@ export default class ChuEditor extends LitElement {
   }
 
   onChange = (transaction: Transaction) => {
-    if (this.saving) return
+    // if (this.saving) return
 
-    this.saving = true
+    // this.saving = true
+    console.log(this.payload)
+    this.querySelector('textarea').value = this.editor.content
 
     // if (this.id) {
     //   this.autosave()
