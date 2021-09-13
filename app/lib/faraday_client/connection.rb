@@ -6,6 +6,20 @@ require_relative 'middleware/feed_parser'
 
 module FaradayClient
   module Connection
+    MIDDLEWARE = Faraday::RackBuilder.new do |builder|
+      builder.use Faraday::Request::Retry, exceptions: [FaradayClient::ServerError]
+      builder.use FaradayClient::Middleware::FollowRedirects
+      builder.use FaradayClient::Middleware::RaiseError
+      unless Rails.env.production?
+        builder.response :logger do | logger |
+          logger.filter(/(Authorization:)(\s+)(\w+)/, '\1[REMOVED]')
+        end
+      end
+      builder.use FaradayClient::Middleware::FeedParser
+      builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger
+      builder.adapter Faraday.default_adapter
+    end
+
     # Header keys that can be passed in options hash to {#get},{#head}
     CONVENIENCE_HEADERS = Set.new([:accept, :content_type])
 
@@ -104,6 +118,12 @@ module FaradayClient
         http.headers[:accept] = default_media_type
         http.headers[:content_type] = 'application/json'
         http.headers[:user_agent] = user_agent
+        case name
+        when 'github'
+          http.authorization 'token', @access_token
+        when 'gitlab', 'chuspace', 'bitbucket'
+          http.authorization 'Bearer', @access_token
+        end
       end
     end
 
@@ -170,21 +190,7 @@ module FaradayClient
         }
       }
 
-      conn_opts[:builder] = Faraday::RackBuilder.new do |builder|
-        builder.use Faraday::Request::Retry, exceptions: [FaradayClient::ServerError]
-        builder.use FaradayClient::Middleware::FollowRedirects
-        builder.use FaradayClient::Middleware::RaiseError
-        unless Rails.env.production?
-          builder.response :logger do | logger |
-            logger.filter(/(Authorization:)(\s+)(\w+)/, '\1[REMOVED]')
-          end
-        end
-        builder.use FaradayClient::Middleware::FeedParser
-        builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger
-        builder.adapter Faraday.default_adapter
-        builder.request :authorization, 'Bearer', @access_token
-      end
-
+      conn_opts[:builder] = MIDDLEWARE
       opts[:faraday] = Faraday.new(conn_opts)
       opts
     end

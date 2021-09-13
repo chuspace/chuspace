@@ -7,8 +7,6 @@ class BlogsController < ApplicationController
   def create
     @blog = Current.user.blogs.new(blog_params)
 
-    puts @blog.inspect
-
     if @blog.save
       redirect_to settings_blogs_path
     else

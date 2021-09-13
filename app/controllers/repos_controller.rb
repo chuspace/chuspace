@@ -4,7 +4,7 @@ class ReposController < ApplicationController
   def index
     @storage = Current.user.storages.find(params[:storage_id])
     query = case @storage.provider
-            when 'github' then "#{params[:q]} user:#{@storage.provider_user.login}"
+            when 'github' then "#{params[:q]} fork:true user:#{@storage.provider_user.login}"
             else params[:q]
     end
 

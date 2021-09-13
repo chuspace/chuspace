@@ -37,7 +37,7 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
   end
 
   def image(node)
-    blob_url = url_or_mailto?(node.url) ? node.url : URI.join(ENV.fetch('IMAGES_ENDPOINT'), node.url).to_s
+    blob_url = node.url
 
     out('<lazy-image')
     out(' src="', escape_href(blob_url), '"')

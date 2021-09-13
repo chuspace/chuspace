@@ -22,7 +22,6 @@ class GithubAdapter < ApplicationAdapter
   end
 
   def create_repository(blog:)
-    puts blog.framework_config.inspect
     decorate_repository(
       post(
         "repos/#{blog.template_name}/generate",
@@ -48,13 +47,13 @@ class GithubAdapter < ApplicationAdapter
     blobs = get "repositories/#{repo_id}/contents/#{path}"
 
     blobs.map do |blob|
-      content = find_blob(repo_id: repo_id, id: blob.sha)
-      Sawyer::Resource.new(agent, content.to_h.merge!(id: blob.sha, path: blob.path))
+      find_blob(repo_id: repo_id, id: blob.sha)
     end
   end
 
   def find_blob(repo_id:, id:)
-    get "repositories/#{repo_id}/git/blobs/#{id}", {}
+    content = get "repositories/#{repo_id}/git/blobs/#{id}", {}
+    Sawyer::Resource.new(agent, content.to_h.merge!(id: id))
   end
 
   def create_blob(repo_id:, path:, content:, message: nil)
