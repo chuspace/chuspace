@@ -17,32 +17,6 @@ class GitlabAdapter < ApplicationAdapter
     @search_repositories ||= decorate_repository(paginate('search', options.merge(search: query, scope: :projects)))
   end
 
-  def repositories
-    @repositories ||= decorate_repository(paginate('projects', { owned: true }))
-  end
-
-  def create_repository(blog:)
-    project = decorate_repository(
-      post(
-        'projects',
-        name: blog.name,
-        path: "#{blog.slug}.chuspace.dev",
-        description: blog.description,
-        visibility: blog.visibility,
-        shared_runners_enabled: true,
-        pages_access_level: 'public',
-        import_url: blog.template_url
-      )
-    )
-
-    post("projects/#{project.id}/triggers", description: 'Deploy pages')
-    project
-  end
-
-  def delete_repository(id:)
-    boolean_from_response :delete, "projects/#{id}"
-  end
-
   def repository_folders(id:)
     tree = get("projects/#{id}/repository/tree", { recursive: true })
     @repository_folders ||= tree.map(&:path)

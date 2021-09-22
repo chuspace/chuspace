@@ -35,7 +35,10 @@
             %>
           <% end %>
         <% else %>
-          <%= form.input :storage_id, as: :select, collection: Current.user.storages.pluck(:provider, :id) %>
+          <div class='list'>
+            <%= render 'storages/item', storage: Current.user.storages.chuspace %>
+          </div>
+          <p class='text-sm mt-2 italic'>Used to store git repository</p>
         <% end %>
 
         <%= form.input :name, required: true %>

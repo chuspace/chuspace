@@ -12,22 +12,12 @@ class BlogFrameworkConfig < ApplicationConfig
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
     },
-    bridgetown: {
-      framework: 'bridgetown',
-      language: 'ruby',
-      default: false,
-      template_name: 'chuspace-contrib/bridgetown-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/bridgetown',
-      posts_folder: 'src/pages/posts',
-      drafts_folder: 'src/pages/posts',
-      assets_folder: 'public/assets/blog'
-    },
     gatsby: {
       framework: 'gatsby',
       language: 'javascript',
       default: false,
       template_name: 'chuspace-contrib/gatsby-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/gatsby',
+      template_url: 'https://github.com/chuspace-contrib/gatsby-starter-blog.git',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -37,7 +27,7 @@ class BlogFrameworkConfig < ApplicationConfig
       language: 'ruby',
       default: false,
       template_name: 'chuspace-contrib/jekyll-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/jekyll',
+      template_url: 'https://github.com/chuspace-contrib/jekyll-starter-blog.git',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -47,37 +37,17 @@ class BlogFrameworkConfig < ApplicationConfig
       language: 'go',
       default: false,
       template_name: 'chuspace-contrib/hugo-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/hugo',
-      posts_folder: 'src/pages/posts',
-      drafts_folder: 'src/pages/posts',
-      assets_folder: 'public/assets/blog'
+      template_url: 'https://github.com/chuspace-contrib/hugo-starter-blog.git',
+      posts_folder: 'content/post',
+      drafts_folder: 'content/post',
+      assets_folder: 'static'
     },
     eleventy: {
       framework: 'eleventy',
       language: 'javascript',
       default: false,
       template_name: 'chuspace-contrib/eleventy-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/eleventy',
-      posts_folder: 'src/pages/posts',
-      drafts_folder: 'src/pages/posts',
-      assets_folder: 'public/assets/blog'
-    },
-    hexo: {
-      framework: 'hexo',
-      language: 'javascript',
-      default: false,
-      template_name: 'chuspace-contrib/hexo-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/hexo',
-      posts_folder: 'src/pages/posts',
-      drafts_folder: 'src/pages/posts',
-      assets_folder: 'public/assets/blog'
-    },
-    publish: {
-      framework: 'publish',
-      language: 'javascript',
-      default: false,
-      template_name: 'chuspace-contrib/publish-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/publish',
+      template_url: 'https://github.com/chuspace-contrib/eleventy-starter-blog.git',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -87,7 +57,7 @@ class BlogFrameworkConfig < ApplicationConfig
       language: 'javascript',
       default: false,
       template_name: 'chuspace-contrib/nextjs-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/nextjs',
+      template_url: 'https://github.com/chuspace-contrib/nextjs-starter-blog.git',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'
@@ -97,37 +67,7 @@ class BlogFrameworkConfig < ApplicationConfig
       language: 'javascript',
       default: false,
       template_name: 'chuspace-contrib/nuxtjs-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/nuxtjs',
-      posts_folder: 'src/pages/posts',
-      drafts_folder: 'src/pages/posts',
-      assets_folder: 'public/assets/blog'
-    },
-    gridsome: {
-      framework: 'gridsome',
-      language: 'javascript',
-      default: false,
-      template_name: 'chuspace-contrib/gridsome-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/gridsome',
-      posts_folder: 'src/pages/posts',
-      drafts_folder: 'src/pages/posts',
-      assets_folder: 'public/assets/blog'
-    },
-    sculpin: {
-      framework: 'sculpin',
-      language: 'php',
-      default: false,
-      template_name: 'chuspace-contrib/sculpin-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/sculpin',
-      posts_folder: 'src/pages/posts',
-      drafts_folder: 'src/pages/posts',
-      assets_folder: 'public/assets/blog'
-    },
-    pelican: {
-      framework: 'pelican',
-      language: 'python',
-      default: false,
-      template_name: 'chuspace-contrib/pelican-starter-blog',
-      template_url: 'https://github.com/chuspace-contrib/pelican',
+      template_url: 'https://github.com/chuspace-contrib/nuxtjs-starter-blog.git',
       posts_folder: 'src/pages/posts',
       drafts_folder: 'src/pages/posts',
       assets_folder: 'public/assets/blog'

@@ -24,7 +24,7 @@ module.exports = {
     colors: {
       transparent: 'transparent',
 
-      black: '#000',
+      black: '#111',
       white: '#fff',
 
       github: {
@@ -56,13 +56,13 @@ module.exports = {
       'red-lighter': '#f9acaa',
       'red-lightest': '#fcebea',
 
-      'blue-darkest': '#004180',
-      'blue-darker': '#005ab3',
-      'blue-dark': '#0074e6',
-      blue: '#1089ff',
-      'blue-light': '#4da7ff',
-      'blue-lighter': '#80c0ff',
-      'blue-lightest': '#b3d9ff',
+      'blue-darkest': '#000099',
+      'blue-darker': '#0000bf',
+      'blue-dark': '#0000e6',
+      blue: '#0000FF',
+      'blue-light': '#4d4dff',
+      'blue-lighter': '#9999ff',
+      'blue-lightest': '#bfbfff',
 
       'green-darkest': '#0f2f21',
       'green-darker': '#1a4731',
@@ -73,8 +73,9 @@ module.exports = {
       'green-lightest': '#e3fcec'
     },
     fontFamily: {
+      monospace: ['Space Mono', 'monospace'],
       sans: [
-        'Inter',
+        'Work Sans',
         'system-ui',
         'BlinkMacSystemFont',
         '-apple-system',

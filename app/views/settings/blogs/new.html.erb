@@ -1,12 +1,13 @@
 <div class='relative'>
-  <h3 class='border-b pb-4'>Create a new repository</h3>
+  <h3 class='border-b pb-4'>Create a new blog</h3>
 
   <div class='absolute right-0 top-0'>
     <%= link_to 'Connect', connect_settings_blogs_path, class: 'button button--fill  ml-2', data: { 'turbo-frame': :_top } %>
   </div>
 
-  <p class='text-gray-600 text-sm mt-2'>
-    New Github repository will be created using default
+  <p class='text-gray-600 mt-2'>
+    A new Git repository will be created using the selected framework of your choice
+    and will be hosted to chuspace git storage
     <%= link_to 'blog template', 'https://github.com/chuspace/blog-template', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
     based on <%= link_to 'Astro', 'https://astro.build/', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
   </p>

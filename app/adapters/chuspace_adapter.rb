@@ -36,6 +36,29 @@ class ChuspaceAdapter < GitlabAdapter
     [provider_user.id, provider_user_token.token]
   end
 
+  def create_repository(blog:)
+    project = decorate_repository(
+      post(
+        'projects',
+        name: blog.name,
+        path: "#{blog.slug}.chuspace.dev",
+        description: blog.description,
+        visibility: blog.visibility,
+        shared_runners_enabled: true,
+        pages_access_level: 'public',
+        template_name: :hugo,
+        auto_devops_enabled: true
+      )
+    )
+
+    post("projects/#{project.id}/triggers", description: 'Deploy pages')
+    project
+  end
+
+  def delete_repository(id:)
+    boolean_from_response :delete, "projects/#{id}"
+  end
+
   def deactivate_user(user_id:)
     post("users/#{user_id}/deactivate")
   end

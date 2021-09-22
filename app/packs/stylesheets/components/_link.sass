@@ -28,25 +28,16 @@
       @apply text-red-lighter
 
 .button
-  @apply py-2 px-3 text-sm rounded no-underline text-center cursor-pointer font-medium
+  @apply py-2 px-3 border-2 border-white rounded no-underline text-center cursor-pointer font-medium inline-block
 
   &.button--default
-    @apply border-2 border-gray-default text-gray-800 transition-colors duration-300
-
-  &.button--slim
-    @apply py-1
+    @apply border-2 border-white text-white transition-colors duration-300
 
   &.button--default:hover
     @apply bg-black text-white
 
-  &.button--active
-    @apply border-blue-darker text-white text-blue-darker
-
-  &.button--active:hover
-    @apply border-blue text-blue
-
   &.button--fill
-    @apply text-white bg-black shadow-md dark:bg-white dark:text-black
+    @apply text-white bg-white shadow-md text-black
 
   &.button--fill:hover
     @apply opacity-80

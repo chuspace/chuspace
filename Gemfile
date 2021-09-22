@@ -26,6 +26,8 @@ gem 'simple_form'
 
 # Emails
 gem 'aws-ses', require: 'aws/ses'
+gem 'aws-sdk-rails'
+gem 'aws-sdk-s3'
 
 # Nested tree
 gem 'ancestry'

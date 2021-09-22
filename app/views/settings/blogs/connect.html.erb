@@ -13,8 +13,8 @@
     <%= render 'blogs/form', blog: @blog, type: :connect %>
   <% else %>
     <div class='placeholder sm:w-3/4 mx-auto w-full'>
-      <h3>No external storages configured</h4>
-      <p>You can only connect repositories from your own git storage providers</p>
+      <h3>No external git storages configured</h4>
+      <p>You can only connect repositories from your own git storage providers. <p>For example: Github or Gitlab</p></p>
       <%= link_to 'Connect storage', settings_storages_path, class: 'button button--fill mt-4 inline-block', data: { 'turbo-frame': '_top' } %>
     </div>
   <% end %>

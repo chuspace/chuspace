@@ -22,6 +22,9 @@ en:
         git_repository_fullname: 'This repository will be used to store articles for your blog'
       storage:
         access_token: the access token should have following scopes
+      blog:
+        framework: static site generator framework to be used to generate blog from
+        visibility: visibility of blog - public, internal or private
 
     include_blanks:
       defaults:

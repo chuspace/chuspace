@@ -21,22 +21,6 @@ class GithubAdapter < ApplicationAdapter
     @search_repositories ||= decorate_repository(search('search/repositories', query, options).items)
   end
 
-  def create_repository(blog:)
-    decorate_repository(
-      post(
-        "repos/#{blog.template_name}/generate",
-        name: blog.name,
-        description: blog.description,
-        private: blog.visibility.private?,
-        accept: 'application/vnd.github.baptiste-preview+json'
-      )
-    )
-  end
-
-  def delete_repository(id:)
-    boolean_from_response :delete, "repositories/#{id}"
-  end
-
   def repository_folders(id:)
     repo_sha = paginate("repositories/#{id}/commits", { per_page: 1 }).first.sha
     tree = get("repositories/#{id}/git/trees/#{repo_sha}", { recursive: true }).tree

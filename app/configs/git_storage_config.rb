@@ -8,17 +8,15 @@ class GitStorageConfig < ApplicationConfig
       description: 'Git storage provider from Github.com',
       scopes: 'repo,workflow,admin:public_key,admin:repo_hook,delete_repo'
     },
-
     gitlab: {
       domain: 'gitlab.io',
       description: 'Git storage provider from Gitlab.com',
       endpoint: 'https://gitlab.com/api/v4',
       scopes: 'api,read_repository,write_repository'
     },
-
     chuspace: {
       domain: 'chuspace.dev',
-      description: 'Default git storage hosted by Chuspace on our servers',
+      description: 'Default git repository storage hosted on Chuspace servers',
       endpoint: 'https://git.chuspace.com/api/v4',
       scopes: 'api,read_repository,write_repository'
     }
@@ -26,6 +24,8 @@ class GitStorageConfig < ApplicationConfig
 
   def self.providers_enum
     @providers_enum ||= defaults.keys.each_with_object({}) do |key, hash|
+      next if key == 'chuspace'
+
       hash[key.to_sym] = key
     end
   end
