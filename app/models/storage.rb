@@ -5,20 +5,19 @@ class Storage < ApplicationRecord
   belongs_to :user, optional: true
   encrypts :access_token, :endpoint
 
-  validates :description, :provider, :access_token, presence: true
+  validates :description, :provider, :endpoint, presence: true
+  validates :access_token, presence: true, unless: :chuspace?
   validates :provider, uniqueness: { scope: :user_id, message: :one_provider_per_user }
 
   enum provider: GitStorageConfig.providers_enum
 
-  before_save :add_provider_defaults, unless: :chuspace?
+  before_validation :assign_endpoint, if: -> { chuspace? || !self_hosted? }
+  before_validation :assign_description, if: :chuspace?
+  before_create :setup_chuspace_git_storage, if: :chuspace?
+
   delegate :chuspace?, to: :provider, allow_nil: true
-  delegate :repositories, to: :adapter
 
   class << self
-    def chuspace_adapter
-      @chuspace_adapter ||= ChuspaceAdapter.new(**Rails.application.credentials.storage[:chuspace].slice(:endpoint, :access_token))
-    end
-
     def external
       where.not(provider: GitStorageConfig.chuspace[:provider])
     end
@@ -34,28 +33,48 @@ class Storage < ApplicationRecord
     def default_or_chuspace
       default || chuspace
     end
+
+    def public_providers
+      GitStorageConfig.defaults.map do |key, config|
+        [config['label'], key]
+      end
+    end
+  end
+
+  def self_hosted?
+    provider_config[:self_hosted]
   end
 
   def adapter
-    @adapter ||= StorageAdapter.new(storage: self)
+    StorageAdapter.new(storage: self)
   end
 
   def provider
     super ? ActiveSupport::StringInquirer.new(super) : nil
   end
 
-  def provider_user
-    @provider_user ||= adapter.user
-  end
-
   def provider_config
-    @provider_config ||= GitStorageConfig.new.send(provider)
+    GitStorageConfig.new.send(provider)
   end
 
   private
 
-  def add_provider_defaults
-    self.assign_attributes(provider_config.slice(:description, :endpoint))
-    self.provider_user_id = adapter.user.id
+  def assign_endpoint
+    self.endpoint = provider_config[:endpoint]
+  end
+
+  def assign_description
+    self.description = provider_config[:description]
+  end
+
+  def setup_chuspace_git_storage
+    ChuspaceAdapter.as_superuser.create_user(user: user)
+    adapter = ChuspaceAdapter.as_superuser
+    adapter.basic_auth = true
+    adapter.sudo = user.username
+
+    self.access_token = adapter.create_personal_access_token(user: user)
+  rescue FaradayClient::Error
+    ChuspaceAdapter.as_superuser.delete_user(user: user)
   end
 end

@@ -3,9 +3,9 @@
     <%= turbo_frame_tag(blog, class: 'flex') do %>
       <div class='flex flex-1'>
         <%= link_to blog_path(blog), 'data-turbo-frame': :_top do %>
-          <div>
+          <div class='px-4'>
             <%= tag.h4 blog.name %>
-            <%= tag.div blog.description, class: 'text-xs text-gray-600 mt-1' %>
+            <%= tag.div blog.description, class: 'text-xs mt-1' %>
 
             <div class='mt-2'>
               <%= content_tag :span, 'internal', class: 'badge badge--closed text-gray-400 text-xs mr-2' if blog.storage.chuspace? %>
@@ -16,7 +16,7 @@
       </div>
 
       <div class='flex items-center justify-between flex-end'>
-        <%= link_to 'Edit', edit_settings_blog_path(blog), class: 'button button--slim button--fill', data: { 'turbo-frame': :_top } %>
+        <%= link_to 'Edit', edit_blog_path(blog), class: 'button button--slim button--fill', data: { 'turbo-frame': :_top } %>
         <%= button_to blog_path(blog), method: :delete, class: 'button button--slim button--danger ml-3', data: { 'turbo-frame': :_top } do %>
           <%= tag.span 'Delete' %>
         <% end %>

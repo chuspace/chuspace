@@ -16,10 +16,7 @@ gem 'activerecord-clean-db-structure'
 gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
-
-# File uploads
-gem 'image_processing'
-gem 'ruby-vips'
+gem 'store_model'
 
 # Form
 gem 'simple_form'
@@ -56,6 +53,7 @@ gem 'view_component'
 # Omninauth
 gem 'omniauth-github', github: 'omniauth/omniauth-github'
 gem 'omniauth-gitlab', github: 'linchus/omniauth-gitlab'
+gem 'omniauth-atlassian-bitbucket', github: 'fnando/omniauth-atlassian-bitbucket'
 gem 'omniauth-rails_csrf_protection'
 
 # Security
@@ -69,7 +67,7 @@ gem 'front_matter_parser'
 gem 'down'
 gem 'http'
 gem 'faraday'
-gem 'sawyer'
+gem 'sawyer', github: 'lostisland/sawyer'
 gem 'faraday-http-cache'
 
 #  SEO

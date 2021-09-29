@@ -9,4 +9,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            Rails.application.credentials.gitlab[:client_id],
            Rails.application.credentials.gitlab[:client_secret],
            scope: OmniauthConfig.new.gitlab[:scope]
+  provider :bitbucket,
+           Rails.application.credentials.bitbucket[:client_id],
+           Rails.application.credentials.bitbucket[:client_secret],
+           scope: OmniauthConfig.new.bitbucket[:scope]
 end

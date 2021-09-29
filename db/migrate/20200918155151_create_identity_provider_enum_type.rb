@@ -3,13 +3,13 @@
 class CreateIdentityProviderEnumType < ActiveRecord::Migration[6.1]
   def up
     execute <<-SQL
-      CREATE TYPE identity_provider_enum_type AS ENUM ('github', 'gitlab', 'email');
+      CREATE TYPE identity_provider_enum_type AS ENUM (#{OmniauthConfig.defaults.keys.map { |provider| "'#{provider}'"} .join(',') });
     SQL
   end
 
   def down
     execute <<-SQL
-      DROP TYPE identity_provider_enum_type AS ENUM ('github', 'gitlab', 'email');
+      DROP TYPE identity_provider_enum_type;
     SQL
   end
 end

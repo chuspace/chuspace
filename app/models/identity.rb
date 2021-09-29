@@ -6,9 +6,5 @@ class Identity < ApplicationRecord
   encrypts :uid
   blind_index :uid
 
-  enum provider: {
-    github: 'github',
-    gitlab: 'gitlab',
-    email: 'email'
-  }, _suffix: true
+  enum provider: OmniauthConfig.providers_enum
 end

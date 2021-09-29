@@ -19,6 +19,8 @@ body
   -moz-osx-font-smoothing: greyscale
   text-rendering: optimizeL segibility
 
+.content
+  margin-top: 60px
 
 *,
 *:before,
@@ -35,3 +37,7 @@ dialog + .backdrop
 
 hr
   @apply mb-4 border-gray-200
+
+input::placeholder
+  color: theme('colors.white')
+  opacity: 0.6

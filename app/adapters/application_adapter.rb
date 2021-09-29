@@ -9,33 +9,50 @@ class ApplicationAdapter
     @access_token = access_token
   end
 
-  def scopes
-    GitStorageConfig.new.send(name)[:scopes]
-  end
-
   private
 
-  def decorate_repository(object)
-    case object
-    when nil then BlogRepository.new
-    when Array then object.map { |item| decorate_repository(item) }
-    else
+  def repository_from_response(response)
+    case response
+    when nil then Repository.new
+    when Array then response.map { |item| repository_from_response(item) }
+    when Sawyer::Resource
       case name.to_sym
-      when :github
-        BlogRepository.new(
-          id: object.id,
-          name: object.full_name.squish,
-          description: object.description,
-          visibility: object.private ? :private : :public,
-          url: object.html_url
+      when :github, :github_enterprise
+        GitRepository.new(
+          id: response.id,
+          fullname: response.full_name.squish,
+          name: response.name,
+          owner: response.owner.login,
+          description: response.description,
+          visibility: response.private ? :private : :public,
+          ssh_url: response.ssh_url,
+          html_url: response.html_url,
+          default_branch: response.default_branch
         )
-      when :chuspace, :gitlab
-        BlogRepository.new(
-          id: object.id,
-          name: object.path_with_namespace.squish,
-          description: object.description,
-          visibility: object.visibility,
-          url: object.web_url
+      when :gitlab, :gitlab_foss
+        GitRepository.new(
+          id: response.id,
+          name: response.path.squish,
+          owner: response.namespace.path,
+          owner_kind: response.namespace.kind,
+          fullname: response.path_with_namespace.squish,
+          description: response.description,
+          visibility: response.visibility,
+          ssh_url: response.ssh_url_to_repo,
+          html_url: response.web_url,
+          default_branch: response.default_branch
+        )
+      when :chuspace, :gitea
+        GitRepository.new(
+          id: response.id,
+          fullname: response.full_name.squish,
+          name: response.name.squish,
+          owner: response.owner.login,
+          description: response.description,
+          visibility: response.private ? :private : :public,
+          ssh_url: response.ssh_url,
+          html_url: response.html_url,
+          default_branch: response.default_branch
         )
       end
     end

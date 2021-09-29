@@ -12,11 +12,14 @@ en:
       storage:
         description: What's this storage for?
         endpoint: API endpoint for self-hosted or enterprise instances
+        access_token: Personal access token generated for selected provider
     labels:
       defaults:
         password: 'Password'
       publication:
         git_repository_fullname: 'Select Github repository'
+      repository:
+        id: Select repository
     hints:
       publication:
         git_repository_fullname: 'This repository will be used to store articles for your blog'
@@ -25,6 +28,8 @@ en:
       blog:
         framework: static site generator framework to be used to generate blog from
         visibility: visibility of blog - public, internal or private
+      repository:
+        id: Type to search
 
     include_blanks:
       defaults:

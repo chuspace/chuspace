@@ -1,10 +1,25 @@
 GIT
+  remote: https://github.com/fnando/omniauth-atlassian-bitbucket.git
+  revision: d12090f727427e1ee91a0294a957e6ebeb715fe4
+  specs:
+    omniauth-atlassian-bitbucket (0.1.0)
+      omniauth-oauth2
+
+GIT
   remote: https://github.com/linchus/omniauth-gitlab.git
   revision: 4d5bc7b350579631a2988c6c7ed136de96697ddf
   specs:
     omniauth-gitlab (3.0.0)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.7.1)
+
+GIT
+  remote: https://github.com/lostisland/sawyer.git
+  revision: 7d57eda0a7d46b62012cb835394174b3c2099580
+  specs:
+    sawyer (0.8.2)
+      addressable (>= 2.3.5)
+      faraday (~> 1.0)
 
 GIT
   remote: https://github.com/omniauth/omniauth-github.git
@@ -92,7 +107,7 @@ GEM
     ast (2.4.2)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.503.0)
+    aws-partitions (1.505.0)
     aws-record (2.6.1)
       aws-sdk-dynamodb (~> 1.18)
     aws-sdk-core (3.121.0)
@@ -138,7 +153,7 @@ GEM
     blind_index (2.2.0)
       activesupport (>= 5)
       argon2-kdf (>= 0.1.1)
-    bootsnap (1.8.1)
+    bootsnap (1.9.1)
       msgpack (~> 1.0)
     brakeman (5.1.1)
     builder (3.2.4)
@@ -159,7 +174,7 @@ GEM
       xpath (~> 3.2)
     childprocess (3.0.0)
     coderay (1.1.3)
-    commonmarker (0.23.1)
+    commonmarker (0.23.2)
     concurrent-ruby (1.1.9)
     coveralls (0.7.1)
       multi_json (~> 1.3)
@@ -170,13 +185,13 @@ GEM
     crass (1.0.6)
     database_consistency (1.1.2)
       activerecord (>= 3.2)
-    database_validations (1.0.0)
+    database_validations (1.0.1)
       activerecord (>= 4.2.0)
     diff-lcs (1.4.4)
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    down (5.2.3)
+    down (5.2.4)
       addressable (~> 2.8)
     easymon (1.4.2)
       redis
@@ -188,7 +203,7 @@ GEM
       railties (>= 5.0.0)
     faker (2.19.0)
       i18n (>= 1.6, < 2)
-    faraday (1.7.1)
+    faraday (1.8.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -219,26 +234,23 @@ GEM
     globalid (0.5.2)
       activesupport (>= 5.0)
     hashie (4.1.0)
-    http (5.0.1)
-      addressable (~> 2.3)
+    http (5.0.2)
+      addressable (~> 2.8)
       http-cookie (~> 1.0)
       http-form_data (~> 2.2)
-      llhttp-ffi (~> 0.3.0)
+      llhttp-ffi (~> 0.4.0)
     http-accept (1.7.0)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
-    image_processing (1.12.1)
-      mini_magick (>= 4.9.5, < 5)
-      ruby-vips (>= 2.0.17, < 3)
     inline_svg (1.7.2)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     jmespath (1.4.0)
     jwt (2.2.3)
-    llhttp-ffi (0.3.1)
+    llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     lockbox (0.6.5)
@@ -247,14 +259,13 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    marcel (1.0.1)
-    meta-tags (2.15.0)
-      actionpack (>= 3.2.0, < 6.2)
+    marcel (1.0.2)
+    meta-tags (2.16.0)
+      actionpack (>= 3.2.0, < 7.1)
     method_source (1.0.0)
     mime-types (3.3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.0901)
-    mini_magick (4.11.0)
     mini_mime (1.1.1)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
@@ -283,7 +294,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.0)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    parallel (1.20.1)
+    parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -293,7 +304,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.4.0)
+    puma (5.5.0)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
@@ -366,7 +377,7 @@ GEM
     rspec-support (3.10.2)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.20.0)
+    rubocop (1.21.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -380,31 +391,26 @@ GEM
     rubocop-performance (1.11.5)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.11.3)
+    rubocop-rails (2.12.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
     ruby-next-core (0.12.0)
     ruby-progressbar (1.11.0)
-    ruby-vips (2.1.3)
-      ffi (~> 1.12)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sawyer (0.8.2)
-      addressable (>= 2.3.5)
-      faraday (> 0.8, < 2.0)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    sentry-rails (4.7.1)
+    sentry-rails (4.7.3)
       railties (>= 5.0)
       sentry-ruby-core (~> 4.7.0)
-    sentry-ruby (4.7.1)
+    sentry-ruby (4.7.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       faraday (>= 1.0)
-      sentry-ruby-core (= 4.7.1)
-    sentry-ruby-core (4.7.1)
+      sentry-ruby-core (= 4.7.3)
+    sentry-ruby-core (4.7.3)
       concurrent-ruby
       faraday
     simple_form (5.1.0)
@@ -426,6 +432,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    store_model (0.11.1)
+      activerecord (>= 5.2)
     strong_migrations (0.7.8)
       activerecord (>= 5)
     sync (0.5.0)
@@ -435,16 +443,16 @@ GEM
     tins (1.29.1)
       sync
     tomo (1.9.0)
-    turbo-rails (0.7.11)
+    turbo-rails (0.8.0)
       rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.7)
-    unicode-display_width (2.0.0)
+    unf_ext (0.0.8)
+    unicode-display_width (2.1.0)
     uniform_notifier (1.14.2)
-    view_component (2.39.0)
+    view_component (2.40.0)
       activesupport (>= 5.0.0, < 8.0)
       method_source (~> 1.0)
     web-console (4.1.0)
@@ -504,11 +512,11 @@ DEPENDENCIES
   friendly_id
   front_matter_parser
   http
-  image_processing
   inline_svg
   lockbox
   meta-tags
   minitest
+  omniauth-atlassian-bitbucket!
   omniauth-github!
   omniauth-gitlab!
   omniauth-rails_csrf_protection
@@ -525,8 +533,7 @@ DEPENDENCIES
   rubocop
   rubocop-performance
   rubocop-rails
-  ruby-vips
-  sawyer
+  sawyer!
   selenium-webdriver
   sentry-rails
   sentry-ruby
@@ -534,6 +541,7 @@ DEPENDENCIES
   simplecov
   simplecov-lcov
   sitemap_generator
+  store_model
   strong_migrations
   tomo
   turbo-rails

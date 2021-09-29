@@ -1,5 +1,7 @@
 <% Identity.providers.each_key do |provider| %>
-  <%= button_to "/auth/#{provider}", class: "flex items-center text-white justify-center mt-2 w-full button #{login_button_colors_classes[provider].join(' ')} text-center", data: { turbo: false }, form: { class: 'w-full' } do %>
-    <%= inline_svg_tag "icons/#{provider}", class: 'fill-current' %> <span class='ml-2'><%= provider.humanize %></span>
+  <% config = OmniauthConfig.new.send(provider) %>
+
+  <%= button_to config[:url], class: "flex items-center text-white justify-center mt-2 w-full button #{login_button_colors_classes[provider].join(' ')} text-center", method: config[:method], data: { turbo: false }, form: { class: 'w-full' } do %>
+    <%= inline_svg_tag "icons/#{provider}", class: 'fill-current w-6 h-6' %><span class='ml-2'><%= provider.humanize %></span>
   <% end %>
 <% end %>

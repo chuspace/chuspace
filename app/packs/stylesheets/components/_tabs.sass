@@ -2,11 +2,11 @@ tab-container
   @apply block
 
   div[role="tablist"]
-    @apply flex border-b border-gray-200 relative
+    @apply flex border-b border-white relative
 
     button[aria-selected="true"]
       &:after
-        @apply border-b-2 border-blue absolute w-full bottom-0 left-0
+        @apply border-b-2 border-white absolute w-full bottom-0 left-0
         content: ''
 
     button[role="tab"]
@@ -16,14 +16,26 @@ tab-container
         @apply mr-0
 
 .tabs
-  @apply border block rounded
+  @apply block
 
-  .tab[aria-selected="true"]
-    @apply bg-gray-100
+  &[dir="vertical"]
+    @apply border rounded
 
-    &:after
-      @apply border-l-2 border-blue h-full border-b-0 absolute w-full bottom-0 left-0
-      content: ''
+    .tab
+      @apply block relative w-full border-b px-4 py-2 last:border-b-0 cursor-pointer hover:bg-gray-800
+      &:after
+        @apply border-l-2 border-white h-full border-b-0 absolute w-full bottom-0 left-0
+        content: ''
 
-  .tab
-    @apply block relative w-full border-b px-4 py-2 last:border-b-0 cursor-pointer hover:bg-gray-100
+    &[aria-selected="true"]
+      @apply bg-gray-800 font-bold
+
+
+  &[dir="horizontal"]
+    @apply border-b border-light-200
+
+    .tab
+      @apply first:ml-0 ml-8 px-2
+
+      &[aria-selected="true"]
+        @apply border-b-2 border-blue font-bold

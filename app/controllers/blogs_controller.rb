@@ -4,11 +4,29 @@ class BlogsController < ApplicationController
   before_action :authenticate!, except: :show
   before_action :find_blog, except: %i[new connect create index]
 
+  def new
+    if Current.user.storages.default_or_chuspace.present?
+      @blog = Current.user.blogs.build(storage: Current.user.storages.default_or_chuspace)
+      @blog.build_git_repo
+
+      render 'index'
+    else
+      redirect_to storages_path, notice: 'You do not have any git storages configured'
+    end
+  end
+
+  def connect
+    @blog = Current.user.blogs.new(storage: Current.user.storages.first)
+    @blog.build_git_repo
+    render 'index'
+  end
+
   def create
     @blog = Current.user.blogs.new(blog_params)
+    puts @blog.inspect
 
     if @blog.save
-      redirect_to settings_blogs_path
+      redirect_to blogs_path
     else
       respond_to do |format|
         format.html
@@ -23,18 +41,28 @@ class BlogsController < ApplicationController
 
   def update
     @blog.update!(blog_params)
-    redirect_to settings_blogs_path
+    redirect_to blogs_path
   end
 
   def destroy
     @blog.destroy
-    redirect_to settings_blogs_path
+    redirect_to blogs_path
   end
 
   private
 
   def blog_params
-    params.require(:blog).permit(:name, :description, :storage_id, :framework, :git_repo_id, :visibility, :posts_folder, :drafts_folder, :assets_folder)
+    params.require(:blog).permit(
+      :name,
+      :description,
+      :storage_id,
+      :framework,
+      :visibility,
+      :posts_folder,
+      :drafts_folder,
+      :assets_folder,
+      git_repo_attributes: GitRepository.attr_json_registry.attribute_names
+    )
   end
 
   def find_blog

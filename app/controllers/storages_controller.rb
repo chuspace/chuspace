@@ -1,24 +1,32 @@
 # frozen_string_literal: true
 
 class StoragesController < ApplicationController
-  before_action :find_storage, except: %i[new create]
+  before_action :find_storage, except: %i[new index create]
 
   def index
     @storages = Current.user.storages
   end
 
   def new
-    @storage = Current.user.storages.build(provider: :github)
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html
-    end
+    @storage = Current.user.storages.build(provider: :chuspace)
+    render 'index'
   end
 
   def create
-    @storage = Current.user.storages.create(storage_params.delete_if { |key, value| value.blank? })
-    redirect_to settings_storages_path
+    Storage.transaction do
+      @storage = Current.user.storages.build(storage_params.delete_if { |key, value| value.blank? })
+
+      if @storage.save
+        redirect_to storages_path
+      else
+        @storage.errors.clear
+
+        respond_to do |format|
+          format.html
+          format.turbo_stream { render turbo_stream: turbo_stream.replace(@storage, partial: 'storages/form', locals: { storage: @storage }) }
+        end
+      end
+    end
   end
 
   def edit
@@ -27,13 +35,13 @@ class StoragesController < ApplicationController
   def update
     @storage.update(storage_params.except(:provider))
 
-    redirect_to settings_storages_path
+    redirect_to storages_path
   end
 
   def destroy
     @storage.destroy
 
-    redirect_to settings_storages_path
+    redirect_to storages_path
   end
 
   private

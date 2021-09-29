@@ -1,65 +1,64 @@
 # frozen_string_literal: true
 
-class ChuspaceAdapter < GitlabAdapter
+class ChuspaceAdapter < GiteaAdapter
+  attr_accessor :basic_auth, :sudo
+
   def name
     'chuspace'
   end
 
-  def create_personal_access_token(user_id:)
-    post("users/#{user_id}/personal_access_tokens", name: name, scopes: scopes)
+  def self.as_superuser
+    endpoint = Rails.application.credentials.storage[:chuspace][:endpoint]
+    access_token = Rails.application.credentials.storage[:chuspace][:access_token]
+
+    new(endpoint: endpoint, access_token: access_token)
   end
 
-  def user(id:)
-    @user ||= get("users/#{id}")
+  def user
+    @user ||= get('user')
   end
 
   def create_user(user:)
     post(
-      'users',
+      'admin/users',
       {
         email: user.email,
-        name: user.name,
+        full_name: user.name,
         username: user.username,
-        projects_limit: 100,
-        can_create_group: false,
-        private_profile: true,
-        skip_confirmation: true,
-        force_random_password: true
+        password: SecureRandom.hex(12),
+        must_change_password: false,
+        prohibit_login: true,
+        visibility: :private,
+        allow_create_organization: false,
+        restricted: true,
+        active: true
       }
     )
   end
 
-  def create_user_with_token(user:)
-    provider_user = create_user(user: user)
-    provider_user_token = create_personal_access_token(user_id: provider_user.id)
+  def delete_user(user:)
+    boolean_from_response(:delete, "admin/users/#{user.username}")
+  end
 
-    [provider_user.id, provider_user_token.token]
+  def create_personal_access_token(user:)
+    provider_user_token = post("users/#{user.username}/tokens", { name: user.username })
+    provider_user_token.sha1
   end
 
   def create_repository(blog:)
-    project = decorate_repository(
+    repository_from_response(
       post(
-        'projects',
-        name: blog.name,
-        path: "#{blog.slug}.chuspace.dev",
+        "repos/#{blog.template_name}/generate",
+        name: blog.slug,
+        owner: blog.user.username,
         description: blog.description,
-        visibility: blog.visibility,
-        shared_runners_enabled: true,
-        pages_access_level: 'public',
-        template_name: :hugo,
-        auto_devops_enabled: true
+        private: true,
+        git_content: true
       )
     )
-
-    post("projects/#{project.id}/triggers", description: 'Deploy pages')
-    project
   end
 
-  def delete_repository(id:)
-    boolean_from_response :delete, "projects/#{id}"
-  end
-
-  def deactivate_user(user_id:)
-    post("users/#{user_id}/deactivate")
+  def delete_repository(blog:)
+    boolean_from_response(:delete, "repos/#{blog.user.username}/#{blog.slug}")
   end
 end

@@ -14,6 +14,6 @@ export default class StorageFormElement extends HTMLElement {
   changeScopes(event) {
     const provider = event.target.value
 
-    this.scopes.innerHTML = this.obj[provider]['scopes']
+    if (this.scopes) this.scopes.innerHTML = this.obj[provider]['scopes']
   }
 }

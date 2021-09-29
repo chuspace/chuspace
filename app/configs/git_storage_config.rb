@@ -2,29 +2,45 @@
 
 class GitStorageConfig < ApplicationConfig
   attr_config(
+    chuspace: {
+      label: 'Chuspace.com',
+      domain: 'chuspace.dev',
+      self_hosted: false,
+      description: 'Chuspace Git storage service for persisting blog repositories.',
+      endpoint: 'https://gitea.chuspace.com/api/v1',
+      scopes: '*'
+    },
     github: {
-      domain: 'github.io',
+      label: 'Github.com',
+      self_hosted: false,
       endpoint: 'https://api.github.com',
-      description: 'Git storage provider from Github.com',
+      scopes: 'repo,workflow,admin:public_key,admin:repo_hook,delete_repo'
+    },
+    github_enterprise: {
+      label: 'Github enterprise',
+      self_hosted: true,
       scopes: 'repo,workflow,admin:public_key,admin:repo_hook,delete_repo'
     },
     gitlab: {
-      domain: 'gitlab.io',
-      description: 'Git storage provider from Gitlab.com',
+      label: 'Gitlab.com',
+      self_hosted: false,
       endpoint: 'https://gitlab.com/api/v4',
       scopes: 'api,read_repository,write_repository'
     },
-    chuspace: {
-      domain: 'chuspace.dev',
-      description: 'Default git repository storage hosted on Chuspace servers',
-      endpoint: 'https://git.chuspace.com/api/v4',
+    gitlab_foss: {
+      label: 'Gitlab CE/EE',
+      self_hosted: true,
       scopes: 'api,read_repository,write_repository'
+    },
+    gitea: {
+      label: 'Gitea',
+      self_hosted: true,
+      scopes: '*'
     }
   )
 
   def self.providers_enum
     @providers_enum ||= defaults.keys.each_with_object({}) do |key, hash|
-      next if key == 'chuspace'
 
       hash[key.to_sym] = key
     end

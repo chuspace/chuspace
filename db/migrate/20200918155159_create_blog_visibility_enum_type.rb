@@ -9,7 +9,7 @@ class CreateBlogVisibilityEnumType < ActiveRecord::Migration[6.1]
 
   def down
     execute <<-SQL
-      DROP TYPE blog_visibility_enum_type AS ENUM ('private', 'public', 'internal');
+      DROP TYPE blog_visibility_enum_type;
     SQL
   end
 end

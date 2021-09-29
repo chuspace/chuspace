@@ -1,14 +1,16 @@
 <div class='right-nav flex items-center'>
   <%= render(Dropdown::Component.new) do |component| %>
     <% component.header(classes: '') do %>
-      <%= render(Avatar::Component.new(url: Current.user.avatar_url, variant: :xs)) %>
+      <%= render(Avatar::Component.new(url: Current.user.avatar_url)) %>
     <% end %>
 
     <% component.body do %>
       <%= content_tag :div, "Signed in as <strong>#{Current.user.username}</strong>".html_safe, class: "dropdown__item whitespace-normal", role: "menuitem", tabindex: "-1" %>
       <div class='dropdown__divider'></div>
-      <%= link_to "Your profile", profile_path, class: "#{link_class(user_path(Current.user))} dropdown__item", role: "menuitem", tabindex: "-1" %>
+      <%= link_to "Your profile", root_path, class: "#{link_class(user_path(Current.user))} dropdown__item", role: "menuitem", tabindex: "-1" %>
       <%= link_to "Settings", settings_path, class: "#{link_class(settings_path)} dropdown__item", role: "menuitem", tabindex: "-1" %>
+      <%= link_to "Blog storages", storages_path, class: "#{link_class(storages_path)} dropdown__item", role: "menuitem", tabindex: "-1" %>
+      <%= link_to "Blogs", blogs_path, class: "#{link_class(blogs_path)} dropdown__item", role: "menuitem", tabindex: "-1" %>
       <%= link_to "Posts", blog_articles_path(Current.user.blogs.default), class: "#{link_class(blog_articles_path(Current.user.blogs.default))} dropdown__item", role: "menuitem", tabindex: "-1" %>
       <div class='dropdown__divider'></div>
       <%= button_to "Sign out", logout_path(Current.user), form: { class: "link link--default dropdown__item", role: "menuitem", tabindex: "-1" }, method: :delete, remote: true %>

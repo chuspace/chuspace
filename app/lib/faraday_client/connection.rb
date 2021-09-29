@@ -11,9 +11,7 @@ module FaradayClient
       builder.use FaradayClient::Middleware::FollowRedirects
       builder.use FaradayClient::Middleware::RaiseError
       unless Rails.env.production?
-        builder.response :logger do | logger |
-          logger.filter(/(Authorization:)(\s+)(\w+)/, '\1[REMOVED]')
-        end
+        builder.response :logger, nil, { headers: true, bodies: true }
       end
       builder.use FaradayClient::Middleware::FeedParser
       builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger
@@ -111,18 +109,28 @@ module FaradayClient
       data
     end
 
-    # Hypermedia agent for the GitHub API
+    # Hypermedia agent for the API
     # @return [Sawyer::Agent]
     def agent
       @agent ||= Sawyer::Agent.new(endpoint, sawyer_options) do |http|
         http.headers[:accept] = default_media_type
         http.headers[:content_type] = 'application/json'
         http.headers[:user_agent] = user_agent
+        http.headers['Sudo'] = @sudo if @sudo
+
         case name
-        when 'github'
+        when 'github', 'github_enterprise'
           http.authorization 'token', @access_token
-        when 'gitlab', 'chuspace', 'bitbucket'
+        when 'gitlab', 'gitlab_foss'
           http.authorization 'Bearer', @access_token
+        when 'chuspace', 'gitea'
+          http.authorization 'token', @access_token
+        end
+
+        if @basic_auth
+          username = Rails.application.credentials.storage[:chuspace].dig(:username)
+          password = Rails.application.credentials.storage[:chuspace].dig(:password)
+          http.basic_auth username, password
         end
       end
     end

@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 class CreateUsers < ActiveRecord::Migration[6.0]
+  disable_ddl_transaction!
+
   def change
     enable_extension 'citext'
 
     create_table :users do |t|
       t.string :name
-      t.citext :username, index: { unique: true }
+      t.citext :username
       t.string :email_ciphertext, null: false
-      t.string :email_bidx, null: false, index: { unique: true }
-      t.text :bio
+      t.string :email_bidx, null: false
 
       # Track logins
       t.integer :sign_in_count, default: 0
@@ -20,5 +21,8 @@ class CreateUsers < ActiveRecord::Migration[6.0]
 
       t.timestamps null: false
     end
+
+    add_index :users, :username, algorithm: :concurrently, unique: true
+    add_index :users, :email_bidx, algorithm: :concurrently, unique: true
   end
 end

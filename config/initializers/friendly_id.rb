@@ -18,8 +18,11 @@ FriendlyId.defaults do |config|
   # undesirable to allow as slugs. Edit this list as needed for your app.
   config.use :reserved
 
-  config.reserved_words = %w(new edit index session login logout users admin
-    stylesheets assets javascripts images)
+  config.reserved_words = %w(
+    new edit index session login logout users admin
+    stylesheets chu chuspace about help contact assets
+    javascripts images
+  )
 
   # This adds an option to treat reserved words as conflicts rather than exceptions.
   # When there is no good candidate, a UUID will be appended, matching the existing
@@ -62,14 +65,14 @@ FriendlyId.defaults do |config|
   #
   # By default, slug has no size limit, but you can change it if you wish.
   #
-  # config.slug_limit = 255
+  config.slug_limit = 40
   #
   # When FriendlyId can not generate a unique ID from your base method, it appends
   # a UUID, separated by a single dash. You can configure the character used as the
   # separator. If you're upgrading from FriendlyId 4, you may wish to replace this
   # with two dashes.
   #
-  # config.sequence_separator = '-'
+  config.sequence_separator = '--'
   #
   # Note that you must use the :slugged addon **prior** to the line which
   # configures the sequence separator, or else FriendlyId will raise an undefined

@@ -9,16 +9,12 @@ class GithubAdapter < ApplicationAdapter
     @user ||= get('user', options)
   end
 
-  def repositories(options: {})
-    @repositories ||= decorate_repository(paginate('user/repos', options))
-  end
-
   def repository(id:)
-    @repository ||= decorate_repository(get("repositories/#{id}"))
+    @repository ||= repository_from_response(get("repositories/#{id}"))
   end
 
   def search_repositories(query:, options: { sort: 'asc', per_page: 5 })
-    @search_repositories ||= decorate_repository(search('search/repositories', query, options).items)
+    @search_repositories ||= repository_from_response(search('search/repositories', query, options).items)
   end
 
   def repository_folders(id:)

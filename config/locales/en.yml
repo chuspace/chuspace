@@ -10,7 +10,7 @@ en:
               one_default_storage_allowed: 'one default storage allowed'
 
   home:
-    index:
+    marketing:
       heading: Blogging platform for developers
       intro:
         Chuspace is a blogging platform built on Git. Publish, learn and collaborate

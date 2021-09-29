@@ -21,6 +21,10 @@ module.exports = {
       lg: '992px',
       xl: '1160px'
     },
+    borderColor: (theme) => ({
+      ...theme('colors'),
+      DEFAULT: theme('colors.white', 'currentColor')
+    }),
     colors: {
       transparent: 'transparent',
 
@@ -35,6 +39,10 @@ module.exports = {
         light: '#e65528',
         dark: '#c43f17'
       },
+      bitbucket: {
+        light: '#0047b3',
+        dark: '#003380'
+      },
       email: {
         light: 'rgba(0,0,0,0.6)',
         dark: 'rgba(0,0,0,0.8)'
@@ -46,6 +54,15 @@ module.exports = {
         400: 'rgba(0,0,0,0.4)',
         200: 'rgba(0,0,0,0.2)',
         100: 'rgba(0,0,0,0.1)'
+      },
+
+      light: {
+        default: 'rgba(255,255,255,0.8)',
+        800: 'rgba(255,255,255,0.8)',
+        600: 'rgba(255,255,255,0.6)',
+        400: 'rgba(255,255,255,0.4)',
+        200: 'rgba(255,255,255,0.2)',
+        100: 'rgba(255,255,255,0.1)'
       },
 
       'red-darkest': '#3b0d0c',

@@ -10,52 +10,67 @@
               for="repos-popup"
               class='relative block'
             >
-              <%= form.input(
-                  :git_repo_id,
-                  as: :string,
-                  autofocus: true,
-                  input_html: {
-                    value: blog.repository&.name,
-                    'data-action': 'input:auto-refresh-form#reset',
-                  },
-                  wrapper_html: { class: 'relative' }
-                )
-              %>
+              <%= form.simple_fields_for(:git_repo) do |repo_form| %>
+                <%= repo_form.input(
+                    :id,
+                    as: :string,
+                    autofocus: true,
+                    input_html: {
+                      value: blog.git_repo&.name,
+                      'data-action': 'input:auto-refresh-form#reset',
+                    },
+                    wrapper_html: { class: 'relative' }
+                  )
+                %>
+              <% end %>
               <ul id="repos-popup" class='absolute z-10 bg-white border border-gray-100 w-full'></ul>
             </auto-complete>
 
-            <%= form.input(
-                :git_repo_id,
-                as: :hidden,
-                wrapper: false,
-                input_html: {
-                  'data-target': 'auto-refresh-form.autoCompleteInput'
-                }
-              )
-            %>
+            <%= form.simple_fields_for(:git_repo) do |repo_form| %>
+              <%= repo_form.input(
+                  :id,
+                  as: :hidden,
+                  wrapper: false,
+                  input_html: {
+                    'data-target': 'auto-refresh-form.autoCompleteInput'
+                  }
+                )
+              %>
+            <% end %>
           <% end %>
         <% else %>
-          <div class='list'>
+           <%= form.input(
+              :storage_id,
+              as: :hidden,
+              wrapper: false,
+              input_html: {
+                value: blog.storage_id
+              }
+            )
+          %>
+          <div class='list list--table'>
             <%= render 'storages/item', storage: Current.user.storages.chuspace %>
           </div>
-          <p class='text-sm mt-2 italic'>Used to store git repository</p>
+          <p class='text-sm mt-2 italic'>Used to store git git_repo</p>
         <% end %>
 
-        <%= form.input :name, required: true %>
-        <%= form.input :description, as: :text, required: true %>
-        <%= form.input :framework, as: :select, collection: Blog.frameworks %>
-        <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
+        <div class='mt-8'>
+          <%= form.input :name, required: true %>
+          <%= form.input :description, as: :text, required: true %>
+          <%= form.input :framework, as: :select, collection: Blog.frameworks %>
+          <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
 
-        <div data-target='auto-refresh-form.loader'>
-          <% if blog.repository_folders.any? %>
-            <%= form.input :posts_folder, as: :select, collection: blog.repository_folders %>
-            <%= form.input :drafts_folder, as: :select, collection: blog.repository_folders %>
-            <%= form.input :assets_folder, as: :select, collection: blog.repository_folders %>
-          <% end %>
+          <div data-target='auto-refresh-form.loader'>
+            <% if blog.git_repo&.folders&.any? %>
+              <%= form.input :posts_folder, as: :select, collection: blog.git_repo&.folders %>
+              <%= form.input :drafts_folder, as: :select, collection: blog.git_repo&.folders %>
+              <%= form.input :assets_folder, as: :select, collection: blog.git_repo&.folders %>
+            <% end %>
+          </div>
+
+          <%= form.input :type, as: :hidden, input_html: { value: type, name: 'type' } %>
+          <%= form.button :submit, 'Create', class: 'mt-12' %>
         </div>
-
-        <%= form.input :type, as: :hidden, input_html: { value: type, name: 'type' } %>
-        <%= form.button :submit, 'Create', class: 'mt-12' %>
       <% end %>
     <% end %>
   </auto-refresh-form>

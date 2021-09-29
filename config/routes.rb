@@ -8,6 +8,10 @@ Rails.application.routes.draw do
   resources :blogs do
     resources :domains
     resources :articles
+
+    collection do
+      get :connect
+    end
   end
 
   resources :settings, only: :index
@@ -18,12 +22,6 @@ Rails.application.routes.draw do
 
   namespace :settings do
     resources :profiles
-    resources :storages
-    resources :blogs do
-      collection do
-        get :connect
-      end
-    end
   end
 
   get '/me', to: 'users#show', as: :profile

@@ -7,7 +7,10 @@ class StorageAdapter
   ADAPTERS = {
     chuspace: ChuspaceAdapter,
     github: GithubAdapter,
-    gitlab: GitlabAdapter
+    github_enterprise: GithubEnterpriseAdapter,
+    gitlab: GitlabAdapter,
+    gitlab_foss: GitlabFossAdapter,
+    gitea: GiteaAdapter
   }.freeze
 
   REQUIRED_METHODS = %i[

@@ -1,4 +1,4 @@
-<%= turbo_frame_tag :storage_settings do %>
+<%= turbo_frame_tag @storage do %>
   <div class='pb-4 flex items-center border-b'>
     <%= inline_svg_tag "icons/#{@storage.provider}", class: 'fill-current mr-2 w-8 h-8' %>
     <%= tag.h3 @storage.provider.humanize %>

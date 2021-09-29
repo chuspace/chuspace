@@ -1,38 +1,37 @@
 # frozen_string_literal: true
 
-class GitlabAdapter < ApplicationAdapter
+class GiteaAdapter < ApplicationAdapter
   def name
-    'gitlab'
+    'gitea'
   end
 
   def user
     @user ||= get('user')
   end
 
-  def repository(id:)
-    @repository ||= repository_from_response(get("projects/#{id}"))
+  def repository(repo:)
+    @repository ||= repository_from_response(get("repos/#{repo.owner}/#{repo.name}"))
   end
 
-  def search_repositories(query:, options: { sort: 'asc', per_page: 5 })
-    @search_repositories ||= repository_from_response(paginate('search', options.merge(search: query, scope: :projects)))
-  end
-
-  def repository_folders(id:)
-    tree = get("projects/#{id}/repository/tree", { recursive: true })
+  def repository_folders(repo:)
+    tree = get("repos/#{repo.owner}/#{repo.name}/contents")
     @repository_folders ||= tree.map(&:path)
   end
 
-  def blobs(repo_id:, path:)
-    blobs = get "projects/#{repo_id}/repository/tree", { path: path }
+  def blobs(blog:)
+    username = blog.user.username
+    repo_id = blog.git_repo_id
+
+    blobs = get "repos/#{username}/#{repo_id}/contents/#{blog.posts_folder}"
 
     blobs.map do |blob|
-      content = find_blob(repo_id: repo_id, id: blob.id)
+      content = find_blob(repo_id: repo_id, id: blob.path)
       Sawyer::Resource.new(agent, content.to_h.merge!(id: blob.id, path: blob.path))
     end
   end
 
   def find_blob(repo_id:, id:)
-    blob = get "projects/#{repo_id}/repository/blobs/#{id}", { ref: :master }
+    blob = get "repos/#{username}/#{repo_id}/contents/#{id}"
     Sawyer::Resource.new(agent, blob.to_h.merge!(id: id))
   end
 

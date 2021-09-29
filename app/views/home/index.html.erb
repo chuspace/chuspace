@@ -1,15 +1,28 @@
-<main class='min-h-full block sm:flex items-center justify-between'>
-  <section class='w-full mt-32'>
-    <h1 class='font-black font-monospace text-8xl leading-none bg-blue'>
-      <%= t('.heading') %><span class="blinking-cursor">|</span>
-    </h1>
-    <p class="mt-12 w-full sm:w-3/4 text-2xl font-sans">
-      <%= t('.intro') %>
-    </p>
+<% if signed_in? %>
+  <main class='sm:w-2/3 w-full sm:mx-auto mt-24'>
+    <div>
+      <div class='flex items-center'>
+        <div class='flex-1'>
+          <%= render(Avatar::Component.new(url: Current.user.avatar_url(variant: :xl))) %>
+          <h3 class='mt-2'><%= Current.user.name %></h3>
+        </div>
 
-    <div class='mt-12'>
-      <%= link_to 'Get started', login_path, class: 'button button--fill', 'data-turbo': false %>
-      <%= link_to 'Know more', '#', class: 'button button--default ml-2' %>
+        <div class=''>
+          <%= link_to 'Edit', '#', class: 'button button--default' %>
+        </div>
+      </div>
+
+      <div class='tabs mt-8' dir='horizontal'>
+        <div role="tablist">
+          <%= link_to 'About', new_blog_path, type: "button", role: "tab", 'aria-selected': "true", class: 'tab' %>
+          <%= link_to 'Recent posts', connect_blogs_path, type: "button", role: "tab", 'aria-selected': "false", class: 'tab' %>
+          <%= link_to 'Blogs', new_blog_path, type: "button", role: "tab", 'aria-selected': "false", class: 'tab' %>
+        </div>
+      </div>
     </div>
-  </section>
-</main>
+  </main>
+<% else %>
+  <main class='min-h-full block sm:flex items-center justify-between'>
+    <%= render 'marketing' %>
+  </main>
+<% end %>

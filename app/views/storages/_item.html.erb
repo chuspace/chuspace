@@ -20,7 +20,7 @@
 
       <% unless storage.chuspace? %>
         <div class='flex items-center justify-between flex-end'>
-          <%= link_to 'Edit', edit_storage_path(storage), class: 'button button--slim button--fill', data: { 'turbo-frame': :storage_settings } %>
+          <%= link_to 'Edit', edit_storage_path(storage), class: 'button button--slim button--fill', data: { 'turbo-frame': :storages } %>
           <%= button_to storage_path(storage), method: :delete, class: 'button button--slim button--danger ml-3' do %>
             <%= tag.span 'Delete' %>
           <% end %>
