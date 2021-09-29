@@ -38,6 +38,7 @@ module Chuspace
       g.stylesheets false
     end
 
+    config.active_record.encryption.extend_queries = true
     StrongMigrations.start_after = 20210713123213
   end
 end

@@ -8,8 +8,18 @@ class SessionsController < ApplicationController
 
   def create
     ApplicationRecord.transaction do
-      identity = Identity.where(provider: auth_hash.provider, uid: auth_hash.uid).first
-      user = find_or_create_user
+      @identity = Identity.where(provider: auth_hash.provider, uid: auth_hash.uid).first
+      user = if signed_in?
+        Current.user
+      elsif identity.present?
+        identity.user
+      elsif User.where(email: auth_hash.info.email).any?
+        flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{provider} account."
+        redirect_to login_path
+        return
+      else
+        User.create(user_atts)
+      end
 
       if identity.present?
         identity.update(identity_attrs)
@@ -32,19 +42,6 @@ class SessionsController < ApplicationController
 
   private
 
-  def find_or_create_user
-    if signed_in?
-      Current.user
-    elsif identity.present?
-      identity.user
-    elsif User.where(email: auth_hash.info.email).any?
-      flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{provider} account."
-      User.find_by(email: auth_hash.info.email)
-    else
-      User.create(user_atts)
-    end
-  end
-
   def identity_attrs
     {
       provider: auth_hash.provider,
@@ -55,7 +52,8 @@ class SessionsController < ApplicationController
   def user_atts
     {
       name: auth_hash.info.name,
-      email: auth_hash.info.email
+      email: auth_hash.info.email,
+      username: auth_hash.info.username || auth_hash.info.nickname
     }.freeze
   end
 

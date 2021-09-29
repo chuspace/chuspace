@@ -5,14 +5,13 @@ class CreateIdentities < ActiveRecord::Migration[6.1]
 
   def up
     create_table :identities do |t|
-      t.text :uid_ciphertext, null: false
-      t.text :uid_bidx, null: false
+      t.text :uid, null: false
       t.references :user, null: false, foreign_key: true
       t.timestamps
     end
 
     add_column :identities, :provider, :identity_provider_enum_type, null: false
-    add_index :identities, %i[uid_bidx provider], unique: true, algorithm: :concurrently
+    add_index :identities, %i[uid provider], unique: true, algorithm: :concurrently
   end
 
   def down

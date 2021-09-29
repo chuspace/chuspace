@@ -3,6 +3,7 @@
 class Storage < ApplicationRecord
   has_many :blogs, dependent: :delete_all
   belongs_to :user, optional: true
+
   encrypts :access_token, :endpoint
 
   validates :description, :provider, :endpoint, presence: true

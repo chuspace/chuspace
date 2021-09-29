@@ -1,4 +1,6 @@
-require "spec_helper"
+# frozen_string_literal: true
+
+require 'spec_helper'
 
 RSpec.describe IdentityPolicy, type: :policy do
   # See https://actionpolicy.evilmartians.io/#/testing?id=rspec-dsl

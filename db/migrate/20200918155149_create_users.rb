@@ -9,8 +9,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
     create_table :users do |t|
       t.string :name
       t.citext :username
-      t.string :email_ciphertext, null: false
-      t.string :email_bidx, null: false
+      t.string :email, null: false
 
       # Track logins
       t.integer :sign_in_count, default: 0
@@ -23,6 +22,6 @@ class CreateUsers < ActiveRecord::Migration[6.0]
     end
 
     add_index :users, :username, algorithm: :concurrently, unique: true
-    add_index :users, :email_bidx, algorithm: :concurrently, unique: true
+    add_index :users, :email, algorithm: :concurrently, unique: true
   end
 end

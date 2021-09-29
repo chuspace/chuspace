@@ -2,15 +2,12 @@
 
 class User < ApplicationRecord
   include Trackable
-  extend FriendlyId
-  friendly_id :name, use: %i[slugged history finders], slug_column: :username
 
   has_many :blogs, dependent: :delete_all
   has_many :storages, dependent: :delete_all
   has_many :identities, dependent: :delete_all
 
-  encrypts :email
-  blind_index :email, slow: true
+  encrypts :email, deterministic: true, downcase: true
 
   AVATAR_VARIANTS = { xs: 32, sm: 48, md: 64, lg: 80, xl: 120, thumb: 150, profile: 250 }.freeze
 

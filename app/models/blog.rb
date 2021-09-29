@@ -2,8 +2,7 @@
 
 class Blog < ApplicationRecord
   extend FriendlyId
-
-  friendly_id :name, use: %i[slugged history finders]
+  friendly_id :name, use: %i[slugged history finders], slug_limit: 40, sequence_separator: '--'
 
   belongs_to :user
   belongs_to :storage

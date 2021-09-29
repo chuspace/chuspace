@@ -3,7 +3,7 @@
 class OmniauthConfig < ApplicationConfig
   attr_config(
     github: {
-      scope: 'read:user,user:email',
+      scope: 'user',
       method: :post,
       url: '/auth/github'
     },

@@ -3,7 +3,7 @@
 class CreateBlogFrameworkEnumType < ActiveRecord::Migration[6.1]
   def up
     execute <<-SQL
-      CREATE TYPE blog_framework_enum_type AS ENUM (#{BlogFrameworkConfig.defaults.keys.map { |framework| "'#{framework}'"} .join(',') });
+      CREATE TYPE blog_framework_enum_type AS ENUM (#{BlogFrameworkConfig.defaults.keys.map { |framework| "'#{framework}'" } .join(',') });
     SQL
   end
 

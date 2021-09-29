@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Settings
   class ProfilesController < ApplicationController
     layout 'settings'

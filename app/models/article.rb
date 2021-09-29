@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Article
   include ActiveModel::Model
   attr_accessor :id, :filename, :title, :intro, :date, :tags, :published, :visibility, :content, :path
