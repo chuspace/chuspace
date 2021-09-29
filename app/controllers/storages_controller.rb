@@ -16,7 +16,7 @@ class StoragesController < ApplicationController
     Storage.transaction do
       @storage = Current.user.storages.build(storage_params.delete_if { |key, value| value.blank? })
 
-      if @storage.save
+      if params['commit'] && @storage.save
         redirect_to storages_path
       else
         @storage.errors.clear

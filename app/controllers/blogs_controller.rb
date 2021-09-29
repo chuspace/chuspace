@@ -7,7 +7,6 @@ class BlogsController < ApplicationController
   def new
     if Current.user.storages.default_or_chuspace.present?
       @blog = Current.user.blogs.build(storage: Current.user.storages.default_or_chuspace)
-      @blog.build_git_repo
 
       render 'index'
     else
@@ -17,13 +16,11 @@ class BlogsController < ApplicationController
 
   def connect
     @blog = Current.user.blogs.new(storage: Current.user.storages.first)
-    @blog.build_git_repo
     render 'index'
   end
 
   def create
     @blog = Current.user.blogs.new(blog_params)
-    puts @blog.inspect
 
     if @blog.save
       redirect_to blogs_path
@@ -61,7 +58,8 @@ class BlogsController < ApplicationController
       :posts_folder,
       :drafts_folder,
       :assets_folder,
-      git_repo_attributes: GitRepository.attr_json_registry.attribute_names
+      :git_repo_id,
+      :git_repo_name
     )
   end
 

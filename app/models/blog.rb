@@ -8,8 +8,7 @@ class Blog < ApplicationRecord
   belongs_to :storage
   validates_presence_of :name, :posts_folder, :drafts_folder, :assets_folder
 
-  store_accessor :git_repo, :id, :name, :fullname, :description, :name, :owner,
-                 :ssh_url, :html_url, :visibility, :folders, :default_branch, prefix: true
+  attribute :git_repo, GitRepository.to_type
   enum framework: BlogFrameworkConfig.frameworks_enum, _suffix: true
 
   enum visibility: {
@@ -19,7 +18,7 @@ class Blog < ApplicationRecord
   }, _suffix: true
 
   before_validation :set_defaults, on: :create, if: :chuspace?
-  before_create :create_git_repo, if: -> { git_repo_id.blank? }
+  before_create :create_git_repo, if: -> { git_repo.id.blank? }
   after_destroy_commit :delete_git_repo
 
   delegate :provider, :chuspace?, to: :storage
@@ -68,7 +67,7 @@ class Blog < ApplicationRecord
   end
 
   def create_git_repo
-    self.git_repo = storage.adapter.create_repository(blog: self)
+    self.git_repo = storage.adapter.create_repository(blog: self).attributes
   rescue StandardError
     storage.adapter.delete_repository(blog: self)
   end

@@ -16,7 +16,7 @@ gem 'activerecord-clean-db-structure'
 gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
-gem 'store_model'
+gem 'store_model', github: 'DmitryTsepelev/store_model'
 
 # Form
 gem 'simple_form'

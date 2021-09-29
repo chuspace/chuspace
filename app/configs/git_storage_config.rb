@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GitStorageConfig < ApplicationConfig
+  disable_auto_cast!
+
   attr_config(
     chuspace: {
       label: 'Chuspace.com',

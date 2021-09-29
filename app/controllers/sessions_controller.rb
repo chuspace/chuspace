@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
 
   def create
     ApplicationRecord.transaction do
-      @identity = Identity.where(provider: auth_hash.provider, uid: auth_hash.uid).first
+      identity = Identity.where(provider: auth_hash.provider, uid: auth_hash.uid).first
       user = if signed_in?
         Current.user
       elsif identity.present?

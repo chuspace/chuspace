@@ -34,7 +34,6 @@ class ApplicationAdapter
           id: response.id,
           name: response.path.squish,
           owner: response.namespace.path,
-          owner_kind: response.namespace.kind,
           fullname: response.path_with_namespace.squish,
           description: response.description,
           visibility: response.visibility,

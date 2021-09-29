@@ -28,7 +28,7 @@ module Chuspace
     config.anyway_config.autoload_static_config_path = 'app/configs'
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 7.0
 
     # Customise rails generator
     config.generators do |g|

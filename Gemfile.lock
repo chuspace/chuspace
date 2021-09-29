@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/DmitryTsepelev/store_model.git
+  revision: 6f732c34fd058565e0278543c53ee532dd0bef12
+  specs:
+    store_model (0.11.1)
+      activerecord (>= 5.2)
+
+GIT
   remote: https://github.com/fnando/omniauth-atlassian-bitbucket.git
   revision: d12090f727427e1ee91a0294a957e6ebeb715fe4
   specs:
@@ -424,8 +431,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    store_model (0.11.1)
-      activerecord (>= 5.2)
     strong_migrations (0.7.8)
       activerecord (>= 5)
     sync (0.5.0)
@@ -529,7 +534,7 @@ DEPENDENCIES
   simplecov
   simplecov-lcov
   sitemap_generator
-  store_model
+  store_model!
   strong_migrations
   tomo
   turbo-rails

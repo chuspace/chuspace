@@ -11,7 +11,7 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
 
       t.references :user, null: false, foreign_key: true
       t.references :storage, null: false, foreign_key: true
-      t.jsonb :git_repo, null: false, default: '{}'
+      t.jsonb :git_repo, null: false, default: {}
 
       t.string :posts_folder, null: false
       t.string :drafts_folder, null: false
