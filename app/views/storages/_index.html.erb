@@ -1,9 +1,0 @@
-<%= turbo_frame_tag :storages_index do %>
-  <% if Current.user.storages.any? %>
-    <div class='list list--table mt-4'>
-      <%= render partial: 'storages/item', collection: Current.user.storages, as: :storage, cached: true %>
-    </div>
-  <% else %>
-    <div class='placeholder text-2xl'>No storages connected</div>
-  <% end %>
-<% end %>

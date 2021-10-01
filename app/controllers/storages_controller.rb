@@ -4,12 +4,11 @@ class StoragesController < ApplicationController
   before_action :find_storage, except: %i[new index create]
 
   def index
-    @storages = Current.user.storages
+    @storages = Current.user.storages.order(:id)
   end
 
   def new
     @storage = Current.user.storages.build(provider: :chuspace)
-    render 'index'
   end
 
   def create
@@ -19,7 +18,7 @@ class StoragesController < ApplicationController
       if params['commit'] && @storage.save
         redirect_to storages_path
       else
-        @storage.errors.clear
+        @storage.errors.clear unless params['commit']
 
         respond_to do |format|
           format.html
@@ -33,9 +32,14 @@ class StoragesController < ApplicationController
   end
 
   def update
-    @storage.update(storage_params.except(:provider))
-
-    redirect_to storages_path
+    if @storage.update(storage_params.except(:provider))
+      redirect_to storages_path
+    else
+      respond_to do |format|
+        format.html { redirect_to edit_storage_path(@storage) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@storage, partial: 'storages/form', locals: { storage: @storage }) }
+      end
+    end
   end
 
   def destroy

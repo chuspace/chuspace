@@ -9,6 +9,7 @@ class Storage < ApplicationRecord
   validates :description, :provider, :endpoint, presence: true
   validates :access_token, presence: true, unless: :chuspace?
   validates :provider, uniqueness: { scope: :user_id, message: :one_provider_per_user }
+  validates :default, uniqueness: { scope: :user_id, message: :one_default_storage_allowed }
 
   enum provider: GitStorageConfig.providers_enum
 

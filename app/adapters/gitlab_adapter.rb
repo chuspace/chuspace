@@ -23,7 +23,7 @@ class GitlabAdapter < ApplicationAdapter
 
   def repository_folders(fullname:)
     tree = get("projects/#{CGI.escape(fullname)}/repository/tree", { recursive: true })
-    @repository_folders ||= tree.map(&:path)
+    @repository_folders ||= tree.select { |item| item.type == 'tree' }.map(&:path).sort
   end
 
   def blobs(fullname:, path:)

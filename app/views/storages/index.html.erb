@@ -1,19 +1,11 @@
-<div class='sm:w-2/3 w-full mx-auto mt-24'>
-  <%= turbo_frame_tag(:storages, class: 'relative w-full block') do %>
-    <div class='flex items-center border-b border-light-200 pb-3'>
-      <h3 class='flex-1'>Blog storages</h3>
-      <%= link_to 'Add new storage', new_storage_path, class: 'button button--fill', data: { 'turbo-frame': :_top } %>
-    </div>
-
-    <div class='mt-4 mb-8'>
-      <p>
-        Blog storages are git hosting providers.
-        Chuspace currently ships with its own git hosting which you can add
-        for storing blog content but it also supports Github, Gitlab and Gitea.
-      </p>
-      <p>You can also use self-hosted Github enterprise, Gitlab and Gitea instances.</p>
-    </div>
-
-    <%= render "storages/#{params[:action]}", storage: @storage %>
+<%= render 'layout' do %>
+  <%= turbo_frame_tag :storages_index do %>
+    <% if @storages.any? %>
+      <div class='list list--table mt-4'>
+        <%= render partial: 'storages/item', collection: @storages, as: :storage, cached: true %>
+      </div>
+    <% else %>
+      <div class='placeholder text-2xl'>No storages connected</div>
+    <% end %>
   <% end %>
-</div>
+<% end %>

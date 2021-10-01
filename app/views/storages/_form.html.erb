@@ -1,6 +1,6 @@
 <auto-refresh-form>
   <storage-form data-providers='<%= GitStorageConfig.defaults.to_json %>'>
-    <%= simple_form_for(storage, url: storages_path, data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" }) do |form| %>
+    <%= simple_form_for(storage, data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" }) do |form| %>
       <%= form.input :provider, as: :select, collection: Storage.public_providers, input_html: { data: { action: 'change:storage-form#changeScopes change:auto-refresh-form#refresh', target: 'storage-form.select' } }, selected: storage.provider unless storage.persisted? %>
 
       <div data-target='auto-refresh-form.loader'>
@@ -16,7 +16,7 @@
 
       <div class='flex items-center mt-8'>
         <%= form.button :submit, storage.persisted? ? 'Save' : 'Create', class: 'button button--fill' %>
-        <%= link_to 'Cancel', storages_path, class: 'button button--fill ml-2', data: { 'turbo-frame': :storages } %>
+        <%= link_to 'Cancel', storages_path, class: 'button button--fill ml-2', data: { 'turbo-frame': :_top } %>
       </div>
     <% end %>
   </storage-form>

@@ -9,7 +9,7 @@
 
             <div class='mt-2'>
               <%= content_tag :span, 'internal', class: 'badge badge--closed text-gray-400 text-xs mr-2' if blog.storage.chuspace? %>
-              <%= content_tag :span, 'primary', class: 'badge badge--open text-gray-400 text-xs mr-2' if blog.default? %>
+              <%= content_tag :span, 'default', class: 'badge badge--open text-gray-400 text-xs mr-2' if blog.default? %>
             </div>
           </div>
         <% end %>

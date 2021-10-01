@@ -17,6 +17,7 @@ class CreateStorages < ActiveRecord::Migration[6.1]
 
     add_column :storages, :provider, :git_storage_provider_enum_type, null: false
     add_index :storages, %i[user_id provider], unique: true, algorithm: :concurrently
+    add_index :storages, %i[user_id default], unique: true, algorithm: :concurrently
     add_index :storages, :default, algorithm: :concurrently
     add_index :storages, :active, algorithm: :concurrently
   end

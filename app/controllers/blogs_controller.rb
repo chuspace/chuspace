@@ -57,9 +57,9 @@ class BlogsController < ApplicationController
       :storage_id,
       :framework,
       :visibility,
-      :repo_articles_folder,
-      :repo_drafts_folder,
-      :repo_assets_folder,
+      :repo_articles_path,
+      :repo_drafts_path,
+      :repo_assets_path,
       :repo_fullname
     )
   end

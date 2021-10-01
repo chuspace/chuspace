@@ -12,24 +12,25 @@ class ApplicationAdapter
   private
 
   def repository_from_response(response)
+    puts response.class
     chuspace_repo = case response
                     when Array then response.map { |item| repository_from_response(item) }
                     when Sawyer::Resource
-                      {
-                        id: response.id,
-                        fullname: response.full_name&.squish || response.path_with_namespace&.squish,
-                        name: response.name,
-                        owner: response.namespace&.path || response.owner&.login,
-                        description: response.description,
-                        visibility: response.visibility || response.private ? :private : :public,
-                        ssh_url: response.ssh_url_to_repo || response.ssh_url,
-                        html_url: response.web_url || response.html_url,
-                        default_branch: response.default_branch
-                      }
+                      Sawyer::Resource.new(
+                        agent, {
+                          id: response.id,
+                          fullname: response.full_name&.squish || response.path_with_namespace&.squish,
+                          name: response.name,
+                          owner: response.namespace&.path || response.owner&.login,
+                          description: response.description,
+                          visibility: response.visibility || response.private ? :private : :public,
+                          ssh_url: response.ssh_url_to_repo || response.ssh_url,
+                          html_url: response.web_url || response.html_url,
+                          default_branch: response.default_branch
+                        }
+                      )
                     else
-                      {}
+                      Sawyer::Resource.new(agent, {})
                     end
-
-    Sawyer::Resource.new(agent, chuspace_repo)
   end
 end

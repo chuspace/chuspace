@@ -12,7 +12,7 @@
           <%= tag.pre storage.provider_config[:scopes], class: 'text-sm whitespace-pre-wrap break-words text-red mt-2' unless storage.chuspace? %>
           <div class='mt-2'>
             <%= content_tag :span, 'internal', class: 'badge badge--closed text-gray-400 text-xs mr-2' if storage.chuspace? %>
-            <%= content_tag :span, 'primary', class: 'badge badge--open text-gray-400 text-xs mr-2' if storage.default? %>
+            <%= content_tag :span, 'default', class: 'badge badge--open text-gray-400 text-xs mr-2' if storage.default? %>
             <%= content_tag :span, 'connected', class: 'badge badge--merged text-gray-400 text-xs' if storage.active? %>
           </div>
         </div>
@@ -20,7 +20,7 @@
 
       <% unless storage.chuspace? %>
         <div class='flex items-center justify-between flex-end'>
-          <%= link_to 'Edit', edit_storage_path(storage), class: 'button button--slim button--fill', data: { 'turbo-frame': :storages } %>
+          <%= link_to 'Edit', edit_storage_path(storage), class: 'button button--slim button--fill', data: { 'turbo-frame': :_top } %>
           <%= button_to storage_path(storage), method: :delete, class: 'button button--slim button--danger ml-3' do %>
             <%= tag.span 'Delete' %>
           <% end %>
