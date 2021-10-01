@@ -1,7 +1,7 @@
 // @flow
 
 import 'tippy.js/dist/tippy.css'
-import 'tippy.js/themes/light.css'
+import 'tippy.js/themes/translucent.css'
 import 'tippy.js/animations/scale.css'
 
 import { LitElement, html, render } from 'lit'

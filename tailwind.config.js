@@ -28,7 +28,7 @@ module.exports = {
     colors: {
       transparent: 'transparent',
 
-      black: '#111',
+      black: '#010409',
       white: '#fff',
 
       github: {

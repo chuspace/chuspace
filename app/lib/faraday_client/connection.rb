@@ -195,7 +195,8 @@ module FaradayClient
         headers: {
           accept: default_media_type,
           user_agent: user_agent
-        }
+        },
+        ssl: { verify: false }
       }
 
       conn_opts[:builder] = MIDDLEWARE

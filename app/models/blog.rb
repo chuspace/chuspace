@@ -6,9 +6,7 @@ class Blog < ApplicationRecord
 
   belongs_to :user
   belongs_to :storage
-  validates_presence_of :name, :posts_folder, :drafts_folder, :assets_folder
-
-  attribute :git_repo, GitRepository.to_type
+  validates_presence_of :name, :repo_articles_path, :repo_drafts_path, :repo_assets_path
   enum framework: BlogFrameworkConfig.frameworks_enum, _suffix: true
 
   enum visibility: {
@@ -17,13 +15,17 @@ class Blog < ApplicationRecord
     internal: 'internal'
   }, _suffix: true
 
-  before_validation :set_defaults, on: :create, if: :chuspace?
-  before_create :create_git_repo, if: -> { git_repo.id.blank? }
-  after_destroy_commit :delete_git_repo
+  before_validation :set_defaults, on: :create, if: -> { storage.chuspace? }
+  before_create :create_and_connect_git_repo, if: -> { storage.chuspace? && repo_id.blank? }
+  after_validation :connect_git_repo, if: -> { storage.external? && repo_fullname.present? }
+  after_destroy_commit :delete_git_repo, if: -> { storage.chuspace? }
 
-  delegate :provider, :chuspace?, to: :storage
   delegate :template_name, to: :framework_config
   scope :default, -> { find_by(default: true) }
+
+  def repo_folders
+    repo_fullname ? storage.adapter.repository_folders(fullname: repo_fullname) : []
+  end
 
   def framework_config
     OpenStruct.new(BlogFrameworkConfig.new.send(framework))
@@ -34,12 +36,12 @@ class Blog < ApplicationRecord
   end
 
   def create_draft_article(title:, content:)
-    path = "#{drafts_folder}/#{title.parameterize}.md"
+    path = "#{repo_drafts_path}/#{title.parameterize}.md"
     storage.adapter.create_blob(blog: blog, path: path, content: content, message: nil)
   end
 
   def create_article(title:, content:)
-    path = "#{posts_folder}/#{title.parameterize}.md"
+    path = "#{repo_articles_path}/#{title.parameterize}.md"
     storage.adapter.create_blob(blog: blog, path: path, content: content, message: nil)
   end
 
@@ -48,31 +50,44 @@ class Blog < ApplicationRecord
   end
 
   def article(id:)
-    Article.from(storage.adapter.find_blob(blog: blog, id: id))
+    Article.from(storage.adapter.find_blob(fullname: repo_fullname, id: id))
   end
 
   def articles
-    Article.from(storage.adapter.blobs(blog: blog, path: posts_folder))
+    Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_articles_path))
   end
 
   def drafts
-    Article.from(storage.adapter.blobs(blog: blog, path: drafts_folder))
+    Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_drafts_path))
   end
 
   private
 
   def set_defaults
-    self.assign_attributes(BlogFrameworkConfig.new.send(framework).slice(:posts_folder, :drafts_folder, :assets_folder))
+    self.assign_attributes(BlogFrameworkConfig.new.send(framework).slice(:repo_articles_path, :repo_drafts_path, :repo_assets_path, :repo_about_path))
     self.visibility ||= :private
   end
 
-  def create_git_repo
-    self.git_repo = storage.adapter.create_repository(blog: self).attributes
+  def create_and_connect_git_repo
+    repository = storage.adapter.create_repository(blog: self)
+    self.attributes = {
+      repo_id: repository.id,
+      repo_fullname: repository.fullname,
+      repo_name: repository.name,
+      repo_owner: repository.owner,
+      repo_ssh_url: repository.ssh_url,
+      repo_html_url: repository.html_url,
+      repo_default_branch: repository.default_branch
+    }
   rescue StandardError
-    storage.adapter.delete_repository(blog: self)
+    storage.adapter.delete_repository(fullname: repo_fullname)
+  end
+
+  def connect_git_repo
+    self.assign_attributes(storage.adapter.repository(fullname: repo_fullname).to_attrs)
   end
 
   def delete_git_repo
-    storage.adapter.delete_repository(blog: self)
+    storage.adapter.delete_repository(fullname: repo_fullname)
   end
 end

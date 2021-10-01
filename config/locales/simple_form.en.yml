@@ -16,20 +16,16 @@ en:
     labels:
       defaults:
         password: 'Password'
-      publication:
-        git_repository_fullname: 'Select Github repository'
-      repository:
-        id: Select repository
+      git_repo:
+        fullname: Repository full path
     hints:
-      publication:
-        git_repository_fullname: 'This repository will be used to store articles for your blog'
       storage:
         access_token: the access token should have following scopes
       blog:
         framework: static site generator framework to be used to generate blog from
         visibility: visibility of blog - public, internal or private
-      repository:
-        id: Type to search
+      git_repo:
+        fullname: Repository full path
 
     include_blanks:
       defaults:

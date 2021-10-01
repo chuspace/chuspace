@@ -4,11 +4,9 @@
       <li
         role="option"
         class='border-b border-gray-100 py-2 px-4 cursor-pointer last:border-b-0'
-        data-action='click:auto-refresh-form#onAutoCompleteItemClick'
-        data-autocomplete-value='<%= repo.name %>'
-        data-id='<%= repo.id %>'
+        data-autocomplete-value='<%= repo.repo_fullname %>'
       >
-        <%= repo.name %>
+        <%= repo.repo_fullname %>
       </li>
     <% end %>
   <% else %>

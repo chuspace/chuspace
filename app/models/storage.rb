@@ -42,6 +42,10 @@ class Storage < ApplicationRecord
     end
   end
 
+  def external?
+    !chuspace?
+  end
+
   def self_hosted?
     provider_config[:self_hosted]
   end

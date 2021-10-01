@@ -19,7 +19,7 @@ class ChuspaceAdapter < GiteaAdapter
   end
 
   def create_user(user:)
-    post(
+    user = post(
       'admin/users',
       {
         email: user.email,
@@ -27,13 +27,23 @@ class ChuspaceAdapter < GiteaAdapter
         username: user.username,
         password: SecureRandom.hex(12),
         must_change_password: false,
-        prohibit_login: true,
-        visibility: :private,
-        allow_create_organization: false,
-        restricted: true,
-        active: true
+        send_notify: false,
+        visibility: :private
       }
     )
+
+    patch("admin/users/#{user.username}", {
+        max_repo_creation: 5,
+        allow_git_hook: false,
+        admin: false,
+        allow_create_organization: false,
+        active: true,
+        login_name: user.username,
+        source_id: 0
+      }
+    )
+
+    user
   end
 
   def delete_user(user:)
@@ -49,16 +59,15 @@ class ChuspaceAdapter < GiteaAdapter
     repository_from_response(
       post(
         "repos/#{blog.template_name}/generate",
-        name: blog.slug,
+        name: blog.name,
         owner: blog.user.username,
-        description: blog.description,
         private: true,
         git_content: true
       )
     )
   end
 
-  def delete_repository(blog:)
-    boolean_from_response(:delete, "repos/#{blog.user.username}/#{blog.slug}")
+  def delete_repository(fullname:)
+    boolean_from_response(:delete, "repos/#{fullname}")
   end
 end

@@ -55,7 +55,7 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
 
       out(' content="', escape_html(node.string_content), '"')
       out(' readonly="nocursor"')
-      out(' theme="light"')
+      out(' theme="dark"')
       out('></code-editor>')
     end
   end

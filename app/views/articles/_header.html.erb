@@ -1,11 +1,11 @@
 <div class='flex w-full'>
-  <div class='bg-gray-100 w-16 h-16 flex items-center justify-center rounded'>
-    <%= inline_svg_tag 'icons/markdown', class: 'w-8 h-8' %>
+  <div class='bg-light-100 text-white w-16 h-16 flex items-center justify-center rounded'>
+    <%= inline_svg_tag 'icons/markdown', class: 'w-8 h-8 fill-current' %>
   </div>
   <div class='ml-2'>
-    <h1 class='text-lg font-semibold text-gray-600 hover:text-gray-800'>
+    <h1 class='text-lg font-semibold'>
       <%= link_to blog.user.username, profile_path, class: 'link link--default' %> / <%= link_to blog.name, blog_path(blog), class: 'link link--default' %>
     </h1>
-    <h2 class='summary font-bold text-gray-600'><%= article.title %></h2>
+    <h2 class='summary font-bold'><%= article.title %></h2>
   </div>
 </div>

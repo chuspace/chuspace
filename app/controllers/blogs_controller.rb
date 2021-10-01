@@ -5,8 +5,8 @@ class BlogsController < ApplicationController
   before_action :find_blog, except: %i[new connect create index]
 
   def new
-    if Current.user.storages.default_or_chuspace.present?
-      @blog = Current.user.blogs.build(storage: Current.user.storages.default_or_chuspace)
+    if Current.user.storages.chuspace.present?
+      @blog = Current.user.blogs.build(storage: Current.user.storages.chuspace)
 
       render 'index'
     else
@@ -25,9 +25,11 @@ class BlogsController < ApplicationController
     if @blog.save
       redirect_to blogs_path
     else
+      @blog.errors.clear
+
       respond_to do |format|
         format.html
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: 'blogs/form', locals: { blog: @blog, type: params[:type].to_sym }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: "blogs/#{params[:type]}", locals: { blog: @blog }) }
       end
     end
   end
@@ -55,11 +57,10 @@ class BlogsController < ApplicationController
       :storage_id,
       :framework,
       :visibility,
-      :posts_folder,
-      :drafts_folder,
-      :assets_folder,
-      :git_repo_id,
-      :git_repo_name
+      :repo_articles_folder,
+      :repo_drafts_folder,
+      :repo_assets_folder,
+      :repo_fullname
     )
   end
 

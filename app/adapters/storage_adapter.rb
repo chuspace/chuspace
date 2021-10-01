@@ -24,6 +24,7 @@ class StorageAdapter
     delete_repository
     update_repository
     repository_folders
+    head_sha
     blobs
     create_blob
     find_blob

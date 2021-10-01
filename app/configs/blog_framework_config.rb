@@ -7,81 +7,90 @@ class BlogFrameworkConfig < ApplicationConfig
       default: true,
       language: 'javascript',
       template_name: 'chuspace/astro-starter-blog',
-      posts_folder: 'src/pages/posts',
-      drafts_folder: 'src/pages/posts',
-      assets_folder: 'public/assets/blog'
+      repo_articles_path: 'src/pages/posts',
+      repo_drafts_path: 'src/pages/posts',
+      repo_assets_path: 'public/assets/blog',
+      repo_about_path: 'src/pages/about.md'
     },
     bridgetown: {
       framework: 'bridgetown',
       language: 'javascript',
       default: false,
       template_name: 'chuspace/bridgetown-starter-blog',
-      posts_folder: 'src/_posts',
-      drafts_folder: 'src/_posts',
-      assets_folder: 'src/images'
+      repo_articles_path: 'src/_posts',
+      repo_drafts_path: 'src/_posts',
+      repo_assets_path: 'src/images',
+      repo_about_path: 'src/about.md'
     },
     eleventy: {
       framework: 'eleventy',
       language: 'javascript',
       default: false,
       template_name: 'chuspace/11ty-starter-blog',
-      posts_folder: 'src/blog',
-      drafts_folder: 'src/blog',
-      assets_folder: 'src/blog'
+      repo_articles_path: 'src/blog',
+      repo_drafts_path: 'src/blog',
+      repo_assets_path: 'src/blog',
+      repo_about_path: 'src/about.md'
     },
     gridsome: {
       framework: 'gridsome',
       language: 'javascript',
       default: false,
       template_name: 'chuspace/gridsome-starter-blog',
-      posts_folder: 'content/posts',
-      drafts_folder: 'content/posts',
-      assets_folder: 'static'
+      repo_articles_path: 'content/posts',
+      repo_drafts_path: 'content/posts',
+      repo_assets_path: 'static',
+      repo_about_path: 'content/about.md'
     },
     gatsby: {
       framework: 'gatsby',
       language: 'javascript',
       default: false,
       template_name: 'chuspace/gatsby-starter-blog',
-      posts_folder: 'src/posts',
-      drafts_folder: 'src/posts',
-      assets_folder: 'src/images'
+      repo_articles_path: 'content/posts',
+      repo_drafts_path: 'content/drafts',
+      repo_assets_path: 'static/images',
+      repo_about_path: 'content/pages/about.md'
     },
     hexo: {
       framework: 'hexo',
       language: 'javascript',
       default: false,
       template_name: 'chuspace/hexo-starter-blog',
-      posts_folder: 'source/_posts',
-      drafts_folder: 'source/_posts',
-      assets_folder: 'source/images'
+      repo_articles_path: 'source/_posts',
+      repo_drafts_path: 'source/_posts',
+      repo_assets_path: 'source/images',
+      repo_about_path: 'source/pages/about.md'
     },
     hugo: {
       framework: 'hugo',
       language: 'go',
       default: false,
       template_name: 'chuspace/hugo-starter-blog',
-      posts_folder: 'content/posts',
-      drafts_folder: 'content/posts',
-      assets_folder: 'static'
+      repo_articles_path: 'content/posts',
+      repo_drafts_path: 'content/posts',
+      repo_assets_path: 'static',
+      repo_about_path: 'content/pages/about.md'
     },
     jekyll: {
       framework: 'jekyll',
       language: 'ruby',
       default: false,
       template_name: 'chuspace/jekyll-starter-blog',
-      posts_folder: '_posts',
-      drafts_folder: '_drafts',
-      assets_folder: 'assets/img'
+      repo_articles_path: '_posts',
+      repo_drafts_path: '_drafts',
+      repo_assets_path: 'assets/img',
+      repo_about_path: 'about.md'
     },
     nextjs: {
       framework: 'nextjs',
       language: 'javascript',
       default: false,
       template_name: 'chuspace/nextjs-starter-blog',
-      posts_folder: '_posts',
-      drafts_folder: '_posts',
-      assets_folder: 'public/images'
+      repo_articles_path: '_posts',
+      repo_drafts_path: '_drafts',
+      repo_assets_path: 'public/images',
+      repo_about_path: '_pages/about.md'
     }
   )
 
