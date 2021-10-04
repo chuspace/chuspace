@@ -10,6 +10,9 @@ module.exports = {
     './app/packs/**/*.js'
   ],
   darkMode: 'media',
+  daisyui: {
+    themes: ['light', 'dark']
+  },
   theme: {
     container: {
       center: true,
@@ -21,10 +24,7 @@ module.exports = {
       lg: '992px',
       xl: '1160px'
     },
-    borderColor: (theme) => ({
-      ...theme('colors'),
-      DEFAULT: theme('colors.light', 'currentColor')
-    }),
+
     colors: {
       transparent: 'transparent',
       black: '#111',
@@ -38,35 +38,35 @@ module.exports = {
       },
 
       accent: {
-        100: '#f0eef6',
-        200: '#dbd6f5',
-        300: '#8067fe',
-        400: '#3617cf',
-        500: '#2e1f7a'
+        100: '#EFF6FF',
+        200: '#93C5FD',
+        300: '#60A5FA',
+        400: '#3B82F6',
+        500: '#2563EB'
       },
 
       warn: {
-        100: '#f7f4d4',
-        200: '#e6df99',
+        100: '#FFFBEB',
+        200: '#FCD34D',
         300: '#e4d101',
-        400: '#8a800f',
-        500: '#524d14'
+        400: '#FBBF24',
+        500: '#F59E0B'
       },
 
       danger: {
-        100: '#fcf2e8',
-        200: '#efd5be',
-        300: '#fe9934',
-        400: '#8a0f0f',
-        500: '#661a1a'
+        100: '#FEF2F2',
+        200: '#FCA5A5',
+        300: '#F87171',
+        400: '#EF4444',
+        500: '#DC2626'
       },
 
       success: {
-        100: '#eef9ec',
-        200: '#dbf5d6',
-        300: '#2bfe01',
-        400: '#388a0f',
-        500: '#335214'
+        100: '#ECFDF5',
+        200: '#6EE7B7',
+        300: '#34D399',
+        400: '#10B981',
+        500: '#059669'
       },
 
       github: {
@@ -122,5 +122,5 @@ module.exports = {
   variants: {
     extend: {}
   },
-  plugins: [require('@tailwindcss/typography')]
+  plugins: [require('@tailwindcss/typography'), require('daisyui')]
 }

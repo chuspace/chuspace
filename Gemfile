@@ -16,7 +16,6 @@ gem 'activerecord-clean-db-structure'
 gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
-gem 'store_model', github: 'DmitryTsepelev/store_model'
 
 # Form
 gem 'simple_form'
@@ -46,9 +45,6 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Turblinks
 gem 'turbo-rails'
-
-# View components
-gem 'view_component'
 
 # Omninauth
 gem 'omniauth-github', github: 'omniauth/omniauth-github'

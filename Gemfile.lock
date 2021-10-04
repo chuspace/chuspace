@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/DmitryTsepelev/store_model.git
-  revision: 6f732c34fd058565e0278543c53ee532dd0bef12
-  specs:
-    store_model (0.11.1)
-      activerecord (>= 5.2)
-
-GIT
   remote: https://github.com/fnando/omniauth-atlassian-bitbucket.git
   revision: d12090f727427e1ee91a0294a957e6ebeb715fe4
   specs:
@@ -112,7 +105,7 @@ GEM
     ast (2.4.2)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.507.0)
+    aws-partitions (1.510.0)
     aws-record (2.6.1)
       aws-sdk-dynamodb (~> 1.18)
     aws-sdk-core (3.121.1)
@@ -248,7 +241,7 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     jmespath (1.4.0)
-    jwt (2.2.3)
+    jwt (2.3.0)
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
@@ -376,7 +369,7 @@ GEM
     rspec-support (3.10.2)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.22.0)
+    rubocop (1.22.1)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -448,9 +441,6 @@ GEM
       unf_ext
     unf_ext (0.0.8)
     unicode-display_width (2.1.0)
-    view_component (2.40.0)
-      activesupport (>= 5.0.0, < 8.0)
-      method_source (~> 1.0)
     web-console (4.1.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -534,11 +524,9 @@ DEPENDENCIES
   simplecov
   simplecov-lcov
   sitemap_generator
-  store_model!
   strong_migrations
   tomo
   turbo-rails
-  view_component
   web-console (>= 3.3.0)
   webdrivers
   webpacker (= 6.0.0.rc.5)

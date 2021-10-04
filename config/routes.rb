@@ -30,4 +30,8 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'sessions#create'
   get '/login', to: 'sessions#new', as: :login
   get '/auth/email', to: 'sessions#new_email', as: :login_email
+
+  if Rails.env.development?
+    mount Lookbook::Engine, at: "/lookbook"
+  end
 end
