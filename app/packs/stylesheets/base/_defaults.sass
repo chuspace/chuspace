@@ -1,12 +1,6 @@
-@import url('https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css')
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap')
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap')
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap')
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500&display=swap')
-
 html,
 body
-  @apply leading-normal font-serif bg-black text-white
+  @apply leading-normal font-serif bg-prime-100 dark:bg-prime-500 text-black dark:text-white
   width: 100%
   position: relative
   font-weight: normal
@@ -17,7 +11,7 @@ body
   --baseline-multiplier: 0.17
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: greyscale
-  text-rendering: optimizeL segibility
+  text-rendering: optimizeLegibility
 
 .content
   margin-top: 60px
@@ -36,8 +30,7 @@ dialog + .backdrop
   background-color: rgba(0, 0, 0, 0.3)
 
 hr
-  @apply mb-4 border-gray-200
+  @apply mb-4
 
 input::placeholder
-  color: theme('colors.white')
   opacity: 0.6

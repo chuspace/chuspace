@@ -1,14 +1,14 @@
 <div class='sm:w-2/3 w-full mx-auto mt-24'>
   <%= turbo_frame_tag(:blogs, class: 'relative w-full block') do %>
     <div class='flex items-center border-b border-light-200 pb-3'>
-      <h3 class='flex-1'>Blogs</h3>
+      <h1 class='flex-1'>Blogs</h1>
       <div class='flex items-center'>
         <%= link_to 'Connect existing', connect_blogs_path, class: 'button button--fill', data: { 'turbo-frame': :_top } %>
         <%= link_to 'Add new', new_blog_path, class: 'button button--fill  ml-2', data: { 'turbo-frame': :_top } %>
       </div>
     </div>
 
-    <div class='mt-4 mb-8'>
+    <div class='mt-4 mb-8 intro'>
       <p>
         Chuspace blogs are powered by git repositories connected to one of the
         git storage providers.

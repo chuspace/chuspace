@@ -21,7 +21,7 @@ class StoragesController < ApplicationController
         @storage.errors.clear unless params['commit']
 
         respond_to do |format|
-          format.html
+          format.html { render :new }
           format.turbo_stream { render turbo_stream: turbo_stream.replace(@storage, partial: 'storages/form', locals: { storage: @storage }) }
         end
       end
@@ -36,7 +36,7 @@ class StoragesController < ApplicationController
       redirect_to storages_path
     else
       respond_to do |format|
-        format.html { redirect_to edit_storage_path(@storage) }
+        format.html { render :edit }
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@storage, partial: 'storages/form', locals: { storage: @storage }) }
       end
     end

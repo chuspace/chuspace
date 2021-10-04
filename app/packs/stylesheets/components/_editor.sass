@@ -48,7 +48,7 @@
     @apply whitespace-pre-wrap
 
   code
-    @apply bg-gray-100 p-1 border border-gray-200 rounded-sm whitespace-pre-wrap text-base font-normal
+    @apply bg-prime-300 p-1 rounded-sm whitespace-pre-wrap text-base font-normal
 
   img
     width: 800px
@@ -56,25 +56,6 @@
 
   div + br
     display: none
-
-  .insertion
-    @apply bg-green-lightest text-green-darkest max-w-full whitespace-normal
-
-    pre
-      @apply p-4 overflow-x-auto text-base
-
-    *
-      background: inherit
-      color: inherit
-
-    img
-      @apply border-4 border-green-lightest
-
-  .deletion
-    @apply bg-red-lightest line-through text-red max-w-full whitespace-normal
-    *
-      background: inherit
-      color: inherit
 
   ul, ol
     @apply ml-8 mb-6 list-disc

@@ -1,13 +1,13 @@
-<section class='w-full mt-32'>
-  <h1 class='font-black font-monospace text-8xl leading-none bg-blue'>
-    <%= t('.heading') %><span class="blinking-cursor">|</span>
+<section>
+  <h1 class='font-black text-8xl leading-none'>
+    <%= t('.heading') %>
   </h1>
-  <p class="mt-12 w-full sm:w-3/4 text-2xl font-sans">
+  <p class="mt-8 w-full sm:w-3/4 text-2xl font-sans">
     <%= t('.intro') %>
   </p>
 
   <div class='mt-12'>
-    <%= link_to 'Get started', login_path, class: 'button button--fill', 'data-turbo': false %>
-    <%= link_to 'Know more', '#', class: 'button button--default ml-2' %>
+    <%= link_to 'Get started', login_path, class: 'button button--fill button--lg', 'data-turbo': false %>
+    <%= link_to 'Know more', '#', class: 'button button--outline button--lg ml-2' %>
   </div>
 </section>

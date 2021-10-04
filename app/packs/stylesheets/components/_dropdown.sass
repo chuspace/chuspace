@@ -6,14 +6,14 @@ details
       @apply inline-block
 
 .dropdown
-  @apply absolute bg-black border border-white rounded-sm shadow mt-2 right-0 z-50
+  @apply absolute bg-prime-500 border border-prime-300 rounded-sm shadow mt-2 right-0 z-50
   min-width: 16rem
 
   .dropdown__divider
-    @apply border-t border-white block
+    @apply border-t border-prime-300 block
 
   .dropdown__item
-    @apply py-2 px-4 block text-sm cursor-pointer
+    @apply py-2 px-4 block cursor-pointer
 
     input[type="submit"]
       @apply cursor-pointer
@@ -29,7 +29,7 @@ details
       @apply pt-2
 
     &:hover
-      @apply bg-gray-800
+      @apply bg-prime-500
 
   &:after, &:before
     bottom: 100%
@@ -43,13 +43,13 @@ details
 
   &:after
     border-color: rgba(255, 255, 255, 0)
-    border-bottom-color: theme('colors.black')
+    border-bottom-color: theme('colors.prime.300')
     border-width: 7px
     margin-right: -7px
 
   &:before
     border-color: rgba(204, 204, 204, 0)
-    border-bottom-color: theme('colors.white')
+    border-bottom-color: theme('colors.prime.300')
     border-width: 8px
     margin-right: -8px
 

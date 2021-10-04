@@ -5,24 +5,7 @@ $variants: ("xs": 32, "sm": 48, "md": 64, "lg": 80, "xl": 120, "thumb": 150, "pr
   @apply rounded cursor-pointer shadow
 
 .avatar__badge
-  @apply border border-gray-400 inline-block text-center align-middle
-
-.avatar__uploader
-  @apply bg-gray-100 block rounded
-  width: 150px
-  height: 150px
-
-  .avatar__uploader__hint
-    @apply absolute
-    width: inherit
-    top: 160px
-
-    &__blank
-      @apply relative flex items-center text-center px-2
-      width: inherit
-      height: inherit
-      top: unset
-
+  @apply border border-prime-300 inline-block text-center align-middle
 
 @each $variant, $size in $variants
   .avatar--#{$variant}

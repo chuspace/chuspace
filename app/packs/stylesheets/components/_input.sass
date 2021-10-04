@@ -10,7 +10,7 @@
 
     abbr
       text-decoration: none
-      color: theme('colors.red')
+      color: theme('colors.danger.400')
 
   .input__container
     @apply w-full relative
@@ -21,7 +21,7 @@
 
     &__label--floating
       &::before
-        @apply absolute hidden text-sm border-r pr-2 italic pointer-events-none text-gray-400
+        @apply absolute hidden text-sm border-r pr-2 italic pointer-events-none dark:text-prime-200 text-prime-400
         content: attr(data-label)
         top: calc(100% / 2 - 0.4rem)
         right: 110%
@@ -40,7 +40,7 @@
       @apply border-none
 
 .input
-  @apply py-2 px-4 bg-white w-full text-base border border-white bg-black
+  @apply py-2 px-4 bg-white w-full text-base border border-white bg-transparent
   transition: border-color 0.5s ease
   box-sizing: border-box
 
@@ -56,7 +56,7 @@
 
 .input__error,
 .input__hint
-  @apply mt-2 block text-xs text-light-600
+  @apply mt-2 block text-xs dark:text-prime-200 text-prime-400
   transition: color 0.5s ease
 
 .input__hint
@@ -67,17 +67,17 @@
 
 .form_field__container--invalid
   .input__label
-    @apply text-red
+    @apply text-danger-300
 
   .input__container
     &::after
-      @apply border-red border-b-2
+      @apply border-danger-400 border-b-2
 
   .input__hint
     @apply hidden
 
   .input__error
-    @apply text-red block
+    @apply text-danger-300 block
 
   input-check
     @apply block w-full
@@ -91,8 +91,8 @@
   width: 16px
   border-radius: 2px
   content: ''
-  background-color: theme('colors.gray.800')
-  border: 1px solid theme('colors.white')
+  background-color: theme('colors.prime.500')
+  border: 1px solid theme('colors.prime.100')
 
 [type='checkbox']::before:hover
   background-color: theme('colors.black')

@@ -9,7 +9,7 @@ module.exports = {
     './config/initializers/simple_form.rb',
     './app/packs/**/*.js'
   ],
-  darkMode: 'class',
+  darkMode: 'media',
   theme: {
     container: {
       center: true,
@@ -23,13 +23,51 @@ module.exports = {
     },
     borderColor: (theme) => ({
       ...theme('colors'),
-      DEFAULT: theme('colors.white', 'currentColor')
+      DEFAULT: theme('colors.light', 'currentColor')
     }),
     colors: {
       transparent: 'transparent',
-
-      black: '#010409',
+      black: '#111',
       white: '#fff',
+      prime: {
+        100: '#f4f4f1',
+        200: '#e8e9e2',
+        300: '#989a7e',
+        400: '#464738',
+        500: '#2a2b22'
+      },
+
+      accent: {
+        100: '#f0eef6',
+        200: '#dbd6f5',
+        300: '#8067fe',
+        400: '#3617cf',
+        500: '#2e1f7a'
+      },
+
+      warn: {
+        100: '#f7f4d4',
+        200: '#e6df99',
+        300: '#e4d101',
+        400: '#8a800f',
+        500: '#524d14'
+      },
+
+      danger: {
+        100: '#fcf2e8',
+        200: '#efd5be',
+        300: '#fe9934',
+        400: '#8a0f0f',
+        500: '#661a1a'
+      },
+
+      success: {
+        100: '#eef9ec',
+        200: '#dbf5d6',
+        300: '#2bfe01',
+        400: '#388a0f',
+        500: '#335214'
+      },
 
       github: {
         light: '#151413',
@@ -42,92 +80,43 @@ module.exports = {
       bitbucket: {
         light: '#0047b3',
         dark: '#003380'
-      },
-      email: {
-        light: 'rgba(0,0,0,0.6)',
-        dark: 'rgba(0,0,0,0.8)'
-      },
-      gray: {
-        default: 'rgba(0,0,0,0.8)',
-        800: 'rgba(0,0,0,0.8)',
-        600: 'rgba(0,0,0,0.6)',
-        400: 'rgba(0,0,0,0.4)',
-        200: 'rgba(0,0,0,0.2)',
-        100: 'rgba(0,0,0,0.1)'
-      },
-
-      light: {
-        default: 'rgba(255,255,255,0.8)',
-        800: 'rgba(255,255,255,0.8)',
-        600: 'rgba(255,255,255,0.6)',
-        400: 'rgba(255,255,255,0.4)',
-        200: 'rgba(255,255,255,0.2)',
-        100: 'rgba(255,255,255,0.1)'
-      },
-
-      'red-darkest': '#3b0d0c',
-      'red-darker': '#621b18',
-      'red-dark': '#cc1f1a',
-      red: '#e3342f',
-      'red-light': '#ef5753',
-      'red-lighter': '#f9acaa',
-      'red-lightest': '#fcebea',
-
-      'blue-darkest': '#000099',
-      'blue-darker': '#0000bf',
-      'blue-dark': '#0000e6',
-      blue: '#0000FF',
-      'blue-light': '#4d4dff',
-      'blue-lighter': '#9999ff',
-      'blue-lightest': '#bfbfff',
-
-      'green-darkest': '#0f2f21',
-      'green-darker': '#1a4731',
-      'green-dark': '#1f9d55',
-      green: '#38c172',
-      'green-light': '#51d88a',
-      'green-lighter': '#a2f5bf',
-      'green-lightest': '#e3fcec'
+      }
     },
-    fontFamily: {
-      monospace: ['Space Mono', 'monospace'],
-      sans: [
-        'Work Sans',
-        'system-ui',
-        'BlinkMacSystemFont',
-        '-apple-system',
-        'Segoe UI',
-        'Roboto',
-        'Oxygen',
-        'Ubuntu',
-        'Cantarell',
-        'Open Sans',
-        'Fira Sans',
-        'Droid Sans',
-        'Helvetica Neue',
-        'sans-serif'
-      ],
-      serif: [
-        'Source Serif Pro',
-        'Lucida Grande',
-        'Lucida Sans Unicode',
-        'Lucida Sans',
-        'Tahoma',
-        'Verdana',
-        'Arial',
-        'Geneva',
-        'Georgia',
-        'sans-serif'
-      ],
-      mono: [
-        'Fira Code',
-        'Menlo',
-        'Monaco',
-        'Consolas',
-        'Liberation Mono',
-        'Courier New',
-        'monospace'
-      ]
+    extend: {
+      fontFamily: {
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica',
+          'Arial',
+          'sans-serif'
+        ],
+        serif: [
+          'Constantia',
+          'Lucida Bright',
+          'Lucidabright',
+          'Lucida Serif',
+          'Lucida',
+          'DejaVu Serif',
+          'Georgia',
+          'Palatino Linotype',
+          'Palatino',
+          'serif'
+        ],
+        mono: [
+          'DejaVu sans mono',
+          'Anonymous Pro',
+          'Ubuntu Mono',
+          'Droid Sans Mono Consolas',
+          'Andale Mono',
+          'Consolas',
+          'Monaco',
+          'Courier New',
+          'monospace'
+        ]
+      }
     }
   },
   variants: {

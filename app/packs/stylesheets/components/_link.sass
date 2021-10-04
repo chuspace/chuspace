@@ -1,52 +1,46 @@
 .link
-  @apply no-underline
+  @apply no-underline font-sans
 
   &.link--default
-    @apply text-white
+    @apply text-accent-200
 
   &.link--default:hover
-    @apply text-white
+    @apply text-accent-300
 
   &.link--active
-    @apply text-blue-darker
+    @apply text-accent-400
 
   &.link--active:hover
-    @apply text-blue
+    @apply text-accent-500
 
   &.link--danger
-    @apply text-red
+    @apply text-danger-400
 
   &.link--danger:hover
-    @apply text-red-light
+    @apply text-danger-500
 
   &.link--disabled
-    @apply text-gray-200 pointer-events-none cursor-not-allowed
+    @apply text-prime-400 pointer-events-none cursor-not-allowed
 
   &[data-method="delete"]
-    @apply text-red
+    @apply text-danger-400
     &:hover
-      @apply text-red-lighter
+      @apply text-danger-500
 
 .button
-  @apply py-1 px-3 border border-white rounded no-underline text-center cursor-pointer font-medium
+  @apply py-2 font-sans px-3 text-sm rounded no-underline text-center cursor-pointer
 
-  &.button--default
-    @apply border-white text-white transition-colors duration-300
+  &.button--lg
+    @apply py-3 px-6 text-base
 
-  &.button--default:hover
-    @apply bg-black text-white
+  &.button--outline
+    @apply border-2 border-accent-300
 
   &.button--fill
-    @apply text-white bg-white shadow-md text-black
-
-  &.button--fill:hover
-    @apply opacity-80
+    @apply text-prime-100 bg-accent-400 border-accent-400
 
   &.button--danger
-    @apply border-red-light text-red-dark bg-red-lightest shadow-md dark:border-transparent dark:bg-transparent dark:text-red
-
-  &.button--danger:hover
-    @apply border-red-lighter text-red-light
+    @apply border-danger-400 text-danger-200 bg-danger-400
 
   &.button--disabled
     @apply pointer-events-none cursor-not-allowed
