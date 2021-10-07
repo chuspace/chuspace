@@ -51,7 +51,7 @@ class StoragesController < ApplicationController
   private
 
   def find_storage
-    @storage = Current.user.storages.find(params[:id])
+    @storage = Current.user.storages.find_by(provider: params[:id])
   end
 
   def storage_params

@@ -11,7 +11,7 @@ sassRule.use[3] = Object.assign({}, sassRule.use[3], {
 })
 
 const appWebpackConfig = {
-  name: 'friday',
+  name: 'chuspace',
   stats: 'minimal',
   devtool: 'none',
   performance: {

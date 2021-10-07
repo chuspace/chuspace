@@ -1,0 +1,88 @@
+.chu-editor
+  font-weight: 400
+  font-style: normal
+  font-size: 22px
+  color: theme('colors.accent')
+  line-height: 1.5
+  outline: none
+  position: relative
+
+  &:last-child
+    @apply mb-0
+
+  div
+    @apply whitespace-nowrap
+
+  blockquote
+    @apply border-l-2 -ml-4 pl-4 mb-6
+    font-style: italic
+
+  .title
+    @apply mb-2
+
+  a
+    hyphens: auto
+    cursor: pointer
+    text-decoration: underline
+    overflow-wrap: break-word
+
+  h1, h2, h3, h4, h5, h6
+    @apply my-12
+    letter-spacing: -0.07rem
+
+    a
+      text-decoration: none
+
+      &:hover
+        text-decoration: underline
+
+  strong
+    @apply mb-6 font-bold
+
+  code-editor, lazy-image, p
+    @apply mb-6 block
+
+  figure, p > div
+    @apply whitespace-nowrap
+
+  pre
+    @apply whitespace-pre-wrap
+
+  code
+    @apply bg-secondary p-1 border border-secondary-focus text-secondary-content rounded-sm whitespace-pre-wrap text-base font-normal
+
+  img
+    width: 800px
+    min-height: 400px
+
+  div + br
+    display: none
+
+  .insertion
+    @apply bg-success text-success max-w-full whitespace-normal
+
+    pre
+      @apply p-4 overflow-x-auto text-base
+
+    *
+      background: inherit
+      color: inherit
+
+    img
+      @apply border-4 border-success
+
+  .deletion
+    @apply bg-error line-through text-error max-w-full whitespace-normal
+    *
+      background: inherit
+      color: inherit
+
+  ul, ol
+    @apply ml-8 mb-6 list-disc
+
+    li
+      p
+        @apply mb-2
+
+  ol
+    @apply list-decimal

@@ -1,66 +1,48 @@
 <%= turbo_frame_tag(blog) do %>
-  <% if Current.user.storages.external.any? %>
-    <div class='text-sm mt-2'>
-      <p>The selected git repository must support publishing posts using markdown.</p>
-      <strong>Example: Jekyll, Hugo or Astro</strong>
-    </div>
+  <auto-refresh-form>
+    <%= simple_form_for(blog, url: blogs_path, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+      <%= form.input :storage_id, as: :select, collection: Current.user.storages.external.pluck(:description, :id), autofocus: true, input_html: { 'data-action': 'change:auto-refresh-form#refresh' } %>
+      <% if blog.storage.present? %>
+        <auto-complete
+          src="<%= storage_repos_path(blog.storage) %>"
+          for="repos-popup"
+          class='relative block'
+          data-action='auto-complete-change:auto-refresh-form#refresh'>
+          <%= form.input(
+                :repo_fullname,
+              as: :string,
+              input_html: {
+                value: blog.repo_fullname,
+                'data-action': 'input:auto-refresh-form#reset',
+              },
+              wrapper_html: { class: 'relative' }
+            ) %>
+          <ul
+            id="repos-popup"
+            class='absolute z-10 bg-black border border-light-200 w-full'></ul>
+        </auto-complete>
+      <% end %>
 
-    <div class='mt-8'>
-      <auto-refresh-form>
-        <%= simple_form_for(blog, url: blogs_path, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" } }) do |form| %>
-          <%= form.input :storage_id, as: :select, collection: Current.user.storages.external.pluck(:provider, :id), input_html: { 'data-action': 'change:auto-refresh-form#refresh' } %>
-          <% if blog.storage.present? %>
-            <auto-complete
-              src="<%= storage_repos_path(blog.storage) %>"
-              for="repos-popup"
-              class='relative block'
-              data-action='auto-complete-change:auto-refresh-form#refresh'
-            >
-              <%= form.input(
-                  :repo_fullname,
-                  as: :string,
-                  autofocus: true,
-                  input_html: {
-                    value: blog.repo_fullname,
-                    'data-action': 'input:auto-refresh-form#reset',
-                  },
-                  wrapper_html: { class: 'relative' }
-                )
-              %>
-              <ul
-                id="repos-popup"
-                class='absolute z-10 bg-black border border-light-200 w-full'
-              ></ul>
-            </auto-complete>
-          <% end %>
-
-          <div class='mt-8'>
-            <%= form.input :name, required: true %>
-            <%= form.input :description, as: :text, required: true %>
-            <%= form.input :framework, as: :select, collection: Blog.frameworks %>
-            <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
-
-            <div data-target='auto-refresh-form.loader'>
-              <% if blog.repo_folders&.any? %>
-                <%= form.input :repo_articles_path, as: :select, collection: blog.repo_folders %>
-                <%= form.input :repo_drafts_path, as: :select, collection: blog.repo_folders %>
-                <%= form.input :repo_assets_path, as: :select, collection: blog.repo_folders %>
-                <%= form.input :repo_about_path, as: :select, collection: blog.repo_folders %>
-              <% end %>
-            </div>
-
-            <%= form.input :type, as: :hidden, input_html: { value: :connect, name: 'type' } %>
-            <%= form.button :submit, 'Connect', class: 'mt-12' %>
-          </div>
+      <div data-target='auto-refresh-form.loader'>
+        <% if blog.repo_fullname.present? %>
+          <%= form.input :name, required: true %>
+          <%= form.input :description, as: :text, required: true %>
+          <%= form.input :framework, as: :select, collection: Blog.frameworks %>
+          <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
         <% end %>
+      </div>
 
-      </auto-refresh-form>
-    </div>
-  <% else %>
-    <div class='placeholder sm:w-3/4 mx-auto w-full'>
-      <h3>No external git storages configured</h4>
-      <p>You can only connect repositories from your own git storage providers. <p>For example: Github or Gitlab</p></p>
-      <%= link_to 'Connect storage', storages_path, class: 'button button--fill mt-4 inline-block', data: { 'turbo-frame': '_top' } %>
-    </div>
-  <% end %>
+      <div data-target='auto-refresh-form.loader'>
+        <% if blog.repo_folders&.any? %>
+          <%= form.input :repo_articles_path, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_drafts_path, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_assets_path, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_about_path, as: :select, collection: blog.repo_folders %>
+        <% end %>
+      </div>
+
+      <%= form.input :type, as: :hidden, input_html: { value: :connect, name: 'type' } %>
+      <%= form.button :submit, 'Connect', class: 'mt-12 loading' %>
+    <% end %>
+  </auto-refresh-form>
 <% end %>

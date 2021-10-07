@@ -19,6 +19,7 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
       out('<a href="', node.url.nil? ? '' : escape_href(node.url), '"')
       out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?
       out(' target="', '_blank', '"')
+      out(' class="', 'link link-primary', '"')
       out(' is="', 'link-preview', '"')
       out(' data-behaviour="', 'has-tooltip', '"')
       out(' rel="', 'noopener noreferrer', '"')

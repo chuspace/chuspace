@@ -16,7 +16,40 @@ en:
 
   home:
     marketing:
-      heading: Blogging platform for developers
-      intro:
-        Chuspace is a blogging platform built on Git. Publish, learn and collaborate
-        using the tools you love and use everyday.
+      heading: Defragging dev blogs
+      intro: Chuspace is a collaborative blogging and indexing platform,
+        which works with any markdown powered static site blog hosted
+        on Github, Gitlab or Gitea.
+
+  sessions:
+    index:
+      welcome: Welcome back to Chuspace
+      login_card_title: Click to log in into your account
+      intro: Write . Read . Learn . Contribute . Write again
+    email:
+      welcome: Login with email
+      intro: You will recieve a magic link in your email to log in
+
+  shared:
+    login_prompt: Click to go to log  in page
+    signup_prompt: Click to go to sign up page
+
+    identities:
+      login_with: Click to log in with %{provider}
+  signups:
+    email:
+      welcome: Signup with email
+      intro: You will recieve a magic link in your email to log in
+
+    index:
+      welcome: Welcome to Chuspace
+      intro: An integrated blogging platform for developers to write,
+        learn and grow together
+
+      features:
+        - title: Truly own your content
+          description: Connect your blogs from Github . Gitlab or Gitea
+        - title: Any static site framework
+          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . Hexo
+        - title: Publishing and collaboration
+          description: Write . Read . Learn . Contribute . Write again

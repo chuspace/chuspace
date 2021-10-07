@@ -1,9 +1,0 @@
-<%= turbo_frame_tag :blogs do %>
-  <% if Current.user.blogs.any? %>
-    <div class='list list--table mt-4'>
-      <%= render partial: 'blogs/item', collection: Current.user.blogs, as: :blog, cached: true %>
-    </div>
-  <% else %>
-    <div class='placeholder text-2xl'>No blogs</div>
-  <% end %>
-<% end %>

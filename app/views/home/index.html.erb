@@ -3,20 +3,20 @@
     <div>
       <div class='flex items-center'>
         <div class='flex-1'>
-          <%= render(Avatar::Component.new(url: Current.user.avatar_url(variant: :xl))) %>
+          <%= image_tag Current.user.avatar_url(variant: :xl) %>
           <h3 class='mt-2'><%= Current.user.name %></h3>
         </div>
 
         <div class=''>
-          <%= link_to 'Edit', '#', class: 'button button--default' %>
+          <%= link_to 'Edit', '#', class: 'btn btn-primary btn-outline btn-sm' %>
         </div>
       </div>
 
       <div class='tabs mt-8' dir='horizontal'>
         <div role="tablist">
-          <%= link_to 'About', new_blog_path, type: "button", role: "tab", 'aria-selected': "true", class: 'tab' %>
-          <%= link_to 'Recent posts', connect_blogs_path, type: "button", role: "tab", 'aria-selected': "false", class: 'tab' %>
-          <%= link_to 'Blogs', new_blog_path, type: "button", role: "tab", 'aria-selected': "false", class: 'tab' %>
+          <%= link_to 'About', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
+          <%= link_to 'Recent posts', connect_blogs_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
+          <%= link_to 'Blogs', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
         </div>
       </div>
     </div>

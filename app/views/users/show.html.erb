@@ -1,6 +1,5 @@
 <div class='mt-32'>
   <h1 class='mb-8'><%= @user.name %></h1>
-
   <% if @user.blogs.any? %>
     <div class='list'>
       <%= render partial: 'blogs/item', collection: @user.blogs, as: :blog, cached: true %>

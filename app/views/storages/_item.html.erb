@@ -1,27 +1,34 @@
 <% cache storage do %>
-  <div class='list__item list__item--bordered <%= 'bg-gray-100' if storage.chuspace? %>'>
+  <div class='border-b last:border-b-0 p-4'>
     <%= turbo_frame_tag(storage, class: 'flex') do %>
       <div class='flex flex-1'>
-        <%= inline_svg_tag "icons/#{storage.chuspace? ? 'database' : storage.provider}", class: 'fill-current mr-2 w-6 h-6' %>
-        <div>
-          <div class='flex items-center'>
-            <%= tag.h4 storage.provider.humanize %>
-            <%= tag.span '–', class: 'mx-2' %>
-            <%= tag.span storage.description, class: 'text-xs' %>
-          </div>
-          <%= tag.pre storage.provider_config[:scopes], class: 'text-sm whitespace-pre-wrap break-words text-danger-300 mt-2' unless storage.chuspace? %>
+        <%= inline_svg_tag(
+          "icons/#{storage.chuspace? ? 'database' : storage.provider}",
+          class: 'fill-current w-8 h-8'
+        ) %>
+
+        <div class='ml-2'>
+          <%= tag.h6 storage.label %>
+          <%= tag.p storage.description, class: 'text-sm text-secondary' %>
+          <%= tag.pre storage.provider_config[:scopes], class: 'text-sm whitespace-pre-wrap break-words text-info mt-2' unless storage.chuspace? %>
           <div class='mt-2'>
-            <%= content_tag :span, 'internal', class: 'badge badge--closed mr-2' if storage.chuspace? %>
-            <%= content_tag :span, 'default', class: 'badge badge--open mr-2' if storage.default? %>
-            <%= content_tag :span, 'connected', class: 'badge badge--merged' if storage.active? %>
+            <%= tag.span 'system', class: 'badge badge-primary mr-2' if storage.chuspace? %>
+            <%= tag.span, 'default', class: 'badge badge-success mr-2' if storage.default? %>
+            <%= tag.span, 'connected', class: 'badge badge-info' if storage.active? %>
+            <%= tag.span, 'self-hosted', class: 'badge badge-info' if storage.self_hosted? %>
           </div>
         </div>
       </div>
 
       <% unless storage.chuspace? %>
         <div class='flex items-center justify-between flex-end'>
-          <%= link_to 'Edit', edit_storage_path(storage), class: 'button button--sm button--fill', data: { 'turbo-frame': :_top } %>
-          <%= button_to storage_path(storage), method: :delete, class: 'button button--sm button--danger ml-3' do %>
+          <%= link_to(
+              'Edit',
+            edit_storage_path(storage),
+            class: 'btn btn-sm btn-primary',
+            data: { 'turbo-frame': :_top }
+          ) %>
+          <%= button_to(storage_path(storage), method: :delete, class: 'btn btn-sm btn-error ml-3') do %>
             <%= tag.span 'Delete' %>
           <% end %>
         </div>

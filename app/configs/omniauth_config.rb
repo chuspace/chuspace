@@ -16,11 +16,6 @@ class OmniauthConfig < ApplicationConfig
       scope: 'email account',
       method: :post,
       url: '/auth/bitbucket'
-    },
-    email: {
-      scope: '*',
-      method: :get,
-      url: '/login/email'
     }
   )
 

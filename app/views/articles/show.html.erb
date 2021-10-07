@@ -1,6 +1,8 @@
-<div class='sm:w-3/4 sm:mx-auto w-full mt-32 mx-auto'>
-  <%= render 'header', blog: @blog, article: @article %>
-  <div class='chu-editor mt-8'>
-    <%= MarkdownRenderer.new.render(@markdown_doc).html_safe %>
+<div class='mt-32 sm:flex block items-center justify-center flex-col'>
+  <div class='sm:w-2/3 w-full'>
+    <%= render 'header', blog: @blog, article: @article %>
+    <div class='mt-8 chu-editor'>
+      <%= MarkdownRenderer.new.render(@markdown_doc).html_safe %>
+    </div>
   </div>
 </div>

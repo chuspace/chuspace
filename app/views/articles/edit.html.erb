@@ -1,11 +1,15 @@
-<div class='mt-32 sm:w-3/4 sm:mx-auto w-full'>
-  <chu-editor
-    class='chu-editor block mt-8'
-    data-gramm="false"
-    content='<%= @article.content %>'
-  >
-    <%= simple_form_for(:article, url: blog_article_path(@blog, @article), method: :put) do |form| %>
-      <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: @article.content } %>
-    <% end %>
-  </chu-editor>
+<div class='mt-32 sm:flex block items-center justify-center flex-col'>
+  <div class='sm:w-2/3 w-full'>
+    <%= render 'header', blog: @blog, article: @article %>
+    <div class='mt-8 prose lg:prose-xl mx-auto'>
+      <chu-editor
+        class='block'
+        data-gramm="false"
+        content='<%= @article.content %>'>
+        <%= simple_form_for(:article, url: blog_article_path(@blog, @article), method: :put) do |form| %>
+          <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: @article.content } %>
+        <% end %>
+      </chu-editor>
+    </div>
+  </div>
 </div>

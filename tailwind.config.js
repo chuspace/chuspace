@@ -9,10 +9,7 @@ module.exports = {
     './config/initializers/simple_form.rb',
     './app/packs/**/*.js'
   ],
-  darkMode: 'media',
-  daisyui: {
-    themes: ['light', 'dark']
-  },
+
   theme: {
     container: {
       center: true,
@@ -24,54 +21,10 @@ module.exports = {
       lg: '992px',
       xl: '1160px'
     },
-
     colors: {
-      transparent: 'transparent',
-      black: '#111',
-      white: '#fff',
-      prime: {
-        100: '#f4f4f1',
-        200: '#e8e9e2',
-        300: '#989a7e',
-        400: '#464738',
-        500: '#2a2b22'
-      },
-
-      accent: {
-        100: '#EFF6FF',
-        200: '#93C5FD',
-        300: '#60A5FA',
-        400: '#3B82F6',
-        500: '#2563EB'
-      },
-
-      warn: {
-        100: '#FFFBEB',
-        200: '#FCD34D',
-        300: '#e4d101',
-        400: '#FBBF24',
-        500: '#F59E0B'
-      },
-
-      danger: {
-        100: '#FEF2F2',
-        200: '#FCA5A5',
-        300: '#F87171',
-        400: '#EF4444',
-        500: '#DC2626'
-      },
-
-      success: {
-        100: '#ECFDF5',
-        200: '#6EE7B7',
-        300: '#34D399',
-        400: '#10B981',
-        500: '#059669'
-      },
-
       github: {
         light: '#151413',
-        dark: '#000'
+        dark: '#111827'
       },
       gitlab: {
         light: '#e65528',
@@ -81,46 +34,81 @@ module.exports = {
         light: '#0047b3',
         dark: '#003380'
       }
-    },
-    extend: {
-      fontFamily: {
-        sans: [
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'Segoe UI',
-          'Roboto',
-          'Helvetica',
-          'Arial',
-          'sans-serif'
-        ],
-        serif: [
-          'Constantia',
-          'Lucida Bright',
-          'Lucidabright',
-          'Lucida Serif',
-          'Lucida',
-          'DejaVu Serif',
-          'Georgia',
-          'Palatino Linotype',
-          'Palatino',
-          'serif'
-        ],
-        mono: [
-          'DejaVu sans mono',
-          'Anonymous Pro',
-          'Ubuntu Mono',
-          'Droid Sans Mono Consolas',
-          'Andale Mono',
-          'Consolas',
-          'Monaco',
-          'Courier New',
-          'monospace'
-        ]
-      }
     }
   },
   variants: {
     extend: {}
   },
-  plugins: [require('@tailwindcss/typography'), require('daisyui')]
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          primary: '#111827' /* Primary color */,
+          'primary-focus': '#1F2937' /* Primary color - focused */,
+          'primary-content':
+            '#fff' /* Foreground content color to use on primary color */,
+
+          secondary: '#4B5563' /* Secondary color */,
+          'secondary-focus': '#374151' /* Secondary color - focused */,
+          'secondary-content':
+            '#ffffff' /* Foreground content color to use on secondary color */,
+
+          accent: '#525252' /* Accent color */,
+          'accent-focus': '#D97706' /* Accent color - focused */,
+          'accent-content':
+            '#111827' /* Foreground content color to use on accent color */,
+
+          neutral: '#fff' /* Neutral color */,
+          'neutral-focus': '#f4f4f4' /* Neutral color - focused */,
+          'neutral-content':
+            '#111827' /* Foreground content color to use on neutral color */,
+
+          'base-100':
+            '#fff' /* Base color of page, used for blank backgrounds */,
+          'base-200': '#f4f4f4' /* Base color, a little darker */,
+          'base-300': '#f5f5f5' /* Base color, even more darker */,
+          'base-content':
+            '#111827' /* Foreground content color to use on base color */,
+
+          info: '#2094f3' /* Info */,
+          success: '#009485' /* Success */,
+          warning: '#ff9900' /* Warning */,
+          error: '#ff5724' /* Error */
+        },
+        dark: {
+          primary: '#3B82F6' /* Primary color */,
+          'primary-focus': '#2563EB' /* Primary color - focused */,
+          'primary-content':
+            '#ffffff' /* Foreground content color to use on primary color */,
+
+          secondary: '#9CA3AF' /* Secondary color */,
+          'secondary-focus': '#6B7280' /* Secondary color - focused */,
+          'secondary-content':
+            '#ffffff' /* Foreground content color to use on secondary color */,
+
+          accent: '#91A6BA' /* Accent color */,
+          'accent-focus': '#D97706' /* Accent color - focused */,
+          'accent-content':
+            '#111827' /* Foreground content color to use on accent color */,
+
+          neutral: '#fff' /* Neutral color */,
+          'neutral-focus': '#f4f4f4' /* Neutral color - focused */,
+          'neutral-content':
+            '#111827' /* Foreground content color to use on neutral color */,
+
+          'base-100':
+            '#111827' /* Base color of page, used for blank backgrounds */,
+          'base-200': '#464738' /* Base color, a little darker */,
+          'base-300': '#2a2b22' /* Base color, even more darker */,
+          'base-content':
+            '#f4f4f4' /* Foreground content color to use on base color */,
+          info: '#2094f3' /* Info */,
+          success: '#009485' /* Success */,
+          warning: '#ff9900' /* Warning */,
+          error: '#ff5724' /* Error */
+        }
+      }
+    ]
+  }
 }

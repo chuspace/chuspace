@@ -5,7 +5,7 @@ en:
     required:
       text: 'required'
       mark: '*'
-      html: '<abbr title="required">*</abbr>'
+      html: '<abbr title="required" class="ml-2 text-error">*</abbr>'
     error_notification:
       default_message: 'Please review the problems below:'
     placeholders:
@@ -13,19 +13,23 @@ en:
         description: What's this storage for?
         endpoint: API endpoint for self-hosted or enterprise instances
         access_token: Personal access token generated for selected provider
+      signup:
+        email: Type your email
+      session:
+        email: Type your email
+
     labels:
       defaults:
         password: 'Password'
-      git_repo:
-        fullname: Repository full path
+      storage:
+        default: Set this to be a default storage
+
     hints:
       storage:
-        access_token: the access token should have following scopes
+        access_token: the access token should have following scopes <pre>%{scopes}</pre>
       blog:
         framework: static site generator framework to be used to generate blog from
         visibility: visibility of blog - public, internal or private
-      git_repo:
-        fullname: Repository full path
 
     include_blanks:
       defaults:

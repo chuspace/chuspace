@@ -19,6 +19,10 @@ class Storage < ApplicationRecord
 
   delegate :chuspace?, to: :provider, allow_nil: true
 
+  def to_param
+    provider
+  end
+
   class << self
     def external
       where.not(provider: GitStorageConfig.chuspace[:provider])
@@ -41,6 +45,12 @@ class Storage < ApplicationRecord
         [config['label'], key]
       end
     end
+
+    def provider_scopes
+      GitStorageConfig.defaults.each_with_object({}) do |(key, config), hash|
+        hash[key] = config['scopes']
+      end
+    end
   end
 
   def external?
@@ -49,6 +59,10 @@ class Storage < ApplicationRecord
 
   def self_hosted?
     provider_config[:self_hosted]
+  end
+
+  def label
+    provider_config[:label]
   end
 
   def adapter

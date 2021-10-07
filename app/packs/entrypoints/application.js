@@ -17,4 +17,3 @@ function importAll(r) {
 }
 
 importAll(require.context('../javascripts/elements', true, /.(ts)$/))
-importAll(require.context('../../components', true, /.(sass|ts)$/))

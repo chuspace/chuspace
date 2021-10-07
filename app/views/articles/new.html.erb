@@ -1,5 +1,5 @@
 <div class='mt-32 sm:w-3/4 sm:mx-auto w-full'>
-  <%= simple_form_for(Article.new, url: blog_articles_path(@blog)) do |form|%>
+  <%= simple_form_for(Article.new, url: blog_articles_path(@blog)) do |form| %>
     <%= form.input :title, as: :text %>
     <chu-editor class='chu-editor block mt-8' data-gramm="false">
       <%= form.input :content, as: :text, wrapper: false, label: false, input_html: { class: 'hidden' } %>

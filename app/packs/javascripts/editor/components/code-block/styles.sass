@@ -1,10 +1,13 @@
 
 code-editor
-  @apply whitespace-nowrap relative
+  position: relative
   width: 100%
+  white-space: nowrap
+
 
   .code-editor-container
     @apply rounded shadow-lg pb-4
+    border-radius: 0.5rem
 
     .CodeMirror
       @apply rounded-b max-w-full pt-4 font-normal overflow-y-auto
@@ -14,7 +17,7 @@ code-editor
         max-height: 600px
 
   .code-editor-toolbar
-    @apply flex items-center p-4 w-full relative rounded-t text-base bg-white text-sm bg-prime-300
+    @apply flex items-center p-4 w-full relative rounded-t text-base text-sm bg-primary
     height: 40px
 
   .code-editor-toolbar-heading
@@ -29,17 +32,17 @@ code-editor
     width: 150px
 
   .code-editor-language-switcher
-    @apply mr-4 bg-white -m-2 shadow-md rounded list-none absolute z-50 ml-0
+    @apply mr-4 bg-primary -m-2 shadow-md rounded list-none absolute z-50 ml-0
     max-height: 250px
     top: 40px
     left: 9px
     width: 150px
 
     li
-      @apply px-2 py-1 border-b border-prime-200
+      @apply px-2 py-1 border-b border-primary
 
       &:hover, &.selected
-        @apply bg-prime-100
+        @apply bg-primary
 
       &:last-child
         @apply border-b-0

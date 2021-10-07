@@ -1,11 +1,9 @@
 <%= render 'layout' do %>
-  <%= turbo_frame_tag :storages_index do %>
-    <% if @storages.any? %>
-      <div class='list list--table mt-4'>
-        <%= render partial: 'storages/item', collection: @storages, as: :storage, cached: true %>
-      </div>
-    <% else %>
-      <div class='placeholder text-2xl'>No storages connected</div>
-    <% end %>
+  <% if @storages.any? %>
+    <div class='border-2 mt-4'>
+      <%= render partial: 'storages/item', collection: @storages, as: :storage, cached: true %>
+    </div>
+  <% else %>
+    <div class='text-center text-2xl'>No storages connected</div>
   <% end %>
 <% end %>

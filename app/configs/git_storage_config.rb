@@ -10,18 +10,18 @@ class GitStorageConfig < ApplicationConfig
       self_hosted: false,
       description: 'Chuspace Git storage service for persisting blog repositories.',
       endpoint: 'https://gitea.chuspace.com/api/v1',
-      scopes: '*'
+      scopes: 'Access token have full access to your account'
     },
     github: {
       label: 'Github.com',
       self_hosted: false,
       endpoint: 'https://api.github.com',
-      scopes: 'repo,workflow,admin:public_key,admin:repo_hook,delete_repo'
+      scopes: 'repo,admin:repo_hook'
     },
     github_enterprise: {
       label: 'Github enterprise',
       self_hosted: true,
-      scopes: 'repo,workflow,admin:public_key,admin:repo_hook,delete_repo'
+      scopes: 'repo,admin:repo_hook'
     },
     gitlab: {
       label: 'Gitlab.com',
@@ -37,7 +37,7 @@ class GitStorageConfig < ApplicationConfig
     gitea: {
       label: 'Gitea',
       self_hosted: true,
-      scopes: '*'
+      scopes: 'Access token have full access to your account'
     }
   )
 

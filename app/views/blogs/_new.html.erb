@@ -1,37 +1,26 @@
-<%= turbo_frame_tag(blog) do %>
-  <p class='mt-2'>
-    A new Git repository will be created using the selected framework of your choice
-    and will be hosted to chuspace git storage
-    <%= link_to 'blog template', 'https://github.com/chuspace/blog-template', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
-    based on <%= link_to 'Astro', 'https://astro.build/', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
-  </p>
-
-  <div class='mt-8'>
-    <auto-refresh-form>
-      <%= simple_form_for(blog, url: blogs_path, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" } }) do |form| %>
-        <%= form.input(
+<%= turbo_frame_tag(@blog) do %>
+  <auto-refresh-form>
+    <%= simple_form_for(blog, url: blogs_path, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+      <%= form.input(
             :storage_id,
-            as: :hidden,
-            wrapper: false,
-            input_html: {
-              value: blog.storage_id
-            }
-          )
-        %>
-        <div class='list list--table'>
-          <%= render 'storages/item', storage: blog.storage %>
-        </div>
-        <p class='text-sm mt-2 italic'>Used to store git git_repo</p>
+          as: :hidden,
+          wrapper: false,
+          input_html: {
+            value: blog.storage_id
+          }
+        ) %>
+      <div class='list list--table'>
+        <%= render 'storages/item', storage: blog.storage %>
+      </div>
 
-        <div class='mt-8'>
-          <%= form.input :name %>
-          <%= form.input :description %>
-          <%= form.input :framework, as: :select, collection: Blog.frameworks %>
-          <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
-          <%= form.input :type, as: :hidden, input_html: { value: :new, name: 'type' } %>
-          <%= form.button :submit, 'Create', class: 'mt-12' %>
-        </div>
-      <% end %>
-    </auto-refresh-form>
-  </div>
+      <p class='text-sm mt-2 italic'>Used to store git git_repo</p>
+
+      <%= form.input :name %>
+      <%= form.input :description %>
+      <%= form.input :framework, as: :select, collection: Blog.frameworks %>
+      <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
+      <%= form.input :type, as: :hidden, input_html: { value: :new, name: 'type' } %>
+      <%= form.button :submit, 'Create', class: 'mt-12' %>
+    <% end %>
+  </auto-refresh-form>
 <% end %>

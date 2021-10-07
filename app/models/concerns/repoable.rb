@@ -22,6 +22,8 @@ module Repoable
 
   def connect_git_repo
     repository = storage.adapter.repository(fullname: repo_fullname)
+    self.name = repository.name
+    self.description = repository.description
     self.attributes = repo_hash(repository: repository)
   end
 

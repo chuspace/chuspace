@@ -1,3 +1,45 @@
+@import '~prosemirror-view/style/prosemirror.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-8xl font-bold font-sans;
+  }
+
+  h2 {
+    @apply text-6xl font-semibold font-sans;
+  }
+
+  h3 {
+    @apply text-4xl font-semibold font-sans;
+  }
+
+  h4 {
+    @apply text-2xl font-bold font-sans;
+  }
+
+  h5 {
+    @apply text-xl font-bold font-sans;
+  }
+
+  h6 {
+    @apply text-lg font-bold font-sans;
+  }
+
+  strong {
+    @apply font-sans font-semibold;
+  }
+}
+
+@layer components {
+  label {
+    justify-content: flex-start !important;
+  }
+}
+
+.ProseMirror {
+  @apply outline-none;
+}

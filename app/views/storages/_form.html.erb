@@ -1,22 +1,53 @@
 <auto-refresh-form>
-  <storage-form data-providers='<%= GitStorageConfig.defaults.to_json %>'>
-    <%= simple_form_for(storage, data: { target: 'auto-refresh-form.form', "turbo-frame": "_top" }) do |form| %>
-      <%= form.input :provider, as: :select, collection: Storage.public_providers, input_html: { data: { action: 'change:storage-form#changeScopes change:auto-refresh-form#refresh', target: 'storage-form.select' } }, selected: storage.provider unless storage.persisted? %>
+  <storage-form data-providers='<%= GitStorageConfig.provider_scopes.to_json %>'>
+    <%= simple_form_for(storage, data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' }) do |form| %>
+      <%= form.input(
+          :provider,
+          as: :select,
+          collection: Storage.public_providers,
+          input_html: {
+            data: {
+              action: 'change:storage-form#changeScopes change:auto-refresh-form#refresh',
+              target: 'storage-form.select'
+            }
+          },
+          selected: storage.provider
+        ) unless storage.persisted? %>
 
       <div data-target='auto-refresh-form.loader'>
-        <%= form.input :description unless storage.chuspace? %>
-        <%= form.input :endpoint if storage.self_hosted? %>
+        <%= form.input(:description) unless storage.chuspace? %>
+        <%= form.input(:endpoint) if storage.self_hosted? %>
         <% unless storage.chuspace? %>
-          <%= form.input :access_token %>
-          <%= tag.pre GitStorageConfig.new.send(storage.provider)[:scopes], class: 'text-sm whitespace-pre-wrap break-words text-red mt-2', data: { target: 'storage-form.scopes' } %>
+          <%= form.input(
+                :access_token,
+              required: true,
+              hint: t('form.hints.storage.access_token',
+              scopes: GitStorageConfig.new.send(storage.provider)[:scopes]).html_safe,
+              input_html: {
+                data: {
+                  target: 'storage-form.scopes'
+                }
+              }
+            ) %>
         <% end %>
       </div>
 
-      <%= form.input :default %>
+      <%= form.input(:default) %>
 
       <div class='flex items-center mt-8'>
-        <%= form.button :submit, storage.persisted? ? 'Save' : 'Create', class: 'button button--fill' %>
-        <%= link_to 'Cancel', storages_path, class: 'button button--fill ml-2', data: { 'turbo-frame': :_top } %>
+        <%= form.button(
+              :submit,
+            storage.persisted? ? 'Save' : 'Create',
+            class: 'btn btn-sm btn-primary'
+          ) %>
+        <%= link_to(
+              'Cancel',
+            storages_path,
+            class: 'btn btn-sm btn-outline ml-2',
+            data: {
+              'turbo-frame': :_top
+            }
+          ) %>
       </div>
     <% end %>
   </storage-form>

@@ -2,16 +2,20 @@
 
 module ApplicationHelper
   def link_class(path)
-    default_class = 'link link--default'
-    current_page?(path) ? default_class + ' link--active font-bold' : default_class
+    current_page?(path) ? 'font-bold' : ''
   end
 
   def login_button_colors_classes
     {
-      github: ['bg-github-light', 'hover:bg-github-dark'],
-      gitlab: ['bg-gitlab-light', 'hover:bg-gitlab-dark'],
-      bitbucket: ['bg-bitbucket-light', 'hover:bg-bitbucket-dark'],
-      email: ['bg-accent-400', 'hover:bg-accent-500'],
+      github: ['bg-github-light text-primary-content', 'hover:bg-github-dark'],
+      gitlab: ['bg-gitlab-light text-dark', 'hover:bg-gitlab-dark'],
+      bitbucket: ['bg-bitbucket-light text-primary-content', 'hover:bg-bitbucket-dark'],
+      email: ['btn-accent'],
     }.with_indifferent_access.freeze
+  end
+
+  def button_or_link_to(name = nil, options = nil, html_options = nil, &block)
+    get_request = options[:method] == :get || options[:method].blank?
+    get_request ? link_to(name, options, html_options, &block) : button_to(name, options, html_options, &block)
   end
 end

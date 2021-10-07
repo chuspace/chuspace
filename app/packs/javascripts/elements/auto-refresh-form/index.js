@@ -17,7 +17,8 @@ export default class AutoRefreshFormElement extends HTMLElement {
       const content = document.getElementById(completer.getAttribute('for'))
 
       const spinner = document.createElement('div')
-      spinner.className = 'spinner hidden absolute top-0 z-10 right-0 mr-4 mt-2'
+      spinner.className =
+        'btn btn-sm btn-circle loading hidden absolute bottom-0 z-10 right-0 mr-4 mb-2'
       input.insertAdjacentElement('afterend', spinner)
 
       input.addEventListener('input', (event) => {
@@ -42,7 +43,7 @@ export default class AutoRefreshFormElement extends HTMLElement {
   }
 
   refresh(event) {
-    this.loader.innerHTML = `<div class="spinner mx-auto mt-4"></div>`
+    this.loader.innerHTML = `<div class="text-center mt-4"><span class='btn btn-lg btn-circle loading'></span></div>`
     this.form.requestSubmit()
   }
 

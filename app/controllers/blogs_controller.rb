@@ -4,19 +4,20 @@ class BlogsController < ApplicationController
   before_action :authenticate!, except: :show
   before_action :find_blog, except: %i[new connect create index]
 
+  def index
+    @blogs = Current.user.blogs
+  end
+
   def new
     if Current.user.storages.chuspace.present?
       @blog = Current.user.blogs.build(storage: Current.user.storages.chuspace)
-
-      render 'index'
     else
       redirect_to storages_path, notice: 'You do not have any git storages configured'
     end
   end
 
   def connect
-    @blog = Current.user.blogs.new(storage: Current.user.storages.first)
-    render 'index'
+    @blog = Current.user.blogs.new
   end
 
   def create

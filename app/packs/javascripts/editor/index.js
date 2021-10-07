@@ -1,5 +1,7 @@
 // @flow
 
+import './styles.sass'
+
 import { Change, ChangeSet, Span, simplifyChanges } from 'prosemirror-changeset'
 import { DOMSerializer, Schema } from 'prosemirror-model'
 import { Decoration, DecorationSet } from 'prosemirror-view'

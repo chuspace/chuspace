@@ -7,6 +7,6 @@
   </p>
 
   <div class='mt-8'>
-    <%= render "#{@blog.storage.chuspace? ? 'new' : 'connect'}", blog: @blog %>
+    <%= render 'new', blog: @blog %>
   </div>
 <% end %>

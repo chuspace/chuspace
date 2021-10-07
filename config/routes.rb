@@ -14,24 +14,24 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :settings, only: :index
-
   resources :storages do
     resources :repos
-  end
-
-  namespace :settings do
-    resources :profiles
   end
 
   get '/me', to: 'users#show', as: :profile
 
   delete '/sessions/:id', to: 'sessions#destroy', as: :logout
-  get '/auth/:provider/callback', to: 'sessions#create'
-  get '/login', to: 'sessions#new', as: :login
-  get '/auth/email', to: 'sessions#new_email', as: :login_email
+  get '/auth/:provider/callback', to: 'oauths#create'
 
-  if Rails.env.development?
-    mount Lookbook::Engine, at: "/lookbook"
+  resources :signups, only: %i[index create], path: 'signup' do
+    collection do
+      get :email
+    end
+  end
+
+  resources :sessions, only: %i[index create destroy], path: 'login' do
+    collection do
+      get :email
+    end
   end
 end
