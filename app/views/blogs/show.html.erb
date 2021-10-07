@@ -1,8 +1,17 @@
-<div class='mt-32 relative'>
+<div class='mt-24 relative'>
   <h1><%= @blog.name %></h1>
-  <%= link_to 'New article', new_blog_article_path(@blog), class: 'button button--fill absolute right-0' %>
+  <p><%= @blog.description %></p>
+  <%= link_to 'New article', new_blog_article_path(@blog), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
 
-  <div class='mt-16 list'>
+  <div class='tabs mt-8' dir='horizontal'>
+    <div role="tablist">
+      <%= link_to 'About', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
+      <%= link_to 'Recent posts', connect_blogs_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
+      <%= link_to 'Blogs', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
+    </div>
+  </div>
+
+  <div class='mt-16'>
     <% @articles.each do |article| %>
       <%= render 'articles/article', blog: @blog, article: article %>
     <% end %>
