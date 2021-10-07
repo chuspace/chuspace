@@ -14,7 +14,8 @@ type Options = {
   levels: Array<number>
 }
 
-export default class Heading extends Node {
+export default class Heading extends
+ {
   name = 'heading'
 
   options: Options = {
