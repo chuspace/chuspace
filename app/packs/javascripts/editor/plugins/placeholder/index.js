@@ -10,36 +10,10 @@ import includes from 'lodash/includes'
 export default class Placeholder extends Element {
   name = 'placeholder'
 
-  options = {
-    h1Class: 'title title__label',
-    h2Class: 'summary summary__label',
-    paragraphClass: 'body body__label',
-    h1Text: 'Title',
-    h2Text: 'Summary',
-    paragraphText: 'Write your post here...'
-  }
-
   get update() {
     return (view: EditorView) => {
       view.updateState(view.state)
     }
-  }
-
-  getDecoration(node: Node, pos: number) {
-    let option
-    let className
-    let text
-
-    const suffix = node.childCount === 0 ? '__empty' : ''
-    const typePrefix = node.attrs.level ? `h${node.attrs.level}` : 'paragraph'
-
-    className = this.options[`${typePrefix}Class`] + suffix
-    text = this.options[`${typePrefix}Text`]
-
-    return Decoration.node(pos, pos + node.nodeSize, {
-      class: className,
-      'data-empty-text': text
-    })
   }
 
   get plugins() {
@@ -59,39 +33,41 @@ export default class Placeholder extends Element {
               return false
             }
 
-            const decorations = []
+            // const decorations = []
 
-            if (doc.content.content.length < 2) {
-              decorations.push(
-                Decoration.node(0, 2, {
-                  'data-empty-text': 'Write your post...',
-                  class: 'body body__label body__label__empty'
-                })
-              )
-            }
+            // doc.descendants((node, pos) => {
+            //   const [firstChild, secondChild, thirdChild] = doc.content.content
+            //   const hasPlaceholder = includes(
+            //     ['paragraph', 'heading'],
+            //     node.type.name
+            //   )
 
-            doc.descendants((node, pos) => {
-              const [firstChild, secondChild] = doc.content.content
-              const hasPlaceholder = includes(
-                ['heading', 'paragraph'],
-                node.type.name
-              )
+            //   if (!hasPlaceholder) {
+            //     return
+            //   }
 
-              if (!hasPlaceholder) {
-                return
-              }
+            //   if (doc.childCount <= 1) {
+            //     decorations.push(
+            //       Decoration.node(pos, pos + node.nodeSize, {
+            //         class: 'body__empty',
+            //         'data-empty-text': 'Write your article here...'
+            //       })
+            //     )
+            //   }
 
-              if (node.type.name == 'heading') {
-                decorations.push(
-                  Decoration.node(pos, pos + node.nodeSize, {
-                    class: 'editor__heading_label',
-                    'data-empty-text': `h${node.attrs.level}`
-                  })
-                )
-              }
-            })
+            //   if (node.type.name == 'heading') {
+            //     let text = `h${node.attrs.level}`
 
-            return DecorationSet.create(doc, decorations)
+            //     decorations.push(
+            //       Decoration.node(pos, pos + node.nodeSize, {
+            //         class: 'heading',
+            //         'data-text': text
+            //       })
+            //     )
+            //   }
+            // })
+
+            //return DecorationSet.create(doc, decorations)
           }
         }
       })

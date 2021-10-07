@@ -1,10 +1,15 @@
-<div class='mt-32 sm:w-3/4 sm:mx-auto w-full'>
-  <%= simple_form_for(Article.new, url: blog_articles_path(@blog)) do |form| %>
-    <%= form.input :title, as: :text %>
-    <chu-editor class='chu-editor block mt-8' data-gramm="false">
-      <%= form.input :content, as: :text, wrapper: false, label: false, input_html: { class: 'hidden' } %>
-    </chu-editor>
-
-    <%= form.submit 'Save', class: 'button button--fill' %>
-  <% end %>
+<div class='mt-8 sm:flex block items-center justify-center flex-col'>
+  <div class='sm:w-2/3 w-full'>
+    <%= render 'header', blog: @blog, article: @article %>
+    <div class='mt-8 prose lg:prose-xl mx-auto'>
+      <code-editor mode='yaml-frontmatter' content='<%= @article.frontmatter %>'></code-editor>
+      <chu-editor
+        class='block mt-8'
+        data-gramm="false">
+        <%= simple_form_for(:article, url: blog_articles_path(@blog, @article)) do |form| %>
+          <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden' } %>
+        <% end %>
+      </chu-editor>
+    </div>
+  </div>
 </div>

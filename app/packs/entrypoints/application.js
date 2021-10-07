@@ -16,4 +16,19 @@ function importAll(r) {
   r.keys().forEach(r)
 }
 
+if (
+  window.matchMedia &&
+  window.matchMedia('(prefers-color-scheme: dark)').matches
+) {
+  window.colorScheme = 'dark'
+} else {
+  window.colorScheme = 'light'
+}
+
+window
+  .matchMedia('(prefers-color-scheme: dark)')
+  .addEventListener('change', (e) => {
+    window.colorScheme = e.matches ? 'dark' : 'light'
+  })
+
 importAll(require.context('../javascripts/elements', true, /.(ts)$/))

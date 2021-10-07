@@ -2,8 +2,10 @@
 
 class ArticlesController < ApplicationController
   before_action :find_blog
+  layout "editor", only: %i[new edit]
 
   def new
+    @article = Article.new
   end
 
   def show

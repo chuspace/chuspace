@@ -341,5 +341,9 @@ export const MODES: ModesType = [
   {
     name: 'YAML',
     mode: 'yaml'
+  },
+  {
+    name: 'YAML FrontMatter',
+    mode: 'yaml-frontmatter'
   }
 ]

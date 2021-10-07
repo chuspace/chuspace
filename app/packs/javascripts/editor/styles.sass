@@ -7,6 +7,24 @@
   outline: none
   position: relative
 
+  .heading, .title:not(.title__empty), .summary:not(.summary__empty)
+    @apply relative
+
+    &::before
+      @apply absolute text-sm border-r pr-2 italic pointer-events-none text-secondary font-normal
+      content: attr(data-text)
+      top: calc(100% / 2 - 0.4rem)
+      right: 105%
+
+    @screen sm
+      &::before
+        @apply block
+
+  .title__empty, .summary__empty, .body__empty
+    &::before
+      @apply absolute pointer-events-none float-none h-auto
+      content: attr(data-empty-text)
+
   &:last-child
     @apply mb-0
 
@@ -50,10 +68,6 @@
 
   code
     @apply bg-secondary p-1 border border-secondary-focus text-secondary-content rounded-sm whitespace-pre-wrap text-base font-normal
-
-  img
-    width: 800px
-    min-height: 400px
 
   div + br
     display: none

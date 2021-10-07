@@ -27,40 +27,40 @@ export default class LanguageSwitcher extends LitElement {
   initAutocomplete = () => {
     if (this.autocompleteInstance) return
 
-    this.autocompleteInstance = new autoComplete({
-      data: {
-        src: MODES,
-        key: ['name'],
-        cache: false
-      },
-      placeHolder: 'Select language',
-      selector: () => this.input,
-      threshold: 0,
-      debounce: 300,
-      searchEngine: 'strict',
-      maxResults: 5,
-      highlight: true,
-      resultsList: {
-        render: true,
-        container: function(source) {
-          source.removeAttribute('id')
-          source.className = 'code-editor-language-switcher arrow'
-        },
-        destination: this.querySelector(
-          '.code-editor-language-switcher-container '
-        ),
-        position: 'beforeend',
-        element: 'ul'
-      },
-      resultItem: {
-        content: function(data, source) {
-          source.innerHTML = data.match
-          source.removeAttribute('id')
-        },
-        element: 'li'
-      },
-      onSelection: (feedback) => this.add(feedback.selection.value)
-    })
+    // this.autocompleteInstance = new autoComplete({
+    //   data: {
+    //     src: MODES,
+    //     key: ['name'],
+    //     cache: false
+    //   },
+    //   placeHolder: 'Select language',
+    //   selector: () => this.input,
+    //   threshold: 0,
+    //   debounce: 300,
+    //   searchEngine: 'strict',
+    //   maxResults: 5,
+    //   highlight: true,
+    //   resultsList: {
+    //     render: true,
+    //     container: function(source) {
+    //       source.removeAttribute('id')
+    //       source.className = 'code-editor-language-switcher arrow'
+    //     },
+    //     destination: this.querySelector(
+    //       '.code-editor-language-switcher-container '
+    //     ),
+    //     position: 'beforeend',
+    //     element: 'ul'
+    //   },
+    //   resultItem: {
+    //     content: function(data, source) {
+    //       source.innerHTML = data.match
+    //       source.removeAttribute('id')
+    //     },
+    //     element: 'li'
+    //   },
+    //   onSelection: (feedback) => this.add(feedback.selection.value)
+    // })
   }
 
   add = (language: ModeType) => {
@@ -84,7 +84,7 @@ export default class LanguageSwitcher extends LitElement {
   }
 }
 
-document.addEventListener('turbolinks:load', () => {
+document.addEventListener('turbo:load', () => {
   if (!window.customElements.get('code-editor-language-switcher')) {
     customElements.define('code-editor-language-switcher', LanguageSwitcher)
   }

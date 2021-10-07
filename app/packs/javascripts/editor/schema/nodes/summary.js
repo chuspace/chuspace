@@ -2,45 +2,42 @@
 
 import { setBlockType, toggleBlockType } from 'editor/commands'
 
-import { MarkdownSerializerState } from 'prosemirror-markdown'
 import { Node } from 'editor/base'
 import { Node as PMNode } from 'prosemirror-model'
 import { Plugin } from 'prosemirror-state'
 import { findParentNodeOfType } from 'prosemirror-utils'
-import { markdownSerializer } from 'editor/markdowner'
 import { textblockTypeInputRule } from 'prosemirror-inputrules'
 
-type Options = {
-  levels: Array<number>
-}
-
-export default class Heading extends Node {
-  name = 'heading'
-
-  options: Options = {
-    levels: [1, 2, 3, 4, 5, 6]
-  }
+export default class Summary extends Node {
+  name = 'summary'
 
   get schema() {
     return {
       attrs: {
-        level: {
-          default: 1
-        },
         class: {
-          default: 'heading'
+          default: 'summary',
+          'data-text': 'summary'
         }
       },
       content: 'text*',
-      group: 'block',
+      group: 'node',
       defining: true,
       draggable: false,
-      // $FlowFixMe
-      parseDOM: this.options.levels.map((level: number) => ({
-        tag: `h${level}`,
-        attrs: { level }
-      })),
-      toDOM: (node: PMNode) => [`h${node.attrs.level}`, 0]
+
+      parseDOM: [
+        {
+          tag: 'h2',
+          attrs: {
+            class: 'summary',
+            'data-text': 'summary'
+          }
+        }
+      ],
+      toDOM: (node: PMNode) => [
+        'h2',
+        { class: 'summary', 'data-text': 'summary' },
+        0
+      ]
     }
   }
 
@@ -49,24 +46,13 @@ export default class Heading extends Node {
   }
 
   keys({ type }: PMNode) {
-    return this.options.levels.reduce(
-      (items, level) => ({
-        ...items,
-        ...{
-          [`Shift-Ctrl-${level}`]: setBlockType(type, { level })
-        }
-      }),
-      {}
-    )
+    return {
+      [`Shift-Ctrl-s`]: setBlockType(type)
+    }
   }
 
   inputRules({ type }: PMNode) {
-    // $FlowFixMe
-    return this.options.levels.map((level) =>
-      textblockTypeInputRule(new RegExp(`^(#{1,${level}})\\s$`), type, () => ({
-        level
-      }))
-    )
+    return [textblockTypeInputRule(new RegExp(`^(#{1,2})\\s$`), type, 1)]
   }
 
   get plugins() {
@@ -80,8 +66,11 @@ export default class Heading extends Node {
             if (!parent) return
             if (!parent.node) return
 
-            if (event.code === 'Backspace' && parent.node.content.size === 1) {
-              view.props.commands.heading({})
+            if (
+              event.code === 'Backspace' &&
+              parent.node.textContent.length === 0
+            ) {
+              view.props.commands.summary({})
               return true
             }
 

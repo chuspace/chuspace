@@ -4,12 +4,23 @@ import 'codemirror/lib/codemirror.css'
 import './styles.sass'
 import './themes/light.sass'
 import './themes/dark.sass'
+import 'codemirror/addon/fold/foldgutter.css'
 import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/yaml/yaml'
+import 'codemirror/mode/markdown/markdown'
+import 'codemirror/mode/gfm/gfm'
+import 'codemirror/mode/yaml-frontmatter/yaml-frontmatter'
 import 'codemirror/addon/edit/matchbrackets'
 import 'codemirror/addon/edit/closebrackets'
 import 'codemirror/addon/edit/matchtags'
 import 'codemirror/addon/edit/trailingspace'
 import 'codemirror/addon/edit/closetag'
+import 'codemirror/addon/fold/foldcode'
+import 'codemirror/addon/fold/foldgutter'
+import 'codemirror/addon/fold/indent-fold'
+import 'codemirror/addon/fold/brace-fold'
+import 'codemirror/addon/fold/comment-fold'
+import 'codemirror/addon/fold/markdown-fold'
 import 'codemirror/addon/display/autorefresh'
 import './language-switcher'
 
@@ -44,6 +55,7 @@ export default class CodeEditor extends LitElement {
   constructor() {
     super()
 
+    this.theme = window.colorScheme
     this.loaded = false
     this.lines = 0
 
@@ -119,12 +131,15 @@ export default class CodeEditor extends LitElement {
   createCM = async (node: ?HTMLElement) =>
     new CodeMirror(node, {
       lineNumbers: true,
+      styleActiveLine: true,
       smartIndent: !this.readonly,
       readOnly: this.readonly || false,
       indentUnit: 2,
       value: this.content.trim(),
       mode: this.mode,
       lineWrapping: true,
+      foldGutter: true,
+      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
       indentWithTabs: !this.readonly,
       theme: `chuspace-${this.theme}`,
       addModeClass: true,

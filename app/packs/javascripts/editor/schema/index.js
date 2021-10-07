@@ -78,6 +78,13 @@ export default class SchemaManager {
 
   get nodeViews(): {} {
     return {
+      front_matter: (node, view, getPos) =>
+        new CodeBlockView({
+          node,
+          view,
+          getPos,
+          editable: this.editor.options.editable
+        }),
       code_block: (node, view, getPos) =>
         new CodeBlockView({
           node,

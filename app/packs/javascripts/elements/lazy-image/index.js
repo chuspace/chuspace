@@ -48,7 +48,7 @@ export default class LazyImage extends LitElement {
                 <svg-icon
                   name="x-circle"
                   feather="true"
-                  class="absolute close right-0 cursor-pointer bg-white p-2 shadow-md"
+                  class="absolute close right-0 cursor-pointer bg-primary p-2 shadow-md"
                   stroke="#000"
                   @click=${this.delete}
                 ></svg-icon>
@@ -65,7 +65,7 @@ export default class LazyImage extends LitElement {
                   <input
                     type="text"
                     @change=${this.onCaptionChange}
-                    class="input border-none p-0 italic text-center text-sm"
+                    class="input input-primary rounded-tr-none focus:shadow-none rounded-tl-none border-0 w-full p-0 italic text-center text-sm"
                     value=${this.alt}
                     maxlength=${70}
                     placeholder="Click to enter caption (optional)"

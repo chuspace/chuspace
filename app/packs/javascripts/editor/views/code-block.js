@@ -20,14 +20,16 @@ export default class CodeBlockView extends BaseView {
   content: string
   readOnly: boolean | 'nocursor'
   lines: number
-  theme: string
   incomingChanges: boolean = false
   getCMInstance: () => CodeMirror
   onLanguageChange: (mode: string) => void
 
-  constructor(props: BaseViewPropType & { theme: string, editable: boolean }) {
+  constructor(props: BaseViewPropType & { editable: boolean }) {
     // Call super but don't render the view
     super(props, false)
+
+    console.log(this.node.attrs.language)
+
     const { mode } = LANGUAGE_MODE_HASH[this.node.attrs.language] || {
       mode: 'auto'
     }
@@ -35,10 +37,9 @@ export default class CodeBlockView extends BaseView {
     // Custom attrs for code block node view
     this.mode = mode
     this.node.attrs.language = mode
-    this.content = this.node.textContent || ''
+    this.content = this.node.textContent || this.node.attrs.data || ''
     this.readOnly = props.editable ? false : 'nocursor'
     this.lines = this.content.split(/\r\n|\r|\n/).length
-    this.theme = props.theme || 'light'
 
     this.renderElement()
   }
@@ -49,7 +50,6 @@ export default class CodeBlockView extends BaseView {
         <code-editor
           mode=${this.mode}
           readonly=${this.readOnly}
-          theme=${this.theme}
           content=${this.content}
           .onInit=${this.onInit}
           .codeMirrorKeymap=${this.codeMirrorKeymap}

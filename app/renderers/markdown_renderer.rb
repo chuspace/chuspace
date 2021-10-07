@@ -51,12 +51,9 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
   def code_block(node)
     block do
       out("<code-editor#{sourcepos(node)}")
-
       out(' mode="', node.fence_info.split(/\s+/)[0], '"') if node.fence_info && !node.fence_info.empty?
-
       out(' content="', escape_html(node.string_content), '"')
       out(' readonly="nocursor"')
-      out(' theme="dark"')
       out('></code-editor>')
     end
   end
