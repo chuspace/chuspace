@@ -1,10 +1,9 @@
 <div class='mt-8 sm:flex block items-center justify-center flex-col'>
   <div class='sm:w-2/3 w-full'>
     <%= render 'header', blog: @blog, article: @article %>
-    <div class='mt-8 prose lg:prose-xl mx-auto'>
-
+    <div class='mt-8'>
       <chu-editor
-        class='block mt-8'
+        class='chu-editor mt-8'
         data-gramm="false"
         content='<%= @article.content %>'>
         <%= simple_form_for(:article, url: blog_article_path(@blog, @article), method: :put) do |form| %>
