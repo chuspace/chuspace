@@ -5,9 +5,8 @@
   color: theme('colors.accent')
   line-height: 1.8
   outline: none
-  position: relative
 
-  .heading, .title:not(.title__empty), .summary:not(.summary__empty)
+  .heading, & > h1:first-of-type, & > h2:first-of-type
     @apply relative
 
     &::before
@@ -20,7 +19,15 @@
       &::before
         @apply block
 
-  .title__empty, .summary__empty, .body__empty
+  & > h1:first-of-type
+    &::before
+      content: 'title'
+
+  & > h2:first-of-type
+    &::before
+      content: 'summary'
+
+  .body__empty
     &::before
       @apply absolute pointer-events-none float-none h-auto
       content: attr(data-empty-text)

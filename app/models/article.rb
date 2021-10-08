@@ -19,6 +19,9 @@ class Article
       content = Base64.decode64(response.content).force_encoding('UTF-8')
       yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
       parsed = FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(content)
+      content = "# #{parsed.front_matter.dig('title')}\n"
+      content += "## #{parsed.front_matter.dig('description')} \n"
+      content += parsed.content
 
       str = "---\n"
       parsed.front_matter.each do |key, value|

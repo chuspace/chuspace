@@ -8,6 +8,7 @@ import ActioncableClient from '../../helpers/actioncable-client'
 import Editor from '../../editor'
 import { Transaction } from 'prosemirror-state'
 import debounce from 'lodash/debounce'
+import hotkeys from 'hotkeys-js'
 import readingTime from '../../helpers/reading-time'
 
 export default class ChuEditor extends LitElement {
@@ -27,7 +28,8 @@ export default class ChuEditor extends LitElement {
       editable: { type: Boolean },
       imageProviderPath: { type: String },
       saving: { type: Boolean, reflect: true },
-      autofocus: { type: Boolean }
+      autofocus: { type: Boolean },
+      commandPallete: { type: Boolean, default: false, reflect: true }
     }
   }
 
@@ -36,6 +38,24 @@ export default class ChuEditor extends LitElement {
 
     this.param = 'post'
     this.appearance = 'default'
+    this.commandPallete = false
+
+    hotkeys('ctrl+k, command+k', (event) => {
+      event.preventDefault()
+      console.log('i run')
+      this.commandPallete = true
+    })
+
+    hotkeys('esc', (event) => {
+      event.preventDefault()
+
+      this.commandPallete = false
+    })
+  }
+
+  toggleCommandPallete = () => {
+    console.log('i run')
+    this.commandPallete = !this.commandPallete
   }
 
   onRecieved = (data: any) => {
@@ -54,7 +74,8 @@ export default class ChuEditor extends LitElement {
       onChange: this.onChange,
       content: this.content || '',
       revision: this.revision || '',
-      appearance: this.appearance
+      appearance: this.appearance,
+      toggleCommandPallete: this.toggleCommandPallete
     })
   }
 
@@ -153,6 +174,22 @@ export default class ChuEditor extends LitElement {
 
   createRenderRoot() {
     return this
+  }
+
+  render() {
+    console.log('i try to render')
+    return html`
+      ${this.commandPallete
+        ? html`
+            <div class="absolute bg-secondary p-2 w-1/3 mx-auto top-0">
+              <ul>
+                <li class="text-primary">Save</li>
+                <li class="text-primary">Commit</li>
+              </ul>
+            </div>
+          `
+        : null}
+    `
   }
 }
 

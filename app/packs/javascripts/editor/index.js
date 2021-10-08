@@ -45,6 +45,7 @@ export type Options = {
   content: string,
   revision: string,
   editable: boolean,
+  toggleCommandPallete: () => void,
   appearance: 'default' | 'comment' | 'plain' | 'contribution',
   onChange: (transaction: Transaction) => void
 }
@@ -87,17 +88,25 @@ export default class Editor {
       }),
       ...this.manager.pasteRules,
       ...this.manager.keymaps,
+      keymap(baseKeymap),
       keymap({
         Backspace: undoInputRule,
-        Escape: selectParentNode,
         ArrowLeft: arrowHandler('left'),
         ArrowRight: arrowHandler('right'),
         ArrowUp: arrowHandler('up'),
         ArrowDown: arrowHandler('down'),
         'Ctrl-s': this.handleSave,
-        'Mod-s': this.handleSave
+        'Mod-s': this.handleSave,
+        'Ctrl-k': this.options.toggleCommandPallete,
+        'Mod-k': this.options.toggleCommandPallete,
+        Escape: (event) => {
+          console.log('i  ru')
+          selectParentNode(event)
+          this.options.toggleCommandPallete()
+          return true
+        }
       }),
-      keymap(baseKeymap),
+
       dropCursor(),
       gapCursor(),
       new Plugin({

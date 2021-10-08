@@ -21,7 +21,7 @@ export default class DialogOpener extends LitElement {
     this.addEventListener('click', this.open)
 
     this.dialogElement
-      .querySelector('svg-icon')
+      .querySelector('.close')
       .addEventListener('click', this.close)
   }
 

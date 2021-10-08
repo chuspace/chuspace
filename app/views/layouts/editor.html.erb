@@ -8,8 +8,16 @@
       <%= yield %>
     </section>
 
-    <nav class='p-2'>
-      <%= link_to 'Save', '#' %>
+    <nav class='mt-12 mr-8'>
+      <%= link_to '#', class: 'flex items-center' do  %>
+        <%= inline_svg_tag 'icons/trash', class: 'w-4 h-4 fill-current' %>
+        <span class='ml-2'>Delete</span>
+      <% end %>
+
+      <%= link_to '#', class: 'flex items-center mt-2 block' do  %>
+        <%= inline_svg_tag 'icons/git-commit', class: 'w-6 h-6 fill-current' %>
+        <span class='ml-2'>Commit</span>
+      <% end %>
     </nav>
   </body>
 </html>

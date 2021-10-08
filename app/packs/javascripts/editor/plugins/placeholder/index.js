@@ -33,41 +33,40 @@ export default class Placeholder extends Element {
               return false
             }
 
-            // const decorations = []
+            const decorations = []
 
-            // doc.descendants((node, pos) => {
-            //   const [firstChild, secondChild, thirdChild] = doc.content.content
-            //   const hasPlaceholder = includes(
-            //     ['paragraph', 'heading'],
-            //     node.type.name
-            //   )
+            doc.descendants((node, pos) => {
+              const hasPlaceholder = includes(
+                ['paragraph', 'heading'],
+                node.type.name
+              )
 
-            //   if (!hasPlaceholder) {
-            //     return
-            //   }
+              if (!hasPlaceholder) {
+                return
+              }
 
-            //   if (doc.childCount <= 1) {
-            //     decorations.push(
-            //       Decoration.node(pos, pos + node.nodeSize, {
-            //         class: 'body__empty',
-            //         'data-empty-text': 'Write your article here...'
-            //       })
-            //     )
-            //   }
+              if (doc.childCount <= 1) {
+                decorations.push(
+                  Decoration.node(pos, pos + node.nodeSize, {
+                    class: 'body__empty',
+                    'data-empty-text': 'Write your article here...'
+                  })
+                )
+              }
 
-            //   if (node.type.name == 'heading') {
-            //     let text = `h${node.attrs.level}`
+              if (node.type.name == 'heading') {
+                let text = `h${node.attrs.level}`
 
-            //     decorations.push(
-            //       Decoration.node(pos, pos + node.nodeSize, {
-            //         class: 'heading',
-            //         'data-text': text
-            //       })
-            //     )
-            //   }
-            // })
+                decorations.push(
+                  Decoration.node(pos, pos + node.nodeSize, {
+                    class: 'heading',
+                    'data-text': text
+                  })
+                )
+              }
+            })
 
-            //return DecorationSet.create(doc, decorations)
+            return DecorationSet.create(doc, decorations)
           }
         }
       })
