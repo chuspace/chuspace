@@ -2,10 +2,11 @@
 
 class ArticlesController < ApplicationController
   before_action :find_blog
-  layout "editor", only: %i[new edit]
+  layout "editor"
 
   def new
     @article = Article.new
+    @edit = true
   end
 
   def show
@@ -19,6 +20,7 @@ class ArticlesController < ApplicationController
 
   def edit
     @article = @blog.article(id: params[:id])
+    @edit = true
     @markdown_doc ||= CommonMarker.render_doc(@article.content || '')
   end
 

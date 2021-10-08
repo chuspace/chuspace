@@ -1,23 +1,44 @@
 <!DOCTYPE html>
 <html lang='en' class='h-full'>
   <%= render 'layouts/head' %>
-  <body class="flex h-full">
-    <%= render 'layouts/minimal_header' %>
+  <body>
+    <div class='mt-4 flex items-start'>
+      <header>
+        <nav class='ml-8'>
+          <%= link_to root_path do %>
+            <h1 class='font-bold text-3xl lowercase inline-block font-monospace'>Chu</h1>
+          <% end %>
+        </nav>
+      </header>
 
-    <section class="container flex-1">
-      <%= yield %>
-    </section>
+      <section class="flex-1">
+        <%= yield %>
+      </section>
 
-    <nav class='mt-12 mr-8'>
-      <%= link_to '#', class: 'flex items-center' do  %>
-        <%= inline_svg_tag 'icons/trash', class: 'w-4 h-4 fill-current' %>
-        <span class='ml-2'>Delete</span>
+      <% if Current.user.present? %>
+        <div class='mr-8'>
+          <%= render 'layouts/user' %>
+        </div>
       <% end %>
+    </div>
 
-      <%= link_to '#', class: 'flex items-center mt-2 block' do  %>
-        <%= inline_svg_tag 'icons/git-commit', class: 'w-6 h-6 fill-current' %>
-        <span class='ml-2'>Commit</span>
-      <% end %>
-    </nav>
+    <% if @edit  %>
+      <nav class='mt-24 mr-8 fixed top-0 right-0'>
+        <%= link_to '#', class: 'flex items-center block link link-primary' do  %>
+          <%= inline_svg_tag 'icons/git-commit', class: 'w-6 h-6 fill-current' %>
+          <span class='ml-2'>Commit</span>
+        <% end %>
+
+        <%= link_to '#', class: 'flex items-center mt-2 block link link-primary' do  %>
+          <%= inline_svg_tag 'icons/code', class: 'w-6 h-6 fill-current' %>
+          <span class='ml-2'>Frontmatter</span>
+        <% end %>
+
+        <%= link_to '#', class: 'flex items-center link text-error mt-2' do  %>
+          <%= inline_svg_tag 'icons/trash', class: 'w-4 h-4 fill-current' %>
+          <span class='ml-2'>Delete</span>
+        <% end %>
+      </nav>
+    <% end %>
   </body>
 </html>
