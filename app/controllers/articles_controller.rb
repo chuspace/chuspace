@@ -2,7 +2,7 @@
 
 class ArticlesController < ApplicationController
   before_action :find_blog
-  layout "editor"
+  layout 'editor'
 
   def new
     @article = Article.new

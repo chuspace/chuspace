@@ -6,7 +6,7 @@
       <header>
         <nav class='ml-8'>
           <%= link_to root_path do %>
-            <h1 class='font-bold text-3xl lowercase inline-block font-monospace'>Chu</h1>
+            <h3 class='lowercase leading-none font-monospace'>Chu</h3>
           <% end %>
         </nav>
       </header>
@@ -23,20 +23,33 @@
     </div>
 
     <% if @edit  %>
-      <nav class='mt-24 mr-8 fixed top-0 right-0'>
-        <%= link_to '#', class: 'flex items-center block link link-primary' do  %>
+      <nav class='mr-8 fixed right-0 top-1/2 -translate-y-1/2'>
+        <%= link_to '#', class: 'flex items-center block link link-primary bg-neutral rounded-full p-2' do  %>
           <%= inline_svg_tag 'icons/git-commit', class: 'w-6 h-6 fill-current' %>
-          <span class='ml-2'>Commit</span>
         <% end %>
 
-        <%= link_to '#', class: 'flex items-center mt-2 block link link-primary' do  %>
+        <%= link_to '#', class: 'flex items-center mt-4 block link link-primary bg-neutral rounded-full p-2' do  %>
           <%= inline_svg_tag 'icons/code', class: 'w-6 h-6 fill-current' %>
-          <span class='ml-2'>Frontmatter</span>
         <% end %>
 
-        <%= link_to '#', class: 'flex items-center link text-error mt-2' do  %>
-          <%= inline_svg_tag 'icons/trash', class: 'w-4 h-4 fill-current' %>
-          <span class='ml-2'>Delete</span>
+        <%= link_to '#', class: 'flex items-center link text-error mt-4 bg-neutral rounded-full p-2' do  %>
+          <%= inline_svg_tag 'icons/trash', class: 'w-6 h-6 fill-current' %>
+        <% end %>
+
+        <%= link_to '#', class: 'flex items-center link text-info mt-4 bg-neutral rounded-full p-2' do  %>
+          <%= inline_svg_tag 'icons/markdown', class: 'w-6 h-6 fill-current' %>
+        <% end %>
+      </nav>
+    <% else %>
+      <nav class='mr-8 fixed right-0 top-1/2 -translate-y-1/2'>
+        <%= link_to '#', class: 'flex items-center block link link-primary bg-neutral rounded-full p-2' do  %>
+          <%= inline_svg_tag 'icons/repo-pull', class: 'w-6 h-6 fill-current' %>
+        <% end %>
+        <%= link_to '#', class: 'flex items-center block link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
+          <%= inline_svg_tag 'icons/share', class: 'w-6 h-6 fill-current' %>
+        <% end %>
+         <%= link_to '#', class: 'flex items-center block link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
+          <%= inline_svg_tag 'icons/bookmark', class: 'w-6 h-6 fill-current' %>
         <% end %>
       </nav>
     <% end %>

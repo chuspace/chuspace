@@ -6,31 +6,33 @@
   line-height: 1.8
   outline: none
 
-  .heading, & > h1:first-of-type, & > h2:first-of-type
-    @apply relative
+  &.editable
+    .heading, & > h1:first-of-type, & > h2:first-of-type
+      @apply relative
 
-    &::before
-      @apply absolute text-sm border-r pr-2 italic pointer-events-none text-secondary font-normal
-      content: attr(data-text)
-      top: calc(100% / 2 - 0.4rem)
-      right: 105%
-
-    @screen sm
       &::before
-        @apply block
+        @apply absolute text-sm border-r pr-2 italic pointer-events-none text-secondary font-normal
+        content: attr(data-text)
+        top: calc(100% / 2 - 0.4rem)
+        right: 105%
 
-  & > h1:first-of-type
-    &::before
-      content: 'title'
+      @screen sm
+        &::before
+          @apply block
 
-  & > h2:first-of-type
-    &::before
-      content: 'summary'
+    & > h1:first-of-type
+      &::before
+        content: 'title'
+
+    & > h2:first-of-type
+      &::before
+        content: 'summary'
 
   .body__empty
     &::before
       @apply absolute pointer-events-none float-none h-auto
       content: attr(data-empty-text)
+
 
   &:last-child
     @apply mb-0

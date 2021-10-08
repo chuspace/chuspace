@@ -1,4 +1,6 @@
-<div class='flex w-full text-article'>
-  <%= inline_svg_tag 'icons/markdown', class: 'w-8 h-8 fill-current' %>
-  <div class='ml-2'><%= link_to blog.user.username, profile_path, class: 'link link-default' %> / <%= link_to blog.name, blog_path(blog), class: 'link link-default' %></div>
+<div class='flex w-full text-article mt-2'>
+  <div class='ml-2'>
+    <%= link_to 'home', root_path, class: 'link link-default' %> /
+    <%= link_to blog.user.username, profile_path, class: 'link link-default' %> /
+    <%= link_to blog.name, blog_path(blog), class: 'link link-default' %></div>
 </div>

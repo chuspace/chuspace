@@ -45,7 +45,6 @@ export type Options = {
   content: string,
   revision: string,
   editable: boolean,
-  toggleCommandPallete: () => void,
   appearance: 'default' | 'comment' | 'plain' | 'contribution',
   onChange: (transaction: Transaction) => void
 }
@@ -97,14 +96,7 @@ export default class Editor {
         ArrowDown: arrowHandler('down'),
         'Ctrl-s': this.handleSave,
         'Mod-s': this.handleSave,
-        'Ctrl-k': this.options.toggleCommandPallete,
-        'Mod-k': this.options.toggleCommandPallete,
-        Escape: (event) => {
-          console.log('i  ru')
-          selectParentNode(event)
-          this.options.toggleCommandPallete()
-          return true
-        }
+        Escape: selectParentNode
       }),
 
       dropCursor(),
@@ -148,7 +140,11 @@ export default class Editor {
     })
 
     view.dom.style.whiteSpace = 'pre-wrap'
-    view.dom.classList.add('chu-editor')
+    view.dom.title = 'Markdown editor'
+    view.dom.classList.add(
+      'chu-editor',
+      this.options.editable ? 'editable' : 'read-only'
+    )
 
     return view
   }

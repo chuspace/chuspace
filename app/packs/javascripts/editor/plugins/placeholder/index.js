@@ -45,7 +45,7 @@ export default class Placeholder extends Element {
                 return
               }
 
-              if (doc.childCount <= 1) {
+              if (doc.childCount <= 1 && node.content.size === 0) {
                 decorations.push(
                   Decoration.node(pos, pos + node.nodeSize, {
                     class: 'body__empty',
