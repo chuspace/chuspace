@@ -25,11 +25,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    frontmatter = {
-      'title' => article_params[:title],
-      'date' => Date.today
-    }.to_yaml
-
+    Article.from(params[:content])
     @blog.create_draft_article(title: article_params[:title], content: frontmatter + "--- \n\n" + article_params[:content])
     redirect_to blog_path(@blog)
   end

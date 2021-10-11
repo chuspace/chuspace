@@ -8,7 +8,6 @@ export { default as Paragraph } from './paragraph'
 // Common mark
 // export { default as Title } from './title'
 // export { default as Summary } from './summary'
-export { default as FrontMatter } from './frontmatter'
 export { default as Blockquote } from './blockquote'
 export { default as CodeBlock } from './code-block'
 export { default as HardBreak } from './hard-break'

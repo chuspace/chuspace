@@ -36,8 +36,12 @@
           <%= inline_svg_tag 'icons/trash', class: 'w-6 h-6 fill-current' %>
         <% end %>
 
-        <%= link_to '#', class: 'flex items-center link text-info mt-4 bg-neutral rounded-full p-2' do  %>
+        <%= link_to '#', class: 'flex items-center link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
           <%= inline_svg_tag 'icons/markdown', class: 'w-6 h-6 fill-current' %>
+        <% end %>
+
+        <%= link_to '#', class: 'flex items-center link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
+          <%= inline_svg_tag 'icons/iterations', class: 'w-6 h-6 fill-current' %>
         <% end %>
       </nav>
     <% else %>
@@ -45,10 +49,12 @@
         <%= link_to '#', class: 'flex items-center block link link-primary bg-neutral rounded-full p-2' do  %>
           <%= inline_svg_tag 'icons/repo-pull', class: 'w-6 h-6 fill-current' %>
         <% end %>
+
         <%= link_to '#', class: 'flex items-center block link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
           <%= inline_svg_tag 'icons/share', class: 'w-6 h-6 fill-current' %>
         <% end %>
-         <%= link_to '#', class: 'flex items-center block link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
+
+        <%= link_to '#', class: 'flex items-center block link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
           <%= inline_svg_tag 'icons/bookmark', class: 'w-6 h-6 fill-current' %>
         <% end %>
       </nav>

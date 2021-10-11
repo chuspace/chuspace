@@ -32,17 +32,22 @@ class GithubAdapter < ApplicationAdapter
     blobs.map do |blob|
       next if blob.type == 'tree'
 
-      find_blob(fullname: fullname, id: blob.sha)
+      id = blob.sha
+      content = blob(fullname: fullname, id: id)
+      Sawyer::Resource.new(agent, blob.to_h.merge!(id: id, **content.to_h))
     end
   end
 
-  def find_blob(fullname:, id:)
-    content = get "repos/#{fullname}/git/blobs/#{id}", {}
-    Sawyer::Resource.new(agent, content.to_h.merge!(id: id))
+  def blob(fullname:, id:)
+    get "repos/#{fullname}/git/blobs/#{id}"
   end
 
   def create_blob(fullname:, path:, content:, message: nil)
-    content = Base64.strict_encode64(content)
+    message ||= "Adding #{path}"
+    post "repos/#{fullname}/contents/#{path}", { content: content, message: message }
+  end
+
+  def update_blob(fullname:, path:, content:, message: nil)
     message ||= "Adding #{path}"
     put "repos/#{fullname}/contents/#{path}", { content: content, message: message }
   end
@@ -50,6 +55,10 @@ class GithubAdapter < ApplicationAdapter
   def delete_blob(fullname:, path:, id:, message: nil)
     message ||= "Deleting #{path}"
     delete "repos/#{fullname}/contents/#{path}", { sha: id, message: message }
+  end
+
+  def commits(fullname:, path:)
+    get("repos/#{fullname}/commits", { path: path })
   end
 
   private

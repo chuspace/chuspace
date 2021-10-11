@@ -26,6 +26,8 @@ class BlogsController < ApplicationController
     if @blog.save
       redirect_to blogs_path
     else
+      puts @blog.errors.inspect
+
       @blog.errors.clear
 
       respond_to do |format|

@@ -27,9 +27,6 @@ export default class CodeBlockView extends BaseView {
   constructor(props: BaseViewPropType & { editable: boolean }) {
     // Call super but don't render the view
     super(props, false)
-
-    console.log(this.node.attrs.language)
-
     const { mode } = LANGUAGE_MODE_HASH[this.node.attrs.language] || {
       mode: 'auto'
     }
@@ -37,7 +34,7 @@ export default class CodeBlockView extends BaseView {
     // Custom attrs for code block node view
     this.mode = mode
     this.node.attrs.language = mode
-    this.content = this.node.textContent || this.node.attrs.data || ''
+    this.content = this.node.textContent || ''
     this.readOnly = props.editable ? false : 'nocursor'
     this.lines = this.content.split(/\r\n|\r|\n/).length
 

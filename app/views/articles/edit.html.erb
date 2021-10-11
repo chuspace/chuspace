@@ -1,11 +1,20 @@
 <div class='sm:w-2/3 mx-auto w-full'>
   <%= render 'header', blog: @blog, article: @article %>
-  <chu-editor
-    class='block mt-8'
-    data-gramm="false"
-    content='<%= @article.content %>'>
-    <%= simple_form_for(:article, url: blog_article_path(@blog, @article), method: :put) do |form| %>
+
+   <%= simple_form_for [@blog, @article] do |form| %>
+
+    <frontmatter-editor>
+      <details class='mt-8 border border-primary px-4 py-2'>
+        <summary data-action='click:frontmatter-editor#toggle'>Front Matter</summary>
+        <%= form.input :front_matter, as: :text, label: false %>
+      </details>
+    </frontmatter-editor>
+
+    <chu-editor
+      class='block mt-8'
+      data-gramm="false"
+      content='<%= @article.content %>'>
       <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: @article.content } %>
-    <% end %>
-  </chu-editor>
+    </chu-editor>
+  <% end %>
 </div>

@@ -1,5 +1,5 @@
 <% cache storage do %>
-  <div class='border-b last:border-b-0 p-4'>
+  <div class='border p-4'>
     <%= turbo_frame_tag(storage, class: 'flex') do %>
       <div class='flex flex-1'>
         <%= inline_svg_tag(
@@ -13,9 +13,9 @@
           <%= tag.pre storage.provider_config[:scopes], class: 'text-sm whitespace-pre-wrap break-words text-info mt-2' unless storage.chuspace? %>
           <div class='mt-2'>
             <%= tag.span 'system', class: 'badge badge-primary mr-2' if storage.chuspace? %>
-            <%= tag.span, 'default', class: 'badge badge-success mr-2' if storage.default? %>
-            <%= tag.span, 'connected', class: 'badge badge-info' if storage.active? %>
-            <%= tag.span, 'self-hosted', class: 'badge badge-info' if storage.self_hosted? %>
+            <%= tag.span 'default', class: 'badge badge-success mr-2' if storage.default? %>
+            <%= tag.span 'connected', class: 'badge badge-info' if storage.active? %>
+            <%= tag.span 'self-hosted', class: 'badge badge-info' if storage.self_hosted? %>
           </div>
         </div>
       </div>

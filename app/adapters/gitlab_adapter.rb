@@ -48,6 +48,12 @@ class GitlabAdapter < ApplicationAdapter
     post "projects/#{CGI.escape(fullname)}/repository/files/#{CGI.escape(path)}", { branch: :main, encoding: :base64, content: content, commit_message: message }
   end
 
+  def update_blob(fullname:, path:, content:, message: nil)
+    content = Base64.strict_encode64(content)
+    message ||= "Adding #{path}"
+    put "projects/#{CGI.escape(fullname)}/repository/files/#{CGI.escape(path)}", { branch: :main, encoding: :base64, content: content, commit_message: message }
+  end
+
   def delete_blob(fullname:, path:, id:, message: nil)
     message ||= "Deleting #{path}"
     delete "projects/#{CGI.escape(fullname)}/repository/files/#{CGI.escape(path)}", { branch: :master, commit_message: message }

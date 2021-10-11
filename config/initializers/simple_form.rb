@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 SimpleForm.setup do |config|
+  config.label_text = ->(label, required, explicit_label) { "#{label} #{required ? required : '(optional)'}" }
+
   config.wrappers :custom, tag: 'div', class: 'form-control' do |input|
     input.use :html5
     input.use :placeholder
@@ -30,7 +32,6 @@ SimpleForm.setup do |config|
   end
 
   config.default_form_class = 'form'
-  config.label_text = ->(label, required, explicit_label) { "#{label} #{required ? required : '(optional)'}" }
   config.default_wrapper = :custom
   config.boolean_style = :inline
   config.button_class = 'btn btn-primary'

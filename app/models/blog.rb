@@ -8,7 +8,7 @@ class Blog < ApplicationRecord
   belongs_to :user
   belongs_to :storage
   validates_presence_of :name, :repo_articles_path, :repo_drafts_path, :repo_assets_path
-  validates :default, uniqueness: { scope: :user_id, message: :one_default_blog_allowed }
+  # validates :default, uniqueness: { scope: :user_id, message: :one_default_blog_allowed }
   enum framework: BlogFrameworkConfig.frameworks_enum, _suffix: true
 
   enum visibility: {
@@ -29,30 +29,20 @@ class Blog < ApplicationRecord
     super ? ActiveSupport::StringInquirer.new(super) : nil
   end
 
-  def create_draft_article(title:, content:)
-    path = "#{repo_drafts_path}/#{title.parameterize}.md"
-    storage.adapter.create_blob(blog: blog, path: path, content: content, message: nil)
-  end
-
-  def create_article(title:, content:)
-    path = "#{repo_articles_path}/#{title.parameterize}.md"
-    storage.adapter.create_blob(blog: blog, path: path, content: content, message: nil)
-  end
-
-  def delete_article(id:, path:)
-    storage.adapter.delete_blob(blog: blog, path: path, id: id)
-  end
-
   def article(id:)
-    Article.from(storage.adapter.find_blob(fullname: repo_fullname, id: id))
+    articles.find { |article| article.id == id }
+  end
+
+  def draft(id:)
+    drafts.find { |draft| draft.id == id }
   end
 
   def articles
-    Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_articles_path))
+    @articles ||= Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_articles_path), self)
   end
 
   def drafts
-    Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_drafts_path))
+    @drafts ||= Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_drafts_path), self)
   end
 
   private
