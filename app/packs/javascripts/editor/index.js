@@ -140,9 +140,10 @@ export default class Editor {
     })
 
     view.dom.style.whiteSpace = 'pre-wrap'
-    view.dom.title = 'Markdown editor'
+    view.dom.title = 'Enter post content'
+    view.dom.id = 'editor-content'
     view.dom.classList.add(
-      'chu-editor',
+      'post-editor',
       this.options.editable ? 'editable' : 'read-only'
     )
 

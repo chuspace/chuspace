@@ -1,4 +1,7 @@
-.chu-editor
+.ProseMirror-trailingBreak
+  @apply h-0
+
+chu-editor
   font-weight: 400
   font-style: normal
   font-size: 22px
@@ -7,7 +10,12 @@
   outline: none
 
   &.editable
-    .heading, & > h1:first-of-type, & > h2:first-of-type
+    .title__empty, .summary__empty, .body__empty
+      &::before
+        @apply absolute pointer-events-none float-none h-auto
+        content: attr(data-text)
+
+    .heading, .title, .summary
       @apply relative
 
       &::before
@@ -20,20 +28,6 @@
         &::before
           @apply block
 
-    & > h1:first-of-type
-      &::before
-        content: 'title'
-
-    & > h2:first-of-type
-      &::before
-        content: 'summary'
-
-  .body__empty
-    &::before
-      @apply absolute pointer-events-none float-none h-auto
-      content: attr(data-empty-text)
-
-
   &:last-child
     @apply mb-0
 
@@ -43,10 +37,6 @@
   blockquote
     @apply border-l-2 -ml-4 pl-4 mb-6
     font-style: italic
-
-  .title
-    @apply mb-2
-
   a
     hyphens: auto
     cursor: pointer
@@ -63,6 +53,8 @@
 
       &:hover
         text-decoration: underline
+  .title, .title__empty
+    @apply mb-2
 
   strong
     @apply mb-6 font-bold

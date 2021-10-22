@@ -1,6 +1,4 @@
-<div class='flex w-full text-article mt-2'>
-  <div class='ml-2'>
-    <%= link_to 'home', root_path, class: 'link link-default' %> /
-    <%= link_to blog.user.username, profile_path, class: 'link link-default' %> /
-    <%= link_to blog.name, blog_path(blog), class: 'link link-default' %></div>
+<div class='mt-4'>
+  <h1 class='title'><%= article.title %></h1>
+  <h2 class='summary'><%= article.intro %></h2>
 </div>

@@ -1,83 +1,24 @@
 // @flow
 
-import { setBlockType, toggleBlockType } from 'editor/commands'
-
 import { Node } from 'editor/base'
 import { Node as PMNode } from 'prosemirror-model'
-import { Plugin } from 'prosemirror-state'
-import { findParentNodeOfType } from 'prosemirror-utils'
-import { textblockTypeInputRule } from 'prosemirror-inputrules'
 
 export default class Summary extends Node {
   name = 'summary'
 
   get schema() {
     return {
-      attrs: {
-        class: {
-          default: 'summary',
-          'data-text': 'summary'
-        }
-      },
       content: 'text*',
-      group: 'node',
+      group: 'block',
       defining: true,
       draggable: false,
 
       parseDOM: [
         {
-          tag: 'h2',
-          attrs: {
-            class: 'summary',
-            'data-text': 'summary'
-          }
+          tag: 'h2'
         }
       ],
-      toDOM: (node: PMNode) => [
-        'h2',
-        { class: 'summary', 'data-text': 'summary' },
-        0
-      ]
+      toDOM: (node: PMNode) => ['h2', 0]
     }
-  }
-
-  commands({ type, schema }: PMNode) {
-    return (attrs: {}) => toggleBlockType(type, schema.nodes.paragraph, attrs)
-  }
-
-  keys({ type }: PMNode) {
-    return {
-      [`Shift-Ctrl-s`]: setBlockType(type)
-    }
-  }
-
-  inputRules({ type }: PMNode) {
-    return [textblockTypeInputRule(new RegExp(`^(#{1,2})\\s$`), type, 1)]
-  }
-
-  get plugins() {
-    return [
-      new Plugin({
-        props: {
-          handleKeyDown: (view, event) => {
-            const { schema, doc, tr, selection } = view.state
-            const parent = findParentNodeOfType(schema.nodes.heading)(selection)
-
-            if (!parent) return
-            if (!parent.node) return
-
-            if (
-              event.code === 'Backspace' &&
-              parent.node.textContent.length === 0
-            ) {
-              view.props.commands.summary({})
-              return true
-            }
-
-            return false
-          }
-        }
-      })
-    ]
   }
 }

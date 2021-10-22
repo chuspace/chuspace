@@ -2,7 +2,7 @@
 
 class Article
   include ActiveModel::Model
-  attr_accessor :id, :filename, :blog, :content, :path, :front_matter
+  attr_accessor :id, :title, :intro, :published_at, :visibility, :tags, :filename, :blog, :content, :path, :front_matter
   delegate :repo_fullname, :repo_drafts_path, to: :blog
 
   def initialize(attributes = {})
@@ -53,9 +53,15 @@ class Article
       end
 
       front_matter_str += '---'
+      title = parsed.front_matter['title'] || parsed.content.first(80)
 
       Article.new(
         id: response.id,
+        title: title,
+        intro: parsed.front_matter['description'],
+        published_at: parsed.front_matter['published_at'],
+        visibility: parsed.front_matter['visibility'],
+        tags: parsed.front_matter['tags'] || parsed.front_matter['category'],
         front_matter: front_matter_str,
         blog: blog,
         filename: response.name,

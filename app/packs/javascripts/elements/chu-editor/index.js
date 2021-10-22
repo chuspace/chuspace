@@ -1,98 +1,59 @@
 // @flow
 
-import * as Rails from '@rails/ujs'
+import { attr, controller } from '@github/catalyst'
 
-import { LitElement, html } from 'lit'
-
-import ActioncableClient from '../../helpers/actioncable-client'
-import Editor from '../../editor'
+import Editor from 'editor'
 import { Transaction } from 'prosemirror-state'
-import debounce from 'lodash/debounce'
-import readingTime from '../../helpers/reading-time'
 
-export default class ChuEditor extends LitElement {
+function getPreviousSibling(elem, callback) {
+  // Get the next sibling element
+  let sibling = elem.previousElementSibling
+
+  // If there's no callback, return the first sibling
+  if (!callback || typeof callback !== 'function') return sibling
+
+  // If the sibling matches our test condition, use it
+  // If not, jump to the next sibling and continue the loop
+  let index = 0
+  while (sibling) {
+    if (callback(sibling, index, elem)) return sibling
+    index++
+    sibling = sibling.previousElementSibling
+  }
+}
+
+function getNextSibling(elem, callback) {
+  // Get the next sibling element
+  let sibling = elem.nextElementSibling
+
+  // If there's no callback, return the first sibling
+  if (!callback || typeof callback !== 'function') return sibling
+
+  // If the sibling matches our test condition, use it
+  // If not, jump to the next sibling and continue the loop
+  let index = 0
+  while (sibling) {
+    if (callback(sibling, index, elem)) return sibling
+    index++
+    sibling = sibling.nextElementSibling
+  }
+}
+
+@controller
+export default class ChuEditor extends HTMLElement {
   editor: Editor
   status: 'Saved'
 
-  static get properties() {
-    return {
-      url: { type: String, reflect: true },
-      id: { type: String },
-      param: { type: String },
-      publicationId: { type: String },
-      content: { type: String },
-      revision: { type: String },
-      channel: { type: String },
-      appearance: { type: String },
-      editable: { type: Boolean },
-      imageProviderPath: { type: String },
-      saving: { type: Boolean, reflect: true },
-      autofocus: { type: Boolean }
-    }
-  }
-
-  constructor() {
-    super()
-
-    this.param = 'post'
-    this.appearance = 'default'
-  }
-
-  onRecieved = (data: any) => {
-    this.saving = false
-  }
-
-  async connectedCallback() {
-    await super.connectedCallback()
-
+  connectedCallback() {
     this.editor = new Editor({
       element: this,
       autoFocus: this.autofocus,
       editable: true,
-      imageProviderPath: this.imageProviderPath,
-      placeholder: 'Write your post',
       onChange: this.onChange,
-      content: this.content || '',
+      content: this.querySelector('textarea').value || '',
       revision: this.revision || '',
-      appearance: this.appearance,
-      toggleCommandPallete: this.toggleCommandPallete
+      appearance: 'default'
     })
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback()
-
-    if (ActioncableClient.subscribedTo('PostChannel'))
-      ActioncableClient.unsubscribe('PostChannel')
-
-    this.editor.destroy()
-
-    window.onbeforeunload = null
-  }
-
-  updateStatuses() {
-    const status = document.getElementById('editor-status')
-    if (status) status.textContent = this.saving ? 'Saving...' : 'Saved'
-  }
-
-  updated = () => {
-    if (this.editable && this.id) {
-      window.onbeforeunload = () =>
-        this.saving ? 'Are you sure you want to navigate away?' : null
-
-      this.updateStatuses()
-
-      this.subscription = ActioncableClient.subscribe(
-        {
-          channel: this.channel,
-          publication_id: this.publicationId,
-          id: this.id
-        },
-        {
-          received: this.onRecieved
-        }
-      )
-    }
   }
 
   onChange = (transaction: Transaction) => {
@@ -114,43 +75,6 @@ export default class ChuEditor extends LitElement {
       body: this.editor.content
     }
   }
-
-  autosave = debounce(
-    () => {
-      this.subscription.send(this.payload)
-    },
-    500,
-    { maxWait: 500 }
-  )
-
-  create = debounce(
-    () => {
-      fetch(this.url, {
-        method: 'POST',
-        body: JSON.stringify({ [this.param]: this.payload }),
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': Rails.csrfToken()
-        }
-      })
-        .then((response) => response.json())
-        .then(async (response) => {
-          if (response.redirect) {
-            window.history.pushState(null, 'Edit', response.redirect)
-            this.id = response.id
-            await this.requestUpdate()
-
-            const header = document.getElementById('post_header')
-            if (header) header.innerHTML = response.header
-          }
-
-          return response
-        })
-        .finally(() => (this.saving = false))
-    },
-    2000,
-    { maxWait: 2000 }
-  )
 
   createRenderRoot() {
     return this

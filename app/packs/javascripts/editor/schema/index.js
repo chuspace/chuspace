@@ -1,10 +1,10 @@
 // @flow
 
-import * as marks from 'editor/schema/nodes'
-import * as nodes from 'editor/schema/marks'
+import * as marks from 'editor/schema/marks'
+import * as nodes from 'editor/schema/nodes'
 import * as plugins from 'editor/plugins'
 
-import { CodeBlockView, FrontMatterView, ImageView } from 'editor/views'
+import { CodeBlockView, ImageView } from 'editor/views'
 import Editor, { type Options } from '..'
 import { ellipsis, emDash, smartQuotes } from 'prosemirror-inputrules'
 
@@ -24,23 +24,22 @@ export const filterElementsBy = (elements: [], type: string) => {
     )
 }
 
+export const filterElementsByName = (elements: [], name: string) => {
+  return elements
+    .filter((element) => element.name === name)
+    .reduce(
+      (nodes, { name, schema }) => ({
+        ...nodes,
+        [name]: schema
+      }),
+      {}
+    )
+}
+
 export default class SchemaManager {
   elements: []
   schema: Schema
   editor: Editor
-
-  static inMemorySchema(options: { appearance: string }) {
-    const elements = [
-      ...toArray(marks).map((Mark) => new Mark(options)),
-      ...toArray(plugins).map((Plugin) => new Plugin(options)),
-      ...toArray(nodes).map((Node) => new Node(options))
-    ]
-
-    return new Schema({
-      nodes: filterElementsBy(elements, 'node'),
-      marks: filterElementsBy(elements, 'mark')
-    })
-  }
 
   constructor(editor: Editor) {
     this.elements = [
@@ -54,9 +53,40 @@ export default class SchemaManager {
       element.init()
     })
 
+    let nodeElements = filterElementsBy(this.elements, 'node')
+    let markElements = filterElementsBy(this.elements, 'mark')
+
+    switch (editor.options.appearance) {
+      case 'title':
+        nodeElements = {
+          ...filterElementsByName(this.elements, 'doc'),
+          ...filterElementsByName(this.elements, 'text'),
+          ...filterElementsByName(this.elements, 'paragraph'),
+          ...filterElementsByName(this.elements, 'heading'),
+          ...filterElementsBy(this.elements, 'title')
+        }
+
+        markElements = []
+        break
+      case 'summary':
+        nodeElements = {
+          ...filterElementsByName(this.elements, 'doc'),
+          ...filterElementsByName(this.elements, 'text'),
+          ...filterElementsByName(this.elements, 'paragraph'),
+          ...filterElementsByName(this.elements, 'heading'),
+          ...filterElementsBy(this.elements, 'summary')
+        }
+
+        markElements = []
+        break
+
+      default:
+        break
+    }
+
     this.schema = new Schema({
-      nodes: this.nodes,
-      marks: this.marks
+      nodes: nodeElements,
+      marks: markElements
     })
 
     this.editor = editor
@@ -78,13 +108,6 @@ export default class SchemaManager {
 
   get nodeViews(): {} {
     return {
-      // front_matter: (node, view, getPos) =>
-      //   new FrontMatterView({
-      //     node,
-      //     view,
-      //     getPos,
-      //     editable: this.editor.options.editable
-      //   }),
       code_block: (node, view, getPos) =>
         new CodeBlockView({
           node,
