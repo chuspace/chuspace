@@ -1,6 +1,6 @@
 <div class='mt-24 relative'>
-  <h1><%= @blog.name %></h1>
-  <p><%= @blog.description %></p>
+  <h2><%= @blog.name %></h2>
+  <p class='sm:w-2/3 w-full text-secondary'><%= @blog.description %></p>
   <%= link_to 'New article', new_blog_article_path(@blog), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
 
   <div class='tabs mt-8' dir='horizontal'>

@@ -1,0 +1,32 @@
+<div class='mt-24'>
+  <h3>Get started</h3>
+
+  <div class='flex justify-between mt-8'>
+    <div class='card bordered sm:w-1/2 w-full mr-8'>
+      <div class='card-body'>
+        <h5 class='card-title'>Quickstart</h5>
+        <p>
+          Quickstart will setup a default storage for you on
+          Chuspace Git storage and a blog based on provided user
+          name
+        </p>
+        <%= button_to 'Blue pill', setups_path(type: :quick), class: 'btn btn-sm btn-primary mt-4' %>
+      </div>
+    </div>
+
+    <div class='card bordered sm:w-1/2 w-full'>
+      <div class='card-body'>
+        <h5 class='card-title'>Step by step</h5>
+        <p>
+          Connect your own Git provider storage and existing
+          blog using step by step guide
+        </p>
+        <ul class='menu'>
+          <li>Add your git hosting provider</li>
+          <li>Connect your blog</li>
+          <li>All setup</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

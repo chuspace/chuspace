@@ -1,26 +1,18 @@
 <% if signed_in? %>
-  <main class='mt-24'>
-    <div>
-      <div class='flex items-center'>
-        <div class='flex-1'>
-          <%= image_tag Current.user.avatar_url(variant: :xl) %>
-          <h3 class='mt-2'><%= Current.user.name %></h3>
-        </div>
+  <section class='flex justify-between mt-24'>
+    <main class='sm:w-2/3 w-full mr-12 card bordered'>
+      <% @articles.each do |article| %>
+        <%= render 'articles/article', blog: @blog, article: article %>
+      <% end %>
+    </main>
 
-        <div class=''>
-          <%= link_to 'Edit', '#', class: 'btn btn-primary btn-outline btn-sm' %>
-        </div>
+    <aside class='sm:w-1/3 w-full'>
+      <div class='card bordered'>
+        <h5 class='px-4 pt-8'>Top blogs</h5>
+        <%= render partial: 'blogs/mini_item', collection: Blog.all, as: :blog, cached: true %>
       </div>
-
-      <div class='tabs mt-8' dir='horizontal'>
-        <div role="tablist">
-          <%= link_to 'About', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
-          <%= link_to 'Recent posts', connect_blogs_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
-          <%= link_to 'Blogs', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
-        </div>
-      </div>
-    </div>
-  </main>
+    </aside>
+  </section>
 <% else %>
   <main class='min-h-full block sm:flex items-center justify-between'>
     <%= render 'marketing' %>

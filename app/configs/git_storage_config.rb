@@ -5,38 +5,37 @@ class GitStorageConfig < ApplicationConfig
 
   attr_config(
     chuspace: {
-      label: 'Chuspace.com',
-      domain: 'chuspace.dev',
       self_hosted: false,
+      provider: :chuspace,
       description: 'Chuspace Git storage service for persisting blog repositories.',
       endpoint: 'https://gitea.chuspace.com/api/v1',
       scopes: 'Access token have full access to your account'
     },
     github: {
-      label: 'Github.com',
       self_hosted: false,
+      provider: :github,
       endpoint: 'https://api.github.com',
       scopes: 'repo,admin:repo_hook'
     },
     github_enterprise: {
-      label: 'Github enterprise',
       self_hosted: true,
+      provider: :github_enterprise,
       scopes: 'repo,admin:repo_hook'
     },
     gitlab: {
-      label: 'Gitlab.com',
       self_hosted: false,
+      provider: :gitlab,
       endpoint: 'https://gitlab.com/api/v4',
       scopes: 'api,read_repository,write_repository'
     },
     gitlab_foss: {
-      label: 'Gitlab CE/EE',
       self_hosted: true,
+      provider: :gitlab_foss,
       scopes: 'api,read_repository,write_repository'
     },
     gitea: {
-      label: 'Gitea',
       self_hosted: true,
+      provider: :gitea,
       scopes: 'Access token have full access to your account'
     }
   )
@@ -49,7 +48,6 @@ class GitStorageConfig < ApplicationConfig
   end
 
   def self.chuspace
-    provider, config = GitStorageConfig.defaults.find { |key, _| key == 'chuspace' }
-    config.merge(provider: provider.to_sym).symbolize_keys
+    GitStorageConfig.defaults.find { |key, _| key == 'chuspace' }.symbolize_keys
   end
 end

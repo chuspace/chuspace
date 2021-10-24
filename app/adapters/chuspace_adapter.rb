@@ -8,7 +8,7 @@ class ChuspaceAdapter < GiteaAdapter
   end
 
   def self.as_superuser
-    endpoint = Rails.application.credentials.storage[:chuspace][:endpoint]
+    endpoint = GitStorageConfig.new.chuspace[:endpoint]
     access_token = Rails.application.credentials.storage[:chuspace][:access_token]
 
     new(endpoint: endpoint, access_token: access_token)

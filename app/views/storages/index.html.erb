@@ -1,6 +1,6 @@
 <%= render 'layout' do %>
   <% if @storages.any? %>
-    <div class='border-2 mt-4'>
+    <div class='card bordered'>
       <%= render partial: 'storages/item', collection: @storages, as: :storage, cached: true %>
     </div>
   <% else %>

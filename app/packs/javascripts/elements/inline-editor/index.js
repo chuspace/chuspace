@@ -109,7 +109,7 @@ export default class InlineEditor extends HTMLElement {
       this.editable ? 'editable' : 'read-only'
     )
 
-    view
+    if (this.appearance === 'title') view.focus()
   }
 
   createRenderRoot() {

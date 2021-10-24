@@ -6,8 +6,9 @@
     <% end %>
 
     <div class='flex items-center'>
-      <%= link_to 'Feed', '#', class: 'link link--default' %>
-      <%= link_to 'How it works?', '#', class: 'link link--default ml-8' %>
+      <%= link_to 'Feed', '#', class: 'link link-primary' %>
+      <%= link_to 'How it works?', '#', class: 'link link-primary ml-8' %>
+      <%= link_to 'Setup', setups_path, class: link_class(setups_path), class: 'link link-primary ml-8' %>
     </div>
 
     <% if Current.user.present? %>

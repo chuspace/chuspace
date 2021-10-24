@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
   enable_extension "plpgsql"
 
 # Could not dump table "blogs" because of following StandardError
-#   Unknown type 'blog_framework_enum_type' for column 'framework'
+#   Unknown type 'blog_visibility_enum_type' for column 'visibility'
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
@@ -36,6 +36,9 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
 # Could not dump table "storages" because of following StandardError
 #   Unknown type 'git_storage_provider_enum_type' for column 'provider'
 
+# Could not dump table "templates" because of following StandardError
+#   Unknown type 'template_visibility_enum_type' for column 'visibility'
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.citext "username"
@@ -52,7 +55,10 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
   end
 
   add_foreign_key "blogs", "storages"
+  add_foreign_key "blogs", "templates"
   add_foreign_key "blogs", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "storages", "users"
+  add_foreign_key "templates", "storages"
+  add_foreign_key "templates", "users", column: "author_id"
 end

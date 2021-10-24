@@ -1,8 +1,45 @@
 # frozen_string_literal: true
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+
+chuspace_user = User.create!(
+  name: 'Gaurav Tiwari',
+  username: 'gauravtiwari',
+  email: 'gaurav@gauravtiwari.co.uk',
+
+)
+
+chuspace_user.identities.create(uid: chuspace_user.id, provider: :email, user: chuspace_user)
+
+chuspace_user.storages.create!(
+  default: true,
+  active: true,
+  provider: :chuspace,
+  **GitStorageConfig.new.chuspace
+)
+
+github_storage = chuspace_user.storages.create!(
+  active: true,
+  description: 'Github storage to connect Chuspace blog',
+  **GitStorageConfig.new.github.merge(
+    access_token: Rails.application.credentials.storage[:github][:access_token]
+  )
+)
+
+templates = JSON.parse(Rails.root.join('db/defaults/templates.json').read)
+templates.each do |template|
+  github_storage.templates.create(
+    author: chuspace_user,
+    **template
+  )
+end
+
+template = github_storage.templates.first
+github_storage.blogs.create!(
+  user: chuspace_user,
+  permalink: 'self',
+  repo_fullname: 'chuspace/blog',
+  name: 'Chuspace',
+  default: true,
+  visibility: :public,
+  template: template,
+  **template.blog_attributes
+)

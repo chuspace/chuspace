@@ -11,7 +11,7 @@
 
   <%= turbo_frame_tag :blogs do %>
     <% if @blogs.any? %>
-      <div class='list list--table mt-4'>
+      <div class='card bordered mt-4'>
         <%= render partial: 'blogs/item', collection: @blogs, as: :blog, cached: true %>
       </div>
     <% else %>

@@ -39,4 +39,8 @@ class User < ApplicationRecord
       **BlogFrameworkConfig.default.slice(:framework, :posts_folder, :drafts_folder, :assets_folder)
     )
   end
+
+  def to_param
+    username
+  end
 end

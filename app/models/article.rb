@@ -23,7 +23,7 @@ class Article
   end
 
   def update
-    storage.adapter.create_blob(fullname: repo_fullname, path: path, content: base64_blob_content, message: nil)
+    storage.adapter.update_blob(fullname: repo_fullname, path: path, content: base64_blob_content, message: nil)
   end
 
   def delete

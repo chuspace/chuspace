@@ -6,6 +6,7 @@ import 'regenerator-runtime/runtime'
 import 'lazysizes/plugins/blur-up/ls.blur-up'
 import 'lazysizes/plugins/parent-fit/ls.parent-fit'
 import '@hotwired/turbo-rails'
+import 'dialog-polyfill/dialog-polyfill.css'
 
 import lazySizes from 'lazysizes'
 

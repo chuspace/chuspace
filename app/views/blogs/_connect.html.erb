@@ -1,6 +1,6 @@
 <%= turbo_frame_tag(blog) do %>
   <auto-refresh-form>
-    <%= simple_form_for(blog, url: blogs_path, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+    <%= simple_form_for(blog, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
       <%= form.input :storage_id, as: :select, collection: Current.user.storages.external.pluck(:description, :id), autofocus: true, input_html: { 'data-action': 'change:auto-refresh-form#refresh' } %>
       <% if blog.storage.present? %>
         <auto-complete
@@ -29,6 +29,7 @@
           <%= form.input :description, as: :text, required: true %>
           <%= form.input :framework, as: :select, collection: Blog.frameworks %>
           <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
+          <%= form.input :default %>
         <% end %>
       </div>
 

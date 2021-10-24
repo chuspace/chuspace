@@ -4,5 +4,5 @@ class Identity < ApplicationRecord
   belongs_to :user
 
   encrypts :uid, deterministic: true, downcase: true
-  enum provider: OmniauthConfig.providers_enum
+  enum provider: OmniauthConfig.providers_enum.merge(email: 'email')
 end

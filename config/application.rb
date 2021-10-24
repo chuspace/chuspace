@@ -39,6 +39,6 @@ module Chuspace
     end
 
     config.active_record.encryption.extend_queries = true
-    StrongMigrations.start_after = 20210713123213
+    StrongMigrations.start_after = 20211024150450
   end
 end

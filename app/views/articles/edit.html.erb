@@ -9,7 +9,7 @@
     </frontmatter-editor>
 
     <chu-editor
-      class='block editable'
+      class='block chu-editor editable'
       spellcheck="false"
       data-action='keydown:chu-editor#handleArrow'
     >
@@ -17,7 +17,7 @@
         <%= form.input :title, label: false, wrapper: false, input_html: { class: 'hidden', value: @article.title } %>
       </inline-editor>
 
-      <inline-editor class='block' data-appearance='summary'>
+      <inline-editor class='block mb-12' data-appearance='summary'>
         <%= form.input :intro, label: false, wrapper: false, input_html: { class: 'hidden', value: @article.intro } %>
       </inline-editor>
 

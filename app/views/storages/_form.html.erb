@@ -1,5 +1,5 @@
 <auto-refresh-form>
-  <storage-form data-providers='<%= GitStorageConfig.provider_scopes.to_json %>'>
+  <storage-form data-providers='<%= Storage.provider_scopes.to_json %>'>
     <%= simple_form_for(storage, data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' }) do |form| %>
       <%= form.input(
           :provider,

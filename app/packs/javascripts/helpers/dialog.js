@@ -2,10 +2,6 @@
 
 // @flow
 
-import 'dialog-polyfill/dialog-polyfill.css'
-
-import dialogPolyfill from 'dialog-polyfill'
-
 class DocumentWithBody extends Document {
   // $FlowFixMe
   body: HTMLBodyElement

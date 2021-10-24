@@ -12,7 +12,7 @@ class OauthsController < ApplicationController
         identity.user
       elsif User.where(email: auth_hash.info.email).any?
         flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{provider} account."
-        redirect_to login_path
+        redirect_to sessions_path
         return
       else
         User.create(user_atts)

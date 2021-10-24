@@ -1,13 +1,14 @@
 .ProseMirror-trailingBreak
   @apply h-0
 
-chu-editor
+.chu-editor
   font-weight: 400
   font-style: normal
   font-size: 22px
   color: theme('colors.accent')
   line-height: 1.8
   outline: none
+
 
   &.editable
     .title__empty, .summary__empty, .body__empty
@@ -19,7 +20,7 @@ chu-editor
       @apply relative
 
       &::before
-        @apply absolute text-sm border-r pr-2 italic pointer-events-none text-secondary font-normal
+        @apply absolute text-sm border-r pr-2 italic hidden pointer-events-none text-secondary font-normal
         content: attr(data-text)
         top: calc(100% / 2 - 0.4rem)
         right: 105%
@@ -31,9 +32,6 @@ chu-editor
   &:last-child
     @apply mb-0
 
-  div
-    @apply whitespace-nowrap
-
   blockquote
     @apply border-l-2 -ml-4 pl-4 mb-6
     font-style: italic
@@ -44,8 +42,22 @@ chu-editor
     text-decoration: underline
     overflow-wrap: break-word
 
+  h1
+    @apply text-6xl
+  h2
+    @apply text-4xl
+  h3
+    @apply text-2xl font-medium
+  h4
+    @apply text-xl font-medium
+  h5
+    @apply text-lg font-medium
+  h6
+    @apply text-base font-medium
+
   h1, h2, h3, h4, h5, h6
-    @apply my-12
+    @apply my-4
+    color: theme('colors.secondary')
     letter-spacing: -0.07rem
 
     a

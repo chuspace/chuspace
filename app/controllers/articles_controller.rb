@@ -30,6 +30,12 @@ class ArticlesController < ApplicationController
     redirect_to blog_path(@blog)
   end
 
+  def update
+    article = Article.from(params[:content])
+    article.update
+    redirect_to blog_article_path(@blog, article)
+  end
+
   def destroy
     @blog.delete_article(id: params[:id], path: params[:path])
     redirect_to blog_path(@blog)
@@ -42,6 +48,6 @@ class ArticlesController < ApplicationController
   end
 
   def article_params
-    params.require(:article).permit(:title, :content)
+    params.require(:article).permit(:title, :summary, :front_matter, :content)
   end
 end

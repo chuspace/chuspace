@@ -1,5 +1,5 @@
 <% cache storage do %>
-  <div class='border p-4'>
+  <div class='border-b last:border-b-0 p-4 border-base-200'>
     <%= turbo_frame_tag(storage, class: 'flex') do %>
       <div class='flex flex-1'>
         <%= inline_svg_tag(
@@ -8,14 +8,14 @@
         ) %>
 
         <div class='ml-2'>
-          <%= tag.h6 storage.label %>
+          <%= tag.h6 storage.label, class: 'link link-primary link-hover' %>
           <%= tag.p storage.description, class: 'text-sm text-secondary' %>
-          <%= tag.pre storage.provider_config[:scopes], class: 'text-sm whitespace-pre-wrap break-words text-info mt-2' unless storage.chuspace? %>
+          <%= tag.pre storage.provider_config[:scopes], class: 'text-sm whitespace-pre-wrap break-words text-error mt-2' unless storage.chuspace? %>
           <div class='mt-2'>
             <%= tag.span 'system', class: 'badge badge-primary mr-2' if storage.chuspace? %>
-            <%= tag.span 'default', class: 'badge badge-success mr-2' if storage.default? %>
-            <%= tag.span 'connected', class: 'badge badge-info' if storage.active? %>
-            <%= tag.span 'self-hosted', class: 'badge badge-info' if storage.self_hosted? %>
+            <%= tag.span 'default', class: 'badge badge-secondary mr-2' if storage.default? %>
+            <%= tag.span 'connected', class: 'badge badge-success' if storage.active? %>
+            <%= tag.span 'self-hosted', class: 'badge badge-warning' if storage.self_hosted? %>
           </div>
         </div>
       </div>
@@ -25,10 +25,10 @@
           <%= link_to(
               'Edit',
             edit_storage_path(storage),
-            class: 'btn btn-sm btn-primary',
+            class: 'btn btn-sm btn-outline border-info',
             data: { 'turbo-frame': :_top }
           ) %>
-          <%= button_to(storage_path(storage), method: :delete, class: 'btn btn-sm btn-error ml-3') do %>
+          <%= button_to(storage_path(storage), method: :delete, class: 'btn btn-sm btn-outline border-error ml-3') do %>
             <%= tag.span 'Delete' %>
           <% end %>
         </div>

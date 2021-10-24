@@ -1,19 +1,20 @@
 <% cache article do %>
-  <div class='border-b last:border-b-0 py-2 last:py-0'>
+  <article class='border-b last:border-b-0 border-base-200 p-4'>
     <%= turbo_frame_tag(article, class: 'flex') do %>
-      <div class='flex flex-1'>
-        <%= link_to blog_article_path(blog, article), data: { 'turbo-frame': :_top } do %>
-          <%= tag.h4 article.title %>
-          <%= tag.div article.intro, class: 'text-xs text-gray-600 mt-1' %>
+      <div class='flex-1'>
+        <%= link_to article.blog.name, blog_path(article.blog), class: 'link link-accent link-hover font-medium' %>
+        <%= link_to blog_article_path(article.blog, article), data: { 'turbo-frame': :_top } do %>
+          <%= tag.h5 article.title, class: 'link link-primary link-hover mt-1' %>
+          <%= tag.p article.intro, class: 'text-sm text-secondary mt-1 sm:w-2/3 w-full' %>
         <% end %>
       </div>
 
       <div class='flex items-center justify-between flex-end'>
-        <%= link_to 'Edit', edit_blog_article_path(blog, article), class: 'btn border-info btn-outline btn-sm', data: { 'turbo-frame': :_top } %>
-        <%= button_to blog_article_path(blog, article, path: article.path), method: :delete, class: 'btn border-error btn-outline btn-sm ml-3', data: { 'turbo-frame': :_top } do %>
+        <%= link_to 'Edit', edit_blog_article_path(article.blog, article), class: 'btn border-info btn-outline btn-sm', data: { 'turbo-frame': :_top } %>
+        <%= button_to blog_article_path(article.blog, article, path: article.path), method: :delete, class: 'btn border-error btn-outline btn-sm ml-3', data: { 'turbo-frame': :_top } do %>
           <%= tag.span 'Delete' %>
         <% end %>
       </div>
     <% end %>
-  </div>
+  </article>
 <% end %>
