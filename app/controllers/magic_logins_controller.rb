@@ -1,0 +1,12 @@
+class MagicLoginsController < ApplicationController
+  def index
+    identity = Identity.find_by(magic_auth_token: params[:token])
+
+    if identity&.magic_auth_token_valid?
+      signin(identity)
+      redirect_to root_url
+    else
+      redirect_to sessions_url, notice: t('.expired')
+    end
+  end
+end

@@ -13,9 +13,9 @@ en:
         description: What's this storage for?
         endpoint: API endpoint for self-hosted or enterprise instances
         access_token: Personal access token generated for selected provider
-      signup:
+      user:
         email: Type your email
-      session:
+      user:
         email: Type your email
 
     labels:
@@ -30,6 +30,9 @@ en:
       blog:
         framework: static site generator framework to be used to generate blog from
         visibility: visibility of blog - public, internal or private
+      user:
+        email: Your email is safe with us
+        username: Username should be maximum 40 characters
 
     include_blanks:
       defaults:

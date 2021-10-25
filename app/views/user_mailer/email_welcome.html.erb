@@ -1,0 +1,28 @@
+<tr>
+  <td><h3 class='mb-10 salutation'><%= t('.salutation', name: @user.name.first) %></h3></td>
+</tr>
+<tr>
+  <td>
+    <p class='mb-10'>
+      <%= t('.body').html_safe %>
+    </p>
+  </td>
+</tr>
+<tr>
+  <td><p class='my-20'><%= t('user_mailer.send_magic_login.body', expires_in: Identity::MAGIC_AUTH_TOKEN_LIFE) %></p></td>
+</tr>
+<tr>
+  <td style='text-align: center;'><%= link_to 'Click to login', magic_logins_url(token: @identity.magic_auth_token), class: 'button my-20' %></td>
+</tr>
+<tr>
+  <td >
+    <p class='my-40'>
+      <%= t('.outro').html_safe %>
+    </p>
+  </td>
+</tr>
+<tr>
+  <td>
+    <p class='small__text mt-20'><%= t('user_mailer.send_magic_login.direct_url') %>: <%= magic_logins_url(token: @identity.magic_auth_token) %></p>
+  </td>
+</tr>

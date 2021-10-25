@@ -17,6 +17,7 @@ gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
 gem 'store_model'
+gem 'name_of_person'
 
 # Form
 gem 'simple_form'

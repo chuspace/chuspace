@@ -2,6 +2,6 @@
 
 class HomeController < ApplicationController
   def index
-    @articles = Blog.all.flat_map(&:articles)
+    @articles = Blog.all.flat_map(&:articles) if signed_in?
   end
 end

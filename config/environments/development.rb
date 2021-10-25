@@ -53,6 +53,11 @@ Rails.application.configure do
   config.active_record.verbose_query_logs = true
   config.assets.quiet = true
 
+  config.action_mailer.smtp_settings = { host: 'localhost', port: 1_025 }
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3_000 }
+  config.default_url_options = { host: 'localhost:3000' }
+  Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

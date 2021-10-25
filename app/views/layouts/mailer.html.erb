@@ -1,13 +1,126 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <style>
-      /* Email styles need to be inline */
-    </style>
-  </head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+	<!--[if gte mso 9]>
+	<xml>
+		<o:OfficeDocumentSettings>
+		<o:AllowPNG/>
+		<o:PixelsPerInch>96</o:PixelsPerInch>
+		</o:OfficeDocumentSettings>
+	</xml>
+	<![endif]-->
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="format-detection" content="date=no" />
+	<meta name="format-detection" content="address=no" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="x-apple-disable-message-reformatting" />
+    <!--[if !mso]><!-->
+  <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
 
-  <body>
-    <%= yield %>
-  </body>
+  <!--<![endif]-->
+	<title><%= @subject %></title>
+	<!--[if gte mso 9]>
+	<style type="text/css" media="all">
+		sup { font-size: 100% !important; }
+	</style>
+	<![endif]-->
+	<style type="text/css" media="screen">
+		body { font-family: 'Inter', 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif!important; line-height: 1.6; font-size: 16px; padding:0 !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none }
+		a { color:#222; text-decoration:none; font-family: 'Inter', 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif!important; }
+		img { -ms-interpolation-mode: bicubic; }
+    p { line-height: 1.6; font-size: 16px; font-weight: 300; font-family: 'Inter', 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif!important; color:#222; }
+    .salutation { font-weight: 500!important; font-size: 20px!important; }
+    .logo { font-family: 'Noe Display', Inter, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif!important; }
+    .small__text { font-size: 12px; color: #999999; font-weight: normal; font-family: 'Inter', 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif!important; }
+    .mt-20 { margin-top: 20px!important; }
+    .mt-40 { margin-top: 40px!important; }
+    .mb-10 { margin-bottom: 10px!important; }
+    .mb-20 { margin-bottom: 20px!important; }
+    .my-20 { margin-top: 20px!important; margin-bottom: 20px!important; }
+    .center { text-align: center; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .avatar--xl { width: 120px; height: 120px; border-radius: 4px; }
+    .button {
+      display: inline-block;
+      font-size: 15px;
+      color: #ffffff!important;
+      text-decoration: none;
+      font-weight: medium;
+      text-align: center;
+      border-radius: 5px;
+      background: #1089ff;
+      padding: 5px 15px;
+    }
+
+		@media only screen and (max-device-width: 480px), only screen and (max-width: 480px) {
+			.mobile-shell { width: 100% !important; min-width: 100% !important; }
+			.center { margin: 0 auto !important; }
+      .td { width: 100% !important; min-width: 100% !important; }
+      .p20-15 { padding: 20px 15px !important; }
+		}
+	</style>
+</head>
+<body class="body" style="padding:0 !important; margin:0 !important; display:block !important; min-width:100% !important; width:100% !important; background:#ffffff; -webkit-text-size-adjust:none">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+		<tr>
+			<td align="center" valign="top">
+				<table width="800" border="0" cellspacing="0" cellpadding="0" class="mobile-shell">
+					<tr>
+						<td class="td" style="width:800px; min-width:800px; padding:0; margin:0; font-weight:normal;">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td style="padding: 30px 150px 0;" class="p20-15">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0">
+											<tr>
+												<td style="padding-bottom: 38px;">
+													<table width="100%" border="0" cellspacing="0" cellpadding="0">
+														<tr>
+															<td style='font-size: 30px; font-weight: 700;'>
+																<%= link_to root_url, target: :blank, style: 'color:#222', class: 'logo' do %>
+																	Chuspace
+																<% end %>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<%= yield %>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+
+		<tr>
+			<td style="padding-bottom: 50px;" align="center" valign="top">
+				<table width="800" border="0" cellspacing="0" cellpadding="0" class="mobile-shell">
+					<tr>
+						<td class="td" style="width:800px; min-width:800px; padding:0; margin:0; font-weight:normal;">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td style="padding: 0 150px;" class="p20-15">
+										<table width="100%" border="0" cellspacing="0" cellpadding="0">
+											<tr>
+												<td>
+													<p class='mb-10 small__text'><%= t('.do_not_share') %></p>
+													<p class='small__text mt-20'>&copy; Chuspace <%= Time.now.year %>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</body>
 </html>

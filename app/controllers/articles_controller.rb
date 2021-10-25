@@ -44,7 +44,7 @@ class ArticlesController < ApplicationController
   private
 
   def find_blog
-    @blog = Current.user.blogs.find(params[:blog_id])
+    @blog = Current.user.blogs.find_by(permalink: params[:blog_id])
   end
 
   def article_params

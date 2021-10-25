@@ -40,9 +40,13 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
 #   Unknown type 'template_visibility_enum_type' for column 'visibility'
 
   create_table "users", force: :cascade do |t|
-    t.string "name"
+    t.string "first_name", null: false
+    t.string "last_name"
     t.citext "username"
     t.string "email", null: false
+    t.integer "blogs_count", default: 0, null: false
+    t.integer "storages_count", default: 0, null: false
+    t.integer "templates_count", default: 0, null: false
     t.integer "sign_in_count", default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"

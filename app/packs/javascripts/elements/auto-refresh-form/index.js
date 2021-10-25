@@ -43,7 +43,10 @@ export default class AutoRefreshFormElement extends HTMLElement {
   }
 
   refresh(event) {
-    this.loader.innerHTML = `<div class="text-center mt-4"><span class='btn btn-lg btn-circle loading'></span></div>`
+    if (this.loader) {
+      this.loader.innerHTML = `<div class="text-center mt-4"><span class='btn btn-lg btn-circle loading'></span></div>`
+    }
+
     this.form.requestSubmit()
   }
 

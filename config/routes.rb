@@ -3,11 +3,11 @@
 Rails.application.routes.draw do
   root to: 'home#index'
 
-  resources :users
-
+  resources :users, path: 'u'
+  resources :auto_checks, only: :create
   resources :setups, only: %i[index show], path: 'get-started'
 
-  resources :blogs do
+  resources :blogs, path: 'b' do
     resources :domains
     resources :articles do
       resources :commits, only: :new
@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   delete '/sessions/:id', to: 'sessions#destroy', as: :logout
   get '/auth/:provider/callback', to: 'oauths#create'
 
+  resources :magic_logins, only: :index, path: 'magic'
   resources :signups, only: %i[index create], path: 'signup' do
     collection do
       get :email

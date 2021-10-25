@@ -7,9 +7,15 @@ class CreateUsers < ActiveRecord::Migration[6.0]
     enable_extension 'citext'
 
     create_table :users do |t|
-      t.string :name
+      t.string :first_name, null: false
+      t.string :last_name
       t.citext :username
       t.string :email, null: false
+
+      # track associations
+      t.integer :blogs_count, null: false, default: 0
+      t.integer :storages_count, null: false, default: 0
+      t.integer :templates_count, null: false, default: 0
 
       # Track logins
       t.integer :sign_in_count, default: 0

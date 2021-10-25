@@ -2,9 +2,8 @@
   <h2><%= t('.welcome') %></h2>
   <p class='mt-4 text-secondary'><%= t('.intro') %></p>
   <div class='w-1/3 mt-8'>
-    <%= simple_form_for :session, url: sessions_path do |form| %>
-      <%= form.input :email %>
-      <%= form.button :submit, 'Click to recieve magic link', title: 'Click to receive magic link', class: 'btn btn-primary mt-4' %>
+    <%= turbo_frame_tag(@user) do %>
+      <%= render 'form', user: @user %>
     <% end %>
 
     <div class='mt-8'>

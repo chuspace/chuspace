@@ -1,0 +1,7 @@
+<auto-refresh-form>
+  <%= simple_form_for user, url: sessions_path do |form| %>
+    <%= form.input :email, as: :string, hint: false, error_html: { class: 'input-error' } %>
+    <%= form.hint :email unless user.errors.key?(:email) %>
+    <%= form.button :submit, 'Click to recieve magic link', title: 'Click to receive magic link', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top } %>
+  <% end %>
+</auto-refresh-form>

@@ -39,6 +39,10 @@ class Blog < ApplicationRecord
     @drafts ||= Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_drafts_path), self)
   end
 
+  def to_param
+    permalink
+  end
+
   private
 
   def one_default_blog_allowed

@@ -1,6 +1,7 @@
 import '@github/details-menu-element'
 import '@github/auto-complete-element'
 import '@github/tab-container-element'
+import '@github/auto-check-element'
 import 'core-js/es'
 import 'regenerator-runtime/runtime'
 import 'lazysizes/plugins/blur-up/ls.blur-up'
