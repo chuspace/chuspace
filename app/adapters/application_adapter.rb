@@ -31,6 +31,6 @@ class ApplicationAdapter
                       )
                     else
                       Sawyer::Resource.new(agent, {})
-                    end
+    end
   end
 end

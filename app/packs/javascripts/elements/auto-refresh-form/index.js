@@ -2,6 +2,8 @@
 
 import { controller, target, targets } from '@github/catalyst'
 
+import debounce from 'lodash.debounce'
+
 @controller
 export default class AutoRefreshFormElement extends HTMLElement {
   @target form: HTMLFormElement
@@ -42,13 +44,13 @@ export default class AutoRefreshFormElement extends HTMLElement {
     }
   }
 
-  refresh(event) {
+  refresh = debounce((event) => {
     if (this.loader) {
       this.loader.innerHTML = `<div class="text-center mt-4"><span class='btn btn-lg btn-circle loading'></span></div>`
     }
 
     this.form.requestSubmit()
-  }
+  }, 500)
 
   onAutoCompleteItemClick(event) {
     this.autoCompleteInput.value = event.target.dataset.id

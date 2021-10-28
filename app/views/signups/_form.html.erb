@@ -1,12 +1,9 @@
-<auto-refresh-form>
-  <%= simple_form_for user, url: signups_path, data: { target: 'auto-refresh-form.form' } do |form| %>
-    <%= form.input :email, hint: false, as: :string, input_html: { data: { action: 'change:auto-refresh-form#refresh' } } %>
-    <%= form.hint :email unless user.errors.key?(:email) %>
-    <% if user.email.present? && !user.errors.key?(:email) %>
-      <%= form.input :username, hint: false, input_html: { data: { action: 'change:auto-refresh-form#refresh' } } %>
-      <%= form.hint :username unless user.errors.key?(:username) %>
-    <% end %>
-    <%= form.input :name, input_html: { data: { action: 'change:auto-refresh-form#refresh' } } if user.valid_attributes?(:email, :username) %>
-    <%= form.button :submit, 'Signup', title: 'Click to start signup', class: 'btn btn-primary mt-4' if user.valid? %>
+<turbo-reconnect>
+  <%= simple_form_for user, url: signups_path do |form| %>
+    <auto-check src="<%= auto_checks_path(attribute: :email) %>">
+      <%= form.input :email, as: :string %>
+      <input hidden data-csrf value="<%= form_authenticity_token %>">
+    </auto-check>
+    <%= form.button :submit, 'Signup', title: 'Click to start signup', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top, 'disable-with': 'Signing up...' } %>
   <% end %>
-</auto-refresh-form>
+</turbo-reconnect>

@@ -43,3 +43,8 @@
 .ProseMirror {
   @apply outline-none relative;
 }
+
+:root {
+  --animation-btn: 0;
+  --animation-input: 0;
+}

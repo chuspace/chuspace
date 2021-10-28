@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AutoChecksController < ApplicationController
   def create
     case params[:attribute].to_sym
@@ -18,6 +20,7 @@ class AutoChecksController < ApplicationController
     if record.valid_attributes?(attribute)
       head :ok
     else
+
       render html: record.errors.messages[attribute.to_sym].to_sentence.html_safe, status: :unprocessable_entity
     end
   end

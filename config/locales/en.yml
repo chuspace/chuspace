@@ -3,6 +3,14 @@ en:
   activerecord:
     errors:
       models:
+        user:
+          attributes:
+            email:
+              blank: 'A valid email is required'
+            username:
+              blank: 'A valid username is required'
+            name:
+              blank: 'Your full name is required'
         blog:
           attributes:
             default:
@@ -19,7 +27,12 @@ en:
       intro:
         Chuspace is a collaborative blogging and indexing platform, which works
         with any markdown powered static site blog hosted on Github, Gitlab or Gitea.
+  magic_logins:
+    index:
+      success: Successfully signed in
+      expired: Your magic auth token is expired
   sessions:
+    already_signedin: Already signed in
     email:
       intro: You will recieve a magic link in your email to log in
       welcome: Login with email
@@ -30,7 +43,6 @@ en:
     create:
       success: Please check your email
       failure: User with email not found
-      expired: Your magic auth token is expired
   shared:
     identities:
       login_with: Click to log in with %{provider}
@@ -39,6 +51,7 @@ en:
   signups:
     create:
       success: Thanks for signing up. Please check your email
+      failure: Something went wrong!!
     email:
       intro: You will recieve a magic link in your email to log in
       welcome: Signup with email

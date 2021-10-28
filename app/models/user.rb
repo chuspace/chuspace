@@ -16,10 +16,10 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :identities
 
   class << self
-    def create_with_email_identity(name:, username:, email:)
+    def create_with_email_identity(email:)
       user = User.new(
-        name: name,
-        username: username,
+        name: email.split('@').first.humanize,
+        username: email.to_slug.normalize.to_s,
         email: email
       )
 

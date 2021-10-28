@@ -1,19 +1,18 @@
+# frozen_string_literal: true
+
 class SignupsController < ApplicationController
   def email
     @user = User.new
   end
 
   def create
-    @user = User.build_with_email(signup_params)
+    @user = User.create_with_email_identity(email: signup_params[:email])
 
-    if params['commit'] == 'Signup' && @user.save
+    if @user.save
       redirect_to signups_path, notice: t('.success')
     else
-      filled_params = signup_params.delete_if { |key, value| value.blank? }
-      @user.valid_attributes?(*filled_params.keys)
-
       respond_to do |format|
-        format.html { render :email }
+        format.html { redirect_to email_signups_path, notice: t('.failure') }
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@user, partial: 'signups/form', locals: { user: @user }) }
       end
     end
