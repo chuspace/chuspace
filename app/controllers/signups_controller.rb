@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SignupsController < ApplicationController
+  include SessionRedirect
+
   def email
     @user = User.new
   end

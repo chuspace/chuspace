@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  before_action :redirect_if_signedin, except: :destroy
+  include SessionRedirect
 
   def index
   end
@@ -36,9 +36,5 @@ class SessionsController < ApplicationController
 
   def session_params
     params.require(:user).permit(:email)
-  end
-
-  def redirect_if_signedin
-    redirect_to(root_path) && return if signed_in?
   end
 end

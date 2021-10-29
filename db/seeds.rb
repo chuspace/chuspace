@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
-chuspace_user = User.create_with_email_identity(
-  name: 'Gaurav Tiwari',
-  username: 'gauravtiwari',
-  email: 'gaurav@gauravtiwari.co.uk'
-)
-
+chuspace_user = User.create_with_email_identity(email: 'gaurav@gauravtiwari.co.uk')
 chuspace_user.save!
 
 chuspace_user.storages.create!(

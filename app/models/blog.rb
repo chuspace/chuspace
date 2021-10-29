@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
-  include Repoable
+  include Repoable, MeiliSearch
 
   belongs_to :user
   belongs_to :storage
@@ -18,6 +18,24 @@ class Blog < ApplicationRecord
 
   before_validation :set_defaults, on: :create, if: -> { storage.chuspace? }
   scope :default, -> { find_by(default: true) }
+
+  PUBLIC_INDEX = 'PUBLIC_BLOGS'
+  PRIVATE_INDEX = 'PRIVATE_BLOGS'
+  INTERNAL_INDEX = 'INTERNAL_BLOGS'
+
+  meilisearch index_uid: PRIVATE_INDEX do
+    attribute :name, :description, :visibility
+    searchable_attributes %i[name description]
+
+    add_index PUBLIC_INDEX, if: :public_visibility? do
+      attribute :name, :description, :visibility
+      searchable_attributes %i[name description]
+    end
+
+    add_index PUBLIC_INDEX, if: :internal_visibility? do
+      searchable_attributes %i[name description]
+    end
+  end
 
   def visibility
     super ? ActiveSupport::StringInquirer.new(super) : nil
