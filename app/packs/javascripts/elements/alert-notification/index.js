@@ -1,41 +1,23 @@
 // @flow
 
-import { LitElement, html } from 'lit'
+import { controller, target } from '@github/catalyst'
 
-export default class AlertNotification extends LitElement {
-  static get properties() {
-    return {
-      level: { type: String },
-      message: { type: String }
-    }
-  }
+@controller
+export default class AlertNotification extends HTMLElement {
+  @target element: HTMLElement
 
   connectedCallback() {
-    super.connectedCallback()
-
     setTimeout(this.hide, 5000)
   }
 
-  createRenderRoot() {
-    return this
-  }
+  hide = () =>
+    this.element.classList.add(
+      'transition-all',
+      'duration-500',
+      'ease-in-out',
+      '-translate-y-full',
+      'transform'
+    )
 
-  hide = () => {
-    this.classList.remove('fadeInDown')
-    this.classList.add('fadeOutUp')
-  }
-
-  render() {
-    return html`
-      <div class="alert alert--${this.level}" @click=${this.hide}>
-        <div class="p-4 ">${this.message}</div>
-      </div>
-    `
-  }
+  preventDefault = (event) => event.preventDefault()
 }
-
-document.addEventListener('turbo:load', () => {
-  if (!window.customElements.get('alert-notification')) {
-    customElements.define('alert-notification', AlertNotification)
-  }
-})

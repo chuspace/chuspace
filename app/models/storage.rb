@@ -43,7 +43,7 @@ class Storage < ApplicationRecord
 
     def public_providers
       GitStorageConfig.defaults.map do |key, config|
-        [config['label'], key]
+        [key.humanize, key]
       end
     end
 
