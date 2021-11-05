@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
-  include Repoable, Markdownable, MeiliSearch
+  include Repoable, Markdownable, Commitable, MeiliSearch
 
   belongs_to :user
   belongs_to :storage

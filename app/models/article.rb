@@ -4,7 +4,7 @@ require 'marcel'
 require 'down/http'
 
 class Article < ApplicationRecord
-  include MeiliSearch, Markdownable
+  include MeiliSearch, Commitable, Markdownable
   VALID_MIME = 'text/markdown'
 
   belongs_to :blog
@@ -16,7 +16,8 @@ class Article < ApplicationRecord
   validates :title, :blob_path, :blog, :author_id, :blob_sha, presence: true
   validates :blob_path, uniqueness: { scope: :blog_id }
 
-  delegate :repo_fullname, :name, :permalink, to: :blog, prefix: true
+  delegate :storage, :repo_fullname, to: :blog
+  delegate :name, :permalink, to: :blog, prefix: true
   delegate :name, to: :author, prefix: true
   delegate :front_matter, :content, to: :parsed_blob_content
 
