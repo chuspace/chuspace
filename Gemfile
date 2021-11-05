@@ -18,6 +18,8 @@ gem 'babosa'
 gem 'action_policy'
 gem 'store_model'
 gem 'name_of_person'
+gem 'redis-objects'
+gem 'good_job'
 
 # Form
 gem 'simple_form'

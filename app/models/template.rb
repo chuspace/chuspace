@@ -8,8 +8,7 @@ class Template < ApplicationRecord
   def blog_attributes
     {
       repo_articles_path: articles_folder,
-      repo_drafts_path: drafts_folder,
-      repo_assets_path: assets_folder
+      repo_drafts_path: drafts_folder
     }
   end
 

@@ -15,6 +15,14 @@ class User < ApplicationRecord
   AVATAR_VARIANTS = { xs: 32, sm: 48, md: 64, lg: 80, xl: 120, thumb: 150, profile: 250 }.freeze
   accepts_nested_attributes_for :identities
 
+  def about_readme
+    @about_readme ||= blogs.default.readme_content unless blogs.default.blank?
+  end
+
+  def articles
+    Article.where(author: username)
+  end
+
   class << self
     def create_with_email_identity(email:)
       user = User.new(

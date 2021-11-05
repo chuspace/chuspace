@@ -1,25 +1,38 @@
-<div class='mt-24 relative'>
-  <div class='flex items-center'>
-    <%= image_tag @user.avatar_url(variant: :xl), class: 'mask mask-circle' %>
-    <h3 class='ml-2'><%= @user.name %></h3>
-  </div>
-  <%= link_to 'New blog', new_blog_path, class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
-
-  <div class='tabs mt-8 border-b border-base-200'>
-    <div role="tablist">
-      <%= link_to 'About', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
-      <%= link_to 'Recent posts', connect_blogs_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
-      <%= link_to 'Blogs', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
+<div class='relative mt-16 h-full'>
+  <div class='flex h-full'>
+    <div class='profile sm:w-1/4 w-full min-h-full'>
+      <%= image_tag @user.avatar_url(variant: :sm), class: 'mask mask-circle' %>
+      <h4 class='mt-4'><%= @user.name %></h4>
+      <h5 class='text-secondary font-normal'><%= @user.username %></h5>
+      <ul class='mt-8'>
+        <% user_menu.each do |key, config| %>
+          <li class='mb-4 last-mb-0'>
+            <%= link_to(
+                config[:label],
+                profile_path(Current.user, tab: config[:tab]),
+                'aria-selected': false,
+                class: tab_selected?(profile_path(Current.user, tab: config[:tab]))
+              )
+            %>
+          </li>
+        <% end %>
+      </ul>
     </div>
-  </div>
 
-  <div class='mt-8'>
-    <% if @user.blogs.any? %>
-      <div class='card bordered'>
-        <%= render partial: 'blogs/item', collection: @user.blogs, as: :blog, cached: true %>
+    <div class='content sm:w-3/4 w-full'>
+      <div class="text-sm breadcrumbs">
+        <ul>
+          <li>
+            <a><%= @user.username %></a>
+          </li>
+          <li>
+            <a><%= params[:tab] %></a>
+          </li>
+        </ul>
       </div>
-    <% else %>
-      <div class='placeholder text-2xl'>No blogs</div>
-    <% end %>
+      <div class='mt-4'>
+        <%= render @partial %>
+      </div>
+    </div>
   </div>
 </div>

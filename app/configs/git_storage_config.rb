@@ -48,6 +48,7 @@ class GitStorageConfig < ApplicationConfig
   end
 
   def self.chuspace
-    GitStorageConfig.defaults.find { |key, _| key == 'chuspace' }.symbolize_keys
+    provider, config = GitStorageConfig.defaults.find { |key, _| key == 'chuspace' }
+    config.merge(provider: provider.to_sym).symbolize_keys
   end
 end

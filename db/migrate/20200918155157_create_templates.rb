@@ -20,7 +20,6 @@ class CreateTemplates < ActiveRecord::Migration[7.0]
 
       t.string :articles_folder, null: false
       t.string :drafts_folder, null: false
-      t.string :assets_folder, null: false
       t.string :readme, null: false, default: 'README.md'
       t.boolean :default, null: false, default: false
       t.boolean :approved, null: false, default: false

@@ -10,8 +10,7 @@
     "approved": true,
     "system": true,
     "articles_folder": "src/pages/posts",
-    "drafts_folder": "src/pages/drafts",
-    "assets_folder": "public/images"
+    "drafts_folder": "src/pages/drafts"
   },
   {
     "name": "Bridgetown starter",
@@ -24,8 +23,7 @@
     "approved": true,
     "system": true,
     "articles_folder": "src/_posts",
-    "drafts_folder": "src/_posts",
-    "assets_folder": "src/images"
+    "drafts_folder": "src/_posts"
   },
   {
     "name": "11ty starter",
@@ -38,8 +36,7 @@
     "mirror_path": "chuspace-templates/11ty-starter-blog",
     "git_source": "https://github.com/chuspace/11ty-starter-blog",
     "articles_folder": "src/blog",
-    "drafts_folder": "src/blog",
-    "assets_folder": "src/blog"
+    "drafts_folder": "src/blog"
   },
   {
     "name": "Gridsome starter",
@@ -52,8 +49,7 @@
     "mirror_path": "chuspace/gridsome-starter-blog",
     "git_source": "https://github.com/chuspace/gridsome-starter-blog",
     "articles_folder": "content/posts",
-    "drafts_folder": "content/posts",
-    "assets_folder": "static"
+    "drafts_folder": "content/posts"
   },
   {
     "name": "Gatsby starter",
@@ -66,8 +62,7 @@
     "mirror_path": "chuspace/gatsby-starter-blog",
     "git_source": "https://github.com/chuspace/gatsby-starter-blog",
     "articles_folder": "content/posts",
-    "drafts_folder": "content/drafts",
-    "assets_folder": "static/images"
+    "drafts_folder": "content/drafts"
   },
   {
     "name": "Hexo starter",
@@ -80,8 +75,7 @@
     "mirror_path": "chuspace/hexo-starter-blog",
     "git_source": "https://github.com/chuspace/hexo-starter-blog",
     "articles_folder": "source/_posts",
-    "drafts_folder": "source/_posts",
-    "assets_folder": "source/images"
+    "drafts_folder": "source/_posts"
   },
   {
     "name": "Hugo starter",
@@ -94,8 +88,7 @@
     "mirror_path": "chuspace/hugo-starter-blog",
     "git_source": "https://github.com/chuspace/hugo-starter-blog",
     "articles_folder": "content/posts",
-    "drafts_folder": "content/posts",
-    "assets_folder": "static"
+    "drafts_folder": "content/posts"
   },
   {
     "name": "Jekyll starter",
@@ -108,8 +101,7 @@
     "mirror_path": "chuspace/jekyll-starter-blog",
     "git_source": "https://github.com/chuspace/jekyll-starter-blog",
     "articles_folder": "_posts",
-    "drafts_folder": "_drafts",
-    "assets_folder": "assets/img"
+    "drafts_folder": "_drafts"
   },
   {
     "name": "Nextjs starter",
@@ -122,7 +114,6 @@
     "mirror_path": "chuspace/nextjs-starter-blog",
     "git_source": "https://github.com/chuspace/nextjs-starter-blog",
     "articles_folder": "_posts",
-    "drafts_folder": "_drafts",
-    "assets_folder": "public/images"
+    "drafts_folder": "_drafts"
   }
 ]

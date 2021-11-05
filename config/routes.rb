@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   resources :users, path: 'u'
+
   resources :auto_checks, only: :create
   resources :setups, only: %i[index show], path: 'get-started'
 
@@ -22,10 +23,6 @@ Rails.application.routes.draw do
     resources :repos
   end
 
-  get '/me', to: 'users#show', as: :profile
-  delete '/sessions/:id', to: 'sessions#destroy', as: :logout
-  get '/auth/:provider/callback', to: 'oauths#create'
-
   resources :magic_logins, only: :index, path: 'magic'
   resources :signups, only: %i[index create], path: 'signup' do
     collection do
@@ -38,4 +35,8 @@ Rails.application.routes.draw do
       get :email
     end
   end
+
+  delete '/sessions/:id', to: 'sessions#destroy', as: :logout
+  get '/auth/:provider/callback', to: 'oauths#create'
+  get '/:id', to: 'users#show', as: :profile
 end

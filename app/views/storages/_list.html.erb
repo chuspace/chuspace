@@ -1,0 +1,7 @@
+<div class='card bordered'>
+  <% if storages.any? %>
+    <%= render partial: 'storages/item', collection: storages, as: :storage, cached: true %>
+  <% else %>
+    <div class='text-center text-2xl'>No storages connected</div>
+  <% end %>
+</div>

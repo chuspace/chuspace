@@ -27,6 +27,7 @@ class StorageAdapter
     head_sha
     commits
     blobs
+    blob
     create_blob
     find_blob
     delete_blob

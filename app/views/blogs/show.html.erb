@@ -11,9 +11,5 @@
     </div>
   </div>
 
-  <div class='mt-16'>
-    <% @articles.each do |article| %>
-      <%= render 'articles/article', blog: @blog, article: article %>
-    <% end %>
-  </div>
+  <%= render 'articles/list', articles: @blog.articles %>
 </div>

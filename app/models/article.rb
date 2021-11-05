@@ -1,77 +1,59 @@
 # frozen_string_literal: true
 
-class Article
-  include ActiveModel::Model
-  attr_accessor :id, :title, :intro, :published_at, :visibility, :tags, :filename, :blog, :content, :path, :front_matter
-  delegate :repo_fullname, :repo_drafts_path, to: :blog
+require 'marcel'
+require 'down/http'
 
-  def initialize(attributes = {})
-    super
+class Article < ApplicationRecord
+  include MeiliSearch, Markdownable
+  VALID_MIME = 'text/markdown'
 
-    @published ||= false
-    @visibility ||= 'internal'
-    @tags ||= []
+  belongs_to :blog
+  belongs_to :author, class_name: 'User'
+  has_rich_text :blob_content
+  markdownable :content
+
+  before_validation :set_title
+  validates :title, :blob_path, :blog, :author_id, :blob_sha, presence: true
+  validates :blob_path, uniqueness: { scope: :blog_id }
+
+  delegate :repo_fullname, :name, :permalink, to: :blog, prefix: true
+  delegate :name, to: :author, prefix: true
+  delegate :front_matter, :content, to: :parsed_blob_content
+
+  meilisearch do
+    attribute :title, :intro, :visibility, :tags, :published_at
+    searchable_attributes %i[title intro visibility tags author_name blog_name blog_permalink]
+    filterable_attributes %i[author]
+    add_attribute :author_name, :blog_name, :blog_permalink
   end
 
-  def commits
-    blog.storage.adapter.commits(fullname: repo_fullname, path: path)
+  def self.create_from_git_blob(blob:, blog:, author:)
+    mime = Marcel::MimeType.for name: blob.name
+    return unless mime == VALID_MIME
+
+    tempfile = Down::Http.download(blob.download_url)
+
+    Article.create!(
+      blog: blog,
+      author: author,
+      blob_path: blob.path,
+      blob_sha: blob.sha,
+      blob_content: tempfile.read
+    )
   end
 
-  def create
-    path = "#{repo_drafts_path}/#{title.parameterize}.md"
-    storage.adapter.create_blob(fullname: repo_fullname, path: path, content: base64_blob_content, message: nil)
+  def content_to_html
+    MarkdownRenderer.new.render(markdown_ast)
   end
 
-  def update
-    storage.adapter.update_blob(fullname: repo_fullname, path: path, content: base64_blob_content, message: nil)
+  private
+
+  def set_title
+    self.title = front_matter['title'] || markdown_ast.first.to_plaintext
   end
 
-  def delete
-    storage.adapter.delete_blob(fullname: repo_fullname, path: path, id: id)
-  end
-
-  def base64_blob_content
-    Base64.strict_encode64(content)
-  end
-
-  def persisted?
-    id && path
-  end
-
-  def self.from(response, blog)
-    case response
-    when Array then response.map { |blob| Article.from(blob, blog) }
-    else
-      content = Base64.decode64(response.content).force_encoding('UTF-8')
-      yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
-      parsed = FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(content)
-
-      front_matter_str = "---\n"
-      parsed.front_matter.each do |key, value|
-        front_matter_str += "#{key}: '#{value}'"
-        front_matter_str += "\n"
-      end
-
-      front_matter_str += '---'
-      title = parsed.front_matter['title'] || parsed.content.first(80)
-
-      Article.new(
-        id: response.id,
-        title: title,
-        intro: parsed.front_matter['description'],
-        published_at: parsed.front_matter['published_at'],
-        visibility: parsed.front_matter['visibility'],
-        tags: parsed.front_matter['tags'] || parsed.front_matter['category'],
-        front_matter: front_matter_str,
-        blog: blog,
-        filename: response.name,
-        path: response.path,
-        content: parsed.content
-      )
-    end
-  end
-
-  def to_param
-    id
+  def parsed_blob_content
+    yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
+    FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(blob_content.to_plain_text)
   end
 end

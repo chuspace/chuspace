@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
-  include Repoable, MeiliSearch
+  include Repoable, Markdownable, MeiliSearch
 
   belongs_to :user
   belongs_to :storage
   belongs_to :template, optional: true
 
-  validates_presence_of :name, :repo_articles_path, :repo_drafts_path, :repo_assets_path
+  has_many_attached :images
+  has_many :articles, dependent: :delete_all
+  has_rich_text :readme
+  markdownable :readme_content
+
+  validates_presence_of :name, :repo_articles_path, :repo_drafts_path, :readme_path
   validate :one_default_blog_allowed, on: :create
 
   enum visibility: {
@@ -17,44 +22,42 @@ class Blog < ApplicationRecord
   }, _suffix: true
 
   before_validation :set_defaults, on: :create, if: -> { storage.chuspace? }
+  after_create_commit :sync_readme, :sync_git_repo_content
+
   scope :default, -> { find_by(default: true) }
 
-  PUBLIC_INDEX = 'PUBLIC_BLOGS'
-  PRIVATE_INDEX = 'PRIVATE_BLOGS'
-  INTERNAL_INDEX = 'INTERNAL_BLOGS'
-
-  meilisearch index_uid: PRIVATE_INDEX do
+  meilisearch do
     attribute :name, :description, :visibility
-    searchable_attributes %i[name description]
-
-    add_index PUBLIC_INDEX, if: :public_visibility? do
-      attribute :name, :description, :visibility
-      searchable_attributes %i[name description]
-    end
-
-    add_index PUBLIC_INDEX, if: :internal_visibility? do
-      searchable_attributes %i[name description]
-    end
+    searchable_attributes %i[name description visibility]
   end
 
   def visibility
     super ? ActiveSupport::StringInquirer.new(super) : nil
   end
 
-  def article(id:)
-    articles.find { |article| article.id == id }
+  def readme_blob
+    @readme_blob ||= storage.adapter.blob(
+      fullname: repo_fullname,
+      path: readme_path
+    )
   end
 
-  def draft(id:)
-    drafts.find { |draft| draft.id == id }
+  def readme_content
+    readme.to_plain_text
   end
 
-  def articles
-    @articles ||= Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_articles_path), self)
+  def readme_to_html
+    MarkdownRenderer.new.render(markdown_ast)
   end
 
-  def drafts
-    @drafts ||= Article.from(storage.adapter.blobs(fullname: repo_fullname, path: repo_drafts_path), self)
+  def git_blobs
+    @git_blobs ||= storage.adapter.blobs(
+      fullname: repo_fullname,
+      paths: [
+        repo_articles_path,
+        repo_drafts_path
+      ]
+    )
   end
 
   def to_param
@@ -68,7 +71,15 @@ class Blog < ApplicationRecord
   end
 
   def set_defaults
-    self.assign_attributes(BlogFrameworkConfig.new.send(framework).slice(:repo_articles_path, :repo_drafts_path, :repo_assets_path, :repo_about_path))
+    self.assign_attributes(BlogFrameworkConfig.new.send(framework).slice(:repo_articles_path, :repo_drafts_path))
     self.visibility ||= :private
+  end
+
+  def sync_readme
+    SyncBlogReadmeJob.perform_later(self)
+  end
+
+  def sync_git_repo_content
+    SyncBlogGitRepoContentJob.perform_later(self)
   end
 end

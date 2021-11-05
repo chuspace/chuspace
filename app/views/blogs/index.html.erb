@@ -10,12 +10,6 @@
   </div>
 
   <%= turbo_frame_tag :blogs do %>
-    <% if @blogs.any? %>
-      <div class='card bordered mt-4'>
-        <%= render partial: 'blogs/item', collection: @blogs, as: :blog, cached: true %>
-      </div>
-    <% else %>
-      <div class='placeholder text-2xl'>No blogs</div>
-    <% end %>
+    <%= render 'blogs/list', blogs: @blogs %>
   <% end %>
 <% end %>

@@ -17,6 +17,14 @@ module Repoable
     @repository ||= storage.adapter.repository(fullname: repo_fullname)
   end
 
+  def repo_head_sha
+    @repo_head_sha ||= storage.adapter.head_sha(fullname: repo_fullname)
+  end
+
+  def commits
+    @commits ||= storage.adapter.commits(fullname: repo_fullname)
+  end
+
   private
 
   def create_and_connect_git_repo
