@@ -36,6 +36,9 @@ Rails.application.routes.draw do
     end
   end
 
+
+  resources :webhooks, only: :create
+
   delete '/sessions/:id', to: 'sessions#destroy', as: :logout
   get '/auth/:provider/callback', to: 'oauths#create'
   get '/:id', to: 'users#show', as: :profile

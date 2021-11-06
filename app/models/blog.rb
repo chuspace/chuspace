@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
+  extend FriendlyId
   include Repoable, Markdownable, Commitable, MeiliSearch
+
+  friendly_id :name, use: %i[history finders], slug_column: :permalink
 
   belongs_to :user
   belongs_to :storage
@@ -12,7 +15,7 @@ class Blog < ApplicationRecord
   has_rich_text :readme
   markdownable :readme_content
 
-  validates_presence_of :name, :repo_articles_path, :repo_drafts_path, :readme_path
+  validates_presence_of :name, :content_paths, :readme_path
   validate :one_default_blog_allowed, on: :create
 
   enum visibility: {
@@ -53,15 +56,8 @@ class Blog < ApplicationRecord
   def git_blobs
     @git_blobs ||= storage.adapter.blobs(
       fullname: repo_fullname,
-      paths: [
-        repo_articles_path,
-        repo_drafts_path
-      ]
+      paths: content_paths
     )
-  end
-
-  def to_param
-    permalink
   end
 
   private
@@ -71,7 +67,7 @@ class Blog < ApplicationRecord
   end
 
   def set_defaults
-    self.assign_attributes(BlogFrameworkConfig.new.send(framework).slice(:repo_articles_path, :repo_drafts_path))
+    self.assign_attributes(BlogFrameworkConfig.new.send(framework).slice(:content_paths))
     self.visibility ||= :private
   end
 

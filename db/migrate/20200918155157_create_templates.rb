@@ -18,8 +18,7 @@ class CreateTemplates < ActiveRecord::Migration[7.0]
       t.string :git_source, null: false
       t.string :preview_url
 
-      t.string :articles_folder, null: false
-      t.string :drafts_folder, null: false
+      t.string :content_paths, null: false, array: true, default: []
       t.string :readme, null: false, default: 'README.md'
       t.boolean :default, null: false, default: false
       t.boolean :approved, null: false, default: false

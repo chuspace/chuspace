@@ -26,6 +26,27 @@ class GithubAdapter < ApplicationAdapter
     @repo_folders = tree.select { |item| item.type == 'tree' }.map(&:path).sort
   end
 
+  def create_repository_webhook(fullname:)
+    url = if Rails.env.production?
+      Rails.application.routes.url_helpers.webhooks_url
+    else
+      Rails.application.routes.url_helpers.webhooks_url(host: Rails.application.credentials.webhooks[:dev_host])
+    end
+
+    post("repos/#{fullname}/hooks", {
+        events: %w[push pull_request],
+        active: true,
+        config: {
+          url: url
+        }
+      }
+    )
+  end
+
+  def delete_repository_webhook(fullname:, id:)
+    boolean_from_response(:delete, "repos/#{fullname}/hooks/#{id}")
+  end
+
   def blobs(fullname:, paths:)
     items = []
 

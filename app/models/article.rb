@@ -4,15 +4,18 @@ require 'marcel'
 require 'down/http'
 
 class Article < ApplicationRecord
+  extend FriendlyId
   include MeiliSearch, Commitable, Markdownable
   VALID_MIME = 'text/markdown'
+
+  friendly_id :front_matter_permalink_or_title, use: %i[history finders], slug_column: :permalink
 
   belongs_to :blog
   belongs_to :author, class_name: 'User'
   has_rich_text :blob_content
   markdownable :content
 
-  before_validation :set_title
+  before_validation :assign_title
   validates :title, :blob_path, :blog, :author_id, :blob_sha, presence: true
   validates :blob_path, uniqueness: { scope: :blog_id }
 
@@ -47,9 +50,20 @@ class Article < ApplicationRecord
     MarkdownRenderer.new.render(markdown_ast)
   end
 
+  def git_blob
+    @git_blob ||= storage.adapter.blob(
+      fullname: repo_fullname,
+      path: blob_path
+    )
+  end
+
+  def front_matter_permalink_or_title
+    front_matter['permalink'] || front_matter['title'] || markdown_ast.first.to_plaintext
+  end
+
   private
 
-  def set_title
+  def assign_title
     self.title = front_matter['title'] || markdown_ast.first.to_plaintext
   end
 

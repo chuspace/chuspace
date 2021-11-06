@@ -58,10 +58,8 @@ class BlogsController < ApplicationController
       :storage_id,
       :framework,
       :visibility,
-      :repo_articles_path,
-      :repo_drafts_path,
-      :repo_assets_path,
-      :repo_fullname
+      :repo_fullname,
+      repo_contents_path: []
     )
   end
 

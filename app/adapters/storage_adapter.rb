@@ -28,6 +28,7 @@ class StorageAdapter
     commits
     blobs
     blob
+    create_repository_webhook
     create_blob
     find_blob
     delete_blob

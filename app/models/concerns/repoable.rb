@@ -6,7 +6,8 @@ module Repoable
   included do
     before_create :create_and_connect_git_repo, if: -> { storage.chuspace? }
     after_validation :connect_git_repo, if: -> { storage.external? && repo_fullname_changed? }
-    after_destroy_commit :delete_git_repo, if: -> { storage.chuspace? }
+    after_destroy_commit :delete_repository_hook, :delete_git_repo, if: -> { storage.chuspace? }
+    before_create :create_repository_hook
   end
 
   def repo_folders
@@ -39,6 +40,15 @@ module Repoable
     self.name = repository.name
     self.description = repository.description
     self.repo_fullname = repository.fullname
+  end
+
+  def create_repository_hook
+    webhook = storage.adapter.create_repository_webhook(fullname: repo_fullname)
+    self.repo_webhook_id = webhook.id
+  end
+
+  def delete_repository_hook
+    storage.adapter.delete_repository_webhook(fullname: repo_fullname, id: repo_webhook_id)
   end
 
   def delete_git_repo

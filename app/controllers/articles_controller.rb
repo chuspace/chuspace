@@ -10,7 +10,7 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = @blog.article(id: params[:id])
+    @article = @blog.articles.find(params[:id])
     @markdown_doc ||= CommonMarker.render_doc(@article.content || '')
   end
 
@@ -19,7 +19,7 @@ class ArticlesController < ApplicationController
   end
 
   def edit
-    @article = @blog.article(id: params[:id])
+    @article = @blog.articles.find(params[:id])
     @edit = true
     @markdown_doc ||= CommonMarker.render_doc(@article.content || '')
   end
@@ -44,7 +44,7 @@ class ArticlesController < ApplicationController
   private
 
   def find_blog
-    @blog = Current.user.blogs.find_by(permalink: params[:blog_id])
+    @blog = Current.user.blogs.find(params[:blog_id])
   end
 
   def article_params

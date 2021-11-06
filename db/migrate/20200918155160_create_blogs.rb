@@ -14,8 +14,8 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
       t.references :template, foreign_key: true
       t.boolean :default, default: false, null: false
       t.string :repo_fullname, null: false
-      t.string :repo_articles_path, null: false
-      t.string :repo_drafts_path, null: false
+      t.string :content_paths, null: false, array: true, default: []
+      t.string :repo_webhook_id, null: false
       t.string :readme_path, null: false, default: 'README.md'
 
       t.timestamps

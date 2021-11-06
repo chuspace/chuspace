@@ -7,6 +7,7 @@ class CreateArticles < ActiveRecord::Migration[7.0]
     create_table :articles do |t|
       t.string :title, null: false
       t.text :intro
+      t.string :permalink, null: false
       t.datetime :published_at
       t.string :tags, array: true, default: []
       t.string :blob_path, null: false

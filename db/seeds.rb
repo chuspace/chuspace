@@ -3,7 +3,7 @@
 chuspace_user = User.create_with_email_identity(email: 'gaurav@gauravtiwari.co.uk')
 chuspace_user.save!
 
-chuspace_user.storages.create!(
+chuspace_storage = chuspace_user.storages.create!(
   default: true,
   active: true,
   provider: :chuspace,
@@ -20,13 +20,13 @@ github_storage = chuspace_user.storages.create!(
 
 templates = JSON.parse(Rails.root.join('db/defaults/templates.json').read)
 templates.each do |template|
-  github_storage.templates.create(
+  chuspace_storage.templates.create!(
     author: chuspace_user,
     **template
   )
 end
 
-template = github_storage.templates.first
+template = chuspace_storage.templates.first
 github_storage.blogs.create!(
   user: chuspace_user,
   permalink: 'self',
@@ -35,5 +35,5 @@ github_storage.blogs.create!(
   default: true,
   visibility: :public,
   template: template,
-  **template.blog_attributes
+  content_paths: template.content_paths
 )
