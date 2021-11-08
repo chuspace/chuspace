@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  extend FriendlyId
   include Trackable
   has_person_name
+  friendly_id :name, use: %i[history finders], slug_column: :username
 
   has_many :blogs, dependent: :delete_all
+  has_many :articles, dependent: :delete_all, foreign_key: :author_id
   has_many :storages, dependent: :delete_all
   has_many :identities, dependent: :delete_all
   validates :email, :username, :first_name, :name, presence: true
@@ -16,11 +19,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :identities
 
   def about_readme
-    @about_readme ||= blogs.default.readme_content unless blogs.default.blank?
-  end
-
-  def articles
-    Article.where(author: username)
+    @about_readme ||= blogs.default.readme_html unless blogs.default.blank?
   end
 
   class << self

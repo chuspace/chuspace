@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  def url_or_mailto?(url_str)
+    url = URI.parse(url_str)
+    url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS) || url.kind_of?(URI::MailTo)
+  end
+
   def link_class(path)
     current_page?(path) ? 'font-bold' : ''
   end

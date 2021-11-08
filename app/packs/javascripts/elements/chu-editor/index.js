@@ -50,7 +50,7 @@ export default class ChuEditor extends HTMLElement {
       autoFocus: this.autofocus,
       editable: true,
       onChange: this.onChange,
-      content: this.querySelector('textarea').value || '',
+      content: this.querySelector('#content').value || '',
       revision: this.revision || '',
       appearance: 'default'
     })

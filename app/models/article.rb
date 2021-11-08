@@ -12,17 +12,17 @@ class Article < ApplicationRecord
 
   belongs_to :blog
   belongs_to :author, class_name: 'User'
-  has_rich_text :blob_content
   markdownable :content
 
   before_validation :assign_title
-  validates :title, :blob_path, :blog, :author_id, :blob_sha, presence: true
   validates :blob_path, uniqueness: { scope: :blog_id }
+  validates :blob_path, :blog, :author_id, :blob_sha, presence: true
+  validates :title, :content_html, :published_at, presence: true, if: :published?
 
   delegate :storage, :repo_fullname, to: :blog
   delegate :name, :permalink, to: :blog, prefix: true
   delegate :name, to: :author, prefix: true
-  delegate :front_matter, :content, to: :parsed_blob_content
+  delegate :front_matter, :content, to: :parsed_content
 
   meilisearch do
     attribute :title, :intro, :visibility, :tags, :published_at
@@ -35,26 +35,38 @@ class Article < ApplicationRecord
     mime = Marcel::MimeType.for name: blob.name
     return unless mime == VALID_MIME
 
-    tempfile = Down::Http.download(blob.download_url)
+    blob_content = blog.git_blob(path: blob.path).content
+    markdown_ast = MarkdownParserService.call(blog: blog, content: blob_content)
 
-    Article.create!(
+    Article.create(
       blog: blog,
       author: author,
       blob_path: blob.path,
       blob_sha: blob.sha,
-      blob_content: tempfile.read
+      readme: blob.path == blog.readme_path,
+      blob_content: blob_content,
+      md_content: markdown_ast.to_commonmark,
+      html_content: MarkdownRenderer.new.render(markdown_ast)
     )
   end
 
-  def content_to_html
-    MarkdownRenderer.new.render(markdown_ast)
+  def self.without_readme
+    where(readme: false)
   end
 
-  def git_blob
-    @git_blob ||= storage.adapter.blob(
-      fullname: repo_fullname,
-      path: blob_path
-    )
+  def published?
+    published_at && published_at < Time.current
+  end
+
+  def front_matter_str
+    str = "---\n"
+
+    front_matter.each do |key, value|
+      str += "#{key}: '#{value}'"
+      str += "\n"
+    end
+
+    str += '---'
   end
 
   def front_matter_permalink_or_title
@@ -64,11 +76,11 @@ class Article < ApplicationRecord
   private
 
   def assign_title
-    self.title = front_matter['title'] || markdown_ast.first.to_plaintext
+    self.title ||= front_matter['title']
   end
 
-  def parsed_blob_content
+  def parsed_content
     yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
-    FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(blob_content.to_plain_text)
+    FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(content_md)
   end
 end

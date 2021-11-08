@@ -55,7 +55,7 @@ export default class InlineEditor extends HTMLElement {
     })
 
     const titleNode = document.createElement('h1')
-    titleNode.textContent = this.querySelector('input').value
+    titleNode.textContent = this.querySelector('#input').value
 
     const view = new EditorView(this, {
       state: EditorState.create({

@@ -1,6 +1,6 @@
 <div class='sm:w-2/3 mx-auto w-full'>
-  <%= render 'breadcrumbs', blog: @blog, article: @article %>
-  <%= simple_form_for [@blog, @article] do |form| %>
+  <%= render 'breadcrumbs', blog: @blog, blob: @blob %>
+  <%= simple_form_for [@blog, @blob] do |form| %>
     <frontmatter-editor spellcheck="false">
       <details class='mt-8 border border-primary px-4 py-2'>
         <summary data-action='click:frontmatter-editor#toggle'>Front Matter</summary>
@@ -14,14 +14,14 @@
       data-action='keydown:chu-editor#handleArrow'
     >
       <inline-editor class='block mt-8'>
-        <%= form.input :title, label: false, wrapper: false, input_html: { class: 'hidden', value: @article.title, id: 'input' } %>
+        <%= form.input :title, label: false, wrapper: false, input_html: { class: 'hidden', value: @blob.title, id: 'input' } %>
       </inline-editor>
 
       <inline-editor class='block mb-12' data-appearance='summary'>
-        <%= form.input :intro, label: false, wrapper: false, input_html: { class: 'hidden', value: @article.intro, id: 'input' } %>
+        <%= form.input :intro, label: false, wrapper: false, input_html: { class: 'hidden', value: @blob.intro, id: 'input' } %>
       </inline-editor>
 
-      <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: @article.content, id: 'content' } %>
+      <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: @blob.content, id: 'content' } %>
     </chu-editor>
   <% end %>
 </div>

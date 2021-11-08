@@ -1,9 +1,8 @@
 [
   {
     "name": "Astro starter",
-    "description": "Minimal astro starter blog template",
+    "description": "Minimal Astro starter blog template",
     "framework": "astro",
-    "permalink": "astro-starter-blog",
     "default": true,
     "language": "javascript",
     "mirror_path": "chuspace/astro-starter-blog",
@@ -11,13 +10,13 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "content_paths": ["src/pages/posts"]
+    "articles_folder": "src/pages/posts",
+    "assets_folder": "public/assets/blog"
   },
   {
     "name": "Bridgetown starter",
+    "description": "Minimal Bridgetown starter blog template",
     "framework": "bridgetown",
-    "description": "Minimal bridgetown starter blog template",
-    "permalink": "bridgetown-starter-blog",
     "language": "javascript",
     "default": false,
     "mirror_path": "chuspace/bridgetown-starter-blog",
@@ -25,13 +24,13 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "content_paths": ["src/_posts"]
+    "articles_folder": "src/_posts",
+    "assets_folder": "src/images"
   },
   {
     "name": "11ty starter",
+    "description": "Minimal 11ty starter blog template",
     "framework": "eleventy",
-    "description": "Minimal eleventy starter blog template",
-    "permalink": "11ty-starter-blog",
     "language": "javascript",
     "default": false,
     "css": "tailwindcss",
@@ -39,41 +38,41 @@
     "system": true,
     "mirror_path": "chuspace/11ty-starter-blog",
     "git_source": "https://github.com/chuspace/11ty-starter-blog",
-    "content_paths": ["src/blog"]
+    "articles_folder": "src/blog",
+    "assets_folder": "src/blog/images"
   },
   {
     "name": "Gridsome starter",
+    "description": "Minimal Gridsome starter blog template",
     "framework": "gridsome",
     "language": "javascript",
-    "description": "Minimal gridsome starter blog template",
-    "permalink": "gridsome-starter-blog",
     "default": false,
     "css": "tailwindcss",
     "approved": true,
     "system": true,
     "mirror_path": "chuspace/gridsome-starter-blog",
     "git_source": "https://github.com/chuspace/gridsome-starter-blog",
-    "content_paths": ["content/posts"]
+    "articles_folder": "content/posts",
+    "assets_folder": "static"
   },
   {
     "name": "Gatsby starter",
+    "description": "Minimal Gatsby starter blog template",
     "framework": "gatsby",
-    "description": "Minimal gatsby starter blog template",
     "language": "javascript",
-    "permalink": "gatsby-starter-blog",
     "default": false,
     "css": "tailwindcss",
     "approved": true,
     "system": true,
     "mirror_path": "chuspace/gatsby-starter-blog",
     "git_source": "https://github.com/chuspace/gatsby-starter-blog",
-    "content_paths": ["content/posts"]
+    "articles_folder": "content/posts",
+    "assets_folder": "static/images"
   },
   {
     "name": "Hexo starter",
+    "description": "Minimal Hexo starter blog template",
     "framework": "hexo",
-    "description": "Minimal hexo starter blog template",
-    "permalink": "hexo-starter-blog",
     "language": "javascript",
     "default": false,
     "css": "tailwindcss",
@@ -81,41 +80,42 @@
     "system": true,
     "mirror_path": "chuspace/hexo-starter-blog",
     "git_source": "https://github.com/chuspace/hexo-starter-blog",
-    "content_paths": ["source/_posts"]
+    "articles_folder": "source/_posts",
+    "assets_folder": "source/images"
   },
   {
     "name": "Hugo starter",
+    "description": "Minimal Hugo starter blog template",
     "framework": "hugo",
-    "description": "Minimal hugo starter blog template",
     "language": "go",
-    "permalink": "hugo-starter-blog",
     "default": false,
     "css": "tailwindcss",
     "approved": true,
     "system": true,
     "mirror_path": "chuspace/hugo-starter-blog",
     "git_source": "https://github.com/chuspace/hugo-starter-blog",
-    "content_paths": ["content/_posts"]
+    "articles_folder": "content/posts",
+    "assets_folder": "static"
   },
   {
     "name": "Jekyll starter",
+    "description": "Minimal Jekyll starter blog template",
     "framework": "jekyll",
-    "description": "Minimal jekyll starter blog template",
     "language": "ruby",
-    "permalink": "jekyll-starter-blog",
     "default": false,
     "css": "tailwindcss",
     "approved": true,
     "system": true,
     "mirror_path": "chuspace/jekyll-starter-blog",
     "git_source": "https://github.com/chuspace/jekyll-starter-blog",
-    "content_paths": ["_posts", "_drafts"]
+    "articles_folder": "_posts",
+    "drafts_folder": "_drafts",
+    "assets_folder": "assets/img"
   },
   {
     "name": "Nextjs starter",
+    "description": "Minimal Nextjs starter blog template",
     "framework": "nextjs",
-    "description": "Minimal nextjs starter blog template",
-    "permalink": "nextjs-starter-blog",
     "language": "javascript",
     "default": false,
     "css": "tailwindcss",
@@ -123,6 +123,7 @@
     "system": true,
     "mirror_path": "chuspace/nextjs-starter-blog",
     "git_source": "https://github.com/chuspace/nextjs-starter-blog",
-    "content_paths": ["_posts"]
+    "articles_folder": "_posts",
+    "assets_folder": "public/images"
   }
 ]

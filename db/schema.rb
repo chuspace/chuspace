@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_05_103140) do
+ActiveRecord::Schema.define(version: 2021_11_07_175430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -98,6 +98,16 @@ ActiveRecord::Schema.define(version: 2021_11_05_103140) do
 # Could not dump table "identities" because of following StandardError
 #   Unknown type 'identity_provider_enum_type' for column 'provider'
 
+  create_table "images", force: :cascade do |t|
+    t.text "blob_path"
+    t.text "base64_blob_path"
+    t.bigint "blog_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["blob_path", "blog_id"], name: "index_images_on_blob_path_and_blog_id", unique: true
+    t.index ["blog_id"], name: "index_images_on_blog_id"
+  end
+
 # Could not dump table "storages" because of following StandardError
 #   Unknown type 'git_storage_provider_enum_type' for column 'provider'
 
@@ -131,6 +141,7 @@ ActiveRecord::Schema.define(version: 2021_11_05_103140) do
   add_foreign_key "blogs", "templates"
   add_foreign_key "blogs", "users"
   add_foreign_key "identities", "users"
+  add_foreign_key "images", "blogs"
   add_foreign_key "storages", "users"
   add_foreign_key "templates", "storages"
   add_foreign_key "templates", "users", column: "author_id"

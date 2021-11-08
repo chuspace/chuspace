@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :setups, only: %i[index show], path: 'get-started'
 
   resources :blogs, path: 'b' do
+    resources :blobs, only: :index
     resources :domains
     resources :articles do
       resources :commits, only: :new

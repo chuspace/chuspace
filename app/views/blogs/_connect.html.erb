@@ -35,7 +35,9 @@
 
       <div data-target='auto-refresh-form.loader'>
         <% if blog.repo_folders&.any? %>
-          <%= form.input :repo_contents_path, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_articles_folder, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_drafts_folder, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_assets_folder, as: :select, collection: blog.repo_folders %>
           <%= form.input :readme_path %>
         <% end %>
       </div>
