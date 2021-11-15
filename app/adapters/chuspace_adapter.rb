@@ -58,7 +58,7 @@ class ChuspaceAdapter < GiteaAdapter
   def create_repository(blog:)
     repository_from_response(
       post(
-        "repos/#{blog.template_name}/generate",
+        "repos/#{blog.template.mirror_path}/generate",
         name: blog.name,
         owner: blog.user.username,
         private: true,

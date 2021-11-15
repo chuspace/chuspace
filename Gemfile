@@ -16,7 +16,6 @@ gem 'activerecord-clean-db-structure'
 gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
-gem 'store_model'
 gem 'name_of_person'
 
 # Form
@@ -100,6 +99,7 @@ group :development, :test do
   gem 'minitest'
   gem 'rack-proxy'
   gem 'rack-mini-profiler'
+  gem 'dotenv-rails'
 end
 
 group :development do

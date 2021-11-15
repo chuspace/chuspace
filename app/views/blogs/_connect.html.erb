@@ -19,7 +19,7 @@
             ) %>
           <ul
             id="repos-popup"
-            class='absolute z-10 bg-black border border-light-200 w-full'></ul>
+            class='absolute z-10 shadow menu dropdown-content bg-base-100 border w-full'></ul>
         </auto-complete>
       <% end %>
 
@@ -27,7 +27,6 @@
         <% if blog.repo_fullname.present? %>
           <%= form.input :name, required: true %>
           <%= form.input :description, as: :text, required: true %>
-          <%= form.input :framework, as: :select, collection: Blog.frameworks %>
           <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
           <%= form.input :default %>
         <% end %>
@@ -35,10 +34,10 @@
 
       <div data-target='auto-refresh-form.loader'>
         <% if blog.repo_folders&.any? %>
-          <%= form.input :repo_articles_path, as: :select, collection: blog.repo_folders %>
-          <%= form.input :repo_drafts_path, as: :select, collection: blog.repo_folders %>
-          <%= form.input :repo_assets_path, as: :select, collection: blog.repo_folders %>
-          <%= form.input :repo_about_path, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_articles_folder, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_drafts_folder, as: :select, collection: blog.repo_folders %>
+          <%= form.input :repo_assets_folder, as: :select, collection: blog.repo_folders %>
+          <%= form.input :readme_path %>
         <% end %>
       </div>
 

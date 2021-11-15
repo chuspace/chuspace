@@ -1,9 +1,7 @@
 <% if signed_in? %>
   <section class='flex justify-between mt-24'>
     <main class='sm:w-2/3 w-full mr-12 card bordered'>
-      <% @articles.each do |article| %>
-        <%= render 'articles/article', blog: @blog, article: article %>
-      <% end %>
+      <%= render 'articles/list', articles: @articles %>
     </main>
 
     <aside class='sm:w-1/3 w-full'>

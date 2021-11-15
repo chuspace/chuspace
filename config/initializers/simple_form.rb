@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 SimpleForm.setup do |config|
-  config.label_text = ->(label, required, explicit_label) { "#{label} #{required ? required : '(optional)'}" }
-
   config.wrappers :custom, tag: 'div', class: 'form-control', error_class: 'input-error' do |input|
     input.use :html5
     input.use :placeholder
@@ -63,12 +61,14 @@ SimpleForm.setup do |config|
 
   config.default_form_class = 'form'
   config.default_wrapper = :custom
+  config.label_text = ->(label, required, explicit_label) { "#{label} #{required ? required : '(optional)'}" }
   config.boolean_style = :inline
   config.error_notification_tag = :div
   config.error_notification_class = 'alert alert-error'
   config.browser_validations = false
   config.boolean_label_class = 'checkbox'
   config.i18n_scope = 'form'
+  config.button_class = 'btn btn-sm'
   config.generate_additional_classes_for = []
 
   config.wrapper_mappings = {

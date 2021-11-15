@@ -1,0 +1,7 @@
+<div class='card bordered'>
+  <% if blogs.any? %>
+    <%= render partial: 'blogs/item', collection: blogs, as: :blog, cached: true %>
+  <% else %>
+    <div class='text-center text-2xl'>No blogs</div>
+  <% end %>
+</div>

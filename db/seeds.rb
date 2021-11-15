@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-chuspace_user = User.create_with_email_identity(email: 'gaurav@gauravtiwari.co.uk')
+chuspace_user = User.create_with_email_identity(email: 'gaurav@chuspace.com')
 chuspace_user.save!
 
 chuspace_user.storages.create!(
@@ -20,16 +20,16 @@ github_storage = chuspace_user.storages.create!(
 
 templates = JSON.parse(Rails.root.join('db/defaults/templates.json').read)
 templates.each do |template|
-  github_storage.templates.create(
+  github_storage.blog_templates.create(
     author: chuspace_user,
     **template
   )
 end
 
-template = github_storage.templates.first
+template = github_storage.blog_templates.first
 github_storage.blogs.create!(
   user: chuspace_user,
-  permalink: 'self',
+  permalink: 'chuspace',
   repo_fullname: 'chuspace/blog',
   name: 'Chuspace',
   default: true,

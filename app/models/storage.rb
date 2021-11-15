@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Storage < ApplicationRecord
-  has_many :templates, dependent: :delete_all
+  has_many :blog_templates, dependent: :delete_all
   has_many :blogs, dependent: :delete_all
   belongs_to :user, optional: true
 

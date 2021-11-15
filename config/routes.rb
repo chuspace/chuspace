@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :setups, only: %i[index show], path: 'get-started'
 
   resources :blogs, path: 'b' do
+    resources :blobs, only: :index
     resources :domains
     resources :articles do
       resources :commits, only: :new
@@ -15,16 +16,13 @@ Rails.application.routes.draw do
 
     collection do
       get :connect
+      post :auto_check
     end
   end
 
   resources :storages do
     resources :repos
   end
-
-  get '/me', to: 'users#show', as: :profile
-  delete '/sessions/:id', to: 'sessions#destroy', as: :logout
-  get '/auth/:provider/callback', to: 'oauths#create'
 
   resources :magic_logins, only: :index, path: 'magic'
   resources :signups, only: %i[index create], path: 'signup' do
@@ -38,4 +36,8 @@ Rails.application.routes.draw do
       get :email
     end
   end
+
+  delete '/sessions/:id', to: 'sessions#destroy', as: :logout
+  get '/auth/:provider/callback', to: 'oauths#create'
+  get '/:id', to: 'users#show', as: :profile
 end

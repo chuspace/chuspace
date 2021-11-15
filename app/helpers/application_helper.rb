@@ -18,4 +18,18 @@ module ApplicationHelper
     get_request = options[:method] == :get || options[:method].blank?
     get_request ? link_to(name, options, html_options, &block) : button_to(name, options, html_options, &block)
   end
+
+  def tab_selected?(path)
+    request.fullpath == path ? 'font-bold border-b-2 pb-1' : ''
+  end
+
+  def user_menu
+    {
+      about: { label: 'About', tab: nil },
+      articles: { label: 'Recent posts', tab: :articles },
+      blogs: { label: 'Blogs', tab: :blogs },
+      storages: { label: 'Storages', tab: :storages },
+      settings: { label: 'Settings', tab: :settings }
+    }.freeze
+  end
 end

@@ -8,7 +8,7 @@ class GitStorageConfig < ApplicationConfig
       self_hosted: false,
       provider: :chuspace,
       description: 'Chuspace Git storage service for persisting blog repositories.',
-      endpoint: 'https://gitea.chuspace.com/api/v1',
+      endpoint: ENV['CHUSPACE_GIT_STORAGE_ENDPOINT'],
       scopes: 'Access token have full access to your account'
     },
     github: {
@@ -48,6 +48,6 @@ class GitStorageConfig < ApplicationConfig
   end
 
   def self.chuspace
-    GitStorageConfig.defaults.find { |key, _| key == 'chuspace' }.symbolize_keys
+    GitStorageConfig.defaults['chuspace']
   end
 end

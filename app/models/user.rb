@@ -2,6 +2,9 @@
 
 class User < ApplicationRecord
   include Trackable
+  extend FriendlyId
+  friendly_id :username, use: :history, slug_column: :username
+
   has_person_name
 
   has_many :blogs, dependent: :delete_all
@@ -15,9 +18,14 @@ class User < ApplicationRecord
   AVATAR_VARIANTS = { xs: 32, sm: 48, md: 64, lg: 80, xl: 120, thumb: 150, profile: 250 }.freeze
   accepts_nested_attributes_for :identities
 
+  def about_readme
+    @about_readme ||= blogs.default.readme unless blogs.default.blank?
+  end
+
   class << self
     def create_with_email_identity(email:)
-      user = User.new(
+      user = User.
+      new(
         name: email.split('@').first.humanize,
         username: email.to_slug.normalize.to_s,
         email: email
@@ -44,25 +52,13 @@ class User < ApplicationRecord
     "//secure.gravatar.com/avatar/#{gravatar_id}?d=identicon&s=#{size}"
   end
 
-  def enable_default_blogging
-    ChuspaceAdapter.as_superuser.create_user(user: self)
-    adapter = ChuspaceAdapter.as_superuser
-    adapter.basic_auth = true
-    adapter.sudo = username
+  private
 
-    access_token = adapter.create_personal_access_token(user: self)
-    storage = storages.create!(access_token: access_token, provider: :chuspace)
-
-    storage.blogs.create!(
-      user: self,
-      name: username,
-      default: true,
-      visibility: :internal,
-      **BlogFrameworkConfig.default.slice(:framework, :posts_folder, :drafts_folder, :assets_folder)
-    )
+  def should_generate_new_friendly_id?
+    username.blank? || username_changed?
   end
 
-  def to_param
-    username
+  def resolve_friendly_id_conflict(candidates)
+    self.username = normalize_friendly_id(username)
   end
 end

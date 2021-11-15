@@ -8,12 +8,11 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
 
   def header(node)
     slug = string_content_for(node).to_slug&.to_ascii&.normalize&.to_s
-
     block { out('<h', node.header_level, ' id="', slug, '">', :children, '</h', node.header_level, '>') }
   end
 
   def link(node)
-    if url_or_mailto?(node.url)
+    if URI.parse(node.url).absolute?
       out('<link-preview href="', node.url.nil? ? '' : escape_href(node.url), '"')
       out('>')
       out('<a href="', node.url.nil? ? '' : escape_href(node.url), '"')
@@ -26,22 +25,15 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
       out('>', :children, '</a>')
       out('</link-preview>')
     else
-      blob_path = node.url.start_with?('/') ? node.url[1..-1] : node.url
-      blob_path_with_extension = File.extname(blob_path).blank? ? blob_path + '.md' : blob_path
-      post = Current.user.posts.find_by(blob_path: blob_path_with_extension)
-      post_url = post ? Rails.application.routes.url_helpers.post_url(post) : node.url
-
-      out('<a href="', post_url.nil? ? '' : escape_href(post_url), '"')
+      out('<a href="', node.url.nil? ? '' : escape_href(node.url), '"')
       out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?
       out('>', :children, '</a>')
     end
   end
 
   def image(node)
-    blob_url = node.url
-
     out('<lazy-image')
-    out(' src="', escape_href(blob_url), '"')
+    out(' src="', escape_href(node.url), '"')
     plain { out(' alt="', :children, '"') }
     out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?
     out(' >')
@@ -64,11 +56,6 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
   end
 
   private
-
-  def url_or_mailto?(url_str)
-    url = URI.parse(url_str)
-    url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS) || url.kind_of?(URI::MailTo)
-  end
 
   def string_content_for(node, content = '')
     node.each do |subnode|

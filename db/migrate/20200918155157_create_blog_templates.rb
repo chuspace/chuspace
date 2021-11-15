@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class CreateTemplates < ActiveRecord::Migration[7.0]
+class CreateBlogTemplates < ActiveRecord::Migration[7.0]
   disable_ddl_transaction!
 
   def change
-    create_table :templates do |t|
+    create_table :blog_templates do |t|
       t.string :name, null: false
       t.string :description
       t.string :permalink, null: false
@@ -19,7 +19,7 @@ class CreateTemplates < ActiveRecord::Migration[7.0]
       t.string :preview_url
 
       t.string :articles_folder, null: false
-      t.string :drafts_folder, null: false
+      t.string :drafts_folder
       t.string :assets_folder, null: false
       t.string :readme, null: false, default: 'README.md'
       t.boolean :default, null: false, default: false
@@ -29,14 +29,14 @@ class CreateTemplates < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :templates, :visibility, :template_visibility_enum_type, default: :public
-    add_index :templates, :default, algorithm: :concurrently
-    add_index :templates, :approved, algorithm: :concurrently
-    add_index :templates, :system, algorithm: :concurrently
-    add_index :templates, :visibility, algorithm: :concurrently
-    add_index :templates, :framework, algorithm: :concurrently
-    add_index :templates, :css, algorithm: :concurrently
-    add_index :templates, :language, algorithm: :concurrently
-    add_index :templates, :permalink, unique: true, algorithm: :concurrently
+    add_column :blog_templates, :visibility, :template_visibility_enum_type, default: :public
+    add_index :blog_templates, :default, algorithm: :concurrently
+    add_index :blog_templates, :approved, algorithm: :concurrently
+    add_index :blog_templates, :system, algorithm: :concurrently
+    add_index :blog_templates, :visibility, algorithm: :concurrently
+    add_index :blog_templates, :framework, algorithm: :concurrently
+    add_index :blog_templates, :css, algorithm: :concurrently
+    add_index :blog_templates, :language, algorithm: :concurrently
+    add_index :blog_templates, :permalink, unique: true, algorithm: :concurrently
   end
 end

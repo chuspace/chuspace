@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class BlogsController < ApplicationController
+  include AutoCheckable
+
   before_action :authenticate!, except: :show
-  before_action :find_blog, except: %i[new connect create index]
+  before_action :find_blog, except: %i[new connect create index auto_check]
 
   def index
     @blogs = Current.user.blogs
@@ -26,13 +28,17 @@ class BlogsController < ApplicationController
     if @blog.save
       redirect_to blogs_path
     else
-      @blog.errors.clear
+      puts @blog.inspect
 
       respond_to do |format|
         format.html
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: "blogs/#{params[:type]}", locals: { blog: @blog }) }
       end
     end
+  end
+
+  def auto_check
+    check_resource_available(resource: Blog.new(user: Current.user, permalink: params[:value]), attribute: :permalink)
   end
 
   def show
@@ -56,16 +62,18 @@ class BlogsController < ApplicationController
       :name,
       :description,
       :storage_id,
-      :framework,
+      :template_id,
       :visibility,
-      :repo_articles_path,
-      :repo_drafts_path,
-      :repo_assets_path,
-      :repo_fullname
+      :repo_articles_folder,
+      :repo_drafts_folder,
+      :repo_assets_folder,
+      :repo_fullname,
+      :readme_path,
+      :default
     )
   end
 
   def find_blog
-    @blog = Current.user.blogs.find_by(permalink: params[:id])
+    @blog = Current.user.blogs.friendly.find(params[:id])
   end
 end

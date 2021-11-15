@@ -33,13 +33,28 @@ class GithubAdapter < ApplicationAdapter
       next if blob.type == 'tree'
 
       id = blob.sha
-      content = blob(fullname: fullname, id: id)
+      content = blob(fullname: fullname, path: blob.path)
       Sawyer::Resource.new(agent, blob.to_h.merge!(id: id, **content.to_h))
     end
   end
 
-  def blob(fullname:, id:)
-    get "repos/#{fullname}/git/blobs/#{id}"
+  def blob(fullname:, path:)
+    get "repos/#{fullname}/contents/#{path}"
+  rescue FaradayClient::NotFound
+    Sawyer::Resource.new(agent, {})
+  end
+
+  def commits(fullname:, path: nil)
+    commits = get("repos/#{fullname}/commits", { path: path })
+
+    commits.map do |commit|
+      commit_data = commit(fullname: fullname, sha: commit.sha)
+      Sawyer::Resource.new(agent, commit_data.to_h)
+    end
+  end
+
+  def commit(fullname:, sha:)
+    get("repos/#{fullname}/commits/#{sha}")
   end
 
   def create_blob(fullname:, path:, content:, message: nil)

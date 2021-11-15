@@ -15,9 +15,13 @@
 
       <p class='text-sm mt-2 italic'>Used to store blog git repo</p>
 
-      <%= form.input :name %>
+      <auto-check src="<%= auto_check_blogs_path %>">
+        <%= form.input :name, as: :string %>
+        <input hidden data-csrf value="<%= form_authenticity_token %>">
+      </auto-check>
+      <%= form.error :permalink %>
       <%= form.input :description %>
-      <%= form.input :framework, as: :select, collection: Blog.frameworks %>
+      <%= form.input :template_id, as: :select, collection: BlogTemplate.pluck(:name, :id) %>
       <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
       <%= form.input :default %>
       <%= form.input :type, as: :hidden, input_html: { value: :new, name: 'type' } %>

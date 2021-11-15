@@ -26,6 +26,7 @@ class StorageAdapter
     repository_folders
     head_sha
     commits
+    blob
     blobs
     create_blob
     find_blob

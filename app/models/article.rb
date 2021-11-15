@@ -54,6 +54,7 @@ class Article
 
       front_matter_str += '---'
       title = parsed.front_matter['title'] || parsed.content.first(80)
+      parsed_content = MarkdownParserService.call(blog: blog, content: parsed.content).to_commonmark
 
       Article.new(
         id: response.id,
@@ -66,7 +67,7 @@ class Article
         blog: blog,
         filename: response.name,
         path: response.path,
-        content: parsed.content
+        content: parsed_content
       )
     end
   end

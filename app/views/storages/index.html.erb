@@ -1,9 +1,3 @@
 <%= render 'layout' do %>
-  <% if @storages.any? %>
-    <div class='card bordered'>
-      <%= render partial: 'storages/item', collection: @storages, as: :storage, cached: true %>
-    </div>
-  <% else %>
-    <div class='text-center text-2xl'>No storages connected</div>
-  <% end %>
+  <%= render 'storages/list', storages: @storages %>
 <% end %>

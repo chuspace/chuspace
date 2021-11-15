@@ -20,7 +20,6 @@ class AutoChecksController < ApplicationController
     if record.valid_attributes?(attribute)
       head :ok
     else
-
       render html: record.errors.messages[attribute.to_sym].to_sentence.html_safe, status: :unprocessable_entity
     end
   end
