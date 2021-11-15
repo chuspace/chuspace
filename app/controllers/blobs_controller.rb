@@ -14,6 +14,6 @@ class BlobsController < ApplicationController
   private
 
   def find_blog
-    @blog = Current.user.blogs.find_by(permalink: params[:blog_id])
+    @blog = Current.user.blogs.friendly.find(params[:blog_id])
   end
 end

@@ -58,7 +58,7 @@ class Blog < ApplicationRecord
   private
 
   def one_default_blog_allowed
-    errors.add(:default, :one_default_blog_allowed) if default? && user.blogs.default.any?
+    errors.add(:default, :one_default_blog_allowed) if default? && user.blogs.default.present?
   end
 
   def set_defaults
