@@ -29,7 +29,6 @@ end
 template = github_storage.blog_templates.first
 github_storage.blogs.create!(
   user: chuspace_user,
-  permalink: 'chuspace',
   repo_fullname: 'chuspace/blog',
   name: 'Chuspace',
   default: true,

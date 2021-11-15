@@ -28,8 +28,6 @@ class BlogsController < ApplicationController
     if @blog.save
       redirect_to blogs_path
     else
-      puts @blog.inspect
-
       respond_to do |format|
         format.html
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: "blogs/#{params[:type]}", locals: { blog: @blog }) }
@@ -38,7 +36,7 @@ class BlogsController < ApplicationController
   end
 
   def auto_check
-    check_resource_available(resource: Blog.new(user: Current.user, permalink: params[:value]), attribute: :permalink)
+    check_resource_available(resource: Current.user.blogs.new(name: params[:value]), attribute: :name)
   end
 
   def show

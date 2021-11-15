@@ -41,13 +41,10 @@ export default class TurboReconnectElement extends HTMLElement {
         })
 
         input.addEventListener('auto-check-success', async function(event) {
-          const { response, setValidity } = event.detail
-
-          console.log(event)
+          const { response } = event.detail
           const message = await response.text()
           input.classList.remove('input-error')
           const error = check.querySelector('.input-error-message')
-          console.log(error)
           if (error) error.remove()
           const hint = check.querySelector('.input-hint-message')
           if (hint) hint.classList.remove('hidden')

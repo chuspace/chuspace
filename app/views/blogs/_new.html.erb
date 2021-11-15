@@ -1,31 +1,33 @@
-<%= turbo_frame_tag(blog) do %>
-  <auto-refresh-form>
-    <%= simple_form_for(blog, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
-      <%= form.input(
-            :storage_id,
-          as: :hidden,
-          wrapper: false,
-          input_html: {
-            value: blog.storage_id
-          }
-        ) %>
-      <div class='card bordered'>
-        <%= render 'storages/item', storage: blog.storage %>
-      </div>
+<turbo-reconnect>
+  <%= turbo_frame_tag(blog) do %>
+    <auto-refresh-form>
+      <%= simple_form_for(blog, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+        <%= form.input(
+              :storage_id,
+            as: :hidden,
+            wrapper: false,
+            input_html: {
+              value: blog.storage_id
+            }
+          ) %>
+        <div class='card bordered'>
+          <%= render 'storages/item', storage: blog.storage %>
+        </div>
 
-      <p class='text-sm mt-2 italic'>Used to store blog git repo</p>
+        <p class='text-sm mt-2 italic'>Used to store blog git repo</p>
 
-      <auto-check src="<%= auto_check_blogs_path %>">
-        <%= form.input :name, as: :string %>
-        <input hidden data-csrf value="<%= form_authenticity_token %>">
-      </auto-check>
-      <%= form.error :permalink %>
-      <%= form.input :description %>
-      <%= form.input :template_id, as: :select, collection: BlogTemplate.pluck(:name, :id) %>
-      <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
-      <%= form.input :default %>
-      <%= form.input :type, as: :hidden, input_html: { value: :new, name: 'type' } %>
-      <%= form.button :submit, class: 'mt-12' %>
-    <% end %>
-  </auto-refresh-form>
-<% end %>
+        <auto-check src="<%= auto_check_blogs_path %>">
+          <%= form.input :name %>
+          <input hidden data-csrf value="<%= form_authenticity_token %>">
+        </auto-check>
+
+        <%= form.input :description %>
+        <%= form.input :template_id, as: :select, collection: BlogTemplate.pluck(:name, :id) %>
+        <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
+        <%= form.input :default %>
+        <%= form.input :type, as: :hidden, input_html: { value: :new, name: 'type' } %>
+        <%= form.button :submit, class: 'mt-12' %>
+      <% end %>
+    </auto-refresh-form>
+  <% end %>
+</turbo-reconnect>

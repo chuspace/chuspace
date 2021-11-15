@@ -3,13 +3,13 @@
 class Blog < ApplicationRecord
   include Repoable
   extend FriendlyId
-  friendly_id :name, use: :history, slug_column: :permalink
+  friendly_id :name, use: %i[slugged history], slug_column: :name
 
   belongs_to :user
   belongs_to :storage
   belongs_to :template, optional: true, class_name: 'BlogTemplate'
 
-  validates :permalink, uniqueness: { scope: :user_id }
+  validates :name, uniqueness: { scope: :user_id }
   validates_presence_of :template_id, if: -> { storage.chuspace? }
   validates_presence_of :name, :visibility, :repo_articles_folder, :repo_assets_folder
   validate :one_default_blog_allowed, on: :create
@@ -66,11 +66,15 @@ class Blog < ApplicationRecord
     self.visibility ||= :private
   end
 
+  def unset_slug_if_invalid
+    self.name = normalize_friendly_id(name)
+  end
+
   def should_generate_new_friendly_id?
-    permalink.blank? || name_changed?
+    name.blank? || name_changed?
   end
 
   def resolve_friendly_id_conflict(candidates)
-    self.permalink = normalize_friendly_id(name)
+    self.name = normalize_friendly_id(name)
   end
 end
