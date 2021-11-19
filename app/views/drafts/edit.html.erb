@@ -1,0 +1,27 @@
+<div class='sm:w-2/3 mx-auto w-full'>
+  <%= render 'breadcrumbs', blog: @blog, draft: @draft %>
+  <%= simple_form_for [@blog, @draft] do |form| %>
+    <frontmatter-editor spellcheck="false">
+      <details class='mt-8 border border-primary px-4 py-2'>
+        <summary data-action='click:frontmatter-editor#toggle'>Front Matter</summary>
+        <%= form.input :front_matter, as: :text, label: false %>
+      </details>
+    </frontmatter-editor>
+
+    <chu-editor
+      class='block chu-editor editable'
+      spellcheck="false"
+      data-action='keydown:chu-editor#handleArrow'
+    >
+      <inline-editor class='block mt-8'>
+        <%= form.input :title, label: false, wrapper: false, input_html: { class: 'hidden', value: @draft.title } %>
+      </inline-editor>
+
+      <inline-editor class='block mb-12' data-appearance='summary'>
+        <%= form.input :intro, label: false, wrapper: false, input_html: { class: 'hidden', value: @draft.intro } %>
+      </inline-editor>
+
+      <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: @draft.content } %>
+    </chu-editor>
+  <% end %>
+</div>
