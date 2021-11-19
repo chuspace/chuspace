@@ -5,6 +5,8 @@ class Blog < ApplicationRecord
   friendly_id :name, use: %i[slugged history], slug_column: :name
 
   has_one :repository, dependent: :destroy, autosave: true
+  has_many :drafts, through: :repository, source: :blobs
+  has_many :articles, dependent: :destroy
   belongs_to :user
   belongs_to :storage
   belongs_to :template, optional: true, class_name: 'BlogTemplate'

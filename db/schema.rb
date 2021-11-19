@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_18_195226) do
+ActiveRecord::Schema.define(version: 2021_11_19_100215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -61,6 +61,18 @@ ActiveRecord::Schema.define(version: 2021_11_18_195226) do
 
 # Could not dump table "blogs" because of following StandardError
 #   Unknown type 'blog_visibility_enum_type' for column 'visibility'
+
+  create_table "commits", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.text "message"
+    t.text "sha"
+    t.string "author_name"
+    t.string "author_email"
+    t.datetime "committed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["blob_id"], name: "index_commits_on_blob_id"
+  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
@@ -141,6 +153,7 @@ ActiveRecord::Schema.define(version: 2021_11_18_195226) do
   add_foreign_key "blogs", "blog_templates", column: "template_id"
   add_foreign_key "blogs", "storages"
   add_foreign_key "blogs", "users"
+  add_foreign_key "commits", "blobs"
   add_foreign_key "identities", "users"
   add_foreign_key "repositories", "blogs"
   add_foreign_key "storages", "users"

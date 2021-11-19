@@ -17,7 +17,7 @@ module FaradayClient
       end
       builder.use FaradayClient::Middleware::FeedParser
       builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger
-      builder.adapter :typhoeus
+      builder.adapter :typhoeus, http_version: :httpv2_0
     end
 
     # Header keys that can be passed in options hash to {#get},{#head}
