@@ -3,7 +3,7 @@
 chuspace_user = User.create_with_email_identity(email: 'gaurav@chuspace.com')
 chuspace_user.save!
 
-chuspace_user.storages.create!(
+chuspace_storage = chuspace_user.storages.create!(
   default: true,
   active: true,
   provider: :chuspace,
@@ -27,12 +27,28 @@ templates.each do |template|
 end
 
 template = github_storage.blog_templates.first
+# Connect blog
 github_storage.blogs.create!(
   user: chuspace_user,
-  repo_fullname: 'chuspace/blog',
   name: 'Chuspace',
   default: true,
   visibility: :public,
   template: template,
-  **template.blog_attributes
+  repository_attributes: {
+    name: 'chuspace/blog',
+    **template.repository_attributes
+  }
+)
+
+# Create blog
+template_2 = github_storage.blog_templates.second
+chuspace_storage.blogs.create!(
+  user: chuspace_user,
+  name: 'Chuspace Internal',
+  visibility: :public,
+  template: template_2,
+  repository_attributes: {
+    name: "#{chuspace_user.username}/chuspace-internal",
+    **template_2.repository_attributes
+  }
 )

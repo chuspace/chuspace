@@ -2,6 +2,7 @@
 
 class CommitsController < ApplicationController
   before_action :find_blog
+  before_action :find_article, only: %i[edit update destroy]
   layout false
 
   def new
@@ -9,9 +10,16 @@ class CommitsController < ApplicationController
     @edit = true
   end
 
+  def edit
+  end
+
   private
 
   def find_blog
-    @blog = Current.user.blogs.find(params[:blog_id])
+    @blog = Current.user.blogs.friendly.find(params[:blog_id])
+  end
+
+  def find_article
+    @article = @blog.article(id: params[:id])
   end
 end

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'typhoeus'
+require 'typhoeus/adapters/faraday'
 require_relative 'middleware/follow_redirects'
 require_relative 'middleware/raise_error'
 require_relative 'middleware/feed_parser'
@@ -15,7 +17,7 @@ module FaradayClient
       end
       builder.use FaradayClient::Middleware::FeedParser
       builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger
-      builder.adapter Faraday.default_adapter
+      builder.adapter :typhoeus
     end
 
     # Header keys that can be passed in options hash to {#get},{#head}

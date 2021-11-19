@@ -12,12 +12,6 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
       t.references :storage, null: false, foreign_key: true
       t.references :template, foreign_key: { to_table: :blog_templates }
       t.boolean :default, default: false, null: false
-      t.string :repo_fullname, null: false
-      t.string :repo_articles_folder, null: false
-      t.string :repo_drafts_folder
-      t.string :repo_assets_folder, null: false
-      t.string :readme_path, null: false, default: 'README.md'
-
       t.timestamps
     end
 

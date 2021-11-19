@@ -52,6 +52,7 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
   config.assets.quiet = true
+  config.active_storage.service = :local
 
   config.action_mailer.smtp_settings = { host: 'localhost', port: 1_025 }
   config.action_mailer.default_url_options = { host: 'localhost', port: 3_000 }

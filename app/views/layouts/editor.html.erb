@@ -27,7 +27,7 @@
     <% if @edit  %>
       <nav class='mr-8 fixed right-0 top-1/2 -translate-y-1/2'>
         <%= turbo_frame_tag :new_commit do %>
-          <%= link_to new_blog_article_commit_path(@blog, @article), class: 'flex items-center block link link-primary bg-neutral rounded-full p-2', data: { 'turbo-frame': :dialogs } do  %>
+          <%= link_to edit_blog_article_commit_path(@blog, @article), class: 'flex items-center block link link-primary bg-neutral rounded-full p-2', data: { 'turbo-frame': :dialogs } do  %>
             <%= inline_svg_tag 'icons/git-commit', class: 'w-6 h-6 fill-current' %>
           <% end %>
         <% end %>

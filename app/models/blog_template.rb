@@ -8,12 +8,8 @@ class BlogTemplate < ApplicationRecord
   friendly_id :name, use: :history, slug_column: :permalink
 
 
-  def blog_attributes
-    {
-      repo_articles_folder: articles_folder,
-      repo_drafts_folder: drafts_folder,
-      repo_assets_folder: assets_folder
-    }
+  def repository_attributes
+    slice(:articles_folder, :drafts_folder, :assets_folder)
   end
 
   private

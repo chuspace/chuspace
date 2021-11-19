@@ -10,11 +10,51 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_11_062216) do
+ActiveRecord::Schema.define(version: 2021_11_18_195226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "blobs", force: :cascade do |t|
+    t.string "name"
+    t.bigint "repository_id", null: false
+    t.string "path"
+    t.string "sha"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["repository_id", "path"], name: "index_blobs_on_repository_id_and_path", unique: true
+    t.index ["repository_id"], name: "index_blobs_on_repository_id"
+  end
 
 # Could not dump table "blog_templates" because of following StandardError
 #   Unknown type 'template_visibility_enum_type' for column 'visibility'
@@ -33,8 +73,43 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
+  create_table "good_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "queue_name"
+    t.integer "priority"
+    t.jsonb "serialized_params"
+    t.datetime "scheduled_at"
+    t.datetime "performed_at"
+    t.datetime "finished_at"
+    t.text "error"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "active_job_id"
+    t.text "concurrency_key"
+    t.text "cron_key"
+    t.uuid "retried_good_job_id"
+    t.datetime "cron_at"
+    t.index ["active_job_id", "created_at"], name: "index_good_jobs_on_active_job_id_and_created_at"
+    t.index ["concurrency_key"], name: "index_good_jobs_on_concurrency_key_when_unfinished", where: "(finished_at IS NULL)"
+    t.index ["cron_key", "created_at"], name: "index_good_jobs_on_cron_key_and_created_at"
+    t.index ["cron_key", "cron_at"], name: "index_good_jobs_on_cron_key_and_cron_at", unique: true
+    t.index ["queue_name", "scheduled_at"], name: "index_good_jobs_on_queue_name_and_scheduled_at", where: "(finished_at IS NULL)"
+    t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
+  end
+
 # Could not dump table "identities" because of following StandardError
 #   Unknown type 'identity_provider_enum_type' for column 'provider'
+
+  create_table "repositories", force: :cascade do |t|
+    t.string "name"
+    t.bigint "blog_id", null: false
+    t.string "articles_folder", null: false
+    t.string "drafts_folder"
+    t.string "assets_folder", null: false
+    t.string "readme_path", default: "README.md", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["blog_id"], name: "index_repositories_on_blog_id"
+  end
 
 # Could not dump table "storages" because of following StandardError
 #   Unknown type 'git_storage_provider_enum_type' for column 'provider'
@@ -58,11 +133,15 @@ ActiveRecord::Schema.define(version: 2021_07_11_062216) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "blobs", "repositories"
   add_foreign_key "blog_templates", "storages"
   add_foreign_key "blog_templates", "users", column: "author_id"
   add_foreign_key "blogs", "blog_templates", column: "template_id"
   add_foreign_key "blogs", "storages"
   add_foreign_key "blogs", "users"
   add_foreign_key "identities", "users"
+  add_foreign_key "repositories", "blogs"
   add_foreign_key "storages", "users"
 end

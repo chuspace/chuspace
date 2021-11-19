@@ -31,14 +31,13 @@ class User < ApplicationRecord
         email: email
       )
 
-      user.identities.build(
-        uid: email,
-        magic_auth_token_expires_at: Identity::MAGIC_AUTH_TOKEN_LIFE.minutes.from_now,
-        provider: :email
-      )
-
+      user.identities.build(uid: email, provider: :email)
       user
     end
+  end
+
+  def articles
+    blogs.flat_map(&:articles)
   end
 
   def avatar_url(variant: :xs)

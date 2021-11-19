@@ -5,35 +5,28 @@ module Repoable
 
   included do
     before_create :create_and_connect_git_repo, if: -> { storage.chuspace? }
-    after_validation :connect_git_repo, if: -> { storage.external? && repo_fullname_changed? }
+    after_validation :connect_git_repo, if: -> { storage.external? && repository&.name_changed? }
     after_destroy_commit :delete_git_repo, if: -> { storage.chuspace? }
-  end
-
-  def repo_folders
-    @repo_folders ||= repo_fullname.blank? ? [] : storage.adapter.repository_folders(fullname: repo_fullname)
-  end
-
-  def repository
-    @repository ||= storage.adapter.repository(fullname: repo_fullname)
   end
 
   private
 
   def create_and_connect_git_repo
     repository = storage.adapter.create_repository(blog: self)
-    self.repo_fullname = repository.fullname
+    self.repository = build_repository(name: repository.name)
   rescue StandardError
-    storage.adapter.delete_repository(fullname: repo_fullname)
+    storage.adapter.delete_repository(fullname: repository.name)
   end
 
   def connect_git_repo
-    repository = storage.adapter.repository(fullname: repo_fullname)
+    repository = storage.adapter.repository(fullname: repository.name)
     self.name = repository.name
     self.description = repository.description
-    self.repo_fullname = repository.fullname
+
+    self.repository = build_repository(name: repository.name)
   end
 
   def delete_git_repo
-    storage.adapter.delete_repository(fullname: repo_fullname)
+    storage.adapter.delete_repository(fullname: repository.name)
   end
 end

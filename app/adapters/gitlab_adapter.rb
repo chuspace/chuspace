@@ -6,40 +6,52 @@ class GitlabAdapter < ApplicationAdapter
   end
 
   def user
-    @user ||= get('user')
+    get('user')
   end
 
   def repository(fullname:)
-    @repository ||= repository_from_response(get("projects/#{CGI.escape(fullname)}"))
+    repository_from_response(get("projects/#{CGI.escape(fullname)}"))
   end
 
   def head_sha(fullname:)
-    @head_sha ||= paginate("projects/#{CGI.escape(fullname)}/repository/commits", { per_page: 1 }).first.id
+    paginate("projects/#{CGI.escape(fullname)}/repository/commits", { per_page: 1 }).first.id
   end
 
   def search_repositories(query:, options: { sort: 'asc', per_page: 5 })
-    @search_repositories ||= repository_from_response(paginate('search', options.merge(search: query, scope: :projects)))
+    repository_from_response(paginate('search', options.merge(search: query, scope: :projects)))
   end
 
   def repository_folders(fullname:)
     tree = get("projects/#{CGI.escape(fullname)}/repository/tree", { recursive: true })
-    @repository_folders ||= tree.select { |item| item.type == 'tree' }.map(&:path).sort
+    tree.select { |item| item.type == 'tree' }.map(&:path).sort
   end
 
-  def blobs(fullname:, path:)
-    blobs = get "projects/#{CGI.escape(fullname)}/repository/tree", { path: path }
+  def blobs(fullname:, paths: [])
+    items = []
 
-    blobs.map do |blob|
-      next if blob.type == 'tree'
+    paths.each do |path|
+      response = get "projects/#{CGI.escape(fullname)}/repository/tree", { path: path }
+      case response
+      when Array
+        items += response.select { |item| item.type == 'file' }
+        dirs = response.select { |item| item.type == 'dir' }
+        items += blobs(fullname: fullname, paths: dirs.map(&:path))
+      when Sawyer::Resource
+        content = blob(fullname: fullname, id: blob.id)
+        items << Sawyer::Resource.new(agent, content.to_h.merge!(id: blob.id, path: blob.path))
+      end
+    rescue FaradayClient::NotFound
+      next
+    end
 
-      content = find_blob(fullname: fullname, id: blob.id)
-      Sawyer::Resource.new(agent, content.to_h.merge!(id: blob.id, path: blob.path))
-    end.compact
+    items
   end
 
-  def find_blob(fullname:, id:)
+  def blob(fullname:, id:)
     blob = get "projects/#{CGI.escape(fullname)}/repository/blobs/#{id}"
     Sawyer::Resource.new(agent, blob.to_h.merge!(id: id))
+  rescue FaradayClient::NotFound
+    Sawyer::Resource.new(agent, {})
   end
 
   def create_blob(fullname:, path:, content:, message: nil)

@@ -20,7 +20,7 @@ class MarkdownParserService
         uri = URI.parse(node.url)
         path = node.url if uri.absolute?
         mime = Marcel::MimeType.for name: File.basename(uri.path)
-        path = Rails.application.routes.url_helpers.blog_blobs_path(blog, path: CGI.escape(node.url)) if uri.relative? && mime.include?('image/')
+        path = Rails.application.routes.url_helpers.blog_assets_path(blog, path: CGI.escape(node.url)) if uri.relative? && mime.include?('image/')
         node.url = path
       end
 

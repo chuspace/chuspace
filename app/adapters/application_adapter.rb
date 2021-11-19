@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'marcel'
+
 class ApplicationAdapter
   include FaradayClient::Connection
   attr_reader :endpoint, :access_token
@@ -12,7 +14,6 @@ class ApplicationAdapter
   private
 
   def repository_from_response(response)
-    puts response.class
     chuspace_repo = case response
                     when Array then response.map { |item| repository_from_response(item) }
                     when Sawyer::Resource

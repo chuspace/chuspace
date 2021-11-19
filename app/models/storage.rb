@@ -89,13 +89,13 @@ class Storage < ApplicationRecord
   end
 
   def setup_chuspace_git_storage
-    ChuspaceAdapter.as_superuser.create_user(user: user)
+    ChuspaceAdapter.as_superuser.create_user(username: user.username, name: user.name, email: user.email)
     adapter = ChuspaceAdapter.as_superuser
     adapter.basic_auth = true
     adapter.sudo = user.username
 
-    self.access_token = adapter.create_personal_access_token(user: user)
+    self.access_token = adapter.create_personal_access_token(username: user.username)
   rescue FaradayClient::Error
-    ChuspaceAdapter.as_superuser.delete_user(user: user)
+    ChuspaceAdapter.as_superuser.delete_user(username: user.username)
   end
 end

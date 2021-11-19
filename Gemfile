@@ -17,6 +17,7 @@ gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
 gem 'name_of_person'
+gem 'good_job'
 
 # Form
 gem 'simple_form'
@@ -69,6 +70,7 @@ gem 'http'
 gem 'faraday'
 gem 'sawyer', github: 'lostisland/sawyer'
 gem 'faraday-http-cache'
+gem 'typhoeus'
 
 #  SEO
 gem 'meta-tags'

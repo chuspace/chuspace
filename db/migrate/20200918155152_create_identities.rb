@@ -9,7 +9,7 @@ class CreateIdentities < ActiveRecord::Migration[6.1]
 
       # magic login
       t.string :magic_auth_token, null: false
-      t.datetime :magic_auth_token_expires_at, null: false
+      t.datetime :magic_auth_token_expires_at
 
       t.references :user, null: false, foreign_key: true
       t.timestamps

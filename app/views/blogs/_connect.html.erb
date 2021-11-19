@@ -8,15 +8,17 @@
           for="repos-popup"
           class='relative block'
           data-action='auto-complete-change:auto-refresh-form#refresh'>
-          <%= form.input(
-                :repo_fullname,
+          <%= form.simple_fields_for :repository do |repo_form| %>
+            <%= repo_form.input(
+                :name,
               as: :string,
               input_html: {
-                value: blog.repo_fullname,
+                value: blog.repository&.name,
                 'data-action': 'input:auto-refresh-form#reset',
               },
               wrapper_html: { class: 'relative' }
             ) %>
+          <% end %>
           <ul
             id="repos-popup"
             class='absolute z-10 shadow menu dropdown-content bg-base-100 border w-full'></ul>
@@ -24,7 +26,7 @@
       <% end %>
 
       <div data-target='auto-refresh-form.loader'>
-        <% if blog.repo_fullname.present? %>
+        <% if blog.repository&.name&.present? %>
           <%= form.input :name, required: true %>
           <%= form.input :description, as: :text, required: true %>
           <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
@@ -33,11 +35,13 @@
       </div>
 
       <div data-target='auto-refresh-form.loader'>
-        <% if blog.repo_folders&.any? %>
-          <%= form.input :repo_articles_folder, as: :select, collection: blog.repo_folders %>
-          <%= form.input :repo_drafts_folder, as: :select, collection: blog.repo_folders %>
-          <%= form.input :repo_assets_folder, as: :select, collection: blog.repo_folders %>
-          <%= form.input :readme_path %>
+        <% if blog.repository&.folders&.any? %>
+          <%= form.simple_fields_for :repository do |repo_form| %>
+            <%= repo_form.input :repo_articles_folder, as: :select, collection: blog.repository.folders %>
+            <%= repo_form.input :repo_drafts_folder, as: :select, collection: blog.repository.folders %>
+            <%= repo_form.input :repo_assets_folder, as: :select, collection: blog.repository.folders %>
+            <%= repo_form.input :readme_path %>
+          <% end %>
         <% end %>
       </div>
 

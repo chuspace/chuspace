@@ -19,6 +19,8 @@ class StorageAdapter
     repository
     repositories
     create_user
+    contents
+    content
     search_repositories
     create_repository
     delete_repository
@@ -36,6 +38,7 @@ class StorageAdapter
     merge
     rebase
     contributors
+    tree
   ].freeze
 
   attr_reader :storage, :adapter

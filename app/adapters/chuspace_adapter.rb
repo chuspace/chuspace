@@ -14,17 +14,30 @@ class ChuspaceAdapter < GiteaAdapter
     new(endpoint: endpoint, access_token: access_token)
   end
 
-  def user
-    @user ||= get('user')
+  def create_repository(path:, name:, owner:)
+    repository_from_response(
+      post(
+        "repos/#{path}/generate",
+        name: name,
+        owner: owner,
+        private: true,
+        git_content: true
+      )
+    )
   end
 
-  def create_user(user:)
+  def create_personal_access_token(username:)
+    provider_user_token = post("users/#{username}/tokens", { name: username })
+    provider_user_token.sha1
+  end
+
+  def create_user(username:, name:, email:)
     user = post(
       'admin/users',
       {
-        email: user.email,
-        full_name: user.name,
-        username: user.username,
+        email: email,
+        full_name: name,
+        username: username,
         password: SecureRandom.hex(12),
         must_change_password: false,
         send_notify: false,
@@ -32,13 +45,13 @@ class ChuspaceAdapter < GiteaAdapter
       }
     )
 
-    patch("admin/users/#{user.username}", {
+    patch("admin/users/#{username}", {
         max_repo_creation: 5,
         allow_git_hook: false,
         admin: false,
         allow_create_organization: false,
         active: true,
-        login_name: user.username,
+        login_name: username,
         source_id: 0
       }
     )
@@ -46,28 +59,11 @@ class ChuspaceAdapter < GiteaAdapter
     user
   end
 
-  def delete_user(user:)
-    boolean_from_response(:delete, "admin/users/#{user.username}")
-  end
-
-  def create_personal_access_token(user:)
-    provider_user_token = post("users/#{user.username}/tokens", { name: user.username })
-    provider_user_token.sha1
-  end
-
-  def create_repository(blog:)
-    repository_from_response(
-      post(
-        "repos/#{blog.template.mirror_path}/generate",
-        name: blog.name,
-        owner: blog.user.username,
-        private: true,
-        git_content: true
-      )
-    )
-  end
-
   def delete_repository(fullname:)
     boolean_from_response(:delete, "repos/#{fullname}")
+  end
+
+  def delete_user(username:)
+    boolean_from_response(:delete, "admin/users/#{username}")
   end
 end
