@@ -5,13 +5,13 @@
     "framework": "astro",
     "default": true,
     "language": "javascript",
-    "mirror_path": "chuspace/astro-starter-blog",
-    "git_source": "https://github.com/chuspace/astro-starter-blog",
+    "chuspace_mirror_path": "chuspace/astro-starter-blog",
+    "repo_url": "https://github.com/chuspace/astro-starter-blog",
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "articles_folder": "src/pages/posts",
-    "assets_folder": "public/assets/blog"
+    "repo_articles_folder": "src/pages/posts",
+    "repo_assets_folder": "public/assets/blog"
   },
   {
     "name": "Bridgetown starter",
@@ -19,13 +19,13 @@
     "framework": "bridgetown",
     "language": "javascript",
     "default": false,
-    "mirror_path": "chuspace/bridgetown-starter-blog",
-    "git_source": "https://github.com/chuspace/bridgetown-starter-blog",
+    "chuspace_mirror_path": "chuspace/bridgetown-starter-blog",
+    "repo_url": "https://github.com/chuspace/bridgetown-starter-blog",
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "articles_folder": "src/_posts",
-    "assets_folder": "src/images"
+    "repo_articles_folder": "src/_posts",
+    "repo_assets_folder": "src/images"
   },
   {
     "name": "11ty starter",
@@ -36,10 +36,10 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "mirror_path": "chuspace/11ty-starter-blog",
-    "git_source": "https://github.com/chuspace/11ty-starter-blog",
-    "articles_folder": "src/blog",
-    "assets_folder": "src/blog/images"
+    "chuspace_mirror_path": "chuspace/11ty-starter-blog",
+    "repo_url": "https://github.com/chuspace/11ty-starter-blog",
+    "repo_articles_folder": "src/blog",
+    "repo_assets_folder": "src/blog/images"
   },
   {
     "name": "Gridsome starter",
@@ -50,10 +50,10 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "mirror_path": "chuspace/gridsome-starter-blog",
-    "git_source": "https://github.com/chuspace/gridsome-starter-blog",
-    "articles_folder": "content/posts",
-    "assets_folder": "static"
+    "chuspace_mirror_path": "chuspace/gridsome-starter-blog",
+    "repo_url": "https://github.com/chuspace/gridsome-starter-blog",
+    "repo_articles_folder": "content/posts",
+    "repo_assets_folder": "static"
   },
   {
     "name": "Gatsby starter",
@@ -64,10 +64,10 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "mirror_path": "chuspace/gatsby-starter-blog",
-    "git_source": "https://github.com/chuspace/gatsby-starter-blog",
-    "articles_folder": "content/posts",
-    "assets_folder": "static/images"
+    "chuspace_mirror_path": "chuspace/gatsby-starter-blog",
+    "repo_url": "https://github.com/chuspace/gatsby-starter-blog",
+    "repo_articles_folder": "content/posts",
+    "repo_assets_folder": "static/images"
   },
   {
     "name": "Hexo starter",
@@ -78,10 +78,10 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "mirror_path": "chuspace/hexo-starter-blog",
-    "git_source": "https://github.com/chuspace/hexo-starter-blog",
-    "articles_folder": "source/_posts",
-    "assets_folder": "source/images"
+    "chuspace_mirror_path": "chuspace/hexo-starter-blog",
+    "repo_url": "https://github.com/chuspace/hexo-starter-blog",
+    "repo_articles_folder": "source/_posts",
+    "repo_assets_folder": "source/images"
   },
   {
     "name": "Hugo starter",
@@ -92,10 +92,10 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "mirror_path": "chuspace/hugo-starter-blog",
-    "git_source": "https://github.com/chuspace/hugo-starter-blog",
-    "articles_folder": "content/posts",
-    "assets_folder": "static"
+    "chuspace_mirror_path": "chuspace/hugo-starter-blog",
+    "repo_url": "https://github.com/chuspace/hugo-starter-blog",
+    "repo_articles_folder": "content/posts",
+    "repo_assets_folder": "static"
   },
   {
     "name": "Jekyll starter",
@@ -106,11 +106,11 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "mirror_path": "chuspace/jekyll-starter-blog",
-    "git_source": "https://github.com/chuspace/jekyll-starter-blog",
-    "articles_folder": "_posts",
-    "drafts_folder": "_drafts",
-    "assets_folder": "assets/img"
+    "chuspace_mirror_path": "chuspace/jekyll-starter-blog",
+    "repo_url": "https://github.com/chuspace/jekyll-starter-blog",
+    "repo_articles_folder": "_posts",
+    "repo_drafts_folder": "_drafts",
+    "repo_assets_folder": "assets/img"
   },
   {
     "name": "Nextjs starter",
@@ -121,9 +121,9 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "mirror_path": "chuspace/nextjs-starter-blog",
-    "git_source": "https://github.com/chuspace/nextjs-starter-blog",
-    "articles_folder": "_posts",
-    "assets_folder": "public/images"
+    "chuspace_mirror_path": "chuspace/nextjs-starter-blog",
+    "repo_url": "https://github.com/chuspace/nextjs-starter-blog",
+    "repo_articles_folder": "_posts",
+    "repo_assets_folder": "public/images"
   }
 ]

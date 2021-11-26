@@ -1,7 +1,7 @@
 <div class='mt-24 relative'>
   <h2><%= @blog.name %></h2>
   <p class='sm:w-2/3 w-full text-secondary'><%= @blog.description %></p>
-  <%= link_to 'New article', new_blog_article_path(@blog), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
+  <%= link_to 'New draft', new_blog_draft_path(@blog), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
 
   <div class='tabs mt-8' dir='horizontal'>
     <div role="tablist">
@@ -12,6 +12,6 @@
   </div>
 
   <div class='mt-16'>
-    <%= render 'articles/list', articles: @blog.articles %>
+    <%= render 'blogs/about', blog: @blog %>
   </div>
 </div>

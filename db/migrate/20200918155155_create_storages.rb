@@ -10,6 +10,7 @@ class CreateStorages < ActiveRecord::Migration[6.1]
       t.string :scopes
       t.string :access_token, null: false
       t.references :user, null: false, foreign_key: true
+
       t.boolean :default, default: false
       t.boolean :active, default: false
       t.boolean :self_hosted, default: false

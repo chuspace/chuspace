@@ -2,6 +2,6 @@
 
 class HomeController < ApplicationController
   def index
-    @articles = Blog.all.flat_map(&:articles) if signed_in?
+    @editions = Edition.all.limit(20)
   end
 end

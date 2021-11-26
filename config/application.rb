@@ -39,7 +39,7 @@ module Chuspace
     end
 
     config.active_record.encryption.extend_queries = true
-    StrongMigrations.start_after = 20211024150450
+    StrongMigrations.start_after = 20211122121358
 
     # Active Job
     config.active_job.queue_adapter = :good_job

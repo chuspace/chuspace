@@ -6,17 +6,26 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
   def change
     create_table :blogs do |t|
       t.string :name, null: false
+      t.string :permalink, null: false
+
       t.text :description
 
-      t.references :user, null: false, foreign_key: true
+      t.references :owner, null: false, foreign_key: { to_table: :users }
       t.references :storage, null: false, foreign_key: true
       t.references :template, foreign_key: { to_table: :blog_templates }
-      t.boolean :default, default: false, null: false
+      t.boolean :personal, default: false, null: false
+
+      t.string :repo_fullname, null: false
+      t.string :repo_articles_folder, null: false
+      t.string :repo_drafts_folder
+      t.string :repo_assets_folder, null: false
+      t.string :repo_readme_path, null: false, default: 'README.md'
+
       t.timestamps
     end
 
-    add_index :blogs, :default, algorithm: :concurrently
-    add_index :blogs, %i[name user_id], algorithm: :concurrently, unique: true
-    add_column :blogs, :visibility, :blog_visibility_enum_type, index: true, null: false, default: :private
+    add_index :blogs, :personal, algorithm: :concurrently
+    add_index :blogs, %i[permalink owner_id], algorithm: :concurrently, unique: true
+    add_column :blogs, :visibility, :blog_visibility_enum_type, index: { algorithm: :concurrently }, null: false, default: :private
   end
 end

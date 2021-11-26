@@ -2,17 +2,9 @@
   <article class='border-b last:border-b-0 border-base-200 p-4'>
     <%= turbo_frame_tag(draft, class: 'flex') do %>
       <div class='flex-1'>
-        <%= link_to draft.blog.name, blog_path(draft.blog), class: 'link link-accent link-hover font-medium' %>
-        <%= link_to blog_article_path(draft.blog, draft), data: { 'turbo-frame': :_top } do %>
-          <%= tag.h5 draft.title, class: 'link link-primary link-hover mt-1' %>
-          <%= tag.p draft.intro, class: 'text-sm text-secondary mt-1 sm:w-2/3 w-full' %>
-        <% end %>
-      </div>
-
-      <div class='flex items-center justify-between flex-end'>
-        <%= link_to 'Edit', edit_blog_article_path(draft.blog, draft), class: 'btn border-info btn-outline btn-sm', data: { 'turbo-frame': :_top } %>
-        <%= button_to blog_article_path(draft.blog, draft), method: :delete, class: 'btn border-error btn-outline btn-sm ml-3', data: { 'turbo-frame': :_top } do %>
-          <%= tag.span 'Delete' %>
+        <%= link_to edit_blog_draft_path(draft.blog, draft), data: { 'turbo-frame': :_top } do %>
+          <%= tag.h5 draft.parsed.title, class: 'link link-primary link-hover mt-1' %>
+          <%= tag.p draft.parsed.summary, class: 'text-sm text-secondary mt-1 sm:w-2/3 w-full' %>
         <% end %>
       </div>
     <% end %>

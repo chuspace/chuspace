@@ -5,4 +5,12 @@ class ApplicationController < ActionController::Base
   include Authentication
   include SetCurrentRequestDetails
   include SetSentryContext
+
+  before_action :set_paper_trail_whodunnit
+
+  private
+
+  def user_for_paper_trail
+    signed_in? ? Current.user.id : 'Public user'
+  end
 end

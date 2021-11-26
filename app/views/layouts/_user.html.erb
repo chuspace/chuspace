@@ -7,7 +7,7 @@
       </li>
       <div class='divider my-0 h-0'></div>
       <li>
-        <%= link_to 'Your profile', profile_path(Current.user), class: link_class(profile_path(Current.user)), role: 'menuitem', tabindex: '-1' %>
+        <%= link_to 'Your profile', user_path(Current.user), class: link_class(user_path(Current.user)), role: 'menuitem', tabindex: '-1' %>
       </li>
       <li>
         <%= link_to 'Blog storages', storages_path, class: link_class(storages_path), role: 'menuitem', tabindex: '-1' %>

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class Storage < ApplicationRecord
-  has_many :blog_templates, dependent: :delete_all
-  has_many :blogs, dependent: :delete_all
+  has_many   :blogs, dependent: :delete_all, inverse_of: :storage
   belongs_to :user, optional: true
 
   encrypts :access_token, :endpoint
@@ -16,7 +15,7 @@ class Storage < ApplicationRecord
 
   before_validation :assign_endpoint, if: -> { chuspace? || !self_hosted? }
   before_validation :assign_description, if: :chuspace?
-  before_create :setup_chuspace_git_storage, if: :chuspace?
+  before_create     :setup_chuspace_git_storage, if: :chuspace?
 
   delegate :chuspace?, to: :provider, allow_nil: true
 
@@ -26,11 +25,11 @@ class Storage < ApplicationRecord
 
   class << self
     def external
-      where.not(provider: GitStorageConfig.chuspace[:provider])
+      where.not(provider: chuspace_config[:provider])
     end
 
     def chuspace
-      find_by(provider: GitStorageConfig.chuspace[:provider])
+      find_by(provider: chuspace_config[:provider])
     end
 
     def default
@@ -41,8 +40,12 @@ class Storage < ApplicationRecord
       default || chuspace
     end
 
+    def chuspace_config
+      GitStorageConfig.chuspace
+    end
+
     def public_providers
-      GitStorageConfig.defaults.map do |key, config|
+      GitStorageConfig.external.map do |key, config|
         [key.humanize, key]
       end
     end

@@ -1,13 +1,11 @@
 <% cache blog do %>
   <div class='border-b last:border-b-0 p-4 border-base-200'>
-    <%= turbo_frame_tag(blog, class: 'flex') do %>
-      <div class='flex-1'>
-        <%= link_to blog.user.name, user_path(blog.user), class: 'link link-accent link-hover font-medium' %>
-        <%= link_to(blog_path(blog), 'data-turbo-frame': :_top) do %>
-          <%= tag.h5 blog.name, class: 'link link-primary link-hover' %>
-          <%= tag.div blog.description, class: 'text-sm mt-1 text-secondary' %>
-        <% end %>
-      </div>
-    <% end %>
+    <div class='flex-1'>
+      <%= link_to blog.owner.name, user_path(blog.owner), class: 'link link-accent link-hover font-medium' %>
+      <%= link_to(blog_path(blog), 'data-turbo-frame': :_top) do %>
+        <%= tag.h5 blog.name, class: 'link link-primary link-hover' %>
+        <%= tag.div blog.description, class: 'text-sm mt-1 text-secondary' %>
+      <% end %>
+    </div>
   </div>
 <% end %>

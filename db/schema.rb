@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_100215) do
+ActiveRecord::Schema.define(version: 2021_11_22_124442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -45,33 +45,34 @@ ActiveRecord::Schema.define(version: 2021_11_19_100215) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "blobs", force: :cascade do |t|
-    t.string "name"
-    t.bigint "repository_id", null: false
-    t.string "path"
-    t.string "sha"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["repository_id", "path"], name: "index_blobs_on_repository_id_and_path", unique: true
-    t.index ["repository_id"], name: "index_blobs_on_repository_id"
-  end
-
 # Could not dump table "blog_templates" because of following StandardError
 #   Unknown type 'template_visibility_enum_type' for column 'visibility'
 
 # Could not dump table "blogs" because of following StandardError
 #   Unknown type 'blog_visibility_enum_type' for column 'visibility'
 
-  create_table "commits", force: :cascade do |t|
-    t.bigint "blob_id", null: false
-    t.text "message"
-    t.text "sha"
-    t.string "author_name"
-    t.string "author_email"
-    t.datetime "committed_at"
+  create_table "drafts", force: :cascade do |t|
+    t.string "blob_path", null: false
+    t.bigint "blog_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["blob_id"], name: "index_commits_on_blob_id"
+    t.index ["blob_path"], name: "index_drafts_on_blob_path"
+    t.index ["blog_id", "blob_path"], name: "index_drafts_on_blog_id_and_blob_path", unique: true
+    t.index ["blog_id"], name: "index_drafts_on_blog_id"
+  end
+
+  create_table "editions", force: :cascade do |t|
+    t.string "permalink", null: false
+    t.bigint "publisher_id", null: false
+    t.bigint "revision_id", null: false
+    t.integer "number", null: false
+    t.datetime "published_at", precision: 6, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["published_at"], name: "index_editions_on_published_at"
+    t.index ["publisher_id"], name: "index_editions_on_publisher_id"
+    t.index ["revision_id", "number"], name: "index_editions_on_revision_id_and_number", unique: true
+    t.index ["revision_id"], name: "index_editions_on_revision_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -111,25 +112,62 @@ ActiveRecord::Schema.define(version: 2021_11_19_100215) do
 # Could not dump table "identities" because of following StandardError
 #   Unknown type 'identity_provider_enum_type' for column 'provider'
 
-  create_table "repositories", force: :cascade do |t|
-    t.string "name"
-    t.bigint "blog_id", null: false
-    t.string "articles_folder", null: false
-    t.string "drafts_folder"
-    t.string "assets_folder", null: false
-    t.string "readme_path", default: "README.md", null: false
+# Could not dump table "invites" because of following StandardError
+#   Unknown type 'membership_role_enum_type' for column 'role'
+
+# Could not dump table "memberships" because of following StandardError
+#   Unknown type 'membership_role_enum_type' for column 'role'
+
+  create_table "revisions", force: :cascade do |t|
+    t.bigint "draft_id", null: false
+    t.bigint "author_id"
+    t.jsonb "fallback_author", default: false, null: false
+    t.jsonb "fallback_committer", default: false, null: false
+    t.text "message", null: false
+    t.text "content", null: false
+    t.text "sha", null: false
+    t.integer "number", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["blog_id"], name: "index_repositories_on_blog_id"
+    t.index ["author_id"], name: "index_revisions_on_author_id"
+    t.index ["draft_id", "number"], name: "index_revisions_on_draft_id_and_number", unique: true
+    t.index ["draft_id"], name: "index_revisions_on_draft_id"
   end
 
 # Could not dump table "storages" because of following StandardError
 #   Unknown type 'git_storage_provider_enum_type' for column 'provider'
 
+  create_table "taggings", id: :serial, force: :cascade do |t|
+    t.integer "tag_id"
+    t.string "taggable_type"
+    t.integer "taggable_id"
+    t.string "tagger_type"
+    t.integer "tagger_id"
+    t.string "context", limit: 128
+    t.datetime "created_at"
+    t.string "tenant", limit: 128
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+    t.index ["tenant"], name: "index_taggings_on_tenant"
+  end
+
+  create_table "tags", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name"
-    t.citext "username"
+    t.citext "username", null: false
     t.string "email", null: false
     t.integer "blogs_count", default: 0, null: false
     t.integer "storages_count", default: 0, null: false
@@ -147,14 +185,19 @@ ActiveRecord::Schema.define(version: 2021_11_19_100215) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "blobs", "repositories"
-  add_foreign_key "blog_templates", "storages"
   add_foreign_key "blog_templates", "users", column: "author_id"
   add_foreign_key "blogs", "blog_templates", column: "template_id"
   add_foreign_key "blogs", "storages"
-  add_foreign_key "blogs", "users"
-  add_foreign_key "commits", "blobs"
+  add_foreign_key "blogs", "users", column: "owner_id"
+  add_foreign_key "drafts", "blogs"
+  add_foreign_key "editions", "revisions"
+  add_foreign_key "editions", "users", column: "publisher_id"
   add_foreign_key "identities", "users"
-  add_foreign_key "repositories", "blogs"
+  add_foreign_key "invites", "blogs"
+  add_foreign_key "invites", "users", column: "sender_id"
+  add_foreign_key "memberships", "blogs"
+  add_foreign_key "memberships", "users"
+  add_foreign_key "revisions", "drafts"
+  add_foreign_key "revisions", "users", column: "author_id"
   add_foreign_key "storages", "users"
 end

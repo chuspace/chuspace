@@ -1,21 +1,25 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
+  include Repoable
   extend FriendlyId
-  friendly_id :name, use: %i[slugged history], slug_column: :name
 
-  has_one :repository, dependent: :destroy, autosave: true
-  has_many :drafts, through: :repository, source: :blobs
-  has_many :articles, dependent: :destroy
-  belongs_to :user
+  friendly_id :name, use: %i[slugged history], slug_column: :permalink
+
+  has_many :members, class_name: 'Membership', foreign_key: 'user_id', dependent: :delete_all, inverse_of: :user
+  has_many :drafts, dependent: :delete_all, inverse_of: :blog
+  has_many :articles, class_name: 'Edition', dependent: :delete_all, inverse_of: :blog
+
+  belongs_to :owner, class_name: 'User'
   belongs_to :storage
   belongs_to :template, optional: true, class_name: 'BlogTemplate'
 
-  validates :name, uniqueness: { scope: :user_id }
+  validates :name, uniqueness: { scope: :owner_id }
+
   validates_presence_of :template_id, if: -> { storage.chuspace? }
   validates_presence_of :name, :visibility
-  validate :one_default_blog_allowed, on: :create
-  accepts_nested_attributes_for :repository
+
+  acts_as_taggable_on :topics
 
   enum visibility: {
     private: 'private',
@@ -23,21 +27,11 @@ class Blog < ApplicationRecord
     internal: 'internal'
   }, _suffix: true
 
-  scope :default, -> { find_by(default: true) }
-
   def visibility
     super ? ActiveSupport::StringInquirer.new(super) : nil
   end
 
   private
-
-  def one_default_blog_allowed
-    errors.add(:default, :one_default_blog_allowed) if default? && user.blogs.default.present?
-  end
-
-  def unset_slug_if_invalid
-    self.name = normalize_friendly_id(name)
-  end
 
   def should_generate_new_friendly_id?
     name.blank? || name_changed?

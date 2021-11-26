@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class BlogTemplate < ApplicationRecord
-  belongs_to :author, class_name: 'User'
-  belongs_to :storage
-
   extend FriendlyId
+
+  has_many   :blogs, inverse_of: :template
+  belongs_to :author, class_name: 'User'
+
   friendly_id :name, use: :history, slug_column: :permalink
 
-
-  def repository_attributes
-    slice(:articles_folder, :drafts_folder, :assets_folder)
+  def blog_attributes
+    slice(:repo_articles_folder, :repo_drafts_folder, :repo_assets_folder, :repo_readme_path)
   end
 
   private

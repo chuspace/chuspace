@@ -1,0 +1,16 @@
+<%= simple_form_for [draft.blog, draft] do |form| %>
+  <frontmatter-editor spellcheck="false">
+    <details class='mt-8 border border-primary px-4 py-2'>
+      <summary data-action='click:frontmatter-editor#toggle'>Front Matter</summary>
+      <%= form.input :front_matter, as: :text, label: false, input_html: { value: draft.parsed&.front_matter_str } %>
+    </details>
+  </frontmatter-editor>
+
+  <chu-editor
+    class='block chu-editor editable mt-8'
+    spellcheck="false"
+    data-action='keydown:chu-editor#handleArrow'
+  >
+    <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: draft.parsed&.doc&.to_commonmark } %>
+  </chu-editor>
+<% end %>

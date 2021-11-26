@@ -3,7 +3,7 @@
 chuspace_user = User.create_with_email_identity(email: 'gaurav@chuspace.com')
 chuspace_user.save!
 
-chuspace_storage = chuspace_user.storages.create!(
+chuspace_storage = chuspace_user.create_chuspace_storage!(
   default: true,
   active: true,
   provider: :chuspace,
@@ -20,35 +20,37 @@ github_storage = chuspace_user.storages.create!(
 
 templates = JSON.parse(Rails.root.join('db/defaults/templates.json').read)
 templates.each do |template|
-  github_storage.blog_templates.create(
-    author: chuspace_user,
-    **template
-  )
+  chuspace_user.blog_templates.create(template)
 end
 
-template = github_storage.blog_templates.first
+template = chuspace_user.blog_templates.first
 # Connect blog
-github_storage.blogs.create!(
-  user: chuspace_user,
-  name: 'Chuspace',
-  default: true,
+personal_blog = github_storage.blogs.create!(
+  owner: chuspace_user,
+  name: 'blog',
+  personal: true,
   visibility: :public,
   template: template,
-  repository_attributes: {
-    name: 'chuspace/blog',
-    **template.repository_attributes
-  }
+  repo_fullname: 'chuspace/blog',
+  **template.blog_attributes
+)
+
+chuspace_user.memberships.create(
+  blog: personal_blog,
+  role: :owner
 )
 
 # Create blog
-template_2 = github_storage.blog_templates.second
-chuspace_storage.blogs.create!(
-  user: chuspace_user,
-  name: 'Chuspace Internal',
+template_2 = chuspace_user.blog_templates.second
+other_blog = chuspace_storage.blogs.create!(
+  owner: chuspace_user,
+  name: 'Rails metaprogramming',
   visibility: :public,
   template: template_2,
-  repository_attributes: {
-    name: "#{chuspace_user.username}/chuspace-internal",
-    **template_2.repository_attributes
-  }
+  **template_2.blog_attributes
+)
+
+chuspace_user.memberships.create(
+  blog: other_blog,
+  role: :owner
 )

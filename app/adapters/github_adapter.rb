@@ -9,18 +9,12 @@ class GithubAdapter < ApplicationAdapter
     items = []
 
     folders.each do |folder|
-      response = get("repos/#{fullname}/contents/#{folder}")
-      response.each do |item|
-        mime = Marcel::MimeType.for name: item.name
-        next unless item.type == 'file' && Blob::MIMES.include?(mime)
-
-        items << blob(fullname: fullname, path: item.path)
-      end
+      response = get("repos/#{fullname}/contents/#{CGI.escape(folder)}")
+      items += response.select { |item| item.type == 'file' }
 
       dirs = response.select { |item| item.type == 'dir' }
-      next unless dirs.any?
-
-      items += blobs(fullname: fullname, folders: dirs.map(&:path))
+      items += blobs(fullname: fullname, folders: dirs.map(&:path)) if dirs.any?
+      items
     rescue FaradayClient::NotFound
       next
     end
@@ -28,8 +22,11 @@ class GithubAdapter < ApplicationAdapter
     items
   end
 
-  def blob(fullname:, path:)
-    get "repos/#{fullname}/contents/#{path}"
+  def blob(fullname:, path:, ref: nil)
+    opts = {}
+    opts[:ref] = ref if ref
+
+    get "repos/#{fullname}/contents/#{CGI.escape(path)}", opts
   rescue FaradayClient::NotFound
     Sawyer::Resource.new(agent, {})
   end
@@ -38,12 +35,7 @@ class GithubAdapter < ApplicationAdapter
     opts = {}
     opts[:path] = path if path
 
-    commits = get("repos/#{fullname}/commits", **opts)
-
-    commits.map do |commit|
-      commit_data = commit(fullname: fullname, sha: commit.sha)
-      Sawyer::Resource.new(agent, commit_data.to_h)
-    end
+    get("repos/#{fullname}/commits", **opts)
   end
 
   def commit(fullname:, sha:)

@@ -12,16 +12,16 @@ class CreateBlogTemplates < ActiveRecord::Migration[7.0]
       t.string :framework, null: false
       t.string :css
 
-      t.references :storage, null: false, foreign_key: true
       t.references :author, null: false, foreign_key: { to_table: :users }
-      t.string :mirror_path
-      t.string :git_source, null: false
-      t.string :preview_url
 
-      t.string :articles_folder, null: false
-      t.string :drafts_folder
-      t.string :assets_folder, null: false
-      t.string :readme, null: false, default: 'README.md'
+      t.string :chuspace_mirror_path
+      t.string :preview_url
+      t.string :repo_url, null: false
+      t.string :repo_articles_folder, null: false
+      t.string :repo_drafts_folder
+      t.string :repo_assets_folder, null: false
+      t.string :repo_readme_path, null: false, default: 'README.md'
+
       t.boolean :default, null: false, default: false
       t.boolean :approved, null: false, default: false
       t.boolean :system, null: false, default: false

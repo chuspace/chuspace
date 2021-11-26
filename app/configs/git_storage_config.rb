@@ -40,14 +40,21 @@ class GitStorageConfig < ApplicationConfig
     }
   )
 
-  def self.providers_enum
-    @providers_enum ||= defaults.keys.each_with_object({}) do |key, hash|
+  def self.chuspace
+    GitStorageConfig.defaults['chuspace']
+  end
 
-      hash[key.to_sym] = key
+  def self.external
+    @external ||= defaults.each_with_object({}) do |(key, value), hash|
+      next if chuspace['provider'] == key
+
+      hash[key] = value
     end
   end
 
-  def self.chuspace
-    GitStorageConfig.defaults['chuspace']
+  def self.providers_enum
+    @providers_enum ||= defaults.each_with_object({}) do |(key, _), hash|
+      hash[key.to_sym] = key
+    end
   end
 end

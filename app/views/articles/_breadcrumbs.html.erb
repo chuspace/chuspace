@@ -1,7 +1,6 @@
 <div class='flex w-full text-article mt-2'>
   <div>
     <%= link_to 'home', root_path, class: 'link link-default' %> /
-    <%= link_to blog.user.username, profile_path(blog.user), class: 'link link-default' %> /
     <%= link_to blog.name, blog_path(blog), class: 'link link-default' %> /
     <%= link_to article.title.parameterize, blog_article_path(blog, article), class: 'link link-secondary' %>
   </div>

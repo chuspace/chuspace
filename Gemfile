@@ -19,6 +19,9 @@ gem 'action_policy'
 gem 'name_of_person'
 gem 'good_job'
 
+# Tagging
+gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'
+
 # Form
 gem 'simple_form'
 

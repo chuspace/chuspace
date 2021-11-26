@@ -5,8 +5,7 @@ class ArticlesController < ApplicationController
   layout 'editor'
 
   def new
-    @article = Article.new
-    @edit = true
+    @article = Article.new(repository: @blog.repository, name: 'Untitled')
   end
 
   def show

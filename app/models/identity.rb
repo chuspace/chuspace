@@ -2,16 +2,18 @@
 
 class Identity < ApplicationRecord
   MAGIC_AUTH_TOKEN_LIFE = 30
+
   has_secure_token :magic_auth_token
+
   belongs_to :user
 
   encrypts :uid, deterministic: true, downcase: true
+
   enum provider: OmniauthConfig.providers_enum.merge(email: 'email')
 
-  before_validation :set_magic_auth_token_expires_at, if: :email?
+  before_validation     :set_magic_auth_token_expires_at, if: :email?
   validates_presence_of :magic_auth_token_expires_at, if: :email?
-
-  after_create_commit :send_access_email, if: :email?
+  after_create_commit   :send_access_email, if: :email?
 
   def magic_auth_token_valid?
     magic_auth_token_expires_at.to_i >= Time.now.to_i

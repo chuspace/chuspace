@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   private
 
   def find_user
-    @user = Current.user
+    @user = User.friendly.find(params[:id])
   end
 
   def set_content_partial
@@ -30,9 +30,8 @@ class UsersController < ApplicationController
                when 'storages' then 'users/storages'
                when 'blogs' then 'users/blogs'
                when 'articles' then 'users/articles'
-    else
-                 @markdown_doc ||= CommonMarker.render_doc(@user.about_readme || '')
-      'users/about'
+               when 'drafts' then 'users/drafts'
+    else 'users/about'
     end
   end
 

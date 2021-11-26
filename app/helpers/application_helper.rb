@@ -26,7 +26,8 @@ module ApplicationHelper
   def user_menu
     {
       about: { label: 'About', tab: nil },
-      articles: { label: 'Recent posts', tab: :articles },
+      articles: { label: 'Published posts', tab: :articles },
+      drafts: { label: 'Drafts', tab: :drafts },
       blogs: { label: 'Blogs', tab: :blogs },
       storages: { label: 'Storages', tab: :storages },
       settings: { label: 'Settings', tab: :settings }

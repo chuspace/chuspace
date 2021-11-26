@@ -18,17 +18,14 @@ class MarkdownParserService
     markdown_doc.walk do |node|
       if node.type == :image
         uri = URI.parse(node.url)
-        path = node.url if uri.absolute?
+        path = node.url
         mime = Marcel::MimeType.for name: File.basename(uri.path)
-        path = Rails.application.routes.url_helpers.blog_assets_path(blog, path: CGI.escape(node.url)) if uri.relative? && mime.include?('image/')
-        node.url = path
-      end
 
-      if node.type == :link
-        uri = URI.parse(node.url)
-        path = node.url if uri.absolute?
-        path = Rails.application.routes.url_helpers.blog_article_path(blog, path: CGI.escape(node.url)) if uri.relative? && uri.ends_with?('.md')
-        node.url = path
+        if uri.relative? && mime.include?('image/')
+          path = CGI.escape(path.delete_prefix('/'))
+        end
+
+        node.url = Rails.application.routes.url_helpers.blog_assets_path(blog, path: path)
       end
     end
 
