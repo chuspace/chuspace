@@ -2,7 +2,7 @@
   <div class='border-b last:border-b-0 p-4 border-base-200'>
     <%= turbo_frame_tag(blog, class: 'flex') do %>
       <div class='flex-1'>
-        <%= link_to(blog_path(blog), 'data-turbo-frame': :_top) do %>
+        <%= link_to(user_blog_path(blog.owner, blog), 'data-turbo-frame': :_top) do %>
           <%= tag.h5 blog.name, class: 'link link-primary link-hover' %>
           <%= tag.div blog.description, class: 'text-sm mt-1' %>
 
@@ -13,8 +13,8 @@
       </div>
 
       <div class='flex items-center justify-between flex-end'>
-        <%= link_to 'Edit', edit_blog_path(blog), class: 'btn btn-sm btn-outline border-info', data: { 'turbo-frame': :_top } %>
-        <%= button_to blog_path(blog), method: :delete, class: 'btn btn-sm border-error btn-outline ml-3', data: { 'turbo-frame': :_top } do %>
+        <%= link_to 'Edit', user_blog_settings_path(blog.owner, blog), class: 'btn btn-sm btn-outline border-info', data: { 'turbo-frame': :_top } %>
+        <%= button_to user_blog_path(blog.owner, blog), method: :delete, class: 'btn btn-sm border-error btn-outline ml-3', data: { 'turbo-frame': :_top } do %>
           <%= tag.span 'Delete' %>
         <% end %>
       </div>

@@ -10,12 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_22_124442) do
+ActiveRecord::Schema.define(version: 2021_11_28_150135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -51,24 +61,19 @@ ActiveRecord::Schema.define(version: 2021_11_22_124442) do
 # Could not dump table "blogs" because of following StandardError
 #   Unknown type 'blog_visibility_enum_type' for column 'visibility'
 
-  create_table "drafts", force: :cascade do |t|
-    t.string "blob_path", null: false
-    t.bigint "blog_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["blob_path"], name: "index_drafts_on_blob_path"
-    t.index ["blog_id", "blob_path"], name: "index_drafts_on_blog_id_and_blob_path", unique: true
-    t.index ["blog_id"], name: "index_drafts_on_blog_id"
-  end
-
   create_table "editions", force: :cascade do |t|
+    t.text "title", null: false
+    t.text "summary", null: false
     t.string "permalink", null: false
+    t.bigint "blog_id", null: false
     t.bigint "publisher_id", null: false
     t.bigint "revision_id", null: false
     t.integer "number", null: false
     t.datetime "published_at", precision: 6, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["blog_id", "permalink"], name: "index_editions_on_blog_id_and_permalink", unique: true
+    t.index ["blog_id"], name: "index_editions_on_blog_id"
     t.index ["published_at"], name: "index_editions_on_published_at"
     t.index ["publisher_id"], name: "index_editions_on_publisher_id"
     t.index ["revision_id", "number"], name: "index_editions_on_revision_id_and_number", unique: true
@@ -118,8 +123,19 @@ ActiveRecord::Schema.define(version: 2021_11_22_124442) do
 # Could not dump table "memberships" because of following StandardError
 #   Unknown type 'membership_role_enum_type' for column 'role'
 
+  create_table "posts", force: :cascade do |t|
+    t.string "blob_path", null: false
+    t.bigint "blog_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["blob_path"], name: "index_posts_on_blob_path"
+    t.index ["blog_id", "blob_path"], name: "index_posts_on_blog_id_and_blob_path", unique: true
+    t.index ["blog_id"], name: "index_posts_on_blog_id"
+  end
+
   create_table "revisions", force: :cascade do |t|
-    t.bigint "draft_id", null: false
+    t.bigint "blog_id", null: false
+    t.bigint "post_id", null: false
     t.bigint "author_id"
     t.jsonb "fallback_author", default: false, null: false
     t.jsonb "fallback_committer", default: false, null: false
@@ -130,8 +146,11 @@ ActiveRecord::Schema.define(version: 2021_11_22_124442) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["author_id"], name: "index_revisions_on_author_id"
-    t.index ["draft_id", "number"], name: "index_revisions_on_draft_id_and_number", unique: true
-    t.index ["draft_id"], name: "index_revisions_on_draft_id"
+    t.index ["blog_id"], name: "index_revisions_on_blog_id"
+    t.index ["number"], name: "index_revisions_on_number"
+    t.index ["post_id", "number"], name: "index_revisions_on_post_id_and_number", unique: true
+    t.index ["post_id"], name: "index_revisions_on_post_id"
+    t.index ["sha"], name: "index_revisions_on_sha"
   end
 
 # Could not dump table "storages" because of following StandardError
@@ -189,7 +208,7 @@ ActiveRecord::Schema.define(version: 2021_11_22_124442) do
   add_foreign_key "blogs", "blog_templates", column: "template_id"
   add_foreign_key "blogs", "storages"
   add_foreign_key "blogs", "users", column: "owner_id"
-  add_foreign_key "drafts", "blogs"
+  add_foreign_key "editions", "blogs"
   add_foreign_key "editions", "revisions"
   add_foreign_key "editions", "users", column: "publisher_id"
   add_foreign_key "identities", "users"
@@ -197,7 +216,9 @@ ActiveRecord::Schema.define(version: 2021_11_22_124442) do
   add_foreign_key "invites", "users", column: "sender_id"
   add_foreign_key "memberships", "blogs"
   add_foreign_key "memberships", "users"
-  add_foreign_key "revisions", "drafts"
+  add_foreign_key "posts", "blogs"
+  add_foreign_key "revisions", "blogs"
+  add_foreign_key "revisions", "posts"
   add_foreign_key "revisions", "users", column: "author_id"
   add_foreign_key "storages", "users"
 end

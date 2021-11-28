@@ -5,7 +5,8 @@ class CreateEditions < ActiveRecord::Migration[7.0]
 
   def change
     create_table :editions do |t|
-      t.string :permalink, null: false
+      t.text :title, null: false
+      t.text :summary, null: false
 
       t.references :blog, null: false, foreign_key: true
       t.references :publisher, null: false, foreign_key: { to_table: :users }
@@ -18,7 +19,6 @@ class CreateEditions < ActiveRecord::Migration[7.0]
     end
 
     add_index :editions, %i[revision_id number], unique: true, algorithm: :concurrently
-    add_index :editions, %i[blog_id permalink], unique: true, algorithm: :concurrently
     add_index :editions, :published_at, algorithm: :concurrently
   end
 end

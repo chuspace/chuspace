@@ -32,7 +32,8 @@ module Repoable
   end
 
   def repository_readme
-    storage.adapter.blob(fullname: repo_fullname, path: repo_readme_path).content
+    content = storage.adapter.blob(fullname: repo_fullname, path: repo_readme_path).content
+    Base64.decode64(content) if content
   end
 
   def repository

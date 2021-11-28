@@ -1,1 +1,1 @@
-<%= render 'blogs/list', blogs: @user.owning_blogs %>
+<%= render 'blogs/list', blogs: @user.blogs.except_personal %>

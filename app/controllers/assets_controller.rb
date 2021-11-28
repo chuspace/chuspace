@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 
-require 'marcel'
-
 class AssetsController < ApplicationController
   include ActiveStorage::Streaming
   before_action :find_blog
 
   def index
-    @blob = @blog.repository.blobs.images.find_by(path: CGI.unescape(params[:path]))
+    @blob = @blog.repository_blob(path: CGI.unescape(params[:path]))
 
     http_cache_forever(public: true) do
-      send_blob_stream @blob.content, disposition: params[:disposition]
+      send_blob_stream Base64.decode64(@blob.content), disposition: params[:disposition]
     end
   end
 

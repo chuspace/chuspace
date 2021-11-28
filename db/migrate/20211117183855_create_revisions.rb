@@ -5,7 +5,8 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
 
   def change
     create_table :revisions do |t|
-      t.references :draft, null: false, foreign_key: true
+      t.references :blog, null: false, foreign_key: true
+      t.references :post, null: false, foreign_key: true
       t.references :author, foreign_key: { to_table: :users }
 
       t.jsonb :fallback_author, null: false, default: false
@@ -20,6 +21,8 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :revisions, %i[draft_id number], unique: true, algorithm: :concurrently
+    add_index :revisions, %i[post_id number], unique: true, algorithm: :concurrently
+    add_index :revisions, :sha, algorithm: :concurrently
+    add_index :revisions, :number, algorithm: :concurrently
   end
 end

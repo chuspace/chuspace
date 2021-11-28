@@ -1,1 +1,1 @@
-<%= render 'drafts/list', drafts: @user.drafts %>
+<%= render 'drafts/list', posts: @user.posts.drafts.preload(:revisions, blog: :owner) %>

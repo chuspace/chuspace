@@ -2,7 +2,7 @@
   <div class='border-b last:border-b-0 p-4 border-base-200'>
     <div class='flex-1'>
       <%= link_to blog.owner.name, user_path(blog.owner), class: 'link link-accent link-hover font-medium' %>
-      <%= link_to(blog_path(blog), 'data-turbo-frame': :_top) do %>
+      <%= link_to(user_blog_path(blog.owner, blog), 'data-turbo-frame': :_top) do %>
         <%= tag.h5 blog.name, class: 'link link-primary link-hover' %>
         <%= tag.div blog.description, class: 'text-sm mt-1 text-secondary' %>
       <% end %>

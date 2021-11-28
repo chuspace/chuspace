@@ -1,0 +1,10 @@
+<div class='flex w-full text-article mt-2'>
+  <div>
+    <%= link_to 'home', root_path, class: 'link link-default' %> /
+    <%= link_to post.blog.owner.username, user_path(post.blog.owner), class: 'link link-default' %> /
+    <% unless post.blog.personal? %>
+      <%= link_to post.blog.permalink, user_blog_path(post.blog.owner, post.blog), class: 'link link-default' %> /
+    <% end %>
+    <%= content_tag :span, post.revisions.current.title, class: 'text text-secondary' %>
+  </div>
+</div>

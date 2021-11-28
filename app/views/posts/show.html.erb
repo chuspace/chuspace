@@ -1,0 +1,7 @@
+<div class='sm:w-2/3 mx-auto w-full'>
+  <%= render 'breadcrumbs', post: @post %>
+
+  <div class='chu-editor'>
+    <%= @post.revisions.current.parsed_content.html.html_safe %>
+  </div>
+</div>

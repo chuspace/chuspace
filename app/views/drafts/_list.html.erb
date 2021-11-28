@@ -1,7 +1,7 @@
 <div class='card bordered'>
-  <% if drafts.any? %>
-    <%= render partial: 'drafts/item', collection: drafts, as: :draft, cached: true %>
+  <% if posts.any? %>
+    <%= render partial: 'drafts/item', collection: posts, as: :post, cached: true %>
   <% else %>
-    <div class='text-center text-2xl py-16'>No drafts in this blog</div>
+    <div class='text-center text-2xl py-16'>No draft posts in this blog</div>
   <% end %>
 </div>

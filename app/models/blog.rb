@@ -7,8 +7,7 @@ class Blog < ApplicationRecord
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
 
   has_many :members, class_name: 'Membership', foreign_key: 'user_id', dependent: :delete_all, inverse_of: :user
-  has_many :drafts, dependent: :delete_all, inverse_of: :blog
-  has_many :articles, class_name: 'Edition', dependent: :delete_all, inverse_of: :blog
+  has_many :posts, dependent: :delete_all, inverse_of: :blog
 
   belongs_to :owner, class_name: 'User'
   belongs_to :storage
@@ -19,7 +18,11 @@ class Blog < ApplicationRecord
   validates_presence_of :template_id, if: -> { storage.chuspace? }
   validates_presence_of :name, :visibility
 
+  has_rich_text :readme
+
   acts_as_taggable_on :topics
+
+  scope :except_personal, -> { where(personal: false) }
 
   enum visibility: {
     private: 'private',
@@ -29,6 +32,10 @@ class Blog < ApplicationRecord
 
   def visibility
     super ? ActiveSupport::StringInquirer.new(super) : nil
+  end
+
+  def parsed_readme
+    MarkdownContent.new(content: readme.to_plain_text)
   end
 
   private

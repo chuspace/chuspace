@@ -1,13 +1,13 @@
 <% if signed_in? %>
   <section class='flex justify-between mt-24'>
     <main class='sm:w-2/3 w-full mr-12'>
-      <%= render 'articles/list', articles: @articles %>
+      <%= render 'posts/list', posts: @posts %>
     </main>
 
     <aside class='sm:w-1/3 w-full'>
       <div class='card bordered'>
         <h5 class='px-4 pt-8'>Top blogs</h5>
-        <%= render partial: 'blogs/mini_item', collection: Blog.all, as: :blog, cached: true %>
+        <%= render partial: 'blogs/mini_item', collection: Blog.all.except_personal, as: :blog, cached: true %>
       </div>
     </aside>
   </section>

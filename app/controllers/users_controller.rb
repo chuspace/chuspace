@@ -2,7 +2,7 @@
 
 class UsersController < ApplicationController
   before_action :find_user
-  before_action :set_content_partial
+  before_action :set_content_partial, only: :show
 
   def show
   end
@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   private
 
   def find_user
-    @user = User.friendly.find(params[:id])
+    @user = User.friendly.find(params[:username])
   end
 
   def set_content_partial
@@ -29,8 +29,8 @@ class UsersController < ApplicationController
                when 'settings' then 'users/form'
                when 'storages' then 'users/storages'
                when 'blogs' then 'users/blogs'
-               when 'articles' then 'users/articles'
                when 'drafts' then 'users/drafts'
+               when 'posts' then 'users/posts'
     else 'users/about'
     end
   end

@@ -1,7 +1,0 @@
-<div class='card bordered'>
-  <% if articles.any? %>
-    <%= render partial: 'articles/item', collection: articles, as: :article, cached: true %>
-  <% else %>
-    <div class='text-center text-2xl py-16'>No published articles</div>
-  <% end %>
-</div>

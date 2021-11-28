@@ -1,17 +1,17 @@
 <div class='mt-24 relative'>
   <h2><%= @blog.name %></h2>
   <p class='sm:w-2/3 w-full text-secondary'><%= @blog.description %></p>
-  <%= link_to 'New draft', new_blog_draft_path(@blog), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
+  <%= link_to 'New draft', new_user_blog_post_path(@blog.owner, @blog), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
 
-  <div class='tabs mt-8' dir='horizontal'>
+  <div class='tabs mt-8'>
     <div role="tablist">
-      <%= link_to 'About', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
-      <%= link_to 'Recent posts', connect_blogs_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
-      <%= link_to 'Blogs', new_blog_path, type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
+      <%= link_to 'About', user_blog_path(@blog.owner, @blog), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
+      <%= link_to 'Posts', user_blog_path(@blog.owner, @blog, tab: :posts), type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
+      <%= link_to 'Drafts', user_blog_path(@blog.owner, @blog, tab: :drafts), type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
     </div>
   </div>
 
   <div class='mt-16'>
-    <%= render 'blogs/about', blog: @blog %>
+    <%= render @partial, blog: @blog %>
   </div>
 </div>

@@ -5,6 +5,7 @@ class BlogsController < ApplicationController
 
   before_action :authenticate!, except: :show
   before_action :find_blog, except: %i[new connect create index auto_check]
+  before_action :set_content_partial, only: :show
 
   def index
     @blogs = Current.user.blogs
@@ -40,11 +41,14 @@ class BlogsController < ApplicationController
   end
 
   def show
-    @articles = @blog.articles
+    if @blog.personal?
+      redirect_to user_path(@blog.owner)
+    end
   end
 
   def update
     @blog.update!(blog_params)
+
     redirect_to blogs_path
   end
 
@@ -72,6 +76,15 @@ class BlogsController < ApplicationController
   end
 
   def find_blog
-    @blog = Current.user.blogs.friendly.find(params[:id])
+    @blog = Current.user.blogs.friendly.find(params[:permalink])
+  end
+
+  def set_content_partial
+    @partial = case params[:tab]
+               when 'settings' then 'blogs/form'
+               when 'posts' then 'blogs/posts'
+               when 'drafts' then 'blogs/drafts'
+    else 'blogs/about'
+    end
   end
 end

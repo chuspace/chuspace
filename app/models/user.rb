@@ -19,13 +19,12 @@ class User < ApplicationRecord
   has_person_name
 
   has_many :memberships, dependent: :delete_all, inverse_of: :user
-  has_many :blogs, -> { where(personal: false) }, through: :memberships, source: :blog
+  has_many :blogs, through: :memberships, source: :blog
   has_many :storages, -> { where.not(provider: ::Storage.chuspace_config['provider']) }, dependent: :delete_all, inverse_of: :user
   has_many :identities, dependent: :delete_all, inverse_of: :user
   has_many :blog_templates, dependent: :delete_all, foreign_key: 'author_id', inverse_of: :author
-  has_many :drafts, through: :personal_blog, source: :drafts, dependent: :delete_all
-  has_many :articles, through: :personal_blog, source: :articles, dependent: :delete_all
   has_one  :personal_blog, -> { where(personal: true) }, class_name: 'Blog', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
+  has_many :posts, through: :personal_blog, source: :posts, dependent: :delete_all
   has_one  :chuspace_storage, -> { where(provider: ::Storage.chuspace_config['provider']) }, class_name: 'Storage', dependent: :destroy, inverse_of: :user
 
   validates :email, :username, :first_name, :name, presence: true

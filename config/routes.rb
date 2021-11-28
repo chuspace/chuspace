@@ -7,13 +7,15 @@ Rails.application.routes.draw do
   resources :setups, only: %i[index show], path: 'get-started'
 
   scope :connect do
-    resources :storages, only: :index, path: :storage, as: :connect_storage
-    resources :blogs, only: :index, path: :blog, as: :connect_blog
+    get '/storage', to: 'storages#connect', as: :connect_storage
+    get '/blog', to: 'blogs#connect', as: :connect_blog
   end
 
   scope :new do
-    resources :blogs, only: :index, path: :blog, as: :new_blog
+    get '/blog', to: 'blogs#new', as: :new_blog
   end
+
+  resources :storages, except: :new
 
   resources :magic_logins, only: :index, path: 'magic'
   resources :signups, only: %i[index create], path: 'signup' do
@@ -31,13 +33,14 @@ Rails.application.routes.draw do
   delete '/sessions/:id', to: 'sessions#destroy', as: :logout
   get '/auth/:provider/callback', to: 'oauths#create'
 
-  resources :users, path: '', param: :username, only: :show do
-    resources :blogs, path: '', param: :permalink, only: :show do
-      resources :assets, only: :index
-      resources :domains
+  resources :users, path: '', only: :show, param: :username do
+    resources :blogs, path: '', only: :show, param: :permalink do
+      resources :settings, only: %i[index show]
 
-      resources :articles, path: '', param: :permalink do
-        resources :commits
+      resources :drafts, path: '', only: :edit, param: :sha
+
+      resources :posts, path: '', only: %i[show new edit] do
+        resources :settings, only: %i[index show]
       end
     end
   end

@@ -2,6 +2,6 @@
 
 class HomeController < ApplicationController
   def index
-    @editions = Edition.all.limit(20)
+    @posts = Post.published.limit(20)
   end
 end

@@ -1,0 +1,7 @@
+<div class='card bordered'>
+  <% if posts.any? %>
+    <%= render partial: 'posts/item', collection: posts, as: :post, cached: true %>
+  <% else %>
+    <div class='text-center text-2xl py-16'>No published posts in this blog</div>
+  <% end %>
+</div>

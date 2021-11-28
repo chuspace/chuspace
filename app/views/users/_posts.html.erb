@@ -1,0 +1,1 @@
+<%= render 'posts/list', posts: @user.posts.published.preload(blog: :owner, revisions: :edition) %>

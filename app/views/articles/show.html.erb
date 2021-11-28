@@ -1,9 +1,0 @@
-<div class='sm:w-2/3 mx-auto w-full'>
-  <%= render 'breadcrumbs', blog: @blog, article: @article %>
-  <div class='chu-editor'>
-    <%= render 'header', blog: @blog, article: @article %>
-    <div class='mt-8'>
-      <%= MarkdownRenderer.new.render(@markdown_doc).html_safe %>
-    </div>
-  </div>
-</div>
