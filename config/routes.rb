@@ -39,7 +39,7 @@ Rails.application.routes.draw do
 
       resources :drafts, path: '', only: :edit, param: :sha
 
-      resources :posts, path: '', only: %i[show new edit] do
+      resources :posts, path: '', only: %i[show new edit], param: :permalink do
         resources :settings, only: %i[index show]
       end
     end

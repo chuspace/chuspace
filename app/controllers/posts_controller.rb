@@ -5,7 +5,7 @@ class PostsController < ApplicationController
   layout 'editor'
 
   def show
-    @post = @blog.posts.joins(:revisions).find_by(revisions: { sha: params[:id] })
+    @post = @blog.posts.joins(:editions).find_by(editions: { permalink: params[:permalink] })
   end
 
   private
