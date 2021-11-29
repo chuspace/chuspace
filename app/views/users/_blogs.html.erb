@@ -1,1 +1,13 @@
-<%= render 'blogs/list', blogs: @user.blogs.except_personal %>
+<div class='flex justify-between border-b border-base-200 pb-3'>
+  <%= simple_form_for(:search, html: { class: 'flex-1' }) do |form| %>
+    <%= form.input :name, label: false, input_html: { class: 'input-sm' }, placeholder: 'Search' %>
+  <% end %>
+  <div class='ml-8'>
+    <%= link_to 'Connect existing', connect_blog_path, class: 'btn btn-primary btn-sm', data: { turbo: :_top } %>
+    <%= link_to 'Add new', new_blog_path, class: 'btn btn-primary btn-sm ml-2' %>
+  </div>
+</div>
+
+<div class='mt-4'>
+  <%= render 'blogs/list', blogs: @user.blogs.except_personal %>
+</div>

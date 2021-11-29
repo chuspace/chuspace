@@ -64,7 +64,6 @@ ActiveRecord::Schema.define(version: 2021_11_28_150135) do
   create_table "editions", force: :cascade do |t|
     t.text "title", null: false
     t.text "summary", null: false
-    t.string "permalink", null: false
     t.bigint "blog_id", null: false
     t.bigint "publisher_id", null: false
     t.bigint "revision_id", null: false
@@ -72,7 +71,6 @@ ActiveRecord::Schema.define(version: 2021_11_28_150135) do
     t.datetime "published_at", precision: 6, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["blog_id", "permalink"], name: "index_editions_on_blog_id_and_permalink", unique: true
     t.index ["blog_id"], name: "index_editions_on_blog_id"
     t.index ["published_at"], name: "index_editions_on_published_at"
     t.index ["publisher_id"], name: "index_editions_on_publisher_id"
@@ -123,15 +121,8 @@ ActiveRecord::Schema.define(version: 2021_11_28_150135) do
 # Could not dump table "memberships" because of following StandardError
 #   Unknown type 'membership_role_enum_type' for column 'role'
 
-  create_table "posts", force: :cascade do |t|
-    t.string "blob_path", null: false
-    t.bigint "blog_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["blob_path"], name: "index_posts_on_blob_path"
-    t.index ["blog_id", "blob_path"], name: "index_posts_on_blog_id_and_blob_path", unique: true
-    t.index ["blog_id"], name: "index_posts_on_blog_id"
-  end
+# Could not dump table "posts" because of following StandardError
+#   Unknown type 'post_visibility_enum_type' for column 'visibility'
 
   create_table "revisions", force: :cascade do |t|
     t.bigint "blog_id", null: false

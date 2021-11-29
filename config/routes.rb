@@ -7,15 +7,17 @@ Rails.application.routes.draw do
   resources :setups, only: %i[index show], path: 'get-started'
 
   scope :connect do
-    get '/storage', to: 'storages#connect', as: :connect_storage
     get '/blog', to: 'blogs#connect', as: :connect_blog
   end
 
   scope :new do
+    get '/storage', to: 'storages#new', as: :new_storage
     get '/blog', to: 'blogs#new', as: :new_blog
   end
 
-  resources :storages, except: :new
+  resources :storages, except: :new do
+    resources :repositories, only: :index
+  end
 
   resources :magic_logins, only: :index, path: 'magic'
   resources :signups, only: %i[index create], path: 'signup' do
@@ -34,7 +36,7 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'oauths#create'
 
   resources :users, path: '', only: :show, param: :username do
-    resources :blogs, path: '', only: :show, param: :permalink do
+    resources :blogs, path: '', only: %i[show create], param: :permalink do
       resources :settings, only: %i[index show]
 
       resources :drafts, path: '', only: :edit, param: :sha

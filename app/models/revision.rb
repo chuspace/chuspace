@@ -28,6 +28,6 @@ class Revision < ApplicationRecord
   private
 
   def assign_next_number_sequence
-    self.number = post.revisions.current.number + 1
+    self.number = post.revisions.last&.number.to_i + 1
   end
 end

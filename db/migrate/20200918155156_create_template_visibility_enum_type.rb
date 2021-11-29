@@ -3,7 +3,7 @@
 class CreateTemplateVisibilityEnumType < ActiveRecord::Migration[6.1]
   def up
     execute <<-SQL
-      CREATE TYPE template_visibility_enum_type AS ENUM ('private', 'public', 'internal');
+      CREATE TYPE template_visibility_enum_type AS ENUM ('private', 'public', 'subscriber');
     SQL
   end
 

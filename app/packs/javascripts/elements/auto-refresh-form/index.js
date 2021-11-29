@@ -6,8 +6,6 @@ import { controller, target, targets } from '@github/catalyst'
 export default class AutoRefreshFormElement extends HTMLElement {
   @target form: HTMLFormElement
   @target loader: HTMLElement
-  @target autoCompleter: HTMLElement
-  @target autoCompleteInput: HTMLInputElement
 
   connectedCallback() {
     const completer = document.querySelector('auto-complete')
@@ -33,11 +31,13 @@ export default class AutoRefreshFormElement extends HTMLElement {
 
       completer.addEventListener('load', () => {
         spinner.classList.add('hidden')
+        completer.classList.add('show')
       })
 
-      completer.addEventListener('loadend', () =>
+      completer.addEventListener('loadend', () => {
         spinner.classList.add('hidden')
-      )
+        completer.classList.add('show')
+      })
       completer.addEventListener('error', () => spinner.classList.add('hidden'))
     }
   }
@@ -48,14 +48,5 @@ export default class AutoRefreshFormElement extends HTMLElement {
     }
 
     this.form.requestSubmit()
-  }
-
-  onAutoCompleteItemClick(event) {
-    this.autoCompleteInput.value = event.target.dataset.id
-    this.refresh()
-  }
-
-  reset(event) {
-    this.autoCompleteInput.value = null
   }
 }

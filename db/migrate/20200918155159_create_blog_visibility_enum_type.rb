@@ -3,7 +3,7 @@
 class CreateBlogVisibilityEnumType < ActiveRecord::Migration[6.1]
   def up
     execute <<-SQL
-      CREATE TYPE blog_visibility_enum_type AS ENUM ('private', 'public', 'internal');
+      CREATE TYPE blog_visibility_enum_type AS ENUM ('private', 'public', 'subscriber');
     SQL
   end
 

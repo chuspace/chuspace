@@ -25,6 +25,7 @@ class StorageAdapter
     create_repository
     delete_repository
     update_repository
+    repository_files
     repository_folders
     head_sha
     commits

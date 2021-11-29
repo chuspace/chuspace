@@ -1,46 +1,46 @@
 <%= turbo_frame_tag(blog) do %>
   <auto-refresh-form>
-    <%= simple_form_for(blog, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+    <%= simple_form_for([Current.user, blog], html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
       <%= form.input :storage_id, as: :select, collection: Current.user.storages.external.pluck(:description, :id), autofocus: true, input_html: { 'data-action': 'change:auto-refresh-form#refresh' } %>
       <% if blog.storage.present? %>
         <auto-complete
-          src="<%= storage_repos_path(blog.storage) %>"
+          src="<%= storage_repositories_path(blog.storage) %>"
           for="repos-popup"
           class='relative block'
+          data-autoselect="true"
           data-action='auto-complete-change:auto-refresh-form#refresh'>
-          <%= form.simple_fields_for :repository do |repo_form| %>
-            <%= repo_form.input(
-                :name,
-              as: :string,
-              input_html: {
-                value: blog.repository&.name,
-                'data-action': 'input:auto-refresh-form#reset',
-              },
-              wrapper_html: { class: 'relative' }
-            ) %>
-          <% end %>
+          <%= form.input(
+              :repo_fullname,
+            as: :string,
+            input_html: {
+              value: blog.repo_fullname,
+              'data-action': 'change:auto-refresh-form#reset',
+            },
+            wrapper_html: { class: 'relative' }
+          ) %>
           <ul
             id="repos-popup"
-            class='absolute z-10 shadow menu dropdown-content bg-base-100 border w-full'></ul>
+            class='absolute z-10 shadow dropdown-content bg-base-100 border w-full'
+          >
+          </ul>
+          <div id="repos-popup-feedback" class="sr-only"></div>
         </auto-complete>
       <% end %>
 
       <div data-target='auto-refresh-form.loader'>
-        <% if blog.repository&.name&.present? %>
+        <% if blog.repo_fullname.present? %>
+          <div class="divider"></div>
           <%= form.input :name, required: true %>
           <%= form.input :description, as: :text, required: true %>
           <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
-          <%= form.input :default %>
-        <% end %>
-      </div>
 
-      <div data-target='auto-refresh-form.loader'>
-        <% if blog.repository&.folders&.any? %>
-          <%= form.simple_fields_for :repository do |repo_form| %>
-            <%= repo_form.input :repo_articles_folder, as: :select, collection: blog.repository.folders %>
-            <%= repo_form.input :repo_drafts_folder, as: :select, collection: blog.repository.folders %>
-            <%= repo_form.input :repo_assets_folder, as: :select, collection: blog.repository.folders %>
-            <%= repo_form.input :readme_path %>
+          <div class="divider"></div>
+
+          <% if blog.repository.folders.any? %>
+            <%= form.input :repo_articles_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
+            <%= form.input :repo_drafts_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
+            <%= form.input :repo_assets_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
+            <%= form.input :repo_readme_path, as: :select, collection: blog.repository.files, include_blank: 'Choose' %>
           <% end %>
         <% end %>
       </div>

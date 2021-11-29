@@ -1,19 +1,19 @@
-<%= render 'layout' do %>
-  <% if Current.user.storages.external.any? %>
-    <div class='mt-2'>
+<div class='sm:w-2/3 w-full mx-auto mt-24'>
+  <div class='border-b border-base-200 pb-3'>
+    <h3>Connect an existing blog</h3>
+    <div class='mt-2 text-secondary text-sm'>
       <p>
-        Chuspace blogs are powered by git repositories connected to one of the
-        git storage providers.
-        You can either connect an existing blog repository from your git storage
-        providers or add a new one.
+        Connect an existing markdown powered blog hosted on one of the
+        linked git storage providers.
+        The selected git repository must support publishing posts using markdown.
+        <code>Example: Jekyll, Hugo or Astro</code>
       </p>
-      <p>The selected git repository must support publishing posts using markdown.</p>
-      <pre class='mt-2'>Example: Jekyll, Hugo or Astro</pre>
+      <p class='mt-2'>Don't have an existing blog? <%= link_to 'Create one', new_blog_path, class: 'link link-primary' %></p>
     </div>
+  </div>
 
-    <div class='mt-8'>
-      <%= render 'connect', blog: @blog %>
-    </div>
+  <% if Current.user.storages.external.any? %>
+    <%= render 'connect', blog: @blog %>
   <% else %>
     <div class='placeholder sm:w-3/4 mx-auto w-full'>
       <h3>No external git storages configured</h4>
@@ -21,4 +21,4 @@
       <%= link_to 'Connect storage', storages_path, class: 'button button--fill mt-4 inline-block', data: { 'turbo-frame': '_top' } %>
     </div>
   <% end %>
-<% end %>
+</div>

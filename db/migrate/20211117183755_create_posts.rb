@@ -12,5 +12,6 @@ class CreatePosts < ActiveRecord::Migration[7.0]
 
     add_index :posts, %i[blog_id blob_path], unique: true, algorithm: :concurrently
     add_index :posts, :blob_path, algorithm: :concurrently
+    add_column :posts, :visibility, :post_visibility_enum_type, index: { algorithm: :concurrently }
   end
 end

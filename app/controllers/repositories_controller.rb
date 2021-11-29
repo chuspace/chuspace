@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class ReposController < ApplicationController
+class RepositoriesController < ApplicationController
+  before_action :authenticate!
+
   def index
     @storage = Current.user.storages.find_by(provider: params[:storage_id])
     query = case @storage.provider

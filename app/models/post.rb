@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  VALID_MIME = 'text/markdown'.freeze
+
   belongs_to :blog, touch: true
   has_many   :revisions, dependent: :delete_all, inverse_of: :post
   has_many   :editions, through: :revisions, dependent: :delete_all
@@ -15,14 +17,18 @@ class Post < ApplicationRecord
     def drafts
       joins(:revisions).distinct(:revision_id)
     end
+
+    def valid_mime?(name:)
+      VALID_MIME == Marcel::MimeType.for(name: name)
+    end
   end
 
   def git_blob(ref: nil)
-    blog.repository_blob(path: blob_path, ref: ref)
+    blog.repository.blob(path: blob_path, ref: ref)
   end
 
   def git_commits
-    blog.repository_commits(path: blob_path)
+    blog.repository.commits(path: blob_path)
   end
 
   def published?

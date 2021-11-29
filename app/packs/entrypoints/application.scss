@@ -48,3 +48,15 @@
   --animation-btn: 0;
   --animation-input: 0;
 }
+
+auto-complete {
+  ul {
+    @apply hidden;
+  }
+
+  &[open] {
+    ul {
+      @apply block;
+    }
+  }
+}

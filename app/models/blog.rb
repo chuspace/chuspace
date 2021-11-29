@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
-  include Repoable
+  include HasGitRepository
   extend FriendlyId
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
@@ -27,7 +27,7 @@ class Blog < ApplicationRecord
   enum visibility: {
     private: 'private',
     public: 'public',
-    internal: 'internal'
+    subscriber: 'subscriber'
   }, _suffix: true
 
   def visibility
@@ -45,6 +45,6 @@ class Blog < ApplicationRecord
   end
 
   def resolve_friendly_id_conflict(candidates)
-    self.name = normalize_friendly_id(name)
+    self.name = normalize_friendly_id(name) if name
   end
 end

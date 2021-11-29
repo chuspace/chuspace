@@ -67,6 +67,13 @@ class GithubAdapter < ApplicationAdapter
       .sort
   end
 
+  def repository_files(fullname:)
+    tree(fullname: fullname)
+      .select { |item| item.type == 'blob' && Post.valid_mime?(name: item.path) }
+      .map(&:path)
+      .sort
+  end
+
   def search_repositories(query:, options: { sort: 'asc', per_page: 5 })
     repository_from_response(search('search/repositories', query, options).items)
   end

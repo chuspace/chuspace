@@ -23,6 +23,6 @@ class Edition < ApplicationRecord
   private
 
   def assign_next_number_sequence
-    self.number = post.editions.current&.number.to_i + 1
+    self.number = post.editions.last&.number.to_i + 1
   end
 end

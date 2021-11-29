@@ -5,7 +5,7 @@ class DraftsController < ApplicationController
   layout 'editor'
 
   def edit
-    @edit=  true
+    @edit = true
     @post = @blog.posts.joins(:revisions).find_by(revisions: { sha: params[:sha] })
   end
 

@@ -5,10 +5,10 @@ class SyncBlogContentsJob < ApplicationJob
 
   def perform(blog:)
     Blog.transaction do
-      blog.update(readme: repository_readme)
+      blog.update!(readme: blog.repository.readme)
 
       Post.transaction do
-        blog.repository_blobs.each do |git_blob|
+        blog.repository.post_blobs.each do |git_blob|
           blog.posts.create!(blob_path: git_blob.path)
         end
       end
