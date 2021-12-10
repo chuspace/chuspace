@@ -1,7 +1,0 @@
-<%= simple_form_for([blog, article]) do |form| %>
-  <%= form.input :title %>
-  <%= form.input :intro %>
-  <%= form.input :published_at %>
-  <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
-  <%= form.input :tags %>
-<% end %>

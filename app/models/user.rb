@@ -32,7 +32,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, email: true
   encrypts  :email, deterministic: true, downcase: true
 
-  accepts_nested_attributes_for :identities
+  accepts_nested_attributes_for :identities, :memberships
 
   class << self
     def create_with_email_identity(email:)

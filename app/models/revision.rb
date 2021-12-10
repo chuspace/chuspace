@@ -12,9 +12,10 @@ class Revision < ApplicationRecord
 
   validates :number, uniqueness: { scope: :post_id }
   before_validation :assign_next_number_sequence, on: :create
+  before_create     :create_git_commit, if: -> { sha.blank? }
 
   class << self
-    alias current first
+    alias current last
   end
 
   def to_param
@@ -29,5 +30,10 @@ class Revision < ApplicationRecord
 
   def assign_next_number_sequence
     self.number = post.revisions.last&.number.to_i + 1
+  end
+
+  def create_git_commit
+    blob = blog.storage.adapter.update_blob(fullname: blog.repo_fullname, path: post.blob_path, content: Base64.encode64(content), message: message.presence, sha: post.git_blob.sha)
+    self.sha = blob.commit.sha
   end
 end

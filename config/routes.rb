@@ -39,10 +39,10 @@ Rails.application.routes.draw do
     resources :blogs, path: '', only: %i[show create], param: :permalink do
       resources :settings, only: %i[index show]
 
-      resources :drafts, path: '', only: :edit, param: :sha
-
-      resources :posts, path: '', only: %i[show new edit], param: :permalink do
+      resources :posts, path: '', except: :index do
         resources :settings, only: %i[index show]
+        resources :revisions, only: %i[index new]
+        resources :editions, only: %i[index new]
       end
     end
   end

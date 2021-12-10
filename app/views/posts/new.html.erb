@@ -1,4 +1,31 @@
 <div class='sm:w-2/3 mx-auto w-full'>
-  <%= render 'breadcrumbs', post: @post %>
-  <%= render 'drafts/form', post: @post %>
+  <h3>Create a new post</h3>
+  <p class='text-sm mt-2 text-secondary'>
+    The post will be persisted into the connected blog repository draft folder.
+  </p>
+
+  <div class="text-sm breadcrumbs">
+    <ul>
+      <li>
+        <%= link_to @post.blog.owner.username, user_path(@post.blog.owner), class: 'link link-primary' %>
+      </li>
+      <li>
+        <%= link_to @post.blog.repository.fullname, user_blog_path(@post.blog.owner, @post.blog), class: 'link link-primary' %>
+      </li>
+    </ul>
+  </div>
+
+  <div class='mt-8'>
+    <%= simple_form_for(@post, url: user_blog_posts_path(@post.blog.owner, @post.blog, @post)) do |form| %>
+      <%= form.label :blob_path, class: 'mb-2 block' %>
+      <div class="form-control w-full">
+        <div class="input-group input-group-xs w-full">
+          <span><%= @post.blog.repo_drafts_folder %></span>
+          <%= form.input :blob_path, label: false, wrapper: false, input_html: { class: 'w-full' } %>
+        </div>
+      </div>
+
+      <%= form.button :submit, 'Create', class: 'mt-4 float-right btn-primary' %>
+    <% end %>
+  </div>
 </div>

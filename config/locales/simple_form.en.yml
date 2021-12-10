@@ -15,8 +15,8 @@ en:
         access_token: Personal access token generated for selected provider
       user:
         email: Type your email
-      user:
-        email: Type your email
+      post:
+        blob_path: read-about-chuspace.md
 
     labels:
       defaults:
@@ -29,6 +29,8 @@ en:
         repo_drafts_folder: Drafts folder (optional)
         repo_assets_folder: Assets folder
         repo_readme_path: Readme path
+      post:
+        blob_path: File name
 
     hints:
       storage:

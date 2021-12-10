@@ -2,7 +2,16 @@
 
 class PostsController < ApplicationController
   before_action :find_user, :find_blog
-  layout 'editor'
+  layout 'editor', only: %i[new edit]
+
+  def new
+    @post = @blog.posts.new
+    @post.revisions.build(author: Current.user, blog: @blog)
+  end
+
+  def edit
+    @post = @blog.posts.joins(:revisions).find_by(revisions: { sha: params[:id] })
+  end
 
   def show
     @post = @blog.posts.joins(:editions).find_by(editions: { permalink: params[:permalink] })

@@ -8,14 +8,11 @@ class MarkdownContent
   end
 
   def ast
-    CommonMarker.render_doc(body || '')
+    CommonMarker.render_doc(parsed.content || '')
   end
 
   def body
-    str = ''
-    str += "# #{title}\n" if title
-    str += "## #{summary}\n" if summary
-    str += parsed.content
+    parsed.content
   end
 
   def base64
@@ -35,7 +32,7 @@ class MarkdownContent
   end
 
   def title
-    front_matter.dig('title')
+    front_matter.dig('title') || ast.first.to_plaintext
   end
 
   def topics

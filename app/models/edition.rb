@@ -17,7 +17,7 @@ class Edition < ApplicationRecord
   before_validation :assign_next_number_sequence, on: :create
 
   class << self
-    alias current first
+    alias current last
   end
 
   private

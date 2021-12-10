@@ -24,11 +24,21 @@ class BlogsController < ApplicationController
   end
 
   def create
-    @blog = Current.user.blogs.new(blog_params)
+    @blog = Current.user.blogs.new(
+      blog_params.merge(
+        owner: Current.user,
+        members_attributes: {
+          user: Current.user,
+          role: :owner
+        }
+      )
+    )
 
-    if @blog.save
-      redirect_to blogs_path
+    if @blog.save && params[:commit] == 'Connect'
+      redirect_to user_blog_path(Current.user, @blog)
     else
+      puts @blog.errors.inspect
+      puts 'errors'
       respond_to do |format|
         format.html
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: "blogs/#{params[:type]}", locals: { blog: @blog }) }
@@ -70,7 +80,7 @@ class BlogsController < ApplicationController
       :repo_drafts_folder,
       :repo_assets_folder,
       :repo_fullname,
-      :readme_path,
+      :repo_readme_path,
       :default
     )
   end

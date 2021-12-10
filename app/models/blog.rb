@@ -6,7 +6,7 @@ class Blog < ApplicationRecord
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
 
-  has_many :members, class_name: 'Membership', foreign_key: 'user_id', dependent: :delete_all, inverse_of: :user
+  has_many :members, class_name: 'Membership', dependent: :delete_all, inverse_of: :blog
   has_many :posts, dependent: :delete_all, inverse_of: :blog
 
   belongs_to :owner, class_name: 'User'
@@ -15,7 +15,7 @@ class Blog < ApplicationRecord
 
   validates :name, uniqueness: { scope: :owner_id }
 
-  validates_presence_of :template_id, if: -> { storage.chuspace? }
+  validates_presence_of :template_id, if: -> { storage&.chuspace? }
   validates_presence_of :name, :visibility
 
   has_rich_text :readme
@@ -23,6 +23,8 @@ class Blog < ApplicationRecord
   acts_as_taggable_on :topics
 
   scope :except_personal, -> { where(personal: false) }
+
+  accepts_nested_attributes_for :members
 
   enum visibility: {
     private: 'private',
@@ -36,6 +38,10 @@ class Blog < ApplicationRecord
 
   def parsed_readme
     MarkdownContent.new(content: readme.to_plain_text)
+  end
+
+  def repo_drafts_folder
+    super || repo_articles_folder
   end
 
   private

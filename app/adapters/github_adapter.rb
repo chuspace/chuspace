@@ -82,9 +82,9 @@ class GithubAdapter < ApplicationAdapter
     get("repos/#{fullname}/git/trees/#{sha}", { recursive: true }).tree
   end
 
-  def update_blob(fullname:, path:, content:, message: nil)
+  def update_blob(fullname:, path:, content:, sha:, message: nil)
     message ||= "Update #{path}"
-    put "repos/#{fullname}/contents/#{path}", { content: content, message: message }
+    put "repos/#{fullname}/contents/#{path}", { content: content, message: message, sha: sha }
   end
 
   def user(options = {})

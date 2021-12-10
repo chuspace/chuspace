@@ -7,7 +7,17 @@ class Post < ApplicationRecord
   has_many   :revisions, dependent: :delete_all, inverse_of: :post
   has_many   :editions, through: :revisions, dependent: :delete_all
 
+  validates :blob_path, presence: :true, uniqueness: { scope: :blog_id }
+
   after_create_commit :sync_post_revisions
+  before_validation   :set_visibility
+
+  enum visibility: {
+    private: 'private',
+    public: 'public',
+    subscriber: 'subscriber'
+  }, _suffix: true
+
 
   class << self
     def published
@@ -35,9 +45,17 @@ class Post < ApplicationRecord
     editions.any?
   end
 
+  def status
+    editions.any? ? 'published' : 'draft'
+  end
+
   private
 
   def sync_post_revisions
     SyncPostRevisionsJob.perform_later(post: self)
+  end
+
+  def set_visibility
+    self.visibility ||= blog.visibility
   end
 end

@@ -1,9 +1,0 @@
-<%= simple_form_for [post.blog.owner, post.blog, post] do |form| %>
-  <chu-editor
-    class='block chu-editor editable mt-8'
-    spellcheck="false"
-    data-action='keydown:chu-editor#handleArrow'
-  >
-    <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: post.revisions.current&.body } %>
-  </chu-editor>
-<% end %>

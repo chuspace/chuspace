@@ -32,7 +32,7 @@ class StorageAdapter
     blob
     blobs
     create_blob
-    find_blob
+    update_blob
     delete_blob
     commit
     contribute

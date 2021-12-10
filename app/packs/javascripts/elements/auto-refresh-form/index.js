@@ -31,13 +31,11 @@ export default class AutoRefreshFormElement extends HTMLElement {
 
       completer.addEventListener('load', () => {
         spinner.classList.add('hidden')
-        completer.classList.add('show')
       })
 
-      completer.addEventListener('loadend', () => {
+      completer.addEventListener('loadend', () =>
         spinner.classList.add('hidden')
-        completer.classList.add('show')
-      })
+      )
       completer.addEventListener('error', () => spinner.classList.add('hidden'))
     }
   }

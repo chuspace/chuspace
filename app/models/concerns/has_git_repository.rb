@@ -16,7 +16,7 @@ module HasGitRepository
   end
 
   def posts_folders
-    [repo_articles_folder, repo_drafts_folder].compact.freeze
+    [repo_articles_folder, repo_drafts_folder].reject(&:blank?).freeze
   end
 
   def assets_folders

@@ -40,13 +40,22 @@
             <%= form.input :repo_articles_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
             <%= form.input :repo_drafts_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
             <%= form.input :repo_assets_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
-            <%= form.input :repo_readme_path, as: :select, collection: blog.repository.files, include_blank: 'Choose' %>
+            <%= form.input(
+                :repo_readme_path,
+                as: :select,
+                collection: blog.repository.files,
+                include_blank: 'Choose',
+                input_html: {
+                  'data-action': 'change:auto-refresh-form#refresh',
+                },
+              )
+            %>
           <% end %>
         <% end %>
       </div>
 
       <%= form.input :type, as: :hidden, input_html: { value: :connect, name: 'type' } %>
-      <%= form.button :submit, 'Connect', class: 'mt-12 loading' %>
+      <%= form.button :submit, 'Connect', class: "mt-12" %>
     <% end %>
   </auto-refresh-form>
 <% end %>

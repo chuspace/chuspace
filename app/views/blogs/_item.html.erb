@@ -7,15 +7,8 @@
           <%= tag.div blog.description, class: 'text-sm mt-1' %>
 
           <div class='mt-2'>
-            <%= content_tag :span, 'internal', class: 'badge badge-primary mr-2' if blog.storage.chuspace? %>
+            <%= content_tag :span, blog.storage.provider, class: 'badge badge-primary mr-2' %>
           </div>
-        <% end %>
-      </div>
-
-      <div class='flex items-center justify-between flex-end'>
-        <%= link_to 'Edit', user_blog_settings_path(blog.owner, blog), class: 'btn btn-sm btn-outline border-info', data: { 'turbo-frame': :_top } %>
-        <%= button_to user_blog_path(blog.owner, blog), method: :delete, class: 'btn btn-sm border-error btn-outline ml-3', data: { 'turbo-frame': :_top } do %>
-          <%= tag.span 'Delete' %>
         <% end %>
       </div>
     <% end %>

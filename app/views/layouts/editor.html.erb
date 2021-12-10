@@ -1,67 +1,12 @@
 <!DOCTYPE html>
 <html lang='en' class='h-full'>
   <%= render 'layouts/head' %>
-  <body>
-    <div class='mt-4 flex items-start'>
-      <header>
-        <nav class='ml-8'>
-          <%= link_to root_path do %>
-            <h3 class='lowercase leading-none font-monospace'>Chu</h3>
-          <% end %>
-        </nav>
-      </header>
+  <body class="flex flex-col h-full">
+    <%= render 'layouts/flash' %>
+    <%= render 'posts/header', post: @post %>
 
-      <section class="flex-1">
-        <%= yield %>
-      </section>
-
-      <% if Current.user.present? %>
-        <div class='mr-8'>
-          <%= render 'layouts/user' %>
-        </div>
-      <% end %>
-    </div>
-
-    <%= turbo_frame_tag :dialogs %>
-
-    <% if @edit  %>
-      <nav class='mr-8 fixed right-0 top-1/2 -translate-y-1/2'>
-        <%= turbo_frame_tag :new_commit do %>
-          <%= link_to '#', class: 'flex items-center block link link-primary bg-neutral rounded-full p-2', data: { 'turbo-frame': :dialogs } do  %>
-            <%= inline_svg_tag 'icons/git-commit', class: 'w-6 h-6 fill-current' %>
-          <% end %>
-        <% end %>
-
-        <%= link_to '#', class: 'flex items-center mt-4 block link link-primary bg-neutral rounded-full p-2' do  %>
-          <%= inline_svg_tag 'icons/code', class: 'w-6 h-6 fill-current' %>
-        <% end %>
-
-        <%= link_to '#', class: 'flex items-center link text-error mt-4 bg-neutral rounded-full p-2' do  %>
-          <%= inline_svg_tag 'icons/trash', class: 'w-6 h-6 fill-current' %>
-        <% end %>
-
-        <%= link_to '#', class: 'flex items-center link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
-          <%= inline_svg_tag 'icons/markdown', class: 'w-6 h-6 fill-current' %>
-        <% end %>
-
-        <%= link_to '#', class: 'flex items-center link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
-          <%= inline_svg_tag 'icons/iterations', class: 'w-6 h-6 fill-current' %>
-        <% end %>
-      </nav>
-    <% else %>
-      <nav class='mr-8 fixed right-0 top-1/2 -translate-y-1/2'>
-        <%= link_to '#', class: 'flex items-center block link link-primary bg-neutral rounded-full p-2' do  %>
-          <%= inline_svg_tag 'icons/repo-pull', class: 'w-6 h-6 fill-current' %>
-        <% end %>
-
-        <%= link_to '#', class: 'flex items-center block link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
-          <%= inline_svg_tag 'icons/share', class: 'w-6 h-6 fill-current' %>
-        <% end %>
-
-        <%= link_to '#', class: 'flex items-center block link link-primary mt-4 bg-neutral rounded-full p-2' do  %>
-          <%= inline_svg_tag 'icons/bookmark', class: 'w-6 h-6 fill-current' %>
-        <% end %>
-      </nav>
-    <% end %>
+    <section class="container flex-1 pt-24">
+      <%= yield %>
+    </section>
   </body>
 </html>

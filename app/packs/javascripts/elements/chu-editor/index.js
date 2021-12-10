@@ -1,46 +1,13 @@
 // @flow
 
-import { attr, controller } from '@github/catalyst'
+import { attr, controller, target } from '@github/catalyst'
 
 import Editor from 'editor'
 import { Transaction } from 'prosemirror-state'
 
-function getPreviousSibling(elem, callback) {
-  // Get the next sibling element
-  let sibling = elem.previousElementSibling
-
-  // If there's no callback, return the first sibling
-  if (!callback || typeof callback !== 'function') return sibling
-
-  // If the sibling matches our test condition, use it
-  // If not, jump to the next sibling and continue the loop
-  let index = 0
-  while (sibling) {
-    if (callback(sibling, index, elem)) return sibling
-    index++
-    sibling = sibling.previousElementSibling
-  }
-}
-
-function getNextSibling(elem, callback) {
-  // Get the next sibling element
-  let sibling = elem.nextElementSibling
-
-  // If there's no callback, return the first sibling
-  if (!callback || typeof callback !== 'function') return sibling
-
-  // If the sibling matches our test condition, use it
-  // If not, jump to the next sibling and continue the loop
-  let index = 0
-  while (sibling) {
-    if (callback(sibling, index, elem)) return sibling
-    index++
-    sibling = sibling.nextElementSibling
-  }
-}
-
 @controller
 export default class ChuEditor extends HTMLElement {
+  @target revisionsModal: HTMLElement
   editor: Editor
   status: 'Saved'
 
@@ -70,19 +37,13 @@ export default class ChuEditor extends HTMLElement {
     // }
   }
 
-  get payload() {
-    return {
-      body: this.editor.content
-    }
+  showRevisionsModal = (event) => {
+    event.preventDefault()
+    this.revisionsModal.classList.add('modal-open')
   }
 
-  createRenderRoot() {
-    return this
+  closeRevisionsModal = () => {
+    event.preventDefault()
+    this.revisionsModal.classList.remove('modal-open')
   }
 }
-
-document.addEventListener('turbo:load', () => {
-  if (!window.customElements.get('chu-editor')) {
-    customElements.define('chu-editor', ChuEditor)
-  }
-})

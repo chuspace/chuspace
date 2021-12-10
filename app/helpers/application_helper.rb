@@ -27,7 +27,6 @@ module ApplicationHelper
     {
       about: { label: 'About', tab: nil },
       posts: { label: 'Posts', tab: :posts },
-      drafts: { label: 'Drafts', tab: :drafts },
       blogs: { label: 'Blogs', tab: :blogs },
       storages: { label: 'Storages', tab: :storages },
       settings: { label: 'Settings', tab: :settings }
