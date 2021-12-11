@@ -1,5 +1,5 @@
-<div class='mt-24 relative'>
-  <h2><%= @blog.name %></h2>
+<div class='relative'>
+  <h3><%= @blog.name %></h3>
   <p class='sm:w-2/3 w-full text-secondary'><%= @blog.description %></p>
   <%= link_to 'New post', new_user_blog_post_path(@blog.owner, @blog), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
 
@@ -11,7 +11,9 @@
     </div>
   </div>
 
-  <div class='mt-16'>
+  <div class='divider'></div>
+
+  <div class='mt-8'>
     <%= render @partial, blog: @blog %>
   </div>
 </div>

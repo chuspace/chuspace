@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  root to: 'feed#index', constraints: RootConstraint.new, as: :feed
   root to: 'home#index'
 
   resources :auto_checks, only: :create

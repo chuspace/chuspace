@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SignupsController < ApplicationController
+  layout 'marketing'
   include SessionRedirect
 
   def email

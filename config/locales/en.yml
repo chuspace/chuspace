@@ -22,7 +22,7 @@ en:
             provider:
               one_provider_per_user: this storage provider already exists
   home:
-    marketing:
+    index:
       heading: Defragging dev blogs
       intro:
         Chuspace is a collaborative blogging and indexing platform, which works
