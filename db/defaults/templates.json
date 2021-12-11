@@ -10,7 +10,7 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "repo_articles_folder": "src/pages/posts",
+    "repo_posts_folder": "src/pages/posts",
     "repo_assets_folder": "public/assets/blog"
   },
   {
@@ -24,7 +24,7 @@
     "css": "tailwindcss",
     "approved": true,
     "system": true,
-    "repo_articles_folder": "src/_posts",
+    "repo_posts_folder": "src/_posts",
     "repo_assets_folder": "src/images"
   },
   {
@@ -38,7 +38,7 @@
     "system": true,
     "chuspace_mirror_path": "chuspace/11ty-starter-blog",
     "repo_url": "https://github.com/chuspace/11ty-starter-blog",
-    "repo_articles_folder": "src/blog",
+    "repo_posts_folder": "src/blog",
     "repo_assets_folder": "src/blog/images"
   },
   {
@@ -52,7 +52,7 @@
     "system": true,
     "chuspace_mirror_path": "chuspace/gridsome-starter-blog",
     "repo_url": "https://github.com/chuspace/gridsome-starter-blog",
-    "repo_articles_folder": "content/posts",
+    "repo_posts_folder": "content/posts",
     "repo_assets_folder": "static"
   },
   {
@@ -66,7 +66,7 @@
     "system": true,
     "chuspace_mirror_path": "chuspace/gatsby-starter-blog",
     "repo_url": "https://github.com/chuspace/gatsby-starter-blog",
-    "repo_articles_folder": "content/posts",
+    "repo_posts_folder": "content/posts",
     "repo_assets_folder": "static/images"
   },
   {
@@ -80,7 +80,7 @@
     "system": true,
     "chuspace_mirror_path": "chuspace/hexo-starter-blog",
     "repo_url": "https://github.com/chuspace/hexo-starter-blog",
-    "repo_articles_folder": "source/_posts",
+    "repo_posts_folder": "source/_posts",
     "repo_assets_folder": "source/images"
   },
   {
@@ -94,7 +94,7 @@
     "system": true,
     "chuspace_mirror_path": "chuspace/hugo-starter-blog",
     "repo_url": "https://github.com/chuspace/hugo-starter-blog",
-    "repo_articles_folder": "content/posts",
+    "repo_posts_folder": "content/posts",
     "repo_assets_folder": "static"
   },
   {
@@ -108,7 +108,7 @@
     "system": true,
     "chuspace_mirror_path": "chuspace/jekyll-starter-blog",
     "repo_url": "https://github.com/chuspace/jekyll-starter-blog",
-    "repo_articles_folder": "_posts",
+    "repo_posts_folder": "_posts",
     "repo_drafts_folder": "_drafts",
     "repo_assets_folder": "assets/img"
   },
@@ -123,7 +123,7 @@
     "system": true,
     "chuspace_mirror_path": "chuspace/nextjs-starter-blog",
     "repo_url": "https://github.com/chuspace/nextjs-starter-blog",
-    "repo_articles_folder": "_posts",
+    "repo_posts_folder": "_posts",
     "repo_assets_folder": "public/images"
   }
 ]

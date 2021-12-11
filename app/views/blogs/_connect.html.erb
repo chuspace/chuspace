@@ -37,7 +37,7 @@
           <div class="divider"></div>
 
           <% if blog.repository.folders.any? %>
-            <%= form.input :repo_articles_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
+            <%= form.input :repo_posts_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
             <%= form.input :repo_drafts_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
             <%= form.input :repo_assets_folder, as: :select, collection: blog.repository.folders, include_blank: 'Choose' %>
             <%= form.input(

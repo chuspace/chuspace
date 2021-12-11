@@ -13,22 +13,22 @@ class BlogsController < ApplicationController
 
   def new
     if Current.user.storages.chuspace.present?
-      @blog = Current.user.blogs.build(storage: Current.user.storages.chuspace)
+      @blog = Current.user.blogs.build(owner: Current.user, storage: Current.user.storages.chuspace)
     else
       redirect_to storages_path, notice: 'You do not have any git storages configured'
     end
   end
 
   def connect
-    @blog = Current.user.blogs.new
+    @blog = Current.user.blogs.build
   end
 
   def create
-    @blog = Current.user.blogs.new(
+    @blog = Current.user.blogs.build(
       blog_params.merge(
-        owner: Current.user,
+        owner_id: Current.user.id,
         members_attributes: {
-          user: Current.user,
+          user_id: Current.user.id,
           role: :owner
         }
       )
@@ -76,12 +76,12 @@ class BlogsController < ApplicationController
       :storage_id,
       :template_id,
       :visibility,
-      :repo_articles_folder,
+      :repo_posts_folder,
       :repo_drafts_folder,
       :repo_assets_folder,
       :repo_fullname,
       :repo_readme_path,
-      :default
+      :personal
     )
   end
 

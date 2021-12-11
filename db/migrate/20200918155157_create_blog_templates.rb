@@ -17,7 +17,7 @@ class CreateBlogTemplates < ActiveRecord::Migration[7.0]
       t.string :chuspace_mirror_path
       t.string :preview_url
       t.string :repo_url, null: false
-      t.string :repo_articles_folder, null: false
+      t.string :repo_posts_folder, null: false
       t.string :repo_drafts_folder
       t.string :repo_assets_folder, null: false
       t.string :repo_readme_path, null: false, default: 'README.md'

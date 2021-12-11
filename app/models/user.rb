@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :delete_all, inverse_of: :user
   has_many :blogs, through: :memberships, source: :blog
-  has_many :storages, -> { where.not(provider: ::Storage.chuspace_config['provider']) }, dependent: :delete_all, inverse_of: :user
+  has_many :storages, dependent: :delete_all, inverse_of: :user
   has_many :identities, dependent: :delete_all, inverse_of: :user
   has_many :blog_templates, dependent: :delete_all, foreign_key: 'author_id', inverse_of: :author
   has_one  :personal_blog, -> { where(personal: true) }, class_name: 'Blog', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
@@ -35,15 +35,9 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :identities, :memberships
 
   class << self
-    def create_with_email_identity(email:)
-      user = User.
-      new(
-        name: email.split('@').first.humanize,
-        username: email.to_slug.normalize.to_s,
-        email: email
-      )
-
-      user.identities.build(uid: email, provider: :email)
+    def build_with_email_identity(email_params)
+      user = User.new(email_params)
+      user.identities.build(uid: user.email, provider: :email)
       user
     end
   end

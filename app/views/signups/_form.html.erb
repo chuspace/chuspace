@@ -4,6 +4,13 @@
       <%= form.input :email, as: :string %>
       <input hidden data-csrf value="<%= form_authenticity_token %>">
     </auto-check>
+
+    <auto-check src="<%= auto_checks_path(attribute: :username) %>">
+      <%= form.input :username, as: :string %>
+      <input hidden data-csrf value="<%= form_authenticity_token %>">
+    </auto-check>
+
+    <%= form.input :name, as: :string %>
     <%= form.button :submit, 'Signup', title: 'Click to start signup', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top, 'disable-with': 'Signing up...' } %>
   <% end %>
 </turbo-reconnect>

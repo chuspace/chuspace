@@ -8,7 +8,7 @@ module HasGitRepository
     after_destroy_commit :delete_git_repo, if: -> { storage.chuspace? }
     after_create_commit  :sync_repository_blobs
 
-    validates_presence_of :repo_articles_folder, :repo_assets_folder, :repo_readme_path
+    validates_presence_of :repo_posts_folder, :repo_assets_folder, :repo_readme_path
   end
 
   def repository
@@ -16,7 +16,7 @@ module HasGitRepository
   end
 
   def posts_folders
-    [repo_articles_folder, repo_drafts_folder].reject(&:blank?).freeze
+    [repo_posts_folder, repo_drafts_folder].reject(&:blank?).freeze
   end
 
   def assets_folders

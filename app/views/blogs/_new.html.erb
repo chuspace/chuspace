@@ -1,7 +1,7 @@
 <turbo-reconnect>
   <%= turbo_frame_tag(blog) do %>
     <auto-refresh-form>
-      <%= simple_form_for(blog, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+      <%= simple_form_for([blog.owner, blog], url: user_blogs_path(blog.owner, blog), html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
         <%= form.input(
               :storage_id,
             as: :hidden,
@@ -16,7 +16,7 @@
 
         <p class='text-sm mt-2 italic'>Used to store blog git repo</p>
 
-        <auto-check src="<%= auto_check_blogs_path %>">
+        <auto-check src="<%= auto_checks_path(attribute: :blog_permalink) %>">
           <%= form.input :name %>
           <input hidden data-csrf value="<%= form_authenticity_token %>">
         </auto-check>
@@ -24,7 +24,7 @@
         <%= form.input :description %>
         <%= form.input :template_id, as: :select, collection: BlogTemplate.pluck(:name, :id) %>
         <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
-        <%= form.input :default %>
+        <%= form.input :personal %>
         <%= form.input :type, as: :hidden, input_html: { value: :new, name: 'type' } %>
         <%= form.button :submit, class: 'mt-12' %>
       <% end %>

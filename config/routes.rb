@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'oauths#create'
 
   resources :users, path: '', only: :show, param: :username do
-    resources :blogs, path: '', only: %i[show create], param: :permalink do
+    resources :blogs, path: '', except: :index, param: :permalink do
       resources :settings, only: %i[index show]
 
       resources :posts, path: '', except: :index do

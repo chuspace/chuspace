@@ -46,6 +46,17 @@
 # and you have no plans to rollback.
 # Rails.application.config.active_support.cache_format_version = 7.0
 
+# Calls `Rails.application.executor.wrap` around test cases.
+# This makes test cases behave closer to an actual request or job.
+# Several features that are normally disabled in test, such as Active Record query cache
+# and asynchronous queries will then be enabled.
+# Rails.application.config.active_support.executor_around_test_case = true
+
+# Define the isolation level of most of Rails internal state.
+# If you use a fiber based server or job processor, you should set it to `:fiber`.
+# Otherwise the default of `:thread` if preferable.
+# Rails.application.config.active_support.isolation_level = :thread
+
 # Set both the `:open_timeout` and `:read_timeout` values for `:smtp` delivery method.
 # Rails.application.config.action_mailer.smtp_timeout = 5
 
@@ -54,6 +65,9 @@
 # of the video).
 # Rails.application.config.active_storage.video_preview_arguments =
 #   "-vf 'select=eq(n\\,0)+eq(key\\,1)+gt(scene\\,0.015),loop=loop=-1:size=2,trim=start_frame=1' -frames:v 1 -f image2"
+
+# Automatically infer `inverse_of` for associations with a scope.
+# Rails.application.config.active_record.automatic_scope_inversing = true
 
 # Raise when running tests if fixtures contained foreign key violations
 # Rails.application.config.active_record.verify_foreign_keys_for_fixtures = true
@@ -84,3 +98,25 @@
 #
 # See https://guides.rubyonrails.org/action_controller_overview.html#cookies for more information.
 # Rails.application.config.action_dispatch.cookies_serializer = :hybrid
+
+# Enable parameter wrapping for JSON.
+# Previously this was set in an initializer. It's fine to keep using that initializer if you've customized it.
+# To disable parameter wrapping entirely, set this config to `false`.
+# Rails.application.config.action_controller.wrap_parameters_by_default = true
+
+# Specifies whether generated namespaced UUIDs follow the RFC 4122 standard for namespace IDs provided as a
+# `String` to `Digest::UUID.uuid_v3` or `Digest::UUID.uuid_v5` method calls.
+#
+# See https://guides.rubyonrails.org/configuring.html#config-active-support-use-rfc4122-namespaced-uuids for
+# more information.
+# Rails.application.config.active_support.use_rfc4122_namespaced_uuids = true
+
+# Change the default headers to disable browsers' flawed legacy XSS protection.
+# Rails.application.config.action_dispatch.default_headers = {
+#   "X-Frame-Options" => "SAMEORIGIN",
+#   "X-XSS-Protection" => "0",
+#   "X-Content-Type-Options" => "nosniff",
+#   "X-Download-Options" => "noopen",
+#   "X-Permitted-Cross-Domain-Policies" => "none",
+#   "Referrer-Policy" => "strict-origin-when-cross-origin"
+# }

@@ -25,7 +25,7 @@ en:
         default: Set this to be a default storage
       blog:
         storage_id: Select a git storage
-        repo_articles_folder: Posts folder
+        repo_posts_folder: Posts folder
         repo_drafts_folder: Drafts folder (optional)
         repo_assets_folder: Assets folder
         repo_readme_path: Readme path
@@ -39,7 +39,7 @@ en:
         storage_id: Choose from the list of connected storages
         framework: static site generator framework to be used to generate blog from
         visibility: visibility of blog - public, internal or private
-        repo_articles_folder: your posts will be stored here
+        repo_posts_folder: your posts will be stored here
         repo_drafts_folder: use a different folder for storing draft posts
         repo_assets_folder: your images would be stored here
       user:

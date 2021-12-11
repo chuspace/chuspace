@@ -13,8 +13,9 @@ class GithubAdapter < ApplicationAdapter
       items += response.select { |item| item.type == 'file' }
 
       dirs = response.select { |item| item.type == 'dir' }
-      items += blobs(fullname: fullname, folders: dirs.map(&:path)) if dirs.any?
-      items
+      next if dirs.blank?
+
+      items += blobs(fullname: fullname, folders: dirs.map(&:path))
     rescue FaradayClient::NotFound
       next
     end

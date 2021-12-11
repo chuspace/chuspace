@@ -15,7 +15,7 @@ class BlogTemplate < ApplicationRecord
   }, _suffix: true
 
   def blog_attributes
-    slice(:repo_articles_folder, :repo_drafts_folder, :repo_assets_folder, :repo_readme_path)
+    slice(:repo_posts_folder, :repo_drafts_folder, :repo_assets_folder, :repo_readme_path)
   end
 
   private

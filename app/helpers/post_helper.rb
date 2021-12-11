@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PostHelper
   def edit_or_show_post_path(post:)
     if post.published?

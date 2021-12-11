@@ -3,7 +3,11 @@
     <%= form.input :name, label: false, input_html: { class: 'input-sm' }, placeholder: 'Search' %>
   <% end %>
   <div class='ml-8'>
-    <%= link_to 'New post', new_user_blog_post_path(@user, @user.personal_blog), class: 'btn btn-primary btn-sm ml-2' %>
+    <% if @user.personal_blog %>
+      <%= link_to 'New post', new_user_blog_post_path(@user, @user.personal_blog), class: 'btn btn-primary btn-sm ml-2' %>
+    <% else %>
+      <%= link_to 'Setup personal blog', new_user_blog_path(@user), class: 'btn btn-primary btn-sm ml-2' %>
+    <% end %>
   </div>
 </div>
 

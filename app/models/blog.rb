@@ -40,8 +40,8 @@ class Blog < ApplicationRecord
     MarkdownContent.new(content: readme.to_plain_text)
   end
 
-  def repo_drafts_folder
-    super || repo_articles_folder
+  def repo_drafts_or_posts_folder
+    super || repo_posts_folder
   end
 
   private

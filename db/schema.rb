@@ -10,12 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_28_150135) do
+ActiveRecord::Schema.define(version: 2021_12_11_122552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "blog_visibility_enum_type", ["private", "public", "subscriber"]
+  create_enum "git_storage_provider_enum_type", ["chuspace", "github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
+  create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
+  create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
+  create_enum "membership_role_enum_type", ["writer", "editor", "manager", "owner", "subscriber"]
+  create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
+  create_enum "template_visibility_enum_type", ["private", "public", "subscriber"]
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -44,7 +54,7 @@ ActiveRecord::Schema.define(version: 2021_11_28_150135) do
     t.text "metadata"
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
+    t.string "checksum"
     t.datetime "created_at", precision: 6, null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -55,11 +65,60 @@ ActiveRecord::Schema.define(version: 2021_11_28_150135) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-# Could not dump table "blog_templates" because of following StandardError
-#   Unknown type 'template_visibility_enum_type' for column 'visibility'
+  create_table "blog_templates", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description"
+    t.string "permalink", null: false
+    t.string "language", null: false
+    t.string "framework", null: false
+    t.string "css"
+    t.bigint "author_id", null: false
+    t.string "chuspace_mirror_path"
+    t.string "preview_url"
+    t.string "repo_url", null: false
+    t.string "repo_posts_folder", null: false
+    t.string "repo_drafts_folder"
+    t.string "repo_assets_folder", null: false
+    t.string "repo_readme_path", default: "README.md", null: false
+    t.boolean "default", default: false, null: false
+    t.boolean "approved", default: false, null: false
+    t.boolean "system", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "visibility", default: "public", enum_type: "template_visibility_enum_type"
+    t.index ["approved"], name: "index_blog_templates_on_approved"
+    t.index ["author_id"], name: "index_blog_templates_on_author_id"
+    t.index ["css"], name: "index_blog_templates_on_css"
+    t.index ["default"], name: "index_blog_templates_on_default"
+    t.index ["framework"], name: "index_blog_templates_on_framework"
+    t.index ["language"], name: "index_blog_templates_on_language"
+    t.index ["permalink"], name: "index_blog_templates_on_permalink", unique: true
+    t.index ["system"], name: "index_blog_templates_on_system"
+    t.index ["visibility"], name: "index_blog_templates_on_visibility"
+  end
 
-# Could not dump table "blogs" because of following StandardError
-#   Unknown type 'blog_visibility_enum_type' for column 'visibility'
+  create_table "blogs", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "permalink", null: false
+    t.text "description"
+    t.bigint "owner_id", null: false
+    t.bigint "storage_id", null: false
+    t.bigint "template_id"
+    t.boolean "personal", default: false, null: false
+    t.string "repo_fullname", null: false
+    t.string "repo_posts_folder", null: false
+    t.string "repo_drafts_folder"
+    t.string "repo_assets_folder", null: false
+    t.string "repo_readme_path", default: "README.md", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "visibility", default: "private", null: false, enum_type: "blog_visibility_enum_type"
+    t.index ["owner_id"], name: "index_blogs_on_owner_id"
+    t.index ["permalink", "owner_id"], name: "index_blogs_on_permalink_and_owner_id", unique: true
+    t.index ["personal"], name: "index_blogs_on_personal"
+    t.index ["storage_id"], name: "index_blogs_on_storage_id"
+    t.index ["template_id"], name: "index_blogs_on_template_id"
+  end
 
   create_table "editions", force: :cascade do |t|
     t.text "title", null: false
@@ -112,17 +171,57 @@ ActiveRecord::Schema.define(version: 2021_11_28_150135) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
-# Could not dump table "identities" because of following StandardError
-#   Unknown type 'identity_provider_enum_type' for column 'provider'
+  create_table "identities", force: :cascade do |t|
+    t.text "uid", null: false
+    t.string "magic_auth_token", null: false
+    t.datetime "magic_auth_token_expires_at"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "provider", null: false, enum_type: "identity_provider_enum_type"
+    t.index ["magic_auth_token"], name: "index_identities_on_magic_auth_token", unique: true
+    t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
+    t.index ["user_id"], name: "index_identities_on_user_id"
+  end
 
-# Could not dump table "invites" because of following StandardError
-#   Unknown type 'membership_role_enum_type' for column 'role'
+  create_table "invites", force: :cascade do |t|
+    t.bigint "sender_id", null: false
+    t.bigint "blog_id", null: false
+    t.string "identifier", null: false
+    t.text "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "role", default: "writer", null: false, enum_type: "membership_role_enum_type"
+    t.enum "status", default: "pending", null: false, enum_type: "invite_status_enum_type"
+    t.index ["blog_id"], name: "index_invites_on_blog_id"
+    t.index ["code"], name: "index_invites_on_code", unique: true
+    t.index ["identifier", "blog_id"], name: "index_invites_on_identifier_and_blog_id", unique: true
+    t.index ["identifier"], name: "index_invites_on_identifier"
+    t.index ["role"], name: "index_invites_on_role"
+    t.index ["sender_id"], name: "index_invites_on_sender_id"
+    t.index ["status"], name: "index_invites_on_status"
+  end
 
-# Could not dump table "memberships" because of following StandardError
-#   Unknown type 'membership_role_enum_type' for column 'role'
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "blog_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "role", default: "writer", null: false, enum_type: "membership_role_enum_type"
+    t.index ["blog_id"], name: "index_memberships_on_blog_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
 
-# Could not dump table "posts" because of following StandardError
-#   Unknown type 'post_visibility_enum_type' for column 'visibility'
+  create_table "posts", force: :cascade do |t|
+    t.string "blob_path", null: false
+    t.bigint "blog_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "visibility", enum_type: "post_visibility_enum_type"
+    t.index ["blob_path"], name: "index_posts_on_blob_path"
+    t.index ["blog_id", "blob_path"], name: "index_posts_on_blog_id_and_blob_path", unique: true
+    t.index ["blog_id"], name: "index_posts_on_blog_id"
+  end
 
   create_table "revisions", force: :cascade do |t|
     t.bigint "blog_id", null: false
@@ -144,8 +243,24 @@ ActiveRecord::Schema.define(version: 2021_11_28_150135) do
     t.index ["sha"], name: "index_revisions_on_sha"
   end
 
-# Could not dump table "storages" because of following StandardError
-#   Unknown type 'git_storage_provider_enum_type' for column 'provider'
+  create_table "storages", force: :cascade do |t|
+    t.string "description", null: false
+    t.string "endpoint"
+    t.string "scopes"
+    t.string "access_token", null: false
+    t.bigint "user_id", null: false
+    t.boolean "default", default: false
+    t.boolean "active", default: false
+    t.boolean "self_hosted", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "provider", null: false, enum_type: "git_storage_provider_enum_type"
+    t.index ["active"], name: "index_storages_on_active"
+    t.index ["default"], name: "index_storages_on_default"
+    t.index ["self_hosted"], name: "index_storages_on_self_hosted"
+    t.index ["user_id", "provider"], name: "index_storages_on_user_id_and_provider", unique: true
+    t.index ["user_id"], name: "index_storages_on_user_id"
+  end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"

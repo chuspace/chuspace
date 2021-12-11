@@ -3,21 +3,23 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.2'
+ruby '3.0.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.0.alpha2'
+gem 'rails', '7.0.0.rc1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 1.x'
 gem 'strong_migrations'
 gem 'database_validations'
-gem 'activerecord-clean-db-structure'
 gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
 gem 'name_of_person'
 gem 'good_job'
+
+# Sprockets
+gem 'sprockets-rails'
 
 # Tagging
 gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'

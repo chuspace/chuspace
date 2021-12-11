@@ -2,6 +2,7 @@
 
 require_relative 'boot'
 require 'rails/all'
+require 'sprockets/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -23,6 +24,9 @@ module Chuspace
       g.helper false
       g.stylesheets false
     end
+
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_record.encryption.extend_queries = true
     StrongMigrations.start_after = 20211128142958
