@@ -16,7 +16,7 @@
         @apply absolute pointer-events-none float-none h-auto
         content: attr(data-empty-text)
 
-    .heading, .title, .summary, .body
+    .heading, .title, .summary
       @apply relative
 
       &::before
@@ -28,9 +28,6 @@
       @screen sm
         &::before
           @apply block
-    .body
-      &::before
-        top: 1rem
 
   &:last-child
     @apply mb-0
