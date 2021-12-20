@@ -39,7 +39,7 @@ personal_blog = github_storage.blogs.create!(
   **template.blog_attributes
 )
 
-chuspace_user.memberships.create(
+chuspace_user.memberships.create!(
   blog: personal_blog,
   role: :owner
 )
@@ -54,7 +54,7 @@ other_blog = chuspace_storage.blogs.create!(
   **template_2.blog_attributes
 )
 
-chuspace_user.memberships.create(
+chuspace_user.memberships.create!(
   blog: other_blog,
   role: :owner
 )

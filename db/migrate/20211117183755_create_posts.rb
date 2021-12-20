@@ -7,6 +7,7 @@ class CreatePosts < ActiveRecord::Migration[7.0]
     create_table :posts do |t|
       t.string :blob_path, null: false
       t.references :blog, null: false, foreign_key: true
+      t.references :author, foreign_key: { to_table: :users }
       t.timestamps
     end
 

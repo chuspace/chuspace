@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
-  include HasGitRepository
+  include Repoable
   extend FriendlyId
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink

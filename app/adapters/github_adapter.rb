@@ -43,11 +43,6 @@ class GithubAdapter < ApplicationAdapter
     get("repos/#{fullname}/commits/#{sha}")
   end
 
-  def create_blob(fullname:, path:, content:, message: nil)
-    message ||= "Create #{path}"
-    post "repos/#{fullname}/contents/#{path}", { content: content, message: message }
-  end
-
   def delete_blob(fullname:, path:, id:, message: nil)
     message ||= "Delete #{path}"
     delete "repos/#{fullname}/contents/#{path}", { sha: id, message: message }
@@ -83,8 +78,8 @@ class GithubAdapter < ApplicationAdapter
     get("repos/#{fullname}/git/trees/#{sha}", { recursive: true }).tree
   end
 
-  def update_blob(fullname:, path:, content:, sha:, message: nil)
-    message ||= "Update #{path}"
+  def create_or_update_blob(fullname:, path:, content:, sha:, message: nil, committer:, author:)
+    message ||= sha.blank? ? "Create #{path}" : "Update #{path}"
     put "repos/#{fullname}/contents/#{path}", { content: content, message: message, sha: sha }
   end
 

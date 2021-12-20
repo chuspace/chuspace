@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class StoragesController < ApplicationController
+  before_action :authenticate!
   before_action :find_storage, except: %i[new index create]
 
   def new
@@ -22,9 +23,6 @@ class StoragesController < ApplicationController
         end
       end
     end
-  end
-
-  def edit
   end
 
   def update

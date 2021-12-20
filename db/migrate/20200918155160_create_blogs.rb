@@ -19,7 +19,7 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
       t.string :repo_posts_folder, null: false
       t.string :repo_drafts_folder
       t.string :repo_assets_folder, null: false
-      t.string :repo_readme_path, null: false, default: 'README.md'
+      t.string :repo_readme_path, default: 'README.md'
 
       t.timestamps
     end

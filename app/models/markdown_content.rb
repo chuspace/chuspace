@@ -32,7 +32,7 @@ class MarkdownContent
   end
 
   def title
-    front_matter.dig('title') || ast.first.to_plaintext
+    front_matter.dig('title') || ast.first&.to_plaintext || 'Untitled'
   end
 
   def topics

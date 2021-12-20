@@ -31,6 +31,7 @@ class StorageAdapter
     commits
     blob
     blobs
+    create_or_update_blob
     create_blob
     update_blob
     delete_blob

@@ -7,13 +7,12 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
     create_table :revisions do |t|
       t.references :blog, null: false, foreign_key: true
       t.references :post, null: false, foreign_key: true
-      t.references :author, foreign_key: { to_table: :users }
+      t.references :committer, foreign_key: { to_table: :users }
 
-      t.jsonb :fallback_author, null: false, default: false
-      t.jsonb :fallback_committer, null: false, default: false
+      t.jsonb :fallback_committer, null: false, default: {}
 
-      t.text :message, null: false
-      t.text :content, null: false
+      t.text :message
+      t.text :content
       t.text :sha, null: false
 
       t.integer :number, null: false

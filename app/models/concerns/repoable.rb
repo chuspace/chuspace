@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-module HasGitRepository
+module Repoable
   extend ActiveSupport::Concern
 
   included do
-    before_create        :create_git_repo, if: -> { storage.chuspace? }
+    before_validation    :create_git_repo, on: :create, if: -> { name.present? && storage.chuspace? }
     after_destroy_commit :delete_git_repo, if: -> { storage.chuspace? }
     after_create_commit  :sync_repository_blobs
 
-    validates_presence_of :repo_posts_folder, :repo_assets_folder, :repo_readme_path
+    validates_presence_of :repo_fullname, :repo_posts_folder, :repo_assets_folder
   end
 
   def repository
@@ -26,7 +26,8 @@ module HasGitRepository
   private
 
   def create_git_repo
-    repository = storage.adapter.create_repository(path: template.chuspace_mirror_path, name: permalink, owner: owner.username)
+    slug = normalize_friendly_id(name)
+    repository = storage.adapter.create_repository(path: template.chuspace_mirror_path, name: slug, owner: owner.username)
     self.repo_fullname = repository.fullname
   rescue StandardError
     delete_git_repo

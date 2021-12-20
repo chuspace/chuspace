@@ -4,11 +4,13 @@ class Post < ApplicationRecord
   VALID_MIME = 'text/markdown'.freeze
 
   belongs_to :blog, touch: true
+  belongs_to :author, class_name: 'User', touch: true
   has_many   :revisions, dependent: :delete_all, inverse_of: :post
   has_many   :editions, through: :revisions, dependent: :delete_all
 
   validates :blob_path, presence: :true, uniqueness: { scope: :blog_id }
 
+  # before_validation   :set_folder
   after_create_commit :sync_post_revisions
   before_validation   :set_visibility
 
@@ -57,5 +59,9 @@ class Post < ApplicationRecord
 
   def set_visibility
     self.visibility ||= blog.visibility
+  end
+
+  def set_folder
+    self.blob_path = File.join(blog.repo_drafts_or_posts_folder, File.basename(blob_path))
   end
 end

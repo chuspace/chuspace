@@ -20,17 +20,9 @@ class BlogsController < ApplicationController
   end
 
   def create
-    @blog = Current.user.blogs.build(
-      blog_params.merge(
-        owner_id: Current.user.id,
-        members_attributes: {
-          user_id: Current.user.id,
-          role: :owner
-        }
-      )
-    )
+    @blog = Current.user.blogs.build(blog_params.merge(owner: Current.user))
 
-    if @blog.save && params[:commit] == 'Connect'
+    if params[:commit] == 'Connect' && @blog.save && @blog.members.create(user: @blog.owner, role: :owner)
       redirect_to user_blog_path(Current.user, @blog)
     else
       respond_to do |format|

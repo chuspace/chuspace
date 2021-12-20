@@ -9,7 +9,10 @@ class SyncBlogContentsJob < ApplicationJob
 
       Post.transaction do
         blog.repository.post_blobs.each do |git_blob|
-          blog.posts.create!(blob_path: git_blob.path)
+          blog.posts.create(
+            blob_path: git_blob.path,
+            author: blog.owner
+          )
         end
       end
     end
