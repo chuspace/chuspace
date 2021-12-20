@@ -44,20 +44,20 @@ module.exports = {
     themes: [
       {
         light: {
-          primary: '#111827' /* Primary color */,
-          'primary-focus': '#1F2937' /* Primary color - focused */,
+          primary: '#3B82F6' /* Primary color */,
+          'primary-focus': '#2563EB' /* Primary color - focused */,
           'primary-content':
-            '#fff' /* Foreground content color to use on primary color */,
+            '#ffffff' /* Foreground content color to use on primary color */,
 
-          secondary: '#4B5563' /* Secondary color */,
-          'secondary-focus': '#374151' /* Secondary color - focused */,
+          secondary: '#71717A' /* Secondary color */,
+          'secondary-focus': '#52525b' /* Secondary color - focused */,
           'secondary-content':
-            '#ffffff' /* Foreground content color to use on secondary color */,
+            '#fff' /* Foreground content color to use on secondary color */,
 
-          accent: '#525252' /* Accent color */,
+          accent: '#111827' /* Accent color */,
           'accent-focus': '#D97706' /* Accent color - focused */,
           'accent-content':
-            '#111827' /* Foreground content color to use on accent color */,
+            '#fff' /* Foreground content color to use on accent color */,
 
           neutral: '#fff' /* Neutral color */,
           'neutral-focus': '#f4f4f4' /* Neutral color - focused */,
@@ -65,11 +65,11 @@ module.exports = {
             '#111827' /* Foreground content color to use on neutral color */,
 
           'base-100':
-            '#fff' /* Base color of page, used for blank backgrounds */,
-          'base-200': '#ccc' /* Base color, a little darker */,
-          'base-300': '#ddd' /* Base color, even more darker */,
+            '#ffffff' /* Base color of page, used for blank backgrounds */,
+          'base-200': '#e4e4e7' /* Base color, a little darker */,
+          'base-300': '#d4d4d8' /* Base color, even more darker */,
           'base-content':
-            '#111827' /* Foreground content color to use on base color */,
+            '#333333' /* Foreground content color to use on base color */,
 
           info: '#2094f3' /* Info */,
           success: '#009485' /* Success */,
@@ -82,10 +82,10 @@ module.exports = {
           'primary-content':
             '#ffffff' /* Foreground content color to use on primary color */,
 
-          secondary: '#9CA3AF' /* Secondary color */,
-          'secondary-focus': '#6B7280' /* Secondary color - focused */,
+          secondary: '#d4d4d8' /* Secondary color */,
+          'secondary-focus': '#a1a1aa' /* Secondary color - focused */,
           'secondary-content':
-            '#ffffff' /* Foreground content color to use on secondary color */,
+            '#111827' /* Foreground content color to use on secondary color */,
 
           accent: '#91A6BA' /* Accent color */,
           'accent-focus': '#D97706' /* Accent color - focused */,
@@ -99,10 +99,11 @@ module.exports = {
 
           'base-100':
             '#111827' /* Base color of page, used for blank backgrounds */,
-          'base-200': '#464738' /* Base color, a little darker */,
+          'base-200': '#1A243B' /* Base color, a little darker */,
           'base-300': '#2a2b22' /* Base color, even more darker */,
           'base-content':
-            '#f4f4f4' /* Foreground content color to use on base color */,
+            '#D4D4D4' /* Foreground content color to use on base color */,
+
           info: '#2094f3' /* Info */,
           success: '#009485' /* Success */,
           warning: '#ff9900' /* Warning */,

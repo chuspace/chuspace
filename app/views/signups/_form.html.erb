@@ -1,16 +1,24 @@
 <turbo-reconnect>
   <%= simple_form_for user, url: signups_path do |form| %>
     <auto-check src="<%= auto_checks_path(attribute: :email) %>">
-      <%= form.input :email, as: :string %>
+      <%= form.input :email, as: :string, hint: false %>
+      <%= form.hint :email unless user.errors.key?(:email) %>
       <input hidden data-csrf value="<%= form_authenticity_token %>">
     </auto-check>
 
     <auto-check src="<%= auto_checks_path(attribute: :username) %>">
-      <%= form.input :username, as: :string %>
+      <%= form.input :username, as: :string, hint: false %>
+      <%= form.hint :username unless user.errors.key?(:username) %>
       <input hidden data-csrf value="<%= form_authenticity_token %>">
     </auto-check>
 
-    <%= form.input :name, as: :string %>
-    <%= form.button :submit, 'Signup', title: 'Click to start signup', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top, 'disable-with': 'Signing up...' } %>
+    <%= form.input :name, as: :string, hint: false %>
+    <%= form.hint :name unless user.errors.key?(:name) %>
+
+    <div class='mt-4 flex justify-between items-center'>
+      <%= form.button :submit, 'Sign up', title: 'Click to start signup', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top, 'disable-with': 'Signing up...' } %>
+      <%= link_to 'Other signup options →', signups_path, title: t('shared.signup_prompt'), class: 'link link-primary block mt-3', data: { 'turbo-frame': :_top } %>
+      <%= link_to 'Login →', sessions_path, title: t('shared.login_prompt'), class: 'link link-primary block mt-3', data: { 'turbo-frame': :_top } %>
+    </div>
   <% end %>
 </turbo-reconnect>

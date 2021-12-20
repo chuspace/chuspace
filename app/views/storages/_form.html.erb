@@ -1,11 +1,12 @@
-<auto-refresh-form>
-  <storage-form data-providers='<%= Storage.provider_scopes.to_json %>'>
-    <%= simple_form_for(storage, data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' }) do |form| %>
+<auto-refresh-form class='w-full'>
+  <storage-form class='w-full' data-providers='<%= Storage.provider_scopes.to_json %>'>
+    <%= simple_form_for(storage, data: { target: 'auto-refresh-form.form', "turbo-frame": '_top', class: 'w-full' }) do |form| %>
       <%= form.input(
           :provider,
           as: :select,
           collection: Storage.public_providers,
           input_html: {
+            class: 'w-full',
             data: {
               action: 'change:storage-form#changeScopes change:auto-refresh-form#refresh',
               target: 'storage-form.select'
@@ -42,7 +43,7 @@
           ) %>
         <%= link_to(
               'Cancel',
-            storages_path,
+            user_path(storage.user, tab: :storages),
             class: 'btn btn-sm btn-outline ml-2',
             data: {
               'turbo-frame': :_top

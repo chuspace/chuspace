@@ -3,10 +3,6 @@
 class StoragesController < ApplicationController
   before_action :find_storage, except: %i[new index create]
 
-  def index
-    @storages = Current.user.storages.order(:id)
-  end
-
   def new
     @storage = Current.user.storages.build(provider: :chuspace)
   end
@@ -16,7 +12,7 @@ class StoragesController < ApplicationController
       @storage = Current.user.storages.build(storage_params.delete_if { |key, value| value.blank? })
 
       if params['commit'] && @storage.save
-        redirect_to storages_path
+        redirect_to user_path(Current.user, tab: :storages), notice: 'Successfully added!'
       else
         @storage.errors.clear unless params['commit']
 
@@ -33,7 +29,7 @@ class StoragesController < ApplicationController
 
   def update
     if @storage.update(storage_params.except(:provider))
-      redirect_to storages_path
+      redirect_to user_path(Current.user, tab: :storages), notice: 'Successfully updated!'
     else
       respond_to do |format|
         format.html { render :edit }
@@ -45,7 +41,7 @@ class StoragesController < ApplicationController
   def destroy
     @storage.destroy
 
-    redirect_to storages_path
+    redirect_to user_path(Current.user, tab: :storages), notice: 'Successfully deleted!'
   end
 
   private

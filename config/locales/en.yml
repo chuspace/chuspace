@@ -38,7 +38,7 @@ en:
       welcome: Login with email
     index:
       intro: Write . Read . Learn . Contribute . Write again
-      login_card_title: Click to log in into your account
+      cta: Log in with one of the following
       welcome: Welcome back to Chuspace
     create:
       success: Please check your email
@@ -53,9 +53,10 @@ en:
       success: Thanks for signing up. Please check your email
       failure: Something went wrong!!
     email:
-      intro: You will recieve a magic link in your email to log in
-      welcome: Signup with email
+      intro: You will recieve a login link in your email to log in
+      welcome: Create a Chuspace account
     index:
+      cta: Sign up with one of the following
       features:
         - title: Truly own your content
           description: Connect your blogs from Github . Gitlab or Gitea

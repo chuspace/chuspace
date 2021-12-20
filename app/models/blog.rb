@@ -41,7 +41,7 @@ class Blog < ApplicationRecord
   end
 
   def repo_drafts_or_posts_folder
-    super || repo_posts_folder
+    repo_drafts_folder || repo_posts_folder
   end
 
   private

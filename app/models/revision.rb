@@ -26,6 +26,10 @@ class Revision < ApplicationRecord
     MarkdownContent.new(content: content)
   end
 
+  def git_commit
+    blog.repository.commit(sha: sha)
+  end
+
   private
 
   def assign_next_number_sequence
@@ -33,7 +37,8 @@ class Revision < ApplicationRecord
   end
 
   def create_git_commit
-    blob = blog.storage.adapter.update_blob(fullname: blog.repo_fullname, path: post.blob_path, content: Base64.encode64(content), message: message.presence, sha: post.git_blob.sha)
+    blob = blog.storage.adapter.create_blob(fullname: blog.repo_fullname, path: post.blob_path, content: Base64.encode64(content || ''), message: message.presence)
     self.sha = blob.commit.sha
+    self.message = blob.commit.message
   end
 end

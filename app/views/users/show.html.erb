@@ -9,9 +9,9 @@
           <li class='mb-4 last-mb-0'>
             <%= link_to(
                 config[:label],
-                user_path(Current.user, tab: config[:tab]),
+                user_path(@user, tab: config[:tab]),
                 'aria-selected': false,
-                class: tab_selected?(user_path(Current.user, tab: config[:tab]))
+                class: tab_selected?(user_path(@user, tab: config[:tab]))
               )
             %>
           </li>

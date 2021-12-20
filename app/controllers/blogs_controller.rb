@@ -7,15 +7,11 @@ class BlogsController < ApplicationController
   before_action :find_blog, except: %i[new connect create index auto_check]
   before_action :set_content_partial, only: :show
 
-  def index
-    @blogs = Current.user.blogs
-  end
-
   def new
     if Current.user.storages.chuspace.present?
       @blog = Current.user.blogs.build(owner: Current.user, storage: Current.user.storages.chuspace)
     else
-      redirect_to storages_path, notice: 'You do not have any git storages configured'
+      redirect_to new_storage_path, notice: 'You do not have any git storages configured'
     end
   end
 
@@ -37,8 +33,6 @@ class BlogsController < ApplicationController
     if @blog.save && params[:commit] == 'Connect'
       redirect_to user_blog_path(Current.user, @blog)
     else
-      puts @blog.errors.inspect
-      puts 'errors'
       respond_to do |format|
         format.html
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@blog, partial: "blogs/#{params[:type]}", locals: { blog: @blog }) }
@@ -59,12 +53,12 @@ class BlogsController < ApplicationController
   def update
     @blog.update!(blog_params)
 
-    redirect_to blogs_path
+    redirect_to user_blogs_path(@blog.owner, @blog), notice: 'Successfully updated!'
   end
 
   def destroy
     @blog.destroy
-    redirect_to blogs_path
+    redirect_to user_blogs_path(@blog.owner, @blog), notice: 'Successfully deleted!'
   end
 
   private
@@ -86,7 +80,7 @@ class BlogsController < ApplicationController
   end
 
   def find_blog
-    @blog = Current.user.blogs.friendly.find(params[:permalink])
+    @blog = Blog.friendly.find(params[:permalink])
   end
 
   def set_content_partial

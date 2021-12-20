@@ -1,14 +1,12 @@
-<main class='min-h-full sm:flex items-center justify-center flex-col'>
-  <h2><%= t('.welcome') %></h2>
-  <p class='mt-4 text-secondary'><%= t('.intro') %></p>
-  <div class='w-1/3 mt-8'>
-    <%= turbo_frame_tag(@user) do %>
-      <%= render 'form', user: @user %>
-    <% end %>
+<main class='min-h-full sm:flex items-center justify-center flex-col mt-8'>
+  <h3><%= t('.welcome') %></h3>
+  <p class='mt-2 text-secondary'><%= t('.intro') %></p>
 
-    <div class='mt-8'>
-      <%= link_to 'Other signup options →', signups_path, title: t('shared.signup_prompt'), class: 'link link-primary block mt-3' %>
-      <%= link_to 'Login →', sessions_path, title: t('shared.login_prompt'), class: 'link link-primary block mt-3' %>
+  <div class='w-1/2 card bg-base-200 shadow-xl mt-4'>
+    <div class='card-body'>
+      <%= turbo_frame_tag(@user) do %>
+        <%= render 'form', user: @user %>
+      <% end %>
     </div>
   </div>
 </main>

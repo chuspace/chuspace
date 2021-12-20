@@ -10,7 +10,7 @@ module ApplicationHelper
       github: ['bg-github-light text-primary-content', 'hover:bg-github-dark'],
       gitlab: ['bg-gitlab-light text-dark', 'hover:bg-gitlab-dark'],
       bitbucket: ['bg-bitbucket-light text-primary-content', 'hover:bg-bitbucket-dark'],
-      email: ['btn-accent'],
+      email: ['btn-secondary'],
     }.with_indifferent_access.freeze
   end
 

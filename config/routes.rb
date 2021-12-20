@@ -39,7 +39,6 @@ Rails.application.routes.draw do
   resources :users, path: '', only: :show, param: :username do
     resources :blogs, path: '', except: :index, param: :permalink do
       resources :settings, only: %i[index show]
-
       resources :posts, path: '', except: :index do
         resources :settings, only: %i[index show]
         resources :revisions, only: %i[index new]

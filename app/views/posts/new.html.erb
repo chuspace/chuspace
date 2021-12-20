@@ -16,16 +16,8 @@
   </div>
 
   <div class='mt-8'>
-    <%= simple_form_for(@post, url: user_blog_posts_path(@post.blog.owner, @post.blog, @post)) do |form| %>
-      <%= form.label :blob_path, class: 'mb-2 block' %>
-      <div class="form-control w-full">
-        <div class="input-group input-group-xs w-full">
-          <span><%= @post.blog.repo_drafts_or_posts_folder %></span>
-          <%= form.input :blob_path, label: false, wrapper: false, input_html: { class: 'w-full' } %>
-        </div>
-      </div>
-
-      <%= form.button :submit, 'Create', class: 'mt-4 float-right btn-primary' %>
+    <%= turbo_frame_tag @post do %>
+      <%= render 'form', post: @post %>
     <% end %>
   </div>
 </div>

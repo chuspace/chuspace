@@ -25,6 +25,10 @@ class Repository
     @commits ||= blog.storage.adapter.commits(fullname: fullname, path: path)
   end
 
+  def commit(sha:)
+    @commit ||= blog.storage.adapter.commit(fullname: fullname, sha: sha)
+  end
+
   def files
     @files ||= blog.storage.adapter.repository_files(fullname: fullname)
   end

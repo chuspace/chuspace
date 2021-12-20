@@ -9,6 +9,20 @@ class PostsController < ApplicationController
     @post.revisions.build(author: Current.user, blog: @blog)
   end
 
+  def create
+    @post = @blog.posts.new(post_params)
+    @post.revisions.build(author: Current.user, blog: @blog)
+
+    if @post.save
+      redirect_to edit_user_blog_post_path(@post.blog.owner, @post.blog, @post.revisions.current)
+    else
+      respond_to do |format|
+        format.html { render :new }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: 'posts/form', locals: { post: @post }) }
+      end
+    end
+  end
+
   def edit
     @post = @blog.posts.joins(:revisions).find_by(revisions: { sha: params[:id] })
   end
@@ -28,6 +42,6 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:content)
+    params.require(:post).permit(:blob_path)
   end
 end
