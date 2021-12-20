@@ -5,15 +5,16 @@ class PostsController < ApplicationController
   layout 'editor', only: %i[new edit]
 
   def new
-    @post = @blog.posts.new
-    @post.revisions.build(author: Current.user, blog: @blog)
+    @post = @blog.posts.new(author: Current.user)
+    @post.revisions.build(committer: Current.user, blog: @blog)
   end
 
   def create
     @post = @blog.posts.new(post_params)
-    @post.revisions.build(author: Current.user, blog: @blog)
+    @post.author = Current.user
+    @post.revisions.build(committer: Current.user, blog: @blog)
 
-    if @post.save
+    if @post.save!
       redirect_to edit_user_blog_post_path(@post.blog.owner, @post.blog, @post.revisions.current)
     else
       respond_to do |format|
