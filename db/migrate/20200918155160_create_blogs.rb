@@ -13,6 +13,7 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
       t.references :owner, null: false, foreign_key: { to_table: :users }
       t.references :storage, null: false, foreign_key: true
       t.references :template, foreign_key: { to_table: :blog_templates }
+
       t.boolean :personal, default: false, null: false
 
       t.string :repo_fullname, null: false
@@ -21,11 +22,15 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
       t.string :repo_assets_folder, null: false
       t.string :repo_readme_path, default: 'README.md'
 
+      t.datetime :repo_last_synced_at
+      t.bigint :repo_webhook_id
+
       t.timestamps
     end
 
     add_index :blogs, :personal, algorithm: :concurrently
     add_index :blogs, %i[permalink owner_id], algorithm: :concurrently, unique: true
     add_column :blogs, :visibility, :blog_visibility_enum_type, index: { algorithm: :concurrently }, null: false, default: :private
+    add_column :blogs, :repo_status, :blog_repo_status_enum_type, index: { algorithm: :concurrently }, null: false, default: :syncing
   end
 end

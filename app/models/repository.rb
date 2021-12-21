@@ -37,6 +37,10 @@ class Repository
     @folders ||= blog.storage.adapter.repository_folders(fullname: fullname)
   end
 
+  def webhooks
+    @webhooks ||= blog.storage.adapter.webhooks(fullname: fullname)
+  end
+
   def readme
     content = blog.storage.adapter.blob(fullname: fullname, path: blog.repo_readme_path).content
     @readme ||= Base64.decode64(content) if content

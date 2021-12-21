@@ -566,6 +566,7 @@ DEPENDENCIES
   inline_svg
   meilisearch-rails
   meta-tags
+  mini_mime
   minitest
   name_of_person
   omniauth-atlassian-bitbucket!

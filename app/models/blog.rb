@@ -6,8 +6,8 @@ class Blog < ApplicationRecord
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
 
-  has_many :members, class_name: 'Membership', dependent: :delete_all, inverse_of: :blog
-  has_many :posts, dependent: :delete_all, inverse_of: :blog
+  has_many :members, class_name: 'Membership', dependent: :destroy, inverse_of: :blog
+  has_many :posts, dependent: :destroy, inverse_of: :blog
 
   belongs_to :owner, class_name: 'User'
   belongs_to :storage
@@ -38,10 +38,6 @@ class Blog < ApplicationRecord
 
   def parsed_readme
     MarkdownContent.new(content: readme.to_plain_text)
-  end
-
-  def repo_drafts_or_posts_folder
-    repo_drafts_folder.presence || repo_posts_folder
   end
 
   private

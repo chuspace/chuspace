@@ -33,8 +33,10 @@ class GitlabAdapter < ApplicationAdapter
       response = get "projects/#{CGI.escape(fullname)}/repository/tree", { path: path }
       case response
       when Array
-        items += response.select { |item| item.type == 'file' }
+        items += response.select { |item| item.type == 'file' && Post.valid_mime?(name: item.path) }
         dirs = response.select { |item| item.type == 'dir' }
+        next unless dirs.any?
+
         items += blobs(fullname: fullname, paths: dirs.map(&:path))
       when Sawyer::Resource
         content = blob(fullname: fullname, id: blob.id)

@@ -10,7 +10,7 @@ class GithubAdapter < ApplicationAdapter
 
     folders.each do |folder|
       response = get("repos/#{fullname}/contents/#{CGI.escape(folder)}")
-      items += response.select { |item| item.type == 'file' }
+      items += response.select { |item| item.type == 'file' && Post.valid_mime?(name: item.path) }
 
       dirs = response.select { |item| item.type == 'dir' }
       next if dirs.blank?
@@ -41,6 +41,31 @@ class GithubAdapter < ApplicationAdapter
 
   def commit(fullname:, sha:)
     get("repos/#{fullname}/commits/#{sha}")
+  end
+
+  def create_repository_webhook(fullname:, type: nil)
+    url = if Rails.env.production?
+      Rails.application.routes.url_helpers.webhooks_github_repos_url
+    else
+      Rails.application.routes.url_helpers.webhooks_github_repos_url(host: Rails.application.credentials.webhooks[:dev_host])
+    end
+
+    payload = {
+      events: %w[push repository],
+      active: true,
+      config: {
+        url: url,
+        content_type: 'json',
+        secret: Rails.application.credentials.webhooks[:secret]
+      }
+    }
+
+    payload[:type] = type if type
+    post("repos/#{fullname}/hooks", payload)
+  end
+
+  def delete_repository_webhook(fullname:, id:)
+    boolean_from_response(:delete, "repos/#{fullname}/hooks/#{id}")
   end
 
   def delete_blob(fullname:, path:, id:, message: nil)
@@ -83,8 +108,12 @@ class GithubAdapter < ApplicationAdapter
     put "repos/#{fullname}/contents/#{path}", { content: content, message: message, sha: sha }
   end
 
-  def user(options = {})
+  def user(options: {})
     get('user', options)
+  end
+
+  def webhooks(fullname:, options: { per_page: 30 })
+    get("repos/#{fullname}/hooks", options)
   end
 
   private

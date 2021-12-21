@@ -10,6 +10,7 @@ class Revision < ApplicationRecord
 
   delegate :title, :summary, :published_at, :topics, :html, :body, to: :parsed_content
   delegate :author, to: :post
+  delegate :blog, to: :post
 
   validates :number, uniqueness: { scope: :post_id }
   validates :sha, :number, presence: true

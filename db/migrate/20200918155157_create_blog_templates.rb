@@ -26,6 +26,8 @@ class CreateBlogTemplates < ActiveRecord::Migration[7.0]
       t.boolean :approved, null: false, default: false
       t.boolean :system, null: false, default: false
 
+      t.bigint :downloads_count, null: false, default: 0
+
       t.timestamps
     end
 

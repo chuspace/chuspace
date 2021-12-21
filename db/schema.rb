@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "blog_repo_status_enum_type", ["syncing", "synced", "failed"]
   create_enum "blog_visibility_enum_type", ["private", "public", "subscriber"]
   create_enum "git_storage_provider_enum_type", ["chuspace", "github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
   create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
@@ -83,6 +84,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.boolean "default", default: false, null: false
     t.boolean "approved", default: false, null: false
     t.boolean "system", default: false, null: false
+    t.bigint "downloads_count", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.enum "visibility", default: "public", enum_type: "template_visibility_enum_type"
@@ -110,9 +112,12 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.string "repo_drafts_folder"
     t.string "repo_assets_folder", null: false
     t.string "repo_readme_path", default: "README.md"
+    t.datetime "repo_last_synced_at"
+    t.bigint "repo_webhook_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.enum "visibility", default: "private", null: false, enum_type: "blog_visibility_enum_type"
+    t.enum "repo_status", default: "syncing", null: false, enum_type: "blog_repo_status_enum_type"
     t.index ["owner_id"], name: "index_blogs_on_owner_id"
     t.index ["permalink", "owner_id"], name: "index_blogs_on_permalink_and_owner_id", unique: true
     t.index ["personal"], name: "index_blogs_on_personal"
@@ -123,14 +128,12 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
   create_table "editions", force: :cascade do |t|
     t.text "title", null: false
     t.text "summary", null: false
-    t.bigint "blog_id", null: false
     t.bigint "publisher_id", null: false
     t.bigint "revision_id", null: false
-    t.integer "number", null: false
+    t.bigint "number", null: false
     t.datetime "published_at", precision: 6, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["blog_id"], name: "index_editions_on_blog_id"
     t.index ["published_at"], name: "index_editions_on_published_at"
     t.index ["publisher_id"], name: "index_editions_on_publisher_id"
     t.index ["revision_id", "number"], name: "index_editions_on_revision_id_and_number", unique: true
@@ -139,7 +142,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string "slug", null: false
-    t.integer "sluggable_id", null: false
+    t.bigint "sluggable_id", null: false
     t.string "sluggable_type", limit: 50
     t.string "scope"
     t.datetime "created_at", precision: 6
@@ -150,7 +153,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
 
   create_table "good_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "queue_name"
-    t.integer "priority"
+    t.bigint "priority"
     t.jsonb "serialized_params"
     t.datetime "scheduled_at"
     t.datetime "performed_at"
@@ -226,17 +229,15 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
   end
 
   create_table "revisions", force: :cascade do |t|
-    t.bigint "blog_id", null: false
     t.bigint "post_id", null: false
     t.bigint "committer_id"
     t.jsonb "fallback_committer", default: {}, null: false
     t.text "message"
     t.text "content"
     t.text "sha", null: false
-    t.integer "number", null: false
+    t.bigint "number", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["blog_id"], name: "index_revisions_on_blog_id"
     t.index ["committer_id"], name: "index_revisions_on_committer_id"
     t.index ["number"], name: "index_revisions_on_number"
     t.index ["post_id", "number"], name: "index_revisions_on_post_id_and_number", unique: true
@@ -286,7 +287,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
 
   create_table "tags", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.integer "taggings_count", default: 0
+    t.bigint "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
@@ -295,10 +296,10 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.string "last_name"
     t.citext "username", null: false
     t.string "email", null: false
-    t.integer "blogs_count", default: 0, null: false
-    t.integer "storages_count", default: 0, null: false
-    t.integer "templates_count", default: 0, null: false
-    t.integer "sign_in_count", default: 0
+    t.bigint "blogs_count", default: 0, null: false
+    t.bigint "storages_count", default: 0, null: false
+    t.bigint "templates_count", default: 0, null: false
+    t.bigint "sign_in_count", default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet "current_sign_in_ip"
@@ -315,7 +316,6 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
   add_foreign_key "blogs", "blog_templates", column: "template_id"
   add_foreign_key "blogs", "storages"
   add_foreign_key "blogs", "users", column: "owner_id"
-  add_foreign_key "editions", "blogs"
   add_foreign_key "editions", "revisions"
   add_foreign_key "editions", "users", column: "publisher_id"
   add_foreign_key "identities", "users"
@@ -325,7 +325,6 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
   add_foreign_key "memberships", "users"
   add_foreign_key "posts", "blogs"
   add_foreign_key "posts", "users", column: "author_id"
-  add_foreign_key "revisions", "blogs"
   add_foreign_key "revisions", "posts"
   add_foreign_key "revisions", "users", column: "committer_id"
   add_foreign_key "storages", "users"

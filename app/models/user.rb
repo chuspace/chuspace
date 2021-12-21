@@ -18,14 +18,16 @@ class User < ApplicationRecord
 
   has_person_name
 
-  has_many :memberships, dependent: :delete_all, inverse_of: :user
+  has_many :memberships, dependent: :destroy, inverse_of: :user
+  has_many :identities, dependent: :destroy, inverse_of: :user
   has_many :blogs, through: :memberships, source: :blog
-  has_many :storages, dependent: :delete_all, inverse_of: :user
-  has_many :identities, dependent: :delete_all, inverse_of: :user
-  has_many :blog_templates, dependent: :delete_all, foreign_key: 'author_id', inverse_of: :author
-  has_one  :personal_blog, -> { where(personal: true) }, class_name: 'Blog', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
-  has_many :posts, through: :personal_blog, source: :posts, dependent: :delete_all
+  has_many :owning_blogs, class_name: 'Blog', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
+  has_one  :personal_blog, -> { where(personal: true) }, class_name: 'Blog', foreign_key: :owner_id, inverse_of: :owner
+  has_many :blog_templates, dependent: :destroy, foreign_key: 'author_id', inverse_of: :author
+  has_many :storages, dependent: :destroy, inverse_of: :user
   has_one  :chuspace_storage, -> { where(provider: ::Storage.chuspace_config['provider']) }, class_name: 'Storage', dependent: :destroy, inverse_of: :user
+  has_many :posts, foreign_key: :author_id, dependent: :destroy
+  has_many :contributions, through: :posts, source: :revisions, dependent: :destroy
 
   validates :email, :username, :first_name, :name, presence: true
   validates :username, uniqueness: true, length: { in: 1..39 }, format: { with: /\A^[a-z0-9]+(?:-[a-z0-9]+)*$\z/i }

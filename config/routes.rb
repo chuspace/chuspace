@@ -36,6 +36,12 @@ Rails.application.routes.draw do
   delete '/sessions/:id', to: 'sessions#destroy', as: :logout
   get '/auth/:provider/callback', to: 'oauths#create'
 
+  namespace :webhooks do
+    namespace :github do
+      resources :repos, only: :create
+    end
+  end
+
   resources :users, path: '', only: :show, param: :username do
     resources :blogs, path: '', except: :index, param: :permalink do
       resources :settings, only: %i[index show]

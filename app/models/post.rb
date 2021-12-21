@@ -5,14 +5,13 @@ class Post < ApplicationRecord
 
   belongs_to :blog, touch: true
   belongs_to :author, class_name: 'User', touch: true
-  has_many   :revisions, dependent: :delete_all, inverse_of: :post
-  has_many   :editions, through: :revisions, dependent: :delete_all
+  has_many   :revisions, dependent: :destroy, inverse_of: :post
+  has_many   :editions, through: :revisions, dependent: :destroy
 
-  validates :blob_path, presence: :true, uniqueness: { scope: :blog_id }
+  validates :blob_path, presence: :true, uniqueness: { scope: :blog_id }, markdown: true
+  validate  :blob_paths_are_stored_correctly
 
-  # before_validation   :set_folder
-  after_create_commit :sync_post_revisions
-  before_validation   :set_visibility
+  before_validation :set_root_folder, :set_visibility
 
   enum visibility: {
     private: 'private',
@@ -31,7 +30,7 @@ class Post < ApplicationRecord
     end
 
     def valid_mime?(name:)
-      VALID_MIME == Marcel::MimeType.for(name: name)
+      VALID_MIME == MiniMime.lookup_by_filename(name).content_type
     end
   end
 
@@ -48,20 +47,26 @@ class Post < ApplicationRecord
   end
 
   def status
-    editions.any? ? 'published' : 'draft'
+    published? ? 'published' : 'draft'
   end
 
   private
 
-  def sync_post_revisions
-    SyncPostRevisionsJob.perform_later(post: self)
+  def blob_paths_are_stored_correctly
+    unless (blog.repo_drafts_folder && blob_path&.include?(blog.repo_drafts_folder)) || blob_path&.include?(blog.repo_posts_folder)
+      errors.add(:blob_path, 'should be contained in valid folder')
+    end
+  end
+
+  def set_root_folder
+    self.blob_path = if blob_path&.include?('/')
+      blob_path
+    else
+      File.join(blog.repo_drafts_or_posts_folder, File.basename(blob_path))
+    end
   end
 
   def set_visibility
     self.visibility ||= blog.visibility
-  end
-
-  def set_folder
-    self.blob_path = File.join(blog.repo_drafts_or_posts_folder, File.basename(blob_path))
   end
 end

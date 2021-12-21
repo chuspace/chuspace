@@ -5,4 +5,5 @@ class ApplicationController < ActionController::Base
   include Authentication
   include SetCurrentRequestDetails
   include SetSentryContext
+  include ActiveStorage::SetCurrent
 end

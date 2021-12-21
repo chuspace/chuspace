@@ -23,7 +23,9 @@ class StorageAdapter
     content
     search_repositories
     create_repository
+    create_repository_webhook
     delete_repository
+    delete_repository_webhook
     update_repository
     repository_files
     repository_folders
@@ -41,6 +43,7 @@ class StorageAdapter
     rebase
     contributors
     tree
+    webhooks
   ].freeze
 
   attr_reader :storage, :adapter

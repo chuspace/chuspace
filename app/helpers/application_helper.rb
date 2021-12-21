@@ -32,4 +32,9 @@ module ApplicationHelper
       settings: { label: 'Settings', tab: :settings }
     }.freeze
   end
+
+  def url_or_mailto?(url_str)
+    url = URI.parse(url_str)
+    url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS) || url.kind_of?(URI::MailTo)
+  end
 end

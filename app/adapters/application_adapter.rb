@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'marcel'
-
 class ApplicationAdapter
   include FaradayClient::Connection
   attr_reader :endpoint, :access_token

@@ -8,11 +8,10 @@ class CreateEditions < ActiveRecord::Migration[7.0]
       t.text :title, null: false
       t.text :summary, null: false
 
-      t.references :blog, null: false, foreign_key: true
       t.references :publisher, null: false, foreign_key: { to_table: :users }
       t.references :revision, null: false, foreign_key: true
 
-      t.integer  :number, null: false
+      t.bigint :number, null: false
       t.datetime :published_at, null: false
 
       t.timestamps

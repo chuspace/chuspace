@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Storage < ApplicationRecord
-  has_many   :blogs, dependent: :delete_all, inverse_of: :storage
+  has_many   :blogs, inverse_of: :storage
   belongs_to :user, optional: true
 
   encrypts :access_token, :endpoint
@@ -16,6 +16,7 @@ class Storage < ApplicationRecord
   before_validation :assign_endpoint, if: -> { chuspace? || !self_hosted? }
   before_validation :assign_description, if: :chuspace?
   before_create     :setup_chuspace_git_storage, if: :chuspace?
+  before_destroy    :remove_chuspace_git_storage, if: :chuspace?
 
   delegate :chuspace?, to: :provider, allow_nil: true
 
@@ -99,6 +100,10 @@ class Storage < ApplicationRecord
 
     self.access_token = adapter.create_personal_access_token(username: user.username)
   rescue FaradayClient::Error
+    ChuspaceAdapter.as_superuser.delete_user(username: user.username)
+  end
+
+  def remove_chuspace_git_storage
     ChuspaceAdapter.as_superuser.delete_user(username: user.username)
   end
 end

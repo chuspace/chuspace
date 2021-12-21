@@ -17,6 +17,7 @@ gem 'babosa'
 gem 'action_policy'
 gem 'name_of_person'
 gem 'good_job'
+gem 'mini_mime'
 
 # Sprockets
 gem 'sprockets-rails'

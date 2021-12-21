@@ -13,12 +13,12 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.string :email, null: false
 
       # track associations
-      t.integer :blogs_count, null: false, default: 0
-      t.integer :storages_count, null: false, default: 0
-      t.integer :templates_count, null: false, default: 0
+      t.bigint :blogs_count, null: false, default: 0
+      t.bigint :storages_count, null: false, default: 0
+      t.bigint :templates_count, null: false, default: 0
 
       # Track logins
-      t.integer :sign_in_count, default: 0
+      t.bigint :sign_in_count, default: 0
       t.datetime :current_sign_in_at
       t.datetime :last_sign_in_at
       t.inet :current_sign_in_ip

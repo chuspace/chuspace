@@ -7,8 +7,6 @@ class AutoChecksController < ApplicationController
       perform_check(resource: User, attribute: 'email')
     when :username
       perform_check(resource: User, attribute: 'username')
-    when :blog_permalink
-      perform_check(resource: Blog, attribute: 'permalink')
     end
   end
 

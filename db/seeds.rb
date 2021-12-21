@@ -1,11 +1,20 @@
 # frozen_string_literal: true
 
 chuspace_user = User.build_with_email_identity(
-  email: 'gaurav@chuspace.com',
-  username: 'gaurav88',
-  name: 'Gaurav Tiwari'
+  email: 'johndoe@chuspace.com',
+  username: 'johndoe',
+  name: 'John Doe'
 )
+
 chuspace_user.save!
+
+github_user = User.build_with_email_identity(
+  email: 'marysmith@chuspace.com',
+  username: 'marysmith',
+  name: 'Mary Smith'
+)
+
+github_user.save!
 
 chuspace_storage = chuspace_user.create_chuspace_storage!(
   default: true,
@@ -14,7 +23,14 @@ chuspace_storage = chuspace_user.create_chuspace_storage!(
   **GitStorageConfig.new.chuspace
 )
 
-github_storage = chuspace_user.storages.create!(
+github_user.create_chuspace_storage!(
+  default: true,
+  active: true,
+  provider: :chuspace,
+  **GitStorageConfig.new.chuspace
+)
+
+github_storage = github_user.storages.create!(
   active: true,
   description: 'Github storage to connect Chuspace blog',
   **GitStorageConfig.new.github.merge(
@@ -30,7 +46,7 @@ end
 template = chuspace_user.blog_templates.first
 # Connect blog
 personal_blog = github_storage.blogs.create!(
-  owner: chuspace_user,
+  owner: github_user,
   name: 'blog',
   personal: true,
   visibility: :public,
@@ -39,7 +55,7 @@ personal_blog = github_storage.blogs.create!(
   **template.blog_attributes
 )
 
-chuspace_user.memberships.create!(
+github_user.memberships.create!(
   blog: personal_blog,
   role: :owner
 )

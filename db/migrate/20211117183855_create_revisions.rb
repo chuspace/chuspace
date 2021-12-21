@@ -5,7 +5,6 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
 
   def change
     create_table :revisions do |t|
-      t.references :blog, null: false, foreign_key: true
       t.references :post, null: false, foreign_key: true
       t.references :committer, foreign_key: { to_table: :users }
 
@@ -15,7 +14,7 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
       t.text :content
       t.text :sha, null: false
 
-      t.integer :number, null: false
+      t.bigint :number, null: false
 
       t.timestamps
     end

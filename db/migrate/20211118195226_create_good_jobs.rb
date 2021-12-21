@@ -8,7 +8,7 @@ class CreateGoodJobs < ActiveRecord::Migration[7.0]
 
     create_table :good_jobs, id: :uuid do |t|
       t.text :queue_name
-      t.integer :priority
+      t.bigint :priority
       t.jsonb :serialized_params
       t.timestamp :scheduled_at
       t.timestamp :performed_at
