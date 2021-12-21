@@ -23,7 +23,7 @@ class User < ApplicationRecord
   has_many :blogs, through: :memberships, source: :blog
   has_many :owning_blogs, class_name: 'Blog', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_one  :personal_blog, -> { where(personal: true) }, class_name: 'Blog', foreign_key: :owner_id, inverse_of: :owner
-  has_many :blog_templates, dependent: :destroy, foreign_key: 'author_id', inverse_of: :author
+  has_many :blog_templates, dependent: :nullify, foreign_key: 'author_id', inverse_of: :author
   has_many :storages, dependent: :destroy, inverse_of: :user
   has_one  :chuspace_storage, -> { where(provider: ::Storage.chuspace_config['provider']) }, class_name: 'Storage', dependent: :destroy, inverse_of: :user
   has_many :posts, foreign_key: :author_id, dependent: :destroy

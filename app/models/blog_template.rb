@@ -4,7 +4,7 @@ class BlogTemplate < ApplicationRecord
   extend FriendlyId
 
   has_many   :blogs, inverse_of: :template
-  belongs_to :author, class_name: 'User'
+  belongs_to :author, class_name: 'User', optional: true
 
   friendly_id :name, use: :history, slug_column: :permalink
 

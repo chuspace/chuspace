@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.string "language", null: false
     t.string "framework", null: false
     t.string "css"
-    t.bigint "author_id", null: false
+    t.bigint "author_id"
     t.string "chuspace_mirror_path"
     t.string "preview_url"
     t.string "repo_url", null: false

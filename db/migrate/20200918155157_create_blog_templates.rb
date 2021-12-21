@@ -12,7 +12,7 @@ class CreateBlogTemplates < ActiveRecord::Migration[7.0]
       t.string :framework, null: false
       t.string :css
 
-      t.references :author, null: false, foreign_key: { to_table: :users }
+      t.references :author, foreign_key: { to_table: :users }
 
       t.string :chuspace_mirror_path
       t.string :preview_url
