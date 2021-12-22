@@ -61,7 +61,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3_000 }
   config.default_url_options = { host: 'localhost:3000' }
   Rails.application.routes.default_url_options[:host] = 'localhost:3000'
-  config.hosts << "chuspace-dev.loca.lt"
+  config.hosts << 'chuspace-dev.loca.lt'
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

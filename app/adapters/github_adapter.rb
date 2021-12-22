@@ -103,9 +103,9 @@ class GithubAdapter < ApplicationAdapter
     get("repos/#{fullname}/git/trees/#{sha}", { recursive: true }).tree
   end
 
-  def create_or_update_blob(fullname:, path:, content:, sha:, message: nil, committer:, author:)
+  def create_or_update_blob(fullname:, path:, content:, committer:, author:, sha: nil, message: nil)
     message ||= sha.blank? ? "Create #{path}" : "Update #{path}"
-    put "repos/#{fullname}/contents/#{path}", { content: content, message: message, sha: sha }
+    put "repos/#{fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }
   end
 
   def user(options: {})

@@ -8,5 +8,6 @@
   </div>
 
   <%= form.error :blob_path, class: 'mb-2 block' %>
+  <%= form.hint :blob_path, class: 'mb-2 block' unless post.errors.key?(:blob_path) %>
   <%= form.button :submit, 'Create', class: 'mt-4 float-right btn-primary' %>
 <% end %>

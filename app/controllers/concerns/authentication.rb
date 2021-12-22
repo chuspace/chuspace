@@ -37,6 +37,6 @@ module Authentication
   end
 
   def authenticate!
-    redirect_to sessions_path, notice: "You need to login again!" unless authenticate
+    redirect_to sessions_path, notice: 'You need to login again!' unless authenticate
   end
 end

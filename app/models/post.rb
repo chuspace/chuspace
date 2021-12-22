@@ -1,7 +1,17 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  include Sourceable
+
   VALID_MIME = 'text/markdown'.freeze
+  DEFAULT_FRONT_MATTER = <<~YAML
+    ---
+    title: Untitled
+    summary:
+    topics:
+    published_at:
+    ---
+  YAML
 
   belongs_to :blog, touch: true
   belongs_to :author, class_name: 'User', touch: true
@@ -18,7 +28,6 @@ class Post < ApplicationRecord
     public: 'public',
     subscriber: 'subscriber'
   }, _suffix: true
-
 
   class << self
     def published
@@ -59,10 +68,12 @@ class Post < ApplicationRecord
   end
 
   def set_root_folder
-    self.blob_path = if blob_path&.include?('/')
-      blob_path
-    else
-      File.join(blog.repo_drafts_or_posts_folder, File.basename(blob_path))
+    if blob_path.present?
+      self.blob_path = if blob_path.include?('/')
+        blob_path
+      else
+        File.join(blog.repo_drafts_or_posts_folder, File.basename(blob_path))
+      end
     end
   end
 

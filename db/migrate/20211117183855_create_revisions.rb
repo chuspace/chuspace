@@ -7,11 +7,10 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
     create_table :revisions do |t|
       t.references :post, null: false, foreign_key: true
       t.references :committer, foreign_key: { to_table: :users }
-
       t.jsonb :fallback_committer, null: false, default: {}
 
-      t.text :message
-      t.text :content
+      t.text :message, null: false, default: ''
+      t.text :content, null: false, default: ''
       t.text :sha, null: false
 
       t.bigint :number, null: false
@@ -22,5 +21,7 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
     add_index :revisions, %i[post_id number], unique: true, algorithm: :concurrently
     add_index :revisions, :sha, algorithm: :concurrently
     add_index :revisions, :number, algorithm: :concurrently
+
+    add_column :revisions, :source, :content_source_enum_type, index: { algorithm: :concurrently }, null: false, default: :chuspace
   end
 end

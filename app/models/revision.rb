@@ -1,64 +1,18 @@
 # frozen_string_literal: true
 
 class Revision < ApplicationRecord
-  self.implicit_order_column = 'number'
+  include Immutable, Commitable, Sourceable, Orderable, Markdownable
 
   belongs_to :post, touch: true
-  belongs_to :blog, touch: true
   belongs_to :committer, class_name: 'User', optional: true, touch: true
   has_one    :edition, dependent: :destroy, inverse_of: :revision
 
-  delegate :title, :summary, :published_at, :topics, :html, :body, to: :parsed_content
-  delegate :author, to: :post
-  delegate :blog, to: :post
+  delegate :author, :blog, to: :post
 
-  validates :number, uniqueness: { scope: :post_id }
-  validates :sha, :number, presence: true
-  before_validation :assign_next_number_sequence, on: :create
-  before_validation :create_git_commit, on: :create, if: -> { sha.blank? }
-
-  class << self
-    alias current last
-  end
+  validates :number, presence: true, uniqueness: { scope: :post_id }
+  validates :fallback_committer, presence: true, unless: :committer
 
   def to_param
     sha
-  end
-
-  def parsed_content
-    MarkdownContent.new(content: content)
-  end
-
-  def git_commit
-    blog.repository.commit(sha: sha)
-  end
-
-  private
-
-  def assign_next_number_sequence
-    self.number = post.revisions.last&.number.to_i + 1
-  end
-
-  def create_git_commit
-    blob = blog.storage.adapter.create_or_update_blob(
-      fullname: blog.repo_fullname,
-      path: post.blob_path,
-      content: Base64.encode64(content || ''),
-      message: message.presence,
-      sha: post&.git_blob&.sha,
-      committer: {
-        name: committer.name,
-        email: committer.email,
-        date: Date.today
-      },
-      author: {
-        name: post.author.name,
-        email: post.author.email,
-        date: Date.today
-      }
-    )
-    self.content ||= ''
-    self.sha = blob.commit.sha
-    self.message = blob.commit.message
   end
 end

@@ -45,6 +45,8 @@ en:
       user:
         email: Your email is safe with us
         username: Username should be maximum 40 characters
+      post:
+        blob_path: filename should end with .md extension
 
     include_blanks:
       defaults:

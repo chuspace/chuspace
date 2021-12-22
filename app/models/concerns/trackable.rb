@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Trackable
+  extend ActiveSupport::Concern
+
   def set_tracked_fields(request)
     old_current, new_current = self.current_sign_in_at, Time.current.utc
     self.last_sign_in_at = old_current || new_current
