@@ -5,7 +5,11 @@
   font-weight: 400
   font-style: normal
   font-size: 22px
-  line-height: 1.8
+  letter-spacing: -0.003em
+  line-height: 2rem
+  font-family: 'Charter', 'Georgia', 'sans-serif'
+  text-rendering: optimizeLegibility
+  -webkit-font-smoothing: antialiased
   outline: none
 
 
@@ -79,7 +83,7 @@
     @apply whitespace-pre-wrap
 
   code
-    @apply bg-secondary p-1 border border-secondary-focus text-secondary-content rounded-sm whitespace-pre-wrap text-base font-normal
+    @apply bg-secondary px-1 text-secondary-content rounded-sm whitespace-pre-wrap text-base font-normal
 
   div + br
     display: none

@@ -22,8 +22,8 @@
       </div>
 
       <div class='flex items-center justify-between flex-end'>
-        <%= link_to 'Edit', edit_storage_path(storage), class: 'btn btn-sm btn-outline border-info', data: { 'turbo-frame': :_top } %>
-        <%= button_to storage_path(storage), method: :delete, class: 'btn btn-sm border-error btn-outline ml-3', data: { 'turbo-frame': :_top } do %>
+        <%= link_to 'Edit', edit_storage_path(storage), class: 'btn btn-sm btn-outline border-info' %>
+        <%= button_to storage_path(storage), method: :delete, class: 'btn btn-sm border-error btn-outline ml-3' do %>
           <%= tag.span 'Delete' %>
         <% end %>
       </div>
