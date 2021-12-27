@@ -42,7 +42,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, path: '', only: :show, param: :username do
+  resources :users, path: '', except: :index, param: :username do
     resources :blogs, path: '', except: :index, param: :permalink do
       resources :settings, only: %i[index show]
       resources :posts, path: '', except: :index do

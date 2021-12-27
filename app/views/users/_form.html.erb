@@ -1,5 +1,6 @@
 <%= simple_form_for(Current.user) do |form| %>
   <%= form.input :name %>
   <%= form.input :username %>
+  <%= form.input :email %>
   <%= form.button :submit, 'Save', class: 'mt-8 btn btn-primary' %>
 <% end %>
