@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Blog < ApplicationRecord
-  include Repoable
   extend FriendlyId
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
@@ -10,13 +9,10 @@ class Blog < ApplicationRecord
   has_many :posts, dependent: :destroy, inverse_of: :blog
 
   belongs_to :owner, class_name: 'User'
-  belongs_to :storage
-  belongs_to :template, optional: true, class_name: 'BlogTemplate'
+  belongs_to :git_provider
 
   validates :name, uniqueness: { scope: :owner_id }
-
-  validates_presence_of :template_id, if: -> { storage&.chuspace? }
-  validates_presence_of :name, :visibility
+  validates :name, :visibility, presence: true
 
   has_rich_text :readme
 
@@ -37,7 +33,11 @@ class Blog < ApplicationRecord
   end
 
   def parsed_readme
-    MarkdownContent.new(content: readme.to_plain_text)
+    MarkdownContent.new(content: repository.readme)
+  end
+
+  def repository
+    @repository ||= Repository.new(blog: self, fullname: repo_fullname)
   end
 
   private

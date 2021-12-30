@@ -1,0 +1,48 @@
+<div>
+  <section class='text-center'>
+    <h3 class='leading-none'>
+      <%= t('.heading') %>
+    </h3>
+    <h5 class="mt-4 w-full sm:w-2/3 mx-auto font-normal text-secondary">
+      <%= t('.intro') %>
+    </h5>
+  </section>
+
+  <div class='grid gap-4 grid-cols-2 mt-12'>
+    <section class="card shadow-xl bg-base-200">
+      <div class="card-body">
+        <div class='flex items-center text-primary'>
+          <%= inline_svg_tag 'icons/github', class: 'w-6 h-6 fill-current' %>
+          <%= inline_svg_tag 'icons/gitlab', class: 'w-6 h-6 ml-2 fill-current' %>
+        </div>
+
+        <div class='mt-8'>
+          <h2 class="card-title">Connect existing</h2>
+          <p class='text-secondary'>Connect an existing static site blog repository on GitHub or GitLab.</p>
+          <div class="card-actions mt-8">
+            <%= link_to 'Connect', connect_blog_path, class: "btn btn-primary btn-sm" %>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card shadow-xl bg-base-300">
+      <div class="card-body">
+        <div class='flex items-center text-primary'>
+          <%= inline_svg_tag 'icons/jekyll', class: 'w-6 h-6 fill-current' %>
+          <%= inline_svg_tag 'icons/hugo', class: 'w-6 h-6 ml-2 fill-current' %>
+          <%= inline_svg_tag 'icons/gatsby', class: 'w-6 h-6 ml-2 fill-current' %>
+          <%= inline_svg_tag 'icons/nextjs', class: 'w-6 h-6 ml-2 fill-current' %>
+        </div>
+
+        <div class='mt-8'>
+          <h2 class="card-title">Create new</h2>
+          <p>Create a new static site blog repository on GitHub or GitLab.</p>
+          <div class="card-actions mt-8">
+            <%= link_to 'Create', new_blog_path, class: "btn btn-primary btn-sm" %>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

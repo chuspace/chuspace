@@ -19,7 +19,6 @@ module Chuspace
 
     # Customise rails generator
     config.generators do |g|
-      g.test_framework :rspec
       g.assets false
       g.helper false
       g.stylesheets false

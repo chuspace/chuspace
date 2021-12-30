@@ -1,0 +1,48 @@
+<div class='sm:w-2/3 w-full mx-auto'>
+  <h3>Connect an existing blog</h3>
+  <p class='text-secondary mt-2'>Simple three easy steps to get started</p>
+
+  <div class="grid grid-cols-3 gap-4 my-8 w-full">
+    <%= link_to 'Pick your Git Provider', connect_blog_path, class: "tab tab-bordered tab-active" %>
+    <a class="tab tab-bordered">Pick a repository</a>
+    <a class="tab tab-bordered ">Blog settings</a>
+  </div>
+
+  <h4>Connect to Git provider</h4>
+  <div class='mt-2 text-secondary'>
+    <p>
+      Connect an existing static site blog hosted on one of the
+      linked Git providers.
+      The selected Git repository must support publishing posts using markdown.
+      <code>Example: Jekyll, Hugo or Astro</code>
+    </p>
+  </div>
+
+  <section class='my-8'>
+    <ul class='border rounded'>
+      <% Current.user.git_providers.each do |git_provider| %>
+        <li class='py-2 px-4 text-primary flex items-center border-b border-primary-content last:border-b-0'>
+          <div class='flex flex-1 items-center'>
+            <%= inline_svg_tag "icons/#{git_provider.name}", class: 'w-4 h-4 fill-current' %>
+            <%= content_tag :span, git_provider.label, class: 'text-primary-content ml-2' %>
+          </div>
+
+          <% if git_provider.connected? %>
+            <%= link_to 'Choose', connect_blog_git_provider_path(git_provider: git_provider.name), class: 'btn btn-primary btn-sm' %>
+          <% else %>
+            <%= button_to(
+                'Connect',
+                "/auth/#{git_provider.name}_api?origin=#{request.url}",
+                class: 'btn btn-primary btn-sm',
+                data: { turbo: false },
+                title: "Click to allow api access to #{git_provider.name}",
+              )
+            %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  Don't have a static blog repository yet? <%= link_to 'Start from a template', new_blog_path, class: 'link link-primary' %>
+</div>

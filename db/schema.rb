@@ -19,15 +19,12 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "blog_repo_status_enum_type", ["syncing", "synced", "failed"]
   create_enum "blog_visibility_enum_type", ["private", "public", "subscriber"]
-  create_enum "content_source_enum_type", ["chuspace", "remote"]
-  create_enum "git_storage_provider_enum_type", ["chuspace", "github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
+  create_enum "git_provider_enum_type", ["github", "gitlab"]
   create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "manager", "owner", "subscriber"]
   create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
-  create_enum "template_visibility_enum_type", ["private", "public", "subscriber"]
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -67,46 +64,12 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "blog_templates", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "description"
-    t.string "permalink", null: false
-    t.string "language", null: false
-    t.string "framework", null: false
-    t.string "css"
-    t.bigint "author_id"
-    t.string "chuspace_mirror_path"
-    t.string "preview_url"
-    t.string "repo_url", null: false
-    t.string "repo_posts_folder", null: false
-    t.string "repo_drafts_folder"
-    t.string "repo_assets_folder", null: false
-    t.string "repo_readme_path", default: "README.md", null: false
-    t.boolean "default", default: false, null: false
-    t.boolean "approved", default: false, null: false
-    t.boolean "system", default: false, null: false
-    t.bigint "downloads_count", default: 0, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.enum "visibility", default: "public", enum_type: "template_visibility_enum_type"
-    t.index ["approved"], name: "index_blog_templates_on_approved"
-    t.index ["author_id"], name: "index_blog_templates_on_author_id"
-    t.index ["css"], name: "index_blog_templates_on_css"
-    t.index ["default"], name: "index_blog_templates_on_default"
-    t.index ["framework"], name: "index_blog_templates_on_framework"
-    t.index ["language"], name: "index_blog_templates_on_language"
-    t.index ["permalink"], name: "index_blog_templates_on_permalink", unique: true
-    t.index ["system"], name: "index_blog_templates_on_system"
-    t.index ["visibility"], name: "index_blog_templates_on_visibility"
-  end
-
   create_table "blogs", force: :cascade do |t|
     t.string "name", null: false
     t.string "permalink", null: false
     t.text "description"
     t.bigint "owner_id", null: false
-    t.bigint "storage_id", null: false
-    t.bigint "template_id"
+    t.bigint "git_provider_id", null: false
     t.boolean "personal", default: false, null: false
     t.string "repo_fullname", null: false
     t.string "repo_posts_folder", null: false
@@ -118,27 +81,10 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.enum "visibility", default: "private", null: false, enum_type: "blog_visibility_enum_type"
-    t.enum "repo_status", default: "syncing", null: false, enum_type: "blog_repo_status_enum_type"
+    t.index ["git_provider_id"], name: "index_blogs_on_git_provider_id"
     t.index ["owner_id"], name: "index_blogs_on_owner_id"
     t.index ["permalink", "owner_id"], name: "index_blogs_on_permalink_and_owner_id", unique: true
     t.index ["personal"], name: "index_blogs_on_personal"
-    t.index ["storage_id"], name: "index_blogs_on_storage_id"
-    t.index ["template_id"], name: "index_blogs_on_template_id"
-  end
-
-  create_table "editions", force: :cascade do |t|
-    t.text "title", null: false
-    t.text "summary", null: false
-    t.bigint "publisher_id", null: false
-    t.bigint "revision_id", null: false
-    t.bigint "number", null: false
-    t.datetime "published_at", precision: 6, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["published_at"], name: "index_editions_on_published_at"
-    t.index ["publisher_id"], name: "index_editions_on_publisher_id"
-    t.index ["revision_id", "number"], name: "index_editions_on_revision_id_and_number", unique: true
-    t.index ["revision_id"], name: "index_editions_on_revision_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -150,6 +96,21 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "git_providers", force: :cascade do |t|
+    t.string "label", null: false
+    t.text "access_token"
+    t.text "refresh_access_token"
+    t.text "endpoint"
+    t.boolean "self_hosted", default: false, null: false
+    t.bigint "user_id", null: false
+    t.datetime "expires_at", precision: 6
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.enum "name", null: false, enum_type: "git_provider_enum_type"
+    t.index ["user_id", "name"], name: "index_git_providers_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_git_providers_on_user_id"
   end
 
   create_table "good_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -220,51 +181,16 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.string "blob_path", null: false
     t.bigint "blog_id", null: false
     t.bigint "author_id"
+    t.text "title", null: false
+    t.text "summary", null: false
+    t.datetime "published_at", precision: 6, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.enum "visibility", default: "public", enum_type: "post_visibility_enum_type"
-    t.enum "source", default: "chuspace", null: false, enum_type: "content_source_enum_type"
     t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["blob_path"], name: "index_posts_on_blob_path"
     t.index ["blog_id", "blob_path"], name: "index_posts_on_blog_id_and_blob_path", unique: true
     t.index ["blog_id"], name: "index_posts_on_blog_id"
-  end
-
-  create_table "revisions", force: :cascade do |t|
-    t.bigint "post_id", null: false
-    t.bigint "committer_id"
-    t.jsonb "fallback_committer", default: {}, null: false
-    t.text "message", default: "", null: false
-    t.text "content", default: "", null: false
-    t.text "sha", null: false
-    t.bigint "number", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.enum "source", default: "chuspace", null: false, enum_type: "content_source_enum_type"
-    t.index ["committer_id"], name: "index_revisions_on_committer_id"
-    t.index ["number"], name: "index_revisions_on_number"
-    t.index ["post_id", "number"], name: "index_revisions_on_post_id_and_number", unique: true
-    t.index ["post_id"], name: "index_revisions_on_post_id"
-    t.index ["sha"], name: "index_revisions_on_sha"
-  end
-
-  create_table "storages", force: :cascade do |t|
-    t.string "description", null: false
-    t.string "endpoint"
-    t.string "scopes"
-    t.string "access_token", null: false
-    t.bigint "user_id", null: false
-    t.boolean "default", default: false
-    t.boolean "active", default: false
-    t.boolean "self_hosted", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.enum "provider", null: false, enum_type: "git_storage_provider_enum_type"
-    t.index ["active"], name: "index_storages_on_active"
-    t.index ["default"], name: "index_storages_on_default"
-    t.index ["self_hosted"], name: "index_storages_on_self_hosted"
-    t.index ["user_id", "provider"], name: "index_storages_on_user_id_and_provider", unique: true
-    t.index ["user_id"], name: "index_storages_on_user_id"
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -315,12 +241,9 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "blog_templates", "users", column: "author_id"
-  add_foreign_key "blogs", "blog_templates", column: "template_id"
-  add_foreign_key "blogs", "storages"
+  add_foreign_key "blogs", "git_providers"
   add_foreign_key "blogs", "users", column: "owner_id"
-  add_foreign_key "editions", "revisions"
-  add_foreign_key "editions", "users", column: "publisher_id"
+  add_foreign_key "git_providers", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "invites", "blogs"
   add_foreign_key "invites", "users", column: "sender_id"
@@ -328,7 +251,4 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
   add_foreign_key "memberships", "users"
   add_foreign_key "posts", "blogs"
   add_foreign_key "posts", "users", column: "author_id"
-  add_foreign_key "revisions", "posts"
-  add_foreign_key "revisions", "users", column: "committer_id"
-  add_foreign_key "storages", "users"
 end

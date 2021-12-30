@@ -1,12 +1,24 @@
-<%= render 'layout' do %>
-  <p class='mt-2'>
-    A new Git repository will be created using the selected framework of your choice
-    and will be hosted to chuspace git storage
-    <%= link_to 'blog template', 'https://github.com/chuspace/blog', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
-    based on <%= link_to 'Astro', 'https://astro.build/', class: 'link link--default', target: :_blank, rel: 'noopener noreferrer' %>
-  </p>
+<div class='sm:w-2/3 w-full mx-auto'>
+  <h3>Create a new Git repository</h3>
+  <p class='text-secondary mt-2'>Simple three easy steps to get started</p>
 
-  <div class='mt-8'>
-    <%= render 'new', blog: @blog %>
+  <div class="grid grid-cols-3 gap-4 text-sm my-8 w-full">
+    <a class="border-b-2 border-primary pb-2 tab-active">1. Connect to Git provider</a>
+    <a class="border-b-2 border-primary pb-2">2. Create a repository</a>
+    <a class="border-b-2 border-primary pb-2">3. Blog settings</a>
   </div>
-<% end %>
+
+  <h4>Connect to Git provider</h4>
+  <div class='mt-2 text-secondary'>
+    <p>
+      Connect an existing static site blog hosted on one of the
+      linked Git providers.
+      The selected Git repository must support publishing posts using markdown.
+      <code>Example: Jekyll, Hugo or Astro</code>
+    </p>
+  </div>
+
+  <%= render 'blogs/new/steps/current', blog: @blog %>
+
+  Don't have a project yet? Start from a template instead.
+</div>

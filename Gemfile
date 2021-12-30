@@ -18,6 +18,7 @@ gem 'action_policy'
 gem 'name_of_person'
 gem 'good_job'
 gem 'mini_mime'
+gem 'wicked'
 
 # Sprockets
 gem 'sprockets-rails'
@@ -99,8 +100,6 @@ end
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec_junit_formatter'
-  gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'coveralls', require: false

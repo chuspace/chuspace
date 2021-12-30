@@ -1,33 +1,13 @@
-<% if @user.personal_blog %>
-  <div class='flex justify-between border-b border-base-200 pb-3'>
-    <%= simple_form_for(:search, html: { class: 'flex-1' }) do |form| %>
-      <%= form.input :name, label: false, input_html: { class: 'input-sm' }, placeholder: 'Search' %>
-    <% end %>
-
-    <div class='ml-8'>
-      <% if @user.personal_blog %>
-        <%= link_to 'New post', new_user_blog_post_path(@user, @user.personal_blog), class: 'btn btn-primary btn-sm ml-2' %>
-      <% else %>
-        <%= link_to 'Setup personal blog', new_user_blog_path(@user), class: 'btn btn-primary btn-sm ml-2' %>
-      <% end %>
-    </div>
+<div class='text-center py-16'>
+  <h3 class='text-secondary'>404</h3>
+  <div class='text-secondary mt-4 w-3/4 mx-auto'>
+    <p>
+      Your posts are sourced from your personal blog repository.
+    </p>
+    <p>Connect or create a new personal blog to get started</p>
   </div>
 
-  <div class='mt-4'>
-    <%= render 'posts/list', posts: @user.posts.preload(blog: :owner, revisions: :edition) %>
+  <div class='mt-8'>
+    <%= link_to 'Setup personal blog', new_user_blog_path(@user), class: 'btn btn-primary btn-sm ml-2' %>
   </div>
-<% else %>
-  <div class='text-center py-16'>
-    <h3 class='text-secondary'>404</h3>
-    <div class='text-secondary mt-4 w-3/4 mx-auto'>
-      <p>
-        Your posts are sourced from your personal blog repository.
-      </p>
-      <p>Connect or create a new personal blog to get started</p>
-    </div>
-
-    <div class='mt-8'>
-      <%= link_to 'Setup personal blog', new_user_blog_path(@user), class: 'btn btn-primary btn-sm ml-2' %>
-    </div>
-  </div>
-<% end %>
+</div>

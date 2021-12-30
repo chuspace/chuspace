@@ -1,0 +1,7 @@
+<% if blog.git_provider.present? && blog.repo_fullname.present? %>
+  <%= render 'blogs/new/steps/form', blog: blog %>
+<% elsif blog.git_provider.present? %>
+  <%= render 'blogs/new/steps/git_repos', blog: blog %>
+<% else %>
+  <%= render 'blogs/new/steps/git_providers', blog: blog %>
+<% end %>

@@ -1,0 +1,25 @@
+<section class='my-8'>
+  <ul class='border rounded'>
+    <% Current.user.git_providers.each do |git_provider| %>
+      <li class='py-2 px-4 text-primary flex items-center border-b border-primary-content last:border-b-0'>
+        <div class='flex flex-1 items-center'>
+          <%= inline_svg_tag "icons/#{git_provider.name}", class: 'w-4 h-4 fill-current' %>
+          <%= content_tag :span, git_provider.label, class: 'text-primary-content ml-2' %>
+        </div>
+
+        <% if git_provider.connected? %>
+          <%= link_to 'Choose', new_blog_path(git_provider: git_provider.name), class: 'btn btn-primary btn-sm' %>
+        <% else %>
+          <%= button_to(
+              'Connect',
+              "/auth/#{git_provider.name}_api?origin=#{request.url}",
+              class: 'btn btn-primary btn-sm',
+              data: { turbo: false },
+              title: "Click to allow api access to #{git_provider.name}",
+            )
+          %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</section>

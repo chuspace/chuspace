@@ -75,10 +75,26 @@ class GithubAdapter < ApplicationAdapter
 
   def head_sha(fullname:)
     @head_sha ||= paginate("repos/#{fullname}/commits", { per_page: 1 }).first.sha
+  rescue FaradayClient::NotFound
+    nil
+  end
+
+  def users
+    [user] + orgs
+  end
+
+  def orgs(options: {})
+    get('user/orgs', options)
+  end
+
+  def repositories(username:)
+    repository_from_response(get("users/#{username}/repos", { affiliation: 'owner,organization_member' }))
   end
 
   def repository(fullname:)
     repository_from_response(get("repos/#{fullname}"))
+  rescue FaradayClient::NotFound
+    nil
   end
 
   def repository_folders(fullname:)
@@ -86,6 +102,8 @@ class GithubAdapter < ApplicationAdapter
       .select { |item| item.type == 'tree' }
       .map(&:path)
       .sort
+  rescue FaradayClient::NotFound
+    nil
   end
 
   def repository_files(fullname:)
@@ -93,6 +111,8 @@ class GithubAdapter < ApplicationAdapter
       .select { |item| item.type == 'blob' && Post.valid_mime?(name: item.path) }
       .map(&:path)
       .sort
+  rescue FaradayClient::NotFound
+    nil
   end
 
   def search_repositories(query:, options: { sort: 'asc', per_page: 5 })

@@ -118,21 +118,12 @@ module FaradayClient
         http.headers[:accept] = default_media_type
         http.headers[:content_type] = 'application/json'
         http.headers[:user_agent] = user_agent
-        http.headers['Sudo'] = @sudo if @sudo
 
         case name
-        when 'github', 'github_enterprise'
+        when 'github'
           http.authorization 'token', @access_token
-        when 'gitlab', 'gitlab_foss'
+        when 'gitlab'
           http.authorization 'Bearer', @access_token
-        when 'chuspace', 'gitea'
-          http.authorization 'token', @access_token
-        end
-
-        if @basic_auth
-          username = Rails.application.credentials.storage[:chuspace].dig(:username)
-          password = Rails.application.credentials.storage[:chuspace].dig(:password)
-          http.basic_auth username, password
         end
       end
     end

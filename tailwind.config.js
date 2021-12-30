@@ -82,25 +82,25 @@ module.exports = {
           'primary-content':
             '#ffffff' /* Foreground content color to use on primary color */,
 
-          secondary: '#d4d4d8' /* Secondary color */,
-          'secondary-focus': '#a1a1aa' /* Secondary color - focused */,
+          secondary: '#cccccc' /* Secondary color */,
+          'secondary-focus': '#d6d6d6' /* Secondary color - focused */,
           'secondary-content':
             '#111827' /* Foreground content color to use on secondary color */,
 
-          accent: '#91A6BA' /* Accent color */,
-          'accent-focus': '#D97706' /* Accent color - focused */,
+          accent: '#4E9F3D' /* Accent color */,
+          'accent-focus': '#468f37' /* Accent color - focused */,
           'accent-content':
             '#111827' /* Foreground content color to use on accent color */,
 
-          neutral: '#fff' /* Neutral color */,
+          neutral: '#ffffff' /* Neutral color */,
           'neutral-focus': '#f4f4f4' /* Neutral color - focused */,
           'neutral-content':
             '#111827' /* Foreground content color to use on neutral color */,
 
           'base-100':
             '#111827' /* Base color of page, used for blank backgrounds */,
-          'base-200': '#1A243B' /* Base color, a little darker */,
-          'base-300': '#2a2b22' /* Base color, even more darker */,
+          'base-200': '#0e131f' /* Base color, a little darker */,
+          'base-300': '#0c111b' /* Base color, even more darker */,
           'base-content':
             '#D4D4D4' /* Foreground content color to use on base color */,
 

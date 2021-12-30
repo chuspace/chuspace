@@ -1,18 +1,19 @@
 <flexible-header data-on='<%= signed_in? %>'>
   <header data-target='flexible-header.element' class='header'>
-    <nav class='container flex justify-between items-center py-2'>
-      <%= link_to root_path do %>
-        <h1 class='font-bold text-3xl lowercase inline-block font-monospace'>Chuspace</h1>
-        <%= content_tag :span, 'axiom', class: 'text-sm font-sans' %>
+    <nav class='container flex justify-between items-center'>
+      <%= link_to root_path, class: 'pt-1 pb-2' do %>
+        <span class='font-bold text-3xl lowercase inline-block font-monospace'>Chuspace</span>
+        <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
       <% end %>
 
-      <div class='flex items-center'>
-        <%= link_to 'Feed', '#', class: 'link link-primary' %>
-        <%= link_to 'How it works?', '#', class: 'link link-primary ml-8' %>
-        <%= link_to 'Setup', setups_path, class: link_class(setups_path), class: 'link link-primary ml-8' %>
+      <div class='flex items-center py-2'>
+        <% if signed_in? %>
+          <%= render 'layouts/user' %>
+        <% else %>
+          <%= link_to 'Our Story', '#', class: 'link link-primary link-hover ml-8' %>
+          <%= link_to 'Sign in', '#', class: '#', class: 'link link-primary link-hover ml-8' %>
+        <% end %>
       </div>
-
-      <%= render 'layouts/user' if signed_in? %>
     </nav>
   </header>
 </flexible-header>

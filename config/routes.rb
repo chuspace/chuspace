@@ -1,23 +1,20 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: 'feed#index', constraints: RootConstraint.new, as: :feed
   root to: 'home#index'
 
   resources :auto_checks, only: :create
-  resources :setups, only: %i[index show], path: 'get-started'
+
+  scope :new do
+    get '/blog', to: 'blogs#new', as: :new_blog
+    get '/blog/:git_provider', to: 'blogs#new', as: :new_blog_git_provider
+    get '/blog/:git_provider/:repo_fullname', to: 'blogs#new', as: :new_blog_git_provider_repo
+  end
 
   scope :connect do
     get '/blog', to: 'blogs#connect', as: :connect_blog
-  end
-
-  scope :new do
-    get '/storage', to: 'storages#new', as: :new_storage
-    get '/blog', to: 'blogs#new', as: :new_blog
-  end
-
-  resources :storages, except: :new do
-    resources :repositories, only: :index
+    get '/blog/:git_provider', to: 'blogs#connect', as: :connect_blog_git_provider
+    get '/blog/:git_provider/:repo_fullname', to: 'blogs#connect', as: :connect_blog_git_provider_repo
   end
 
   resources :magic_logins, only: :index, path: 'magic'
@@ -42,13 +39,25 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :git_providers, only: :show do
+    resources :repos, only: %i[index create], module: :git_providers
+  end
+
+  namespace :git_providers do
+    namespace :github do
+      resources :callbacks, only: :index, path: 'callback'
+    end
+
+    namespace :gitlab do
+      resources :callbacks, only: :index, path: 'callback'
+    end
+  end
+
   resources :users, path: '', except: :index, param: :username do
     resources :blogs, path: '', except: :index, param: :permalink do
       resources :settings, only: %i[index show]
       resources :posts, path: '', except: :index do
         resources :settings, only: %i[index show]
-        resources :revisions, only: %i[index new]
-        resources :editions, only: %i[index new]
       end
     end
   end

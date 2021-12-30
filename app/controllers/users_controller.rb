@@ -27,7 +27,6 @@ class UsersController < ApplicationController
   def set_content_partial
     @partial = case params[:tab]
                when 'settings' then 'users/form'
-               when 'storages' then 'users/storages'
                when 'blogs' then 'users/blogs'
                when 'drafts' then 'users/drafts'
                when 'posts' then 'users/posts'

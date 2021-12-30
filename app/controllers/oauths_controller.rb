@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class OauthsController < ApplicationController
+  include Omniauthable
   attr_reader :identity, :user
 
   def create
@@ -47,13 +48,5 @@ class OauthsController < ApplicationController
       email: auth_hash.info.email,
       username: auth_hash.info.username || auth_hash.info.nickname
     }.freeze
-  end
-
-  def auth_hash
-    request.env['omniauth.auth']
-  end
-
-  def provider
-    auth_hash.provider.titleize
   end
 end

@@ -32,11 +32,23 @@
   strong {
     @apply font-sans font-semibold;
   }
+
+  details > summary {
+    list-style: none;
+  }
+
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
 }
 
 @layer components {
   label {
     justify-content: flex-start !important;
+  }
+
+  .btn {
+    @apply normal-case font-medium;
   }
 }
 
@@ -63,7 +75,6 @@ auto-complete {
 
 .header {
   @apply fixed top-0 w-full bg-neutral shadow-lg dark:border-0 dark:bg-base-200 z-10;
-  height: 60px;
 
   will-change: transform;
   transition: transform 200ms linear;

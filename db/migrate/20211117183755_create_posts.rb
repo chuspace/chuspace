@@ -8,6 +8,11 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.string :blob_path, null: false
       t.references :blog, null: false, foreign_key: true
       t.references :author, foreign_key: { to_table: :users }
+
+      t.text :title, null: false
+      t.text :summary, null: false
+      t.datetime :published_at, null: false
+
       t.timestamps
     end
 
@@ -15,6 +20,5 @@ class CreatePosts < ActiveRecord::Migration[7.0]
     add_index :posts, :blob_path, algorithm: :concurrently
 
     add_column :posts, :visibility, :post_visibility_enum_type, index: { algorithm: :concurrently }, default: :public
-    add_column :posts, :source, :content_source_enum_type, index: { algorithm: :concurrently }, null: false, default: :chuspace
   end
 end

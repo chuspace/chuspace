@@ -4,24 +4,41 @@ class BlogsController < ApplicationController
   include AutoCheckable
 
   before_action :authenticate!, except: :show
-  before_action :find_blog, except: %i[new connect create index auto_check]
+  before_action :find_blog, only: %i[show update edit destroy]
+  before_action :find_git_provider, only: %i[new connect]
   before_action :set_content_partial, only: :show
 
   def new
-    if Current.user.storages.chuspace.present?
-      @blog = Current.user.blogs.build(owner: Current.user, storage: Current.user.storages.chuspace)
+    @blog = Current.user.owning_blogs.build
+    @blog.git_provider = @git_provider
+    @blog.repo_fullname = params[:repo_fullname]
+
+    if @blog.repo_fullname.present?
+      render 'blogs/new/settings'
+    elsif @blog.git_provider.present?
+      render 'blogs/new/git_repo'
     else
-      redirect_to new_storage_path, notice: 'You do not have any git storages configured'
+      render 'blogs/new/git_provider'
     end
   end
 
   def connect
-    @blog = Current.user.blogs.build
+    @blog = Current.user.owning_blogs.build
+    @blog.git_provider = @git_provider
+    @blog.repo_fullname = params[:repo_fullname]
+
+    if @blog.repo_fullname.present? && @blog.repository.instance.present?
+      render 'blogs/connect/settings'
+    elsif @blog.git_provider.present?
+      flash[:notice] = "Repository not found: #{@blog.repo_fullname}" if @blog.repo_fullname.present?
+      render 'blogs/connect/git_repo'
+    else
+      render 'blogs/connect/git_provider'
+    end
   end
 
   def create
-    @blog = Current.user.blogs.build(blog_params.merge(owner: Current.user).delete_if { |key, value| value.blank? })
-    @blog.assign_attributes(@blog.template.blog_attributes)
+    @blog = Current.user.owning_blogs.build(blog_params.delete_if { |key, value| value.blank? })
 
     if @blog.save! && @blog.members.create(user: @blog.owner, role: :owner)
       redirect_to user_blog_path(@blog.owner, @blog)
@@ -60,8 +77,7 @@ class BlogsController < ApplicationController
     params.require(:blog).permit(
       :name,
       :description,
-      :storage_id,
-      :template_id,
+      :git_provider_id,
       :visibility,
       :repo_posts_folder,
       :repo_drafts_folder,
@@ -74,6 +90,12 @@ class BlogsController < ApplicationController
 
   def find_blog
     @blog = Blog.friendly.find(params[:permalink])
+  end
+
+  def find_git_provider
+    if GitProvider.names.keys.include?(params[:git_provider])
+      @git_provider = Current.user.git_providers.send(params[:git_provider])&.first
+    end
   end
 
   def set_content_partial
