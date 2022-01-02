@@ -30,5 +30,6 @@ class CreateBlogs < ActiveRecord::Migration[6.1]
     add_index :blogs, :personal, algorithm: :concurrently
     add_index :blogs, %i[permalink owner_id], algorithm: :concurrently, unique: true
     add_column :blogs, :visibility, :blog_visibility_enum_type, index: { algorithm: :concurrently }, null: false, default: :private
+    add_column :blogs, :repo_status, :blog_repo_status_enum_type, index: { algorithm: :concurrently }, null: false, default: :syncing
   end
 end

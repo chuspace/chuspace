@@ -51,7 +51,7 @@ module Webhooks
           post.revisions.create!(
             message: @commit['message'],
             committer: @author,
-            source: :remote,
+            originator: post.blog.git_provider.name,
             fallback_committer: @commit['author'] || @commit['committer'],
             sha: @commit['id'],
             content: Base64.decode64(git_blob.content)

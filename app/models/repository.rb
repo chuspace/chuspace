@@ -14,7 +14,7 @@ class Repository
   end
 
   def post_blobs
-    @post_blobs ||= blog.git_provider.adapter.blobs(fullname: fullname, folders: [blog.repo_posts_folder])
+    @post_blobs ||= blog.git_provider.adapter.blobs(fullname: fullname, folders: blog.posts_folders)
   end
 
   def asset_blobs

@@ -1,10 +1,22 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  include Sourceable
+
   VALID_MIME = 'text/markdown'.freeze
+  DEFAULT_FRONT_MATTER = <<~YAML
+    ---
+    title: Untitled
+    summary:
+    topics:
+    published_at:
+    ---
+  YAML
 
   belongs_to :blog, touch: true
   belongs_to :author, class_name: 'User', touch: true
+  has_many   :revisions, dependent: :destroy, inverse_of: :post
+  has_many   :editions, through: :revisions, dependent: :destroy
 
   validates :blob_path, presence: :true, uniqueness: { scope: :blog_id }, markdown: true
   validate  :blob_paths_are_stored_correctly
@@ -18,8 +30,16 @@ class Post < ApplicationRecord
   }, _suffix: true
 
   class << self
+    def published
+      joins(revisions: :edition)
+    end
+
+    def drafts
+      joins(:revisions).distinct(:revision_id)
+    end
+
     def valid_mime?(name:)
-      %w[.md .mdx .markdown].include?(File.extname(name))
+      %w[.md .markdown .mdx].include?(File.extname(name))
     end
   end
 
@@ -29,6 +49,14 @@ class Post < ApplicationRecord
 
   def git_commits
     blog.repository.commits(path: blob_path)
+  end
+
+  def published?
+    editions.any?
+  end
+
+  def status
+    published? ? 'published' : 'draft'
   end
 
   private

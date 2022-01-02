@@ -2,6 +2,7 @@
 
 class Blog < ApplicationRecord
   extend FriendlyId
+  include Repoable
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
 
@@ -33,11 +34,7 @@ class Blog < ApplicationRecord
   end
 
   def parsed_readme
-    MarkdownContent.new(content: repository.readme)
-  end
-
-  def repository
-    @repository ||= Repository.new(blog: self, fullname: repo_fullname)
+    MarkdownContent.new(content: readme.to_plain_text)
   end
 
   private

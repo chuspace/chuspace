@@ -58,6 +58,8 @@ Rails.application.routes.draw do
       resources :settings, only: %i[index show]
       resources :posts, path: '', except: :index do
         resources :settings, only: %i[index show]
+        resources :revisions, only: %i[index new]
+        resources :editions, only: %i[index new]
       end
     end
   end
