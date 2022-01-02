@@ -5,15 +5,44 @@
 
   <div class='tabs mt-8'>
     <div role="tablist">
-      <%= link_to 'About', user_blog_path(@blog.owner, @blog), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
-      <%= link_to 'Posts', user_blog_path(@blog.owner, @blog, tab: :posts), type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
+      <%= link_to 'Overview', user_blog_path(@blog.owner, @blog), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
       <%= link_to 'Settings', user_blog_settings_path(@blog.owner, @blog), type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
     </div>
   </div>
 
   <div class='divider'></div>
+  <div class='grid grid-cols-3 gap-4 mt-8'>
+    <section class='col-span-2'>
+      <div class='card bordered'>
+        <div class='chu-editor card-body'>
+          <div class='card-title'>
+            <code>Readme.md</code>
+          </div>
 
-  <div class='mt-8'>
-    <%= render @partial, blog: @blog %>
+          <%= @blog.parsed_readme&.html&.html_safe %>
+        </div>
+      </div>
+
+      <div class='mt-8'>
+        <%= render 'posts/list', posts: @blog.posts %>
+      </div>
+    </section>
+
+    <aside>
+      <div class='card bordered'>
+
+        <div class='chu-editor card-body'>
+          <div class='card-title'>
+            <code>People</code>
+          </div>
+
+          <div class='flex items-center'>
+            <% @blog.members.each do |member| %>
+              <%= image_tag member.avatar_url, class: 'w-8 h-8 mask mask-circle'%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </aside>
   </div>
 </div>

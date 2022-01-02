@@ -6,7 +6,8 @@ class Blog < ApplicationRecord
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
 
-  has_many :members, class_name: 'Membership', dependent: :destroy, inverse_of: :blog
+  has_many :memberships, dependent: :destroy, inverse_of: :blog
+  has_many :members, through: :memberships, source: :user
   has_many :posts, dependent: :destroy, inverse_of: :blog
 
   belongs_to :owner, class_name: 'User'
