@@ -30,6 +30,21 @@ module Chuspace
     config.active_record.encryption.extend_queries = true
     StrongMigrations.start_after = 20211128142958
 
+    # Cache store
+    config.cache_store = :redis_cache_store, {
+      url: ENV['REDIS_CACHE_SERVERS'].split(','),
+      connect_timeout:    30,  # Defaults to 20 seconds
+      read_timeout:       0.2, # Defaults to 1 second
+      write_timeout:      0.2, # Defaults to 1 second
+      reconnect_attempts: 1,   # Defaults to 0
+
+      error_handler: -> (method:, returning:, exception:) {
+        # Report errors to Sentry as warnings
+        Raven.capture_exception exception, level: 'warning',
+          tags: { method: method, returning: returning }
+      }
+    }
+
     # Active Job
     config.active_job.queue_adapter = :good_job
   end

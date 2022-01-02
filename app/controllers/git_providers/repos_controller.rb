@@ -9,7 +9,7 @@ module GitProviders
       @repositories = @git_provider.adapter.search_repositories(query: query)
 
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@git_provider, :repositories), partial: "repositories", locals: { repositories: @repositories, provider: @git_provider })}
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@git_provider, :repositories), partial: 'repositories', locals: { repositories: @repositories, provider: @git_provider }) }
         format.html
       end
     end

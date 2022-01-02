@@ -47,7 +47,7 @@
             </details-menu>
           </details>
 
-          <%= form.input :login, as: :hidden, input_html: { data: { target: 'details-menu-form.input' } } %>
+          <%= form.input :login, as: :hidden, input_html: { value: @git_provider.adapter.user.login, data: { target: 'details-menu-form.input' } } %>
 
           <div class="form-control w-1/3">
             <div class="relative">

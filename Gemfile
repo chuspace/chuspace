@@ -20,6 +20,11 @@ gem 'good_job'
 gem 'mini_mime'
 gem 'wicked'
 
+# Cache
+gem 'hiredis'
+gem 'oj'
+gem 'redis'
+
 # Sprockets
 gem 'sprockets-rails'
 

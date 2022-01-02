@@ -40,7 +40,7 @@ class BlogsController < ApplicationController
   def create
     @blog = Current.user.owning_blogs.build(blog_params.delete_if { |key, value| value.blank? })
 
-    if @blog.save! && @blog.members.create(user: @blog.owner, role: :owner)
+    if @blog.save && @blog.members.create(user: @blog.owner, role: :owner)
       redirect_to user_blog_path(@blog.owner, @blog)
     else
       respond_to do |format|

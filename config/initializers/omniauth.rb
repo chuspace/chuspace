@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative '../../app/lib/omniauth/strategies/github_app.rb'
 
 Rails.application.config.middleware.use OmniAuth::Builder do

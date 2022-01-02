@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'omniauth-oauth2'
 
 module OmniAuth
@@ -39,7 +41,7 @@ module OmniAuth
       end
 
       extra do
-        {:raw_info => raw_info, :all_emails => emails, :scope => scope }
+        { raw_info: raw_info, all_emails: emails, scope: scope }
       end
 
       def raw_info
@@ -56,7 +58,7 @@ module OmniAuth
       end
 
       def primary_email
-        primary = emails.find{ |i| i['primary'] && i['verified'] }
+        primary = emails.find { |i| i['primary'] && i['verified'] }
         primary && primary['email'] || nil
       end
 

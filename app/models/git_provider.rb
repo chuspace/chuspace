@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GitProvider < ApplicationRecord
   belongs_to :user
   encrypts :access_token, :refresh_access_token, :endpoint
