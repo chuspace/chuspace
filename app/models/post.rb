@@ -21,7 +21,7 @@ class Post < ApplicationRecord
   validates :blob_path, presence: :true, uniqueness: { scope: :blog_id }, markdown: true
   validate  :blob_paths_are_stored_correctly
 
-  before_validation :set_root_folder, :set_visibility
+  before_validation :set_root_dir, :set_visibility
 
   enum visibility: {
     private: 'private',
@@ -62,17 +62,17 @@ class Post < ApplicationRecord
   private
 
   def blob_paths_are_stored_correctly
-    unless (blog.repo_drafts_folder && blob_path&.include?(blog.repo_drafts_folder)) || blob_path&.include?(blog.repo_posts_folder)
-      errors.add(:blob_path, 'should be contained in valid folder')
+    unless (blog.repo_drafts_dir && blob_path&.include?(blog.repo_drafts_dir)) || blob_path&.include?(blog.repo_posts_dir)
+      errors.add(:blob_path, 'should be contained in valid dir')
     end
   end
 
-  def set_root_folder
+  def set_root_dir
     if blob_path.present?
       self.blob_path = if blob_path.include?('/')
         blob_path
       else
-        File.join(blog.repo_drafts_or_posts_folder, File.basename(blob_path))
+        File.join(blog.repo_drafts_or_posts_dir, File.basename(blob_path))
       end
     end
   end

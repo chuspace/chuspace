@@ -14,8 +14,6 @@ class CreateUsers < ActiveRecord::Migration[6.0]
 
       # track associations
       t.bigint :blogs_count, null: false, default: 0
-      t.bigint :storages_count, null: false, default: 0
-      t.bigint :templates_count, null: false, default: 0
 
       # Track logins
       t.bigint :sign_in_count, default: 0

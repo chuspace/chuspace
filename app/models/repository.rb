@@ -14,11 +14,11 @@ class Repository
   end
 
   def post_blobs
-    @post_blobs ||= blog.git_provider.adapter.blobs(fullname: fullname, folders: blog.posts_folders)
+    @post_blobs ||= blog.git_provider.adapter.blobs(fullname: fullname, dirs: blog.posts_dirs)
   end
 
   def asset_blobs
-    @asset_blobs ||= blog.git_provider.adapter.blobs(fullname: fullname, folders: blog.assets_folders)
+    @asset_blobs ||= blog.git_provider.adapter.blobs(fullname: fullname, dirs: blog.assets_dirs)
   end
 
   def commits(path: nil)
@@ -33,8 +33,8 @@ class Repository
     @files ||= blog.git_provider.adapter.repository_files(fullname: fullname)
   end
 
-  def folders
-    @folders ||= blog.git_provider.adapter.repository_folders(fullname: fullname)
+  def dirs
+    @dirs ||= blog.git_provider.adapter.repository_dirs(fullname: fullname)
   end
 
   def webhooks

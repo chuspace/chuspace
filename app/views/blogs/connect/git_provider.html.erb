@@ -23,7 +23,7 @@
       <% Current.user.git_providers.each do |git_provider| %>
         <li class='py-2 px-4 text-primary flex items-center border-b border-primary-content last:border-b-0'>
           <div class='flex flex-1 items-center'>
-            <%= inline_svg_tag "icons/#{git_provider.name}", class: 'w-4 h-4 fill-current' %>
+            <%= inline_svg_tag "icons/#{git_provider.name}", class: 'w-6 h-6 fill-current' %>
             <%= content_tag :span, git_provider.label, class: 'text-primary-content ml-2' %>
           </div>
 
@@ -43,6 +43,4 @@
       <% end %>
     </ul>
   </section>
-
-  Don't have a static blog repository yet? <%= link_to 'Start from a template', new_blog_path, class: 'link link-primary' %>
 </div>

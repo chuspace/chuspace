@@ -2,7 +2,7 @@
   <%= form.label :blob_path, class: 'mb-2 block' %>
   <div class="form-control w-full">
     <div class="input-group input-group-xs w-full">
-      <span><%= post.blog.repo_drafts_or_posts_folder %></span>
+      <span><%= post.blog.repo_drafts_or_posts_dir %></span>
       <%= form.input :blob_path, label: false, hint: false, error: false, wrapper: false, input_html: { class: 'w-full' } %>
     </div>
   </div>

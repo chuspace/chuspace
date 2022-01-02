@@ -1,15 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  root to: 'blogs#connect', constraints: RootConstraint.new, as: :authenticated_root
   root to: 'home#index'
 
   resources :auto_checks, only: :create
-
-  scope :new do
-    get '/blog', to: 'blogs#new', as: :new_blog
-    get '/blog/:git_provider', to: 'blogs#new', as: :new_blog_git_provider
-    get '/blog/:git_provider/:repo_fullname', to: 'blogs#new', as: :new_blog_git_provider_repo
-  end
 
   scope :connect do
     get '/blog', to: 'blogs#connect', as: :connect_blog

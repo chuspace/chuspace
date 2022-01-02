@@ -4,10 +4,11 @@ module Repoable
   extend ActiveSupport::Concern
 
   included do
-    before_destroy       :uninstall_repository_webhooks
-    after_create_commit  :install_repository_webhooks, :sync_repository_content
+    before_destroy       :uninstall_repository_webhooks, unless: -> { git_provider.github? }
+    after_create_commit  :install_repository_webhooks, unless: -> { git_provider.github? }
+    after_create_commit  :sync_repository_content
 
-    validates_presence_of :repo_fullname, :repo_posts_folder, :repo_assets_folder
+    validates_presence_of :repo_fullname, :repo_posts_dir, :repo_assets_dir
 
     enum repo_status: {
       syncing: 'syncing',
@@ -16,20 +17,20 @@ module Repoable
     }, _suffix: true
   end
 
-  def assets_folders
-    [repo_assets_folder].freeze
+  def assets_dirs
+    [repo_assets_dir].freeze
   end
 
   def repository
     Repository.new(blog: self, fullname: repo_fullname)
   end
 
-  def posts_folders
-    [repo_posts_folder, repo_drafts_folder].reject(&:blank?).freeze
+  def posts_dirs
+    [repo_posts_dir, repo_drafts_dir].reject(&:blank?).freeze
   end
 
-  def repo_drafts_or_posts_folder
-    repo_drafts_folder.presence || repo_posts_folder
+  def repo_drafts_or_posts_dir
+    repo_drafts_dir.presence || repo_posts_dir
   end
 
   private

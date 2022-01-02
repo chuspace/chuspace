@@ -10,6 +10,10 @@ export default class DetailsMenuFormElement extends HTMLElement {
 
   onChange = (event) => {
     this.input.value = event.detail.relatedTarget?.textContent?.trim()
+  }
+
+  submit = (event) => {
+    this.onChange(event)
 
     if (this.loader) {
       this.loader.innerHTML = `<div class="text-center mt-4"><span class='btn btn-lg btn-ghost btn-circle loading'></span></div>`

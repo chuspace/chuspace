@@ -1,13 +1,17 @@
-<div class='text-center py-16'>
-  <h3 class='text-secondary'>404</h3>
-  <div class='text-secondary mt-4 w-3/4 mx-auto'>
-    <p>
-      Your posts are sourced from your personal blog repository.
-    </p>
-    <p>Connect or create a new personal blog to get started</p>
-  </div>
+<% if @user.posts.any? %>
+  <%= render 'posts/list', posts: @user.posts %>
+<% else %>
+  <div class='text-center py-16'>
+    <h3 class='text-secondary'>404</h3>
+    <div class='text-secondary mt-4 w-3/4 mx-auto'>
+      <p>
+        Your posts are sourced from your personal blog repository.
+      </p>
+      <p>Connect or create a new personal blog to get started</p>
+    </div>
 
-  <div class='mt-8'>
-    <%= link_to 'Setup personal blog', new_user_blog_path(@user), class: 'btn btn-primary btn-sm ml-2' %>
+    <div class='mt-8'>
+      <%= link_to 'Setup personal blog', connect_blog_path, class: 'btn btn-primary btn-sm ml-2' %>
+    </div>
   </div>
-</div>
+<% end %>

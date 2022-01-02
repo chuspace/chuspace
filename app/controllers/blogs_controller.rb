@@ -79,9 +79,9 @@ class BlogsController < ApplicationController
       :description,
       :git_provider_id,
       :visibility,
-      :repo_posts_folder,
-      :repo_drafts_folder,
-      :repo_assets_folder,
+      :repo_posts_dir,
+      :repo_drafts_dir,
+      :repo_assets_dir,
       :repo_fullname,
       :repo_readme_path,
       :personal

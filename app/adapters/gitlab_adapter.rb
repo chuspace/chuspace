@@ -21,7 +21,7 @@ class GitlabAdapter < ApplicationAdapter
     repository_from_response(paginate('search', options.merge(search: query, scope: :projects)))
   end
 
-  def repository_folders(fullname:)
+  def repository_dirs(fullname:)
     tree = get("projects/#{CGI.escape(fullname)}/repository/tree", { recursive: true })
     tree.select { |item| item.type == 'tree' }.map(&:path).sort
   end

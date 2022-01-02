@@ -7,15 +7,27 @@ module Webhooks
 
       def create
         @commit['added'].each do |blob_path|
-          create_post(blob_path)
+          if blob_path == @blog.repo_readme_path
+            update_readme
+          else
+            create_post(blob_path)
+          end
         end
 
         @commit['removed'].each do |blob_path|
-          delete_post(blob_path)
+          if blob_path == @blog.repo_readme_path
+            update_readme
+          else
+            delete_post(blob_path)
+          end
         end
 
         @commit['modified'].each do |blob_path|
-          update_post(blob_path)
+          if blob_path == @blog.repo_readme_path
+            update_readme
+          else
+            update_post(blob_path)
+          end
         end
 
         render head: :ok
@@ -42,6 +54,10 @@ module Webhooks
       def update_post(blob_path)
         post = @blog.posts.find_by(blob_path: blob_path)
         create_revision(post: post)
+      end
+
+      def update_readme
+        @blog.update!(readme: @blog.repository.readme)
       end
 
       def create_revision(post:)

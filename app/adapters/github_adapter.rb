@@ -5,17 +5,17 @@ class GithubAdapter < ApplicationAdapter
     'github'
   end
 
-  def blobs(fullname:, folders: [])
+  def blobs(fullname:, dirs: [])
     items = []
 
-    folders.each do |folder|
-      response = get("repos/#{fullname}/contents/#{CGI.escape(folder)}")
+    dirs.each do |dir|
+      response = get("repos/#{fullname}/contents/#{CGI.escape(dir)}")
       items += response.select { |item| item.type == 'file' && Post.valid_mime?(name: item.path) }
 
       dirs = response.select { |item| item.type == 'dir' }
       next if dirs.blank?
 
-      items += blobs(fullname: fullname, folders: dirs.map(&:path))
+      items += blobs(fullname: fullname, dirs: dirs.map(&:path))
     rescue FaradayClient::NotFound
       next
     end
@@ -97,7 +97,7 @@ class GithubAdapter < ApplicationAdapter
     nil
   end
 
-  def repository_folders(fullname:)
+  def repository_dirs(fullname:)
     tree(fullname: fullname)
       .select { |item| item.type == 'tree' }
       .map(&:path)

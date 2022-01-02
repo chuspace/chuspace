@@ -25,7 +25,7 @@ module ApplicationHelper
 
   def user_menu
     {
-      about: { label: 'About', tab: nil },
+      overview: { label: 'Overview', tab: nil },
       posts: { label: 'Posts', tab: :posts },
       blogs: { label: 'Blogs', tab: :blogs },
       settings: { label: 'Settings', tab: :settings }

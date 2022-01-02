@@ -30,7 +30,7 @@ class UsersController < ApplicationController
                when 'blogs' then 'users/blogs'
                when 'drafts' then 'users/drafts'
                when 'posts' then 'users/posts'
-    else 'users/about'
+    else 'users/overview'
     end
   end
 

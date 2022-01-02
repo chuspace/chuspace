@@ -24,7 +24,7 @@ class GitAdapter
     delete_repository_webhook
     update_repository
     repository_files
-    repository_folders
+    repository_dirs
     head_sha
     commits
     blob

@@ -9,10 +9,6 @@ en:
     error_notification:
       default_message: 'Please review the problems below:'
     placeholders:
-      storage:
-        description: What's this storage for?
-        endpoint: API endpoint for self-hosted or enterprise instances
-        access_token: Personal access token generated for selected provider
       user:
         email: Type your email
       post:
@@ -21,27 +17,22 @@ en:
     labels:
       defaults:
         password: 'Password'
-      storage:
-        default: Set this to be a default storage
       blog:
-        storage_id: Select a git storage
-        repo_posts_folder: Posts folder
-        repo_drafts_folder: Drafts folder (optional)
-        repo_assets_folder: Assets folder
-        repo_readme_path: Readme path
+        repo_posts_dir: Posts directory
+        repo_drafts_dir: Drafts directory (optional)
+        repo_assets_dir: Assets directory
+        repo_readme_path: Readme
       post:
         blob_path: File name
 
     hints:
-      storage:
-        access_token: the access token should have following scopes <pre>%{scopes}</pre>
       blog:
-        storage_id: Choose from the list of connected storages
         framework: static site generator framework to be used to generate blog from
         visibility: visibility of blog - public, internal or private
-        repo_posts_folder: your posts will be stored here
-        repo_drafts_folder: use a different folder for storing draft posts
-        repo_assets_folder: your images would be stored here
+        repo_posts_dir: your blog posts will be stored here
+        repo_drafts_dir: use a different directory for storing blog drafts
+        repo_assets_dir: your blog images would be stored here
+        personal: use to connect to your personal profile
       user:
         email: Your email is safe with us
         username: Username should be maximum 40 characters

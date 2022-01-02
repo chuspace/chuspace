@@ -16,7 +16,7 @@ module Commitable
   private
 
   def create_commit_on_git_remote
-    blob = blog.storage.adapter.create_or_update_blob(
+    blob = blog.git_provider.adapter.create_or_update_blob(
       fullname: blog.repo_fullname,
       path: post.blob_path,
       content: Base64.encode64(content),
