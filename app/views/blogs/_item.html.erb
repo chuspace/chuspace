@@ -12,7 +12,7 @@
           <div class='mt-8 text-sm'>
             <%= blog.topic_list %>
             updated <%= time_ago_in_words(blog.updated_at) %> ago
-            <%= content_tag :span, blog.storage.provider, class: 'badge badge-primary mr-2' %>
+            <%= content_tag :span, blog.git_provider.name, class: 'badge badge-primary mr-2' %>
           </div>
         <% end %>
       </div>

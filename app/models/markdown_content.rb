@@ -45,6 +45,6 @@ class MarkdownContent
 
   def parsed
     yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
-    FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(content)
+    FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(content || '')
   end
 end
