@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: 'blogs#connect', constraints: RootConstraint.new, as: :authenticated_root
+  root to: 'connect_blogs#index', constraints: RootConstraint.new, as: :authenticated_root
   root to: 'home#index'
 
   resources :auto_checks, only: :create
 
   scope :connect do
-    get '/blog', to: 'blogs#connect', as: :connect_blog
-    get '/blog/:git_provider', to: 'blogs#connect', as: :connect_blog_git_provider
-    get '/blog/:git_provider/:repo_fullname', to: 'blogs#connect', as: :connect_blog_git_provider_repo
+    resources :connect_blogs, path: 'blog', param: :git_provider, only: %i[index show] do
+      member do
+        get '/:repo_fullname', to: 'connect_blogs#finalise_settings', as: :repo
+        post '/:repo_fullname', to: 'connect_blogs#create', as: :create
+      end
+    end
   end
 
   resources :magic_logins, only: :index, path: 'magic'
@@ -49,7 +52,7 @@ Rails.application.routes.draw do
   end
 
   resources :users, path: '', except: :index, param: :username do
-    resources :blogs, path: '', except: :index, param: :permalink do
+    resources :blogs, path: '', only: :show, param: :permalink do
       resources :settings, only: %i[index show]
       resources :posts, path: '', except: :index, param: :permalink do
         resources :settings, only: %i[index show]

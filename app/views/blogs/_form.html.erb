@@ -1,0 +1,30 @@
+<%= turbo_frame_tag(blog) do %>
+  <%= simple_form_for(blog, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+    <div>
+      <%= form.input :name, required: true, input_html: { value: blog.repository.name } %>
+      <%= form.input :description, input_html: { value: blog.repository.description } %>
+    </div>
+
+    <div class='mt-8'>
+      <div class='border-b border-base-200'></div>
+      <%= form.input :repo_posts_dir, as: :select, collection: blog.repository.dirs, include_blank: 'Choose' %>
+      <%= form.input :repo_drafts_dir, as: :select, collection: blog.repository.dirs, include_blank: 'Choose' %>
+      <%= form.input :repo_assets_dir, as: :select, collection: blog.repository.dirs, include_blank: 'Choose' %>
+      <%= form.input(
+          :repo_readme_path,
+          as: :select,
+          collection: blog.repository.files,
+          include_blank: 'Choose'
+        )
+      %>
+    </div>
+
+    <div class='mt-8'>
+      <div class='border-b border-base-200'></div>
+      <%= form.input :visibility, as: :select, collection: Blog.visibilities %>
+      <%= form.input(:personal) %>
+    </div>
+
+    <%= form.button :submit, blog.persisted? ? 'Save' : 'Connect', class: "mt-12 btn btn-primary" %>
+  <% end %>
+<% end %>

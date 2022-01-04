@@ -19,7 +19,7 @@ module Commitable
     blob = blog.git_provider.adapter.create_or_update_blob(
       fullname: blog.repo_fullname,
       path: post.blob_path,
-      content: Base64.encode64(content),
+      content: Base64.encode64(blob_content),
       message: message.presence,
       sha: post.revisions&.current&.blob_sha,
       committer: GitConfig.new.committer,

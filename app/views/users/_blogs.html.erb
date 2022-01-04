@@ -1,5 +1,5 @@
-<% if @user.blogs.any? %>
-  <%= render 'blogs/list', blogs: @user.blogs %>
+<% if @user.blogs.except_personal.any? %>
+  <%= render 'blogs/list', blogs: @user.blogs.except_personal %>
 <% else %>
   <div class='text-center py-16'>
     <div class='text-secondary w-2/3 mx-auto'>
@@ -11,7 +11,7 @@
     </div>
 
     <div class='mt-8'>
-      <%= link_to 'Connect', connect_blog_path, class: 'btn btn-primary btn-sm', data: { turbo: :_top } %>
+      <%= link_to 'Connect', connect_blogs_path, class: 'btn btn-primary btn-sm', data: { turbo: :_top } %>
     </div>
   </div>
 <% end %>

@@ -2,7 +2,7 @@
   <% repositories.each do |repo| %>
     <div class='border-b last:border-b-0 p-4 border-base-200'>
       <div class='flex-1'>
-        <%= link_to(connect_blog_git_provider_repo_path(git_provider: provider.name, repo_fullname: repo.fullname), 'data-turbo-frame': :_top) do %>
+        <%= link_to(repo_connect_blog_path(git_provider: provider.name, repo_fullname: repo.fullname), 'data-turbo-frame': :_top) do %>
           <%= tag.h5 class: 'link link-primary link-hover' do %>
             <%= repo.fullname %>
             <%= content_tag :span, repo.visibility, class: 'badge badge-outline badge-secondary ml-2' %>

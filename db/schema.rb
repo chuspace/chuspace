@@ -14,6 +14,7 @@ ActiveRecord::Schema.define(version: 2022_01_03_180433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
+  enable_extension "hstore"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -68,7 +69,7 @@ ActiveRecord::Schema.define(version: 2022_01_03_180433) do
 
   create_table "blogs", force: :cascade do |t|
     t.string "name", null: false
-    t.string "permalink", null: false
+    t.citext "permalink", null: false
     t.text "description"
     t.bigint "owner_id", null: false
     t.bigint "git_provider_id", null: false
@@ -78,6 +79,7 @@ ActiveRecord::Schema.define(version: 2022_01_03_180433) do
     t.string "repo_drafts_dir"
     t.string "repo_assets_dir", null: false
     t.string "repo_readme_path", default: "README.md"
+    t.text "front_matter_attributes_map", default: "---\ntitle: 'title'\nsummary: 'summary'\ntopics: 'topics'\ndate: 'date'\n---\n", null: false
     t.datetime "repo_last_synced_at"
     t.bigint "repo_webhook_id"
     t.datetime "created_at", precision: 6, null: false
@@ -91,22 +93,18 @@ ActiveRecord::Schema.define(version: 2022_01_03_180433) do
   end
 
   create_table "editions", force: :cascade do |t|
-    t.text "title", null: false
-    t.text "summary", null: false
     t.bigint "publisher_id", null: false
     t.bigint "revision_id", null: false
     t.bigint "number", null: false
-    t.datetime "published_at", precision: 6, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["published_at"], name: "index_editions_on_published_at"
     t.index ["publisher_id"], name: "index_editions_on_publisher_id"
     t.index ["revision_id", "number"], name: "index_editions_on_revision_id_and_number", unique: true
     t.index ["revision_id"], name: "index_editions_on_revision_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
-    t.string "slug", null: false
+    t.citext "slug", null: false
     t.bigint "sluggable_id", null: false
     t.string "sluggable_type", limit: 50
     t.string "scope"
@@ -170,7 +168,7 @@ ActiveRecord::Schema.define(version: 2022_01_03_180433) do
   create_table "invites", force: :cascade do |t|
     t.bigint "sender_id", null: false
     t.bigint "blog_id", null: false
-    t.string "identifier", null: false
+    t.citext "identifier", null: false
     t.text "code"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -213,8 +211,10 @@ ActiveRecord::Schema.define(version: 2022_01_03_180433) do
     t.bigint "post_id", null: false
     t.bigint "committer_id"
     t.jsonb "fallback_committer", default: {}, null: false
+    t.jsonb "front_matter", default: {"date"=>"", "title"=>"", "topics"=>"", "summary"=>""}, null: false
     t.text "message", default: "", null: false
-    t.text "content", default: "", null: false
+    t.text "body", default: "", null: false
+    t.text "blob_content", default: "", null: false
     t.text "sha", null: false
     t.text "blob_sha"
     t.bigint "number", null: false
@@ -259,7 +259,7 @@ ActiveRecord::Schema.define(version: 2022_01_03_180433) do
     t.string "first_name", null: false
     t.string "last_name"
     t.citext "username", null: false
-    t.string "email", null: false
+    t.citext "email", null: false
     t.bigint "blogs_count", default: 0, null: false
     t.bigint "sign_in_count", default: 0
     t.datetime "current_sign_in_at"

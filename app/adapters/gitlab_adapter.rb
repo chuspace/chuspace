@@ -33,7 +33,7 @@ class GitlabAdapter < ApplicationAdapter
       response = get "projects/#{CGI.escape(fullname)}/repository/tree", { path: path }
       case response
       when Array
-        items += response.select { |item| item.type == 'file' && Post.valid_mime?(name: item.path) }
+        items += response.select { |item| item.type == 'file' && MarkdownConfig.valid?(name: item.path) }
         dirs = response.select { |item| item.type == 'dir' }
         next unless dirs.any?
 

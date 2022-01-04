@@ -7,10 +7,13 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
     create_table :revisions do |t|
       t.references :post, null: false, foreign_key: true
       t.references :committer, foreign_key: { to_table: :users }
+
       t.jsonb :fallback_committer, null: false, default: {}
+      t.jsonb :front_matter, null: false, default: MarkdownConfig.default_front_matter
 
       t.text :message, null: false, default: ''
-      t.text :content, null: false, default: ''
+      t.text :body, null: false, default: ''
+      t.text :blob_content, null: false, default: ''
       t.text :sha, null: false
       t.text :blob_sha
 

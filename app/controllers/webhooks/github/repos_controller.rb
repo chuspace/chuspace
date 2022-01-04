@@ -53,7 +53,12 @@ module Webhooks
 
       def update_post(blob_path)
         post = @blog.posts.find_by(blob_path: blob_path)
-        create_revision(post: post)
+
+        if post
+          create_revision(post: post)
+        else
+          create_post(blob_path)
+        end
       end
 
       def update_readme
@@ -70,7 +75,8 @@ module Webhooks
             originator: post.blog.git_provider.name,
             fallback_committer: @commit['author'] || @commit['committer'],
             sha: @commit['id'],
-            content: Base64.decode64(git_blob.content)
+            blob_sha: git_blob.sha,
+            blob_content: Base64.decode64(git_blob.content)
           )
         end
       end
@@ -80,7 +86,7 @@ module Webhooks
       end
 
       def find_author
-        @author = @blog.members.joins(:user).find_by(users: { username: @commit['author']['login'] })
+        @author = @blog.members.find_by(username: @commit['author']['login'])
       end
 
       def set_commit

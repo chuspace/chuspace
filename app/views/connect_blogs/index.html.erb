@@ -3,7 +3,7 @@
   <p class='text-secondary mt-2'>Simple three easy steps to get started</p>
 
   <div class="grid grid-cols-3 gap-4 my-8 w-full">
-    <%= link_to 'Pick your Git Provider', connect_blog_path, class: "tab tab-bordered tab-active" %>
+    <%= link_to 'Pick your Git Provider', connect_blogs_path, class: "tab tab-bordered tab-active" %>
     <a class="tab tab-bordered">Pick a repository</a>
     <a class="tab tab-bordered ">Blog settings</a>
   </div>
@@ -28,7 +28,7 @@
           </div>
 
           <% if git_provider.connected? %>
-            <%= link_to 'Choose', connect_blog_git_provider_path(git_provider: git_provider.name), class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Choose', connect_blog_path(git_provider: git_provider.name), class: 'btn btn-primary btn-sm' %>
           <% else %>
             <%= button_to(
                 'Connect',

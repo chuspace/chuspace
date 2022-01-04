@@ -1,7 +1,7 @@
 <div class='relative h-full'>
   <div class='flex h-full'>
     <div class='profile sm:w-1/4 w-full min-h-full'>
-      <%= image_tag @user.avatar_url(variant: :thumb), class: 'mask mask-circle' %>
+      <%= image_tag @user.avatar_url(variant: :profile), class: 'mask mask-circle' %>
       <h4 class='mt-4'><%= @user.name %></h4>
       <h5 class='text-secondary font-normal'><%= @user.username %></h5>
       <ul class='mt-8'>

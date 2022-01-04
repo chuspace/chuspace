@@ -13,14 +13,8 @@ en:
               blank: 'Your full name is required'
         blog:
           attributes:
-            default:
-              one_default_blog_allowed: one default blog allowed
-        storage:
-          attributes:
-            default:
-              one_default_storage_allowed: one default storage allowed
-            provider:
-              one_provider_per_user: this storage provider already exists
+            personal:
+              one_personal_blog_allowed: one personal blog allowed
   home:
     marketing:
       heading: Defragging dev blogs

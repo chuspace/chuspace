@@ -1,6 +1,11 @@
+<h5 class='border-b border-base-200 pb-2'>Basics</h5>
 <%= simple_form_for(Current.user) do |form| %>
+  <%= form.input :avatar %>
   <%= form.input :name %>
   <%= form.input :username %>
   <%= form.input :email %>
   <%= form.button :submit, 'Save', class: 'mt-8 btn btn-primary' %>
 <% end %>
+
+<h5 class='border-b border-base-200 pb-2 mt-8'>Personal blog</h5>
+<%= render 'blogs/form', blog: Current.user.personal_blog, url: user_blog_settings_path(Current.user, Current.user.personal_blog) %>

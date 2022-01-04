@@ -4,13 +4,11 @@ class CreateUsers < ActiveRecord::Migration[6.0]
   disable_ddl_transaction!
 
   def change
-    enable_extension 'citext'
-
     create_table :users do |t|
       t.string :first_name, null: false
       t.string :last_name
       t.citext :username, null: false
-      t.string :email, null: false
+      t.citext :email, null: false
 
       # track associations
       t.bigint :blogs_count, null: false, default: 0

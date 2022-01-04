@@ -3,16 +3,6 @@
 class Post < ApplicationRecord
   include Sourceable
 
-  VALID_MIME = 'text/markdown'.freeze
-  DEFAULT_FRONT_MATTER = <<~YAML
-    ---
-    title: Untitled
-    summary:
-    topics:
-    published_at:
-    ---
-  YAML
-
   belongs_to :blog, touch: true
   belongs_to :author, class_name: 'User', touch: true
   has_many   :revisions, dependent: :destroy, inverse_of: :post
@@ -38,8 +28,8 @@ class Post < ApplicationRecord
       joins(:revisions).distinct(:revision_id)
     end
 
-    def valid_mime?(name:)
-      %w[.md .markdown .mdx].include?(File.extname(name))
+    def valid_blob?(name:)
+      MarkdownConfig.new.extensions.include?(File.extname(name))
     end
   end
 

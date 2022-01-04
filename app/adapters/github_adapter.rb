@@ -10,7 +10,7 @@ class GithubAdapter < ApplicationAdapter
 
     dirs.each do |dir|
       response = get("repos/#{fullname}/contents/#{CGI.escape(dir)}")
-      items += response.select { |item| item.type == 'file' && Post.valid_mime?(name: item.path) }
+      items += response.select { |item| item.type == 'file' && MarkdownConfig.valid?(name: item.path) }
 
       dirs = response.select { |item| item.type == 'dir' }
       next if dirs.blank?
@@ -108,7 +108,7 @@ class GithubAdapter < ApplicationAdapter
 
   def repository_files(fullname:)
     tree(fullname: fullname)
-      .select { |item| item.type == 'blob' && Post.valid_mime?(name: item.path) }
+      .select { |item| item.type == 'blob' && MarkdownConfig.valid?(name: item.path) }
       .map(&:path)
       .sort
   rescue FaradayClient::NotFound
