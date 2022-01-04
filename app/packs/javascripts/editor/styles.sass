@@ -14,10 +14,10 @@
 
 
   &.editable
-    .title__empty, .summary__empty, .body__empty
+    .title-empty, .summary-empty, .body-empty
       &::before
-        @apply absolute pointer-events-none float-none h-auto
-        content: attr(data-empty-text)
+        @apply absolute pointer-events-none float-none h-auto text-base-300
+        content: attr(data-text)
 
     .heading, .title, .summary
       @apply relative

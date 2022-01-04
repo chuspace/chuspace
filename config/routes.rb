@@ -51,10 +51,10 @@ Rails.application.routes.draw do
   resources :users, path: '', except: :index, param: :username do
     resources :blogs, path: '', except: :index, param: :permalink do
       resources :settings, only: %i[index show]
-      resources :posts, path: '', except: :index do
+      resources :posts, path: '', except: :index, param: :permalink do
         resources :settings, only: %i[index show]
-        resources :revisions, only: %i[index new]
-        resources :editions, only: %i[index new]
+        resources :revisions, only: %i[index new create]
+        resources :editions, only: %i[index new create]
       end
     end
   end

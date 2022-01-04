@@ -8,12 +8,11 @@ module Immutable
     before_save :check_immutability
   end
 
-  def update(*)
-    raise_immutable_error
+  def update_column(*)
+    self.class.raise_immutable_error
   end
 
-  alias update! update
-  alias update_column update
+  alias update_columns update_column
 
   class_methods do
     def update_all(*)

@@ -4,18 +4,18 @@ class RevisionsController < ApplicationController
   before_action :find_user, :find_blog, :find_post
   layout false
 
-  def new
-    @revision = @post.revisions.build(
-      author: Current.user,
-      blog: @blog
-    )
-  end
-
   def create
     revision = @post.revisions.create(
-      author: Current.user,
-      blog: @blog,
-      **revision_params
+      committer: Current.user,
+      originator: :chuspace,
+      message: revision_params[:message],
+      content: <<~STR
+        ---
+        #{@post.revisions.current.front_matter_str(title: revision_params[:title])}
+        ---
+
+        #{revision_params[:content]}
+      STR
     )
 
     redirect_to edit_user_blog_post_path(@user, @blog, revision)
@@ -36,6 +36,6 @@ class RevisionsController < ApplicationController
   end
 
   def revision_params
-    params.require(:revision).permit(:message, :content)
+    params.require(:revision).permit(:message, :title, :content)
   end
 end

@@ -1,17 +1,18 @@
 <div class='sm:w-2/3 mx-auto w-full chu-editor editable'>
   <%= simple_form_for @post.revisions.new, url: user_blog_post_revisions_path(@post.blog.owner, @post.blog, @post.revisions.current, @post.revisions.new) do |form| %>
-    <div class='title' data-text='title'>
+    <div class='title' data-target='chu-editor.title'>
       <%= form.input :title, as: :string, label: false, wrapper: false, input_html: { class: 'w-full p-0 m-0 border-0 focus:outline-none focus:shadow-none text-4xl', value: @post.revisions.current&.title, placeholder: 'Title' } %>
     </div>
 
-    <div class='summary' data-text='summary'>
+    <div class='summary' data-target='chu-editor.summary'>
       <%= form.input :summary, as: :text, label: false, wrapper: false, input_html: { rows: 2, class: 'w-full p-0 m-0 border-0 focus:outline-none focus:shadow-none text-xl mt-2', value: @post.revisions.current&.summary, placeholder: 'Type summary' } %>
     </div>
 
-    <chu-editor
+    <div
       class='block body mt-8'
       spellcheck="false"
       data-text='content'
+      data-target='chu-editor.content'
     >
       <%= form.input :content, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: @post.revisions.current&.body } %>
 
@@ -26,6 +27,6 @@
           </div>
         </div>
       </div>
-    </chu-editor>
+    </div>
   <% end %>
 </div>

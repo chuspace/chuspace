@@ -32,11 +32,21 @@ class MarkdownContent
   end
 
   def title
-    front_matter.dig('title') || ast.first&.to_plaintext || 'Untitled'
+    front_matter.dig('title') || 'Untitled'
   end
 
   def topics
     front_matter.dig('topics') || front_matter.dig('categories') || front_matter.dig('tags')
+  end
+
+  def front_matter_str(title: front_matter.dig('title'))
+    default_frontmatter = FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(Post::DEFAULT_FRONT_MATTER).front_matter
+    front_matter = {}.merge(default_frontmatter).merge(front_matter || {}).merge(title: title)
+    str = ''
+    front_matter.each do |key, value|
+      str += "#{key}: #{value}\n"
+    end
+    str
   end
 
   delegate :front_matter, to: :parsed
@@ -44,7 +54,10 @@ class MarkdownContent
   private
 
   def parsed
-    yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
     FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(content || '')
+  end
+
+  def yaml_loader
+    FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
   end
 end

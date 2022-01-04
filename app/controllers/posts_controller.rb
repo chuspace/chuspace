@@ -25,7 +25,7 @@ class PostsController < ApplicationController
   end
 
   def edit
-    @post = @blog.posts.joins(:revisions).find_by(revisions: { sha: params[:id] })
+    @post = @blog.posts.joins(:revisions).find_by(revisions: { sha: params[:permalink] })
   end
 
   def show

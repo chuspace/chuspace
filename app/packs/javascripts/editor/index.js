@@ -75,8 +75,6 @@ export default class Editor {
     this.view = this.createView()
     this.view.props.commands = this.manager.commands
     this.setActiveNodesAndMarks()
-
-    if (this.options.autoFocus) this.focus()
   }
 
   get plugins() {
@@ -171,6 +169,8 @@ export default class Editor {
   }
 
   focus() {
+    const tr = this.state.tr.setSelection(Selection.atEnd(this.state.doc))
+    this.view.dispatch(tr)
     this.view.focus()
   }
 

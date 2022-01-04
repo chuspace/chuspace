@@ -34,6 +34,7 @@ class SyncRepositoryContentsJob < ApplicationJob
           committer: user,
           originator: post.blog.git_provider.name,
           fallback_committer: git_commit.commit.author.to_h,
+          blob_sha: git_blob.sha,
           sha: git_commit.sha,
           content: Base64.decode64(git_blob.content || '')
         )

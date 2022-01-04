@@ -2,11 +2,13 @@
 <html lang='en' class='h-full'>
   <%= render 'layouts/head' %>
   <body class="flex flex-col h-full">
-    <%= render 'layouts/flash' %>
-    <%= render 'posts/header', post: @post %>
+    <chu-editor data-autofocus='true'>
+      <%= render 'layouts/flash' %>
+      <%= render 'posts/header', post: @post %>
 
-    <section class="container flex-1 pt-24">
-      <%= yield %>
-    </section>
+      <section class="container flex-1 pt-24">
+        <%= yield %>
+      </section>
+    </chu-editor>
   </body>
 </html>

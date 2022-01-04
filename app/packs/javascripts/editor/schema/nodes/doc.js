@@ -18,12 +18,6 @@ export default class Doc extends Node {
       case 'comment':
         content = 'block+'
         break
-      case 'title':
-        content = 'block'
-        break
-      case 'summary':
-        content = 'summary'
-        break
       case 'plain':
         content = 'text+'
         break

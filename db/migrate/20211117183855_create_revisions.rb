@@ -12,6 +12,7 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
       t.text :message, null: false, default: ''
       t.text :content, null: false, default: ''
       t.text :sha, null: false
+      t.text :blob_sha
 
       t.bigint :number, null: false
 

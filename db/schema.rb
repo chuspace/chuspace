@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_11_122552) do
+ActiveRecord::Schema.define(version: 2022_01_03_180433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -216,6 +216,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.text "message", default: "", null: false
     t.text "content", default: "", null: false
     t.text "sha", null: false
+    t.text "blob_sha"
     t.bigint "number", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -260,8 +261,6 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.citext "username", null: false
     t.string "email", null: false
     t.bigint "blogs_count", default: 0, null: false
-    t.bigint "storages_count", default: 0, null: false
-    t.bigint "templates_count", default: 0, null: false
     t.bigint "sign_in_count", default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"

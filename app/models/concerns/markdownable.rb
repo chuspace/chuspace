@@ -4,7 +4,7 @@ module Markdownable
   extend ActiveSupport::Concern
 
   included do
-    delegate :title, :summary, :published_at, :topics, :html, :body, to: :parsed_content
+    delegate :title, :summary, :published_at, :topics, :html, :body, :front_matter_str, to: :parsed_content
   end
 
   def parsed_content

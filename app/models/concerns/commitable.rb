@@ -21,7 +21,7 @@ module Commitable
       path: post.blob_path,
       content: Base64.encode64(content),
       message: message.presence,
-      sha: nil,
+      sha: post.revisions&.current&.blob_sha,
       committer: GitConfig.new.committer,
       author: {
         name: author.name,
@@ -31,6 +31,7 @@ module Commitable
     )
 
     self.sha = blob.commit.sha
+    self.blob_sha = blob.content.sha
     self.message = blob.commit.message
   end
 end

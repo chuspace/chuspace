@@ -24,18 +24,6 @@ export const filterElementsBy = (elements: [], type: string) => {
     )
 }
 
-export const filterElementsByName = (elements: [], name: string) => {
-  return elements
-    .filter((element) => element.name === name)
-    .reduce(
-      (nodes, { name, schema }) => ({
-        ...nodes,
-        [name]: schema
-      }),
-      {}
-    )
-}
-
 export default class SchemaManager {
   elements: []
   schema: Schema
@@ -55,34 +43,6 @@ export default class SchemaManager {
 
     let nodeElements = filterElementsBy(this.elements, 'node')
     let markElements = filterElementsBy(this.elements, 'mark')
-
-    switch (editor.options.appearance) {
-      case 'title':
-        nodeElements = {
-          ...filterElementsByName(this.elements, 'doc'),
-          ...filterElementsByName(this.elements, 'text'),
-          ...filterElementsByName(this.elements, 'paragraph'),
-          ...filterElementsByName(this.elements, 'heading'),
-          ...filterElementsBy(this.elements, 'title')
-        }
-
-        markElements = []
-        break
-      case 'summary':
-        nodeElements = {
-          ...filterElementsByName(this.elements, 'doc'),
-          ...filterElementsByName(this.elements, 'text'),
-          ...filterElementsByName(this.elements, 'paragraph'),
-          ...filterElementsByName(this.elements, 'heading'),
-          ...filterElementsBy(this.elements, 'summary')
-        }
-
-        markElements = []
-        break
-
-      default:
-        break
-    }
 
     this.schema = new Schema({
       nodes: nodeElements,
