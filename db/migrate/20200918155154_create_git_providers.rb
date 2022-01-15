@@ -11,8 +11,6 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
       t.text :refresh_access_token
       t.text :endpoint
 
-      t.boolean :self_hosted, default: false, null:  false
-
       t.references :user, null: false, foreign_key: true
 
       t.datetime :expires_at
@@ -22,6 +20,6 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
 
     add_column :git_providers, :name, :git_provider_enum_type, null: false
 
-    add_index :git_providers, %i[user_id name], unique: true, algorithm: :concurrently
+    add_index :git_providers, %i[user_id name], unique: true, name: :one_provider_per_user_index, algorithm: :concurrently
   end
 end

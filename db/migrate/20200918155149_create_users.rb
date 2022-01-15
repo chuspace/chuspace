@@ -11,7 +11,7 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.citext :email, null: false
 
       # track associations
-      t.bigint :blogs_count, null: false, default: 0
+      t.bigint :publications_count, null: false, default: 0
 
       # Track logins
       t.bigint :sign_in_count, default: 0

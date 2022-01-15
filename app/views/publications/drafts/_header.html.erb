@@ -1,0 +1,19 @@
+<flexible-header>
+  <header data-target='flexible-header.element' class='header'>
+    <nav class='container flex justify-between items-center py-2'>
+      <%= link_to root_path do %>
+        <h1 class='font-bold text-3xl lowercase inline-block font-monospace'>Chu</h1>
+      <% end %>
+
+      <div class='flex items-center flex-1'>
+        <div class='divider divider-vertical'></div>
+        <%= render 'publications/drafts/breadcrumbs', draft: @draft, publication: @publication %>
+      </div>
+
+      <div class='flex items-center'>
+        <%= render 'publications/drafts/actions' %>
+        <%= render 'layouts/user' %>
+      </div>
+    </nav>
+  </header>
+</flexible-header>

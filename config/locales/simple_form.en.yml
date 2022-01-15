@@ -11,37 +11,27 @@ en:
     placeholders:
       user:
         email: Type your email
-      post:
-        blob_path: read-about-chuspace.md
 
     labels:
       defaults:
         password: 'Password'
-      blog:
-        repo_posts_dir: Posts directory
-        repo_drafts_dir: Drafts directory (optional)
-        repo_assets_dir: Assets directory
-        repo_readme_path: Readme
-      post:
-        blob_path: File name
+      publication:
+        repo:
+          posts_folder: Posts/Drafts folder
+          drafts_folder: Drafts folder (optional)
+          assets_folder: Assets folder
+          readme_path: Readme
 
     hints:
-      blog:
-        framework: static site generator framework to be used to generate blog from
-        visibility: visibility of blog - public, internal or private
-        repo_posts_dir: your blog posts will be stored here
-        repo_drafts_dir: use a different directory for storing blog drafts
-        repo_assets_dir: your blog images would be stored here
-        personal: use to connect to your personal profile
+      publication:
+        framework: static site generator framework to be used to generate publication from
+        visibility: visibility of publication - public, internal or private
+        repo:
+          posts_folder: choose folder where your publication posts are stored in markdown format
+          drafts_folder: optional drafts folder in case it's stored separately
+          assets_folder: choose where to store images for your publication posts
+          readme_path: select markdown file to fetch your publication about section
+
       user:
         email: Your email is safe with us
         username: Username should be maximum 40 characters
-      post:
-        blob_path: filename should end with .md extension
-
-    include_blanks:
-      defaults:
-        age: 'Rather not say'
-    prompts:
-      defaults:
-        age: 'Select your age'

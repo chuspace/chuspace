@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Invite < ApplicationRecord
-  belongs_to :blog
+  belongs_to :publication
   belongs_to :sender, class_name: 'User'
 
   validates :identifier, :role, presence: true
@@ -29,7 +29,7 @@ class Invite < ApplicationRecord
   private
 
   def check_if_recipient_can_be_invited
-    errors.add(:identifier, 'Already a member') if blog.members.include?(recipient)
+    errors.add(:identifier, 'Already a member') if publication.members.include?(recipient)
   end
 
   def send_email

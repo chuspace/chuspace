@@ -1,0 +1,15 @@
+<div class="text-sm breadcrumbs">
+  <ul>
+    <li>
+      <%= link_to publication.owner.username, user_path(publication.owner), class: 'link link-primary' %>
+    </li>
+    <% unless publication.personal? %>
+      <li>
+        <%= link_to publication.permalink, user_publication_path(publication.owner, publication), class: 'link link-primary' %>
+      </li>
+    <% end %>
+    <li>
+      <%= content_tag :span, publication.repo.posts_folder, class: 'text text-secondary' %>
+    </li>
+  </ul>
+</div>

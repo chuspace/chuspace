@@ -4,7 +4,7 @@
   <body class="flex flex-col h-full">
     <chu-editor data-autofocus='true'>
       <%= render 'layouts/flash' %>
-      <%= render 'posts/header', post: @post %>
+      <%= render 'publications/drafts/header', draft: @draft %>
 
       <section class="container flex-1 pt-24">
         <%= yield %>

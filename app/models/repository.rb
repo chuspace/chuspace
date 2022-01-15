@@ -1,52 +1,62 @@
 # frozen_string_literal: true
 
 class Repository
-  attr_reader :blog, :fullname
-  delegate :name, :description, :owner, :default_branch, :ssh_url, :html_url, to: :instance, allow_nil: true
+  include ActiveModel::API
 
-  def initialize(blog:, fullname:)
-    @blog = blog
-    @fullname = fullname
+  attr_accessor :publication, :git_adapter
+  validates :publication, presence: true
+  delegate :name, :description, :visibility, to: :instance
+
+  def self.for(publication:, ref: 'HEAD')
+    git_adapter = publication.git_provider.adapter.apply_repository_scope(repo_fullname: publication.repo.fullname, ref: ref)
+    new(publication: publication, git_adapter: git_adapter)
   end
 
-  def blob(path:, ref: nil)
-    @blob ||= blog.git_provider.adapter.blob(fullname: fullname, path: path, ref: ref)
-  end
-
-  def post_blobs
-    @post_blobs ||= blog.git_provider.adapter.blobs(fullname: fullname, dirs: blog.posts_dirs)
-  end
-
-  def asset_blobs
-    @asset_blobs ||= blog.git_provider.adapter.blobs(fullname: fullname, dirs: blog.assets_dirs)
+  def assets
+    @assets ||= git_adapter.blobs(path: publication.repo.assets_folder)
   end
 
   def commits(path: nil)
-    @commits ||= blog.git_provider.adapter.commits(fullname: fullname, path: path)
+    @commits ||= git_adapter.commits(path: path)
   end
 
   def commit(sha:)
-    @commit ||= blog.git_provider.adapter.commit(fullname: fullname, sha: sha)
+    @commit ||= git_adapter.commit(sha: sha)
+  end
+
+  def draft(path:)
+    blob = git_adapter.blob(path: path)
+    @draft ||= Draft.for(front_matter_settings: publication.front_matter, blob: blob)
+  end
+
+  def drafts(path: nil)
+    @drafts ||= git_adapter.blobs(path: path || publication.repo.posts_folder).each do |blob|
+      Draft.for(front_matter_settings: publication.front_matter, blob: blob)
+    end
   end
 
   def files
-    @files ||= blog.git_provider.adapter.repository_files(fullname: fullname)
+    @files ||= git_adapter.repository_files
   end
 
-  def dirs
-    @dirs ||= blog.git_provider.adapter.repository_dirs(fullname: fullname)
+  def folders
+    @folders ||= git_adapter.repository_folders
   end
 
   def webhooks
-    @webhooks ||= blog.git_provider.adapter.webhooks(fullname: fullname)
+    @webhooks ||= git_adapter.webhooks
   end
 
   def readme
-    content = blog.git_provider.adapter.blob(fullname: fullname, path: blog.repo_readme_path).content
+    content = git_adapter.blob(path: publication.repo.readme_path).content
     @readme ||= Base64.decode64(content).force_encoding('UTF-8') if content
   end
 
+  def readme_html
+    MarkdownRenderer.new.render(CommonMarker.render_doc(readme)).html_safe
+  end
+
   def instance
-    @instance ||= blog.git_provider.adapter.repository(fullname: fullname)
+    @instance ||= git_adapter.repository
   end
 end

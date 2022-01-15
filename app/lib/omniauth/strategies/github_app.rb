@@ -35,7 +35,7 @@ module OmniAuth
           'image' => raw_info['avatar_url'],
           'urls' => {
             'GitHub' => raw_info['html_url'],
-            'Blog' => raw_info['blog'],
+            'Blog' => raw_info['publication'],
           },
         }
       end

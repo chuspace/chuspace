@@ -1,17 +1,17 @@
 <div class='sm:w-2/3 mx-auto w-full'>
   <h3>Create a new post</h3>
   <p class='text-sm mt-2 text-secondary'>
-    The post will be persisted into the connected blog
+    The post will be persisted into the connected publication
     repository draft directory.
   </p>
 
   <div class="text-sm breadcrumbs">
     <ul>
       <li>
-        <%= link_to @post.blog.owner.username, user_path(@post.blog.owner), class: 'link link-primary' %>
+        <%= link_to @post.publication.owner.username, user_path(@post.publication.owner), class: 'link link-primary' %>
       </li>
       <li>
-        <%= link_to @post.blog.repository.fullname, user_blog_path(@post.blog.owner, @post.blog), class: 'link link-primary' %>
+        <%= link_to @post.publication.repository.fullname, user_publication_path(@post.publication.owner, @post.publication), class: 'link link-primary' %>
       </li>
     </ul>
   </div>

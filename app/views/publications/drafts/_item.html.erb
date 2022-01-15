@@ -1,0 +1,11 @@
+<% cache draft do %>
+  <article class='border-b last:border-b-0 border-base-200 p-4'>
+    <div class='flex-1'>
+      <% path = draft.type == 'file' ? user_publication_edit_draft_path(publication.owner, publication, path: draft.path) : user_publication_draft_path(publication.owner, blog, path: draft.path) %>
+      <%= link_to path do %>
+        <%= tag.h5 draft.name, class: 'link link-primary link-hover mt-1' %>
+        <%= tag.p draft.path, class: 'text-sm text-secondary mt-1 sm:w-2/3 w-full' %>
+      <% end %>
+    </div>
+  </article>
+<% end %>

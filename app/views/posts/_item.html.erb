@@ -7,7 +7,10 @@
           <%= tag.p post.revisions.current.summary, class: 'text-sm text-secondary mt-1 sm:w-2/3 w-full' %>
         <% end %>
 
-        <%= tag.span post.status, class: 'badge badge-primary mr-2 mt-2' %>
+        <div class='mt-4'>
+          <%= tag.span post.status, class: 'badge badge-primary mr-2 mt-2' %>
+          <%= tag.time post.revisions.current.date, class: 'text-sm text-secondary' %>
+        </div>
       </div>
     <% end %>
   </article>

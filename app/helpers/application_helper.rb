@@ -26,8 +26,9 @@ module ApplicationHelper
   def user_menu
     {
       overview: { label: 'Overview', tab: nil },
+      publications: { label: 'Publications', tab: :publications },
       posts: { label: 'Posts', tab: :posts },
-      blogs: { label: 'Blogs', tab: :blogs },
+      drafts: { label: 'Drafts', tab: :drafts },
       settings: { label: 'Settings', tab: :settings }
     }.freeze
   end

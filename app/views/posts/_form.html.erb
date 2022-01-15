@@ -1,8 +1,8 @@
-<%= simple_form_for(post, url: user_blog_posts_path(post.blog.owner, post.blog, post), html: { data: { "turbo-frame": '_top' } }) do |form| %>
+<%= simple_form_for(post, url: user_publication_posts_path(post.publication.owner, post.publication, post), html: { data: { "turbo-frame": '_top' } }) do |form| %>
   <%= form.label :blob_path, class: 'mb-2 block' %>
   <div class="form-control w-full">
     <div class="input-group input-group-xs w-full">
-      <span><%= post.blog.repo_drafts_or_posts_dir %></span>
+      <span><%= post.publication.repo_drafts_or_posts_folder %></span>
       <%= form.input :blob_path, label: false, hint: false, error: false, wrapper: false, input_html: { class: 'w-full' } %>
     </div>
   </div>

@@ -6,7 +6,7 @@ class RolesConfig < ApplicationConfig
     editor: :editor,
     manager: :manager,
     owner: :owner,
-    subscriber: :subscriber
+    member: :member
   )
 
   def self.to_enum

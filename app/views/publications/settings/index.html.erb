@@ -1,0 +1,8 @@
+<%= render 'publications/layout' do %>
+  <div class='grid grid-cols-4 gap-8'>
+    <%= render 'sidebar', publication: @publication %>
+    <section class='col-span-3'>
+      <%= render 'publications/form', publication: @publication, url: user_publication_setting_path(@user, @publication, id: :profile) %>
+    </section>
+  </div>
+<% end %>

@@ -1,0 +1,18 @@
+<%= turbo_frame_tag(dom_id(provider, :repositories), 'data-target': 'details-menu-form.loader') do %>
+  <div class='card bordered'>
+    <% repositories.each do |repo| %>
+      <div class='border-b last:border-b-0 p-4 border-base-200'>
+        <div class='flex-1'>
+          <% new_publication_path = publication.personal? ? new_connect_personal_publication_path(provider, repo_fullname: repo.fullname) : new_connect_other_publication_path(provider, repo_fullname: repo.fullname)%>
+          <%= link_to(new_publication_path, 'data-turbo-frame': :_top) do %>
+            <%= tag.h5 class: 'link link-primary link-hover' do %>
+              <%= repo.fullname %>
+              <%= content_tag :span, repo.visibility, class: 'badge badge-outline badge-secondary ml-2' %>
+            <% end %>
+            <%= tag.div repo.description, class: 'text-secondary mt-1' %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

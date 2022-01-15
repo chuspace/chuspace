@@ -1,0 +1,25 @@
+<%= render 'layout' do %>
+  <div class="grid grid-cols-3 gap-4 my-8 w-full">
+    <%= link_to 'Connect to Git provider', connect_other_publications_path, class: "tab tab-bordered" %>
+    <a class="tab tab-bordered tab-active">Choose a Git repository</a>
+    <a class="tab tab-bordered ">Content setting</a>
+  </div>
+
+  <h4>Choose a Git repository</h4>
+  <div class='mt-2 text-secondary'>
+    <p>
+      Choose your other publication Git repository hosted on <%= @git_provider.name.titlecase %>.
+    </p>
+    <p>
+      The choosen Git repository must store contents in markdown format.
+      <code class='text-sm'>Example: Jekyll or Hugo</code>
+    </p>
+  </div>
+
+  <%= render('connect/shared/choose_repository', git_provider_user: @git_provider_user, git_provider: @git_provider, publication: @publication) %>
+
+  <div class='mt-8 flex items-center'>
+    <span>Can't see your repo here?</span>
+    <%= button_to 'Configure repository', '/auth/github_app', class: 'link link-primary ml-2', data: { turbo: false } %>
+  </div>
+<% end %>

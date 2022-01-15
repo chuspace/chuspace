@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.0.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.0'
+gem 'rails', '~> 7.x'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 1.x'
@@ -19,6 +19,9 @@ gem 'name_of_person'
 gem 'good_job'
 gem 'mini_mime'
 gem 'wicked'
+
+# JSONB attributes
+gem 'attr_json'
 
 # Cache
 gem 'hiredis'
@@ -96,6 +99,10 @@ gem 'inline_svg'
 
 # App configs
 gem 'anyway_config'
+
+# Graphql API
+gem 'graphql'
+gem 'graphql-client'
 
 group :production do
   # Resource monitoring

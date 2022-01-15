@@ -6,14 +6,12 @@ class GitStorageConfig < ApplicationConfig
   attr_config(
     github: {
       label: 'GitHub.com',
-      self_hosted: false,
       provider: :github,
       endpoint: 'https://api.github.com',
       scopes: 'repo,admin:repo_hook'
     },
     gitlab: {
       label: 'GitLab.com',
-      self_hosted: false,
       provider: :gitlab,
       endpoint: 'https://gitlab.com/api/v4',
       scopes: 'api,read_repository,write_repository'

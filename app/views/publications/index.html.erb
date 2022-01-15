@@ -1,0 +1,16 @@
+<div class='sm:w-2/3 mx-auto'>
+  <h3>Blogs</h1>
+  <div class='mt-4 mb-8 intro'>
+    <p>
+      Chuspace publications are powered by git repositories connected to one of the
+      git storage providers.
+      You can either connect an existing publication repository from your git storage
+      providers or add a new one.
+    </p>
+    <p class='mt-2'>Adding a new publication is only possible through Chuspace.com git storage</p>
+  </div>
+
+  <%= turbo_frame_tag :publications do %>
+    <%= render 'publications/list', publications: @user.publications %>
+  <% end %>
+</div>

@@ -2,10 +2,10 @@
 
 class AssetsController < ApplicationController
   include ActiveStorage::Streaming
-  before_action :find_blog
+  before_action :find_publication
 
   def index
-    @blob = @blog.repository_blob(path: CGI.unescape(params[:path]))
+    @blob = @publication.repository_blob(path: CGI.unescape(params[:path]))
 
     http_cache_forever(public: true) do
       send_blob_stream Base64.decode64(@blob.content), disposition: params[:disposition]
@@ -14,7 +14,7 @@ class AssetsController < ApplicationController
 
   private
 
-  def find_blog
-    @blog = Blog.friendly.find(params[:blog_id])
+  def find_publication
+    @publication = Blog.friendly.find(params[:publication_id])
   end
 end

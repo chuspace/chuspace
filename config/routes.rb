@@ -1,16 +1,35 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: 'connect_blogs#index', constraints: RootConstraint.new, as: :authenticated_root
-  root to: 'home#index'
+  root to: 'home#index', constraints: RootConstraint.new, as: :authenticated_root
+  root to: 'welcome#index'
 
   resources :auto_checks, only: :create
 
-  scope :connect do
-    resources :connect_blogs, path: 'blog', param: :git_provider, only: %i[index show] do
+  namespace :connect do
+    root to: 'home#index'
+
+    resources :personal_publications, path: 'personal', param: :git_provider, only: %i[index show create] do
       member do
-        get '/:repo_fullname', to: 'connect_blogs#finalise_settings', as: :repo
-        post '/:repo_fullname', to: 'connect_blogs#create', as: :create
+        get :repos
+        get :users
+      end
+
+      member do
+        get '/*repo_fullname', to: 'personal_publications#new', as: :new
+        post '/*repo_fullname', to: 'personal_publications#create', as: :create
+      end
+    end
+
+    resources :other_publications, path: 'other', param: :git_provider, only: %i[index show create] do
+      member do
+        get :repos
+        get :users
+      end
+
+      member do
+        get '/*repo_fullname', to: 'other_publications#new', as: :new
+        post '/*repo_fullname', to: 'other_publications#create', as: :create
       end
     end
   end
@@ -52,8 +71,22 @@ Rails.application.routes.draw do
   end
 
   resources :users, path: '', except: :index, param: :username do
-    resources :blogs, path: '', only: :show, param: :permalink do
-      resources :settings, only: %i[index show]
+    resources :publications, path: '', only: :show, param: :permalink do
+      resources :settings, only: %i[index show update], controller: :publication_settings
+
+      scope constraints: { path: /[^\0]+/ }, format: false do
+        scope controller: :drafts, module: :publications do
+          get '/drafts/*path', action: :show, as: :draft
+          get '/new/*path', action: :new, as: :new_draft
+          post '/create/*path', action: :create, as: :create_draft
+          get '/edit/*path', action: :edit, as: :edit_draft
+          put '/update/*path', action: :update, as: :update_draft
+          delete '/delete/*path', action: :update, as: :delete_draft
+          post '/publish/*path', action: :preview, as: :publish_draft
+          post '/preview/*path', action: :preview, as: :preview_draft
+        end
+      end
+
       resources :posts, path: '', except: :index, param: :permalink do
         resources :settings, only: %i[index show]
         resources :revisions, only: %i[index new create]

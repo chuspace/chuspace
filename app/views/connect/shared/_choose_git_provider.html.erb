@@ -1,0 +1,21 @@
+<% cache(git_provider) do %>
+  <li class='p-4 text-primary flex items-center border-b last:border-b-0 border-base-200'>
+    <div class='flex flex-1 items-center'>
+      <%= inline_svg_tag "icons/#{git_provider.name}", class: 'w-6 h-6 fill-current' %>
+      <%= content_tag :span, git_provider.label, class: 'text-primary-content ml-2' %>
+    </div>
+
+    <% if git_provider.connected? %>
+      <%= link_to 'Choose', publication.personal? ? connect_personal_publication_path(git_provider) : connect_other_publication_path(git_provider), class: 'btn btn-primary btn-sm' %>
+    <% else %>
+      <%= button_to(
+          'Connect',
+          "/auth/#{git_provider.name}_api",
+          class: 'btn btn-primary btn-sm',
+          data: { turbo: false },
+          title: "Click to allow api access to #{git_provider.name}",
+        )
+      %>
+    <% end %>
+  </li>
+<% end %>

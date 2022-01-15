@@ -1,34 +1,36 @@
 # frozen_string_literal: true
 
 class RevisionsController < ApplicationController
-  before_action :find_user, :find_blog, :find_post
+  before_action :find_user, :find_publication, :find_post
   layout false
 
   def create
-    revision = @post.revisions.create(
-      committer: Current.user,
-      originator: :chuspace,
-      message: revision_params[:message],
-      content: <<~STR
-        ---
-        #{@post.revisions.current.front_matter_str(title: revision_params[:title])}
-        ---
-
-        #{revision_params[:content]}
-      STR
+    blob = publication.git_provider.adapter.create_or_update_blob(
+      fullname: publication.repo_fullname,
+      path: @post.path || params[:blob_path],
+      content: Base64.encode64(blob_content),
+      message: message.presence,
+      sha: post.revisions&.first&.blob_sha,
+      committer: GitConfig.new.committer,
+      author: {
+        name: author.name,
+        email: author.email,
+        date: Date.today
+      }
     )
 
-    redirect_to edit_user_blog_post_path(@user, @blog, revision)
+
+    redirect_to edit_user_publication_post_path(@user, @publication, revision)
   end
 
   private
 
-  def find_post
-    @post = @blog.posts.joins(:revisions).find_by(revisions: { sha: params[:post_permalink] })
+  def find_blob
+    @post = @publication.repository.blob(path: params[:blob_path])
   end
 
-  def find_blog
-    @blog = @user.blogs.friendly.find(params[:blog_permalink])
+  def find_publication
+    @publication = @user.publications.friendly.find(params[:publication_permalink])
   end
 
   def find_user
@@ -36,6 +38,6 @@ class RevisionsController < ApplicationController
   end
 
   def revision_params
-    params.require(:revision).permit(:message, :title, :content)
+    params.require(:revision).permit(:message, :title, :summary, :body)
   end
 end

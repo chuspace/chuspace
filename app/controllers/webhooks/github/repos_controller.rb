@@ -3,11 +3,11 @@
 module Webhooks
   module Github
     class ReposController < ActionController::API
-      before_action :verify_signature, :set_commit, :verify_commit, :find_blog, :find_author
+      before_action :verify_signature, :set_commit, :verify_commit, :find_publication, :find_author
 
       def create
         @commit['added'].each do |blob_path|
-          if blob_path == @blog.repo_readme_path
+          if blob_path == @publication.repo_readme_path
             update_readme
           else
             create_post(blob_path)
@@ -15,7 +15,7 @@ module Webhooks
         end
 
         @commit['removed'].each do |blob_path|
-          if blob_path == @blog.repo_readme_path
+          if blob_path == @publication.repo_readme_path
             update_readme
           else
             delete_post(blob_path)
@@ -23,7 +23,7 @@ module Webhooks
         end
 
         @commit['modified'].each do |blob_path|
-          if blob_path == @blog.repo_readme_path
+          if blob_path == @publication.repo_readme_path
             update_readme
           else
             update_post(blob_path)
@@ -37,10 +37,10 @@ module Webhooks
 
       def create_post(blob_path)
         Post.transaction do
-          post = @blog.posts.find_or_initialize_by(blob_path: blob_path)
+          post = @publication.posts.find_or_initialize_by(blob_path: blob_path)
 
           unless post.persisted?
-            post.author = @author || @blog.owner
+            post.author = @author || @publication.owner
             post.save
             create_revision(post: post)
           end
@@ -48,11 +48,11 @@ module Webhooks
       end
 
       def delete_post(blob_path)
-        @blog.posts.find_by(blob_path: blob_path)&.destroy
+        @publication.posts.find_by(blob_path: blob_path)&.destroy
       end
 
       def update_post(blob_path)
-        post = @blog.posts.find_by(blob_path: blob_path)
+        post = @publication.posts.find_by(blob_path: blob_path)
 
         if post
           create_revision(post: post)
@@ -62,7 +62,7 @@ module Webhooks
       end
 
       def update_readme
-        @blog.update!(readme: @blog.repository.readme)
+        @publication.update!(readme: @publication.repository.readme)
       end
 
       def create_revision(post:)
@@ -72,7 +72,7 @@ module Webhooks
           post.revisions.create!(
             message: @commit['message'],
             committer: @author,
-            originator: post.blog.git_provider.name,
+            originator: post.publication.git_provider.name,
             fallback_committer: @commit['author'] || @commit['committer'],
             sha: @commit['id'],
             blob_sha: git_blob.sha,
@@ -81,12 +81,12 @@ module Webhooks
         end
       end
 
-      def find_blog
-        @blog = Blog.find_by(repo_fullname: params['repository']['full_name'])
+      def find_publication
+        @publication = Blog.find_by(repo_fullname: params['repository']['full_name'])
       end
 
       def find_author
-        @author = @blog.members.find_by(username: @commit['author']['login'])
+        @author = @publication.members.find_by(username: @commit['author']['login'])
       end
 
       def set_commit

@@ -1,0 +1,36 @@
+<%= render 'layout' do %>
+  <div class='grid grid-cols-3 gap-4 mt-8'>
+    <section class='col-span-2'>
+      <div class='card bordered'>
+        <div class='chu-editor card-body'>
+          <div class='card-title'>
+            <code>Readme.md</code>
+          </div>
+
+          <%= @publication.git_repository.readme_html %>
+        </div>
+      </div>
+
+      <div class='mt-8'>
+        <%= render 'posts/list', posts: @publication.posts %>
+      </div>
+    </section>
+
+    <aside>
+      <div class='card bordered'>
+
+        <div class='chu-editor card-body'>
+          <div class='card-title'>
+            <code>People</code>
+          </div>
+
+          <div class='flex items-center'>
+            <% @publication.members.each do |member| %>
+              <%= image_tag member.avatar_url, class: 'w-8 h-8 mask mask-circle'%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+<% end %>

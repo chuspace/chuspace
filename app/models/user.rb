@@ -10,9 +10,9 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :destroy, inverse_of: :user
   has_many :identities, dependent: :destroy, inverse_of: :user
-  has_many :blogs, through: :memberships, source: :blog
-  has_many :owning_blogs, class_name: 'Blog', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
-  has_one  :personal_blog, -> { where(personal: true) }, class_name: 'Blog', foreign_key: :owner_id, inverse_of: :owner
+  has_many :publications, through: :memberships, source: :publication
+  has_many :owning_publications, class_name: 'Publication', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
+  has_one  :personal_publication, -> (user) { where(personal: true) }, class_name: 'Publication', foreign_key: :owner_id, inverse_of: :owner
   has_many :posts, foreign_key: :author_id, dependent: :destroy
   has_many :git_providers, dependent: :destroy
 
@@ -46,13 +46,17 @@ class User < ApplicationRecord
   end
 
   def seed_git_providers
-    GitStorageConfig.new.to_h.each do |key, hash|
-      git_providers.create(
+    data = GitStorageConfig.new.to_h.map do |key, hash|
+      {
+        user_id: id,
         name: key,
         label: hash[:label],
         endpoint: hash[:endpoint],
-        self_hosted: hash[:self_hosted]
-      )
+        created_at: Time.current,
+        updated_at: Time.current
+      }
     end
+
+    GitProvider.upsert_all(data, returning: false, unique_by: :one_provider_per_user_index)
   end
 end

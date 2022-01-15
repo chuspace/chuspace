@@ -1,0 +1,8 @@
+<%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+  <%= form.simple_fields_for :front_matter do |front_matter_form| %>
+    <%= front_matter_form.input :title, as: :select, collection: BlogConfig.new.front_matter.values, include_blank: 'Choose' %>
+    <%= front_matter_form.input :summary, as: :select, collection: BlogConfig.new.front_matter.values, include_blank: 'Choose' %>
+    <%= front_matter_form.input :date, as: :select, collection: BlogConfig.new.front_matter.values, include_blank: 'Choose' %>
+    <%= front_matter_form.input :topics, as: :select, collection: BlogConfig.new.front_matter.values, include_blank: 'Choose' %>
+  <% end %>
+<% end %>

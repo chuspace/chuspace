@@ -6,7 +6,7 @@ class CreateInvites < ActiveRecord::Migration[7.0]
   def change
     create_table :invites do |t|
       t.references :sender, null: false, foreign_key: { to_table: :users }
-      t.references :blog, null: false, foreign_key: true
+      t.references :publication, null: false, foreign_key: true
       t.citext :identifier, null: false
       t.text :code
 
@@ -17,7 +17,7 @@ class CreateInvites < ActiveRecord::Migration[7.0]
     add_column :invites, :status, :invite_status_enum_type, null: false, default: :pending
 
     add_index :invites, :code, algorithm: :concurrently, unique: true
-    add_index :invites, %i[identifier blog_id], unique: true, algorithm: :concurrently
+    add_index :invites, %i[identifier publication_id], unique: true, algorithm: :concurrently
     add_index :invites, :identifier, algorithm: :concurrently
     add_index :invites, :role, algorithm: :concurrently
     add_index :invites, :status, algorithm: :concurrently

@@ -1,0 +1,53 @@
+<main class='min-h-full block sm:flex items-center justify-between'>
+  <section>
+    <h1 class='text-5xl'>
+      <%= t('.heading') %>
+    </h1>
+    <p class="mt-4 w-full sm:w-3/5 text-secondary text-lg">
+      <%= t('.intro') %>
+    </p>
+
+    <div class='block sm:grid sm:grid-cols-2 sm:gap-4 mt-12'>
+      <div class='card bordered bg-base-200'>
+        <div class='card-body'>
+          <div class='flex items-center text-primary'>
+            <%= inline_svg_tag 'icons/jekyll', class: 'w-6 h-6 fill-current' %>
+            <%= inline_svg_tag 'icons/hugo', class: 'w-6 h-6 fill-current ml-1' %>
+            <%= inline_svg_tag 'icons/nextjs', class: 'w-6 h-6 fill-current ml-2' %>
+          </div>
+
+          <div class='card-title mt-4'><%= t('.actions.personal.title') %></div>
+          <p class='text-secondary pr-12'>
+            <%= t('.actions.personal.description') %>
+          </p>
+
+          <div class='card-actions mt-4'>
+            <% if Current.user.personal_publication.present? %>
+              <%= link_to t('.actions.personal.connected'), '', class: 'btn btn-info btn-disabled' %>
+            <% else %>
+              <%= link_to t('.actions.personal.cta', name: Current.user.username), connect_personal_publications_path, class: 'btn btn-primary' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class='card bordered bg-base-200 sm:mt-0 mt-4'>
+        <div class='card-body'>
+          <div class='flex items-center text-primary'>
+            <%= inline_svg_tag 'icons/jekyll', class: 'w-6 h-6 fill-current' %>
+            <%= inline_svg_tag 'icons/hugo', class: 'w-6 h-6 fill-current ml-1' %>
+            <%= inline_svg_tag 'icons/nextjs', class: 'w-6 h-6 fill-current ml-2' %>
+          </div>
+
+          <div class='card-title mt-4'><%= t('.actions.publication.title') %></div>
+          <p class='text-secondary pr-12'>
+            <%= t('.actions.publication.description') %>
+          </p>
+          <div class='card-actions mt-4'>
+            <%= link_to t('.actions.publication.cta'), connect_other_publications_path, class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

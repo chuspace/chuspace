@@ -1,0 +1,9 @@
+<% git_provider_users.each do |user|%>
+  <li tabindex="0" role="menuitem">
+    <input type="checkbox" name="login" value="<%= user.login %>" class='hidden' />
+    <a data-menu-button-contents class='flex items-center'/>
+      <%= image_tag user.avatar_url, class: 'w-4 h-4 mask mask-circle mr-2'  %>
+      <%= content_tag :span, user.login %>
+    </a>
+  </li>
+<% end %>

@@ -1,73 +1,34 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
-  include Sourceable
-
-  belongs_to :blog, touch: true
+  belongs_to :publication, touch: true
   belongs_to :author, class_name: 'User', touch: true
-  has_many   :revisions, dependent: :destroy, inverse_of: :post
-  has_many   :editions, through: :revisions, dependent: :destroy
 
-  validates :blob_path, presence: :true, uniqueness: { scope: :blog_id }, markdown: true
-  validate  :blob_paths_are_stored_correctly
+  validates :title, :summary, :date, :body, :body_html, :blob_sha, :commit_sha, :visibility, presence: true
+  validates :blob_path, presence: :true, uniqueness: { scope: :publication_id }, markdown: true
+  validates :blob_sha, presence: :true, uniqueness: { scope: :publication_id }
 
-  before_validation :set_root_dir, :set_visibility
+  before_validation :set_visibility
 
-  enum visibility: {
-    private: 'private',
-    public: 'public',
-    subscriber: 'subscriber'
-  }, _suffix: true
+  enum visibility: PublicationConfig.to_enum, _suffix: true
 
   class << self
-    def published
-      joins(revisions: :edition)
-    end
-
-    def drafts
-      joins(:revisions).distinct(:revision_id)
-    end
-
     def valid_blob?(name:)
       MarkdownConfig.new.extensions.include?(File.extname(name))
     end
   end
 
   def git_blob(ref: nil)
-    blog.repository.blob(path: blob_path, ref: ref)
+    publication.repository.blob(path: blob_path, ref: ref)
   end
 
   def git_commits
-    blog.repository.commits(path: blob_path)
-  end
-
-  def published?
-    editions.any?
-  end
-
-  def status
-    published? ? 'published' : 'draft'
+    publication.repository.commits(path: blob_path)
   end
 
   private
 
-  def blob_paths_are_stored_correctly
-    unless (blog.repo_drafts_dir && blob_path&.include?(blog.repo_drafts_dir)) || blob_path&.include?(blog.repo_posts_dir)
-      errors.add(:blob_path, 'should be contained in valid dir')
-    end
-  end
-
-  def set_root_dir
-    if blob_path.present?
-      self.blob_path = if blob_path.include?('/')
-        blob_path
-      else
-        File.join(blog.repo_drafts_or_posts_dir, File.basename(blob_path))
-      end
-    end
-  end
-
   def set_visibility
-    self.visibility ||= blog.visibility
+    self.visibility ||= publication.visibility
   end
 end

@@ -7,5 +7,7 @@
   <%= form.button :submit, 'Save', class: 'mt-8 btn btn-primary' %>
 <% end %>
 
-<h5 class='border-b border-base-200 pb-2 mt-8'>Personal blog</h5>
-<%= render 'blogs/form', blog: Current.user.personal_blog, url: user_blog_settings_path(Current.user, Current.user.personal_blog) %>
+<% if Current.user.personal_publication %>
+  <h5 class='border-b border-base-200 pb-2 mt-8'>Personal publication</h5>
+  <%= render 'publications/form', publication: Current.user.personal_publication, url: user_publication_setting_path(Current.user, Current.user.personal_publication, id: :profile) %>
+<% end %>

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GitProvider < ApplicationRecord
+  class GitAdapterNotFoundError < StandardError; end
+
   belongs_to :user
   encrypts :access_token, :refresh_access_token, :endpoint
 
@@ -8,10 +10,7 @@ class GitProvider < ApplicationRecord
   validates :name, uniqueness: { scope: :user_id }
   validates :refresh_access_token, :expires_at, presence: true, if: :access_token
 
-  enum name: {
-    github: 'github',
-    gitlab: 'gitlab'
-  }
+  enum name: GitStorageConfig.providers_enum
 
   def connected?
     access_token.present? && expires_at > Time.current
@@ -22,7 +21,11 @@ class GitProvider < ApplicationRecord
   end
 
   def adapter
-    @adapter ||= GitAdapter.new(git_provider: self)
+    case name
+    when 'github' then GithubAdapter.new(access_token: access_token, endpoint: endpoint)
+    when 'gitlab' then GitlabAdapter.new(access_token: access_token, endpoint: endpoint)
+    else fail GitAdapterNotFoundError, "#{name} adapter not found"
+    end
   end
 
   def to_param
