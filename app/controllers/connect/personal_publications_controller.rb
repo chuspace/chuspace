@@ -17,7 +17,7 @@ module Connect
     end
 
     def set_as_personal_publication
-      @publication.name = 'blog'
+      @publication.name = Current.user.username
       @publication.personal = true
     end
 

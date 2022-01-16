@@ -2,7 +2,7 @@
   <div class="text-sm breadcrumbs">
     <ul>
       <li>
-        <a><%= link_to @publication.repo.fullname, user_publication_draft_path(@publication.owner, @publication, path: @publication.repo.posts_folder) %></a>
+        <a><%= link_to @publication.repo.fullname, publication_draft_path(@publication, path: @publication.repo.posts_folder) %></a>
       </li>
       <li>
         <a><%= @path %></a>
@@ -10,7 +10,7 @@
     </ul>
   </div>
 
-  <%= turbo_frame_tag dom_id(@publication, :drafts), src: user_publication_draft_path(@publication.owner, @publication, path: @path), lazy: true do %>
+  <%= turbo_frame_tag dom_id(@publication, :drafts), src: publication_draft_path(@publication, path: @path), lazy: true do %>
     Loading
   <% end %>
 <% end %>

@@ -1,5 +1,5 @@
 <div class='sm:w-2/3 mx-auto w-full chu-editor editable'>
-  <%= simple_form_for '', url: user_publication_update_draft_path(@publication.owner, @publication, id: params[:id]) do |form| %>
+  <%= simple_form_for '', url: publication_update_draft_path(@publication, id: params[:id]) do |form| %>
     <div class='title' data-target='chu-editor.title'>
       <%= form.input :title, as: :string, label: false, wrapper: false, input_html: { class: 'w-full p-0 m-0 border-0 focus:outline-none focus:shadow-none text-4xl', value: @draft.title, placeholder: 'Title' } %>
     </div>

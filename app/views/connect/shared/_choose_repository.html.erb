@@ -3,7 +3,7 @@
       <%= simple_form_for('', url: publication.personal? ? repos_connect_personal_publication_path(git_provider) : repos_connect_other_publication_path(git_provider), html: { class: 'relative' }, method: :get, data: { target: 'details-menu-form.form', 'turbo-frame': dom_id(git_provider, :repositories) }) do |form| %>
         <div class='flex items-center justify-between'>
           <details>
-            <summary class='btn min-w-fit'>
+            <summary class='btn btn-accent min-w-fit'>
               <div class='flex items-center' data-menu-button>
                 <%= image_tag git_provider_user.avatar_url, class: 'w-4 h-4 mask mask-circle mr-2' %>
                 <%= content_tag :span, git_provider_user.login %>
@@ -36,7 +36,7 @@
       <% end %>
     </section>
 
-    <div class='mt-8 max-h-96 overflow-y-auto'>
+    <div class='mt-8'>
       <%= turbo_frame_tag dom_id(git_provider, :repositories), src: publication.personal? ? repos_connect_personal_publication_path(git_provider) : repos_connect_other_publication_path(git_provider), lazy: true, 'data-target': 'details-menu-form.loader' do %>
         <h5 class='text-center my-16'>
           Loading <%= git_provider_user.login %> <%= git_provider.name %> repositories...

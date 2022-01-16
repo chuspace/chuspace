@@ -1,16 +1,13 @@
 <div class='relative'>
   <h3><%= @publication.name %></h3>
   <p class='sm:w-2/3 w-full text-secondary'><%= @publication.description %></p>
-  <%= link_to 'New post', new_user_publication_post_path(@publication.owner, @publication), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
+  <%= link_to 'New post', new_publication_post_path(@publication), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
 
-  <div class='tabs mt-8'>
-    <div role="tablist">
-      <%= link_to 'Overview', user_publication_path(@publication.owner, @publication), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
-      <%= link_to 'Drafts', user_publication_draft_path(@publication.owner, @publication, path: @publication.repo.posts_folder), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
-      <%= link_to 'Settings', user_publication_settings_path(@publication.owner, @publication), type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
-    </div>
+  <div class='tabs border-b border-base-200 mt-8'>
+    <%= link_to 'Overview', publication_path(@publication), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
+    <%= link_to 'Drafts', publication_draft_path(@publication, path: @publication.repo.posts_folder), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
+    <%= link_to 'Settings', publication_settings_path(@publication), type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
   </div>
 
-  <div class='divider'></div>
   <%= yield %>
 </div>

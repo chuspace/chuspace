@@ -38,7 +38,7 @@ module Connect
       @publication.assign_attributes(publication_params)
 
       if @publication.save!
-        redirect_to user_publication_path(@publication.owner, @publication)
+        redirect_to @publication.personal? ? user_path(@publication.owner) : publication_path(@publication)
       else
         respond_to do |format|
           format.html

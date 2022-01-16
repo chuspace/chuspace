@@ -70,28 +70,28 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users, path: '', except: :index, param: :username do
-    resources :publications, path: '', only: :show, param: :permalink do
-      resources :settings, only: %i[index show update], controller: :publication_settings
+  resources :users, path: '', except: :index, param: :username, constraints: UserConstraint.new do
+    resources :settings, only: %i[index show update], module: :users
+  end
 
-      scope constraints: { path: /[^\0]+/ }, format: false do
-        scope controller: :drafts, module: :publications do
-          get '/drafts/*path', action: :show, as: :draft
-          get '/new/*path', action: :new, as: :new_draft
-          post '/create/*path', action: :create, as: :create_draft
-          get '/edit/*path', action: :edit, as: :edit_draft
-          put '/update/*path', action: :update, as: :update_draft
-          delete '/delete/*path', action: :update, as: :delete_draft
-          post '/publish/*path', action: :preview, as: :publish_draft
-          post '/preview/*path', action: :preview, as: :preview_draft
-        end
-      end
+  resources :publications, path: '', only: :show, param: :permalink, constraints: PublicationConstraint.new do
+    resources :settings, only: %i[index show update], module: :publications
 
-      resources :posts, path: '', except: :index, param: :permalink do
-        resources :settings, only: %i[index show]
-        resources :revisions, only: %i[index new create]
-        resources :editions, only: %i[index new create]
+    scope constraints: { path: /[^\0]+/ }, format: false do
+      scope controller: :drafts, module: :publications do
+        get '/drafts/*path', action: :show, as: :draft
+        get '/new/*path', action: :new, as: :new_draft
+        post '/create/*path', action: :create, as: :create_draft
+        get '/edit/*path', action: :edit, as: :edit_draft
+        put '/update/*path', action: :update, as: :update_draft
+        delete '/delete/*path', action: :update, as: :delete_draft
+        post '/publish/*path', action: :preview, as: :publish_draft
+        post '/preview/*path', action: :preview, as: :preview_draft
       end
+    end
+
+    resources :posts, path: '', except: :index, param: :permalink do
+      resources :settings, only: %i[index show]
     end
   end
 end

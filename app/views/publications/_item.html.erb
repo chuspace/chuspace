@@ -2,7 +2,7 @@
   <div class='border-b last:border-b-0 p-4 border-base-200'>
     <%= turbo_frame_tag(publication, class: 'flex') do %>
       <div class='flex-1'>
-        <%= link_to(user_publication_path(publication.owner, publication), 'data-turbo-frame': :_top) do %>
+        <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
           <%= tag.h5 class: 'link link-primary link-hover' do %>
             <%= publication.name %>
             <%= content_tag :span, publication.visibility, class: 'badge badge-outline badge-secondary ml-2' %>

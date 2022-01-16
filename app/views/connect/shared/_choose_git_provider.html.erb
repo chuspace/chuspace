@@ -1,8 +1,8 @@
 <% cache(git_provider) do %>
-  <li class='p-4 text-primary flex items-center border-b last:border-b-0 border-base-200'>
+  <li class='p-4 flex items-center border-b last:border-b-0 border-base-200'>
     <div class='flex flex-1 items-center'>
       <%= inline_svg_tag "icons/#{git_provider.name}", class: 'w-6 h-6 fill-current' %>
-      <%= content_tag :span, git_provider.label, class: 'text-primary-content ml-2' %>
+      <%= content_tag :span, git_provider.label, class: 'ml-2' %>
     </div>
 
     <% if git_provider.connected? %>

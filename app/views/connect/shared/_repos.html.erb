@@ -1,5 +1,5 @@
 <%= turbo_frame_tag(dom_id(provider, :repositories), 'data-target': 'details-menu-form.loader') do %>
-  <div class='card bordered'>
+  <div class='card bordered max-h-96 overflow-y-auto'>
     <% repositories.each do |repo| %>
       <div class='border-b last:border-b-0 p-4 border-base-200'>
         <div class='flex-1'>

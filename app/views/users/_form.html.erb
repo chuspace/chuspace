@@ -9,5 +9,5 @@
 
 <% if Current.user.personal_publication %>
   <h5 class='border-b border-base-200 pb-2 mt-8'>Personal publication</h5>
-  <%= render 'publications/form', publication: Current.user.personal_publication, url: user_publication_setting_path(Current.user, Current.user.personal_publication, id: :profile) %>
+  <%= render 'publications/form', publication: Current.user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :profile) %>
 <% end %>

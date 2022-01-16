@@ -1,7 +1,7 @@
 <% cache draft do %>
   <article class='border-b last:border-b-0 border-base-200 p-4'>
     <div class='flex-1'>
-      <% path = draft.type == 'file' ? user_publication_edit_draft_path(publication.owner, publication, path: draft.path) : user_publication_draft_path(publication.owner, blog, path: draft.path) %>
+      <% path = draft.type == 'file' ? publication_edit_draft_path(publication, path: draft.path) : publication_draft_path(publication, path: draft.path) %>
       <% turbo_opts = draft.type == 'file' ? { data: { 'turbo-frame': :_top } } : { data: { 'turbo-frame': dom_id(@publication, :drafts) } } %>
       <%= link_to path, **turbo_opts do %>
         <%= tag.h5 class: 'link link-primary link-hover' do %>

@@ -11,7 +11,7 @@
         <%= link_to @post.publication.owner.username, user_path(@post.publication.owner), class: 'link link-primary' %>
       </li>
       <li>
-        <%= link_to @post.publication.repository.fullname, user_publication_path(@post.publication.owner, @post.publication), class: 'link link-primary' %>
+        <%= link_to @post.publication.repository.fullname, publication_path(@post.publication), class: 'link link-primary' %>
       </li>
     </ul>
   </div>

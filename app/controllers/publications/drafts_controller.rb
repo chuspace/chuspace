@@ -2,7 +2,7 @@
 
 module Publications
   class DraftsController < ApplicationController
-    before_action :find_user, :find_publication
+    before_action :find_publication
     before_action :find_draft, only: %w[update edit destroy]
 
     layout 'editor', only: :edit
@@ -21,11 +21,7 @@ module Publications
     end
 
     def find_publication
-      @publication = @user.publications.friendly.find(params[:publication_permalink])
-    end
-
-    def find_user
-      @user = User.friendly.find(params[:user_username])
+      @publication = Publication.friendly.find(params[:publication_permalink])
     end
   end
 end
