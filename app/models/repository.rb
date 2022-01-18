@@ -24,15 +24,17 @@ class Repository
     @commit ||= git_adapter.commit(sha: sha)
   end
 
+  def asset(path:)
+    @asset ||= git_adapter.blob(path: path)
+  end
+
   def draft(path:)
     blob = git_adapter.blob(path: path)
-    @draft ||= Draft.for(front_matter_settings: publication.front_matter, blob: blob)
+    @draft ||= Draft.new(id: blob.id || blob.sha, name: blob.name, path: blob.path, raw_content: blob.content, publication: publication)
   end
 
   def drafts(path: nil)
-    @drafts ||= git_adapter.blobs(path: path || publication.repo.posts_folder).each do |blob|
-      Draft.for(front_matter_settings: publication.front_matter, blob: blob)
-    end
+    @drafts ||= git_adapter.blobs(path: path || publication.repo.posts_folder)
   end
 
   def files

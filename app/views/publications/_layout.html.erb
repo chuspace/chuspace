@@ -1,11 +1,12 @@
 <div class='relative'>
+  <%= image_tag(@publication.icon.variant(:profile)) if @publication.icon.attached? %>
   <h3><%= @publication.name %></h3>
   <p class='sm:w-2/3 w-full text-secondary'><%= @publication.description %></p>
-  <%= link_to 'New post', new_publication_post_path(@publication), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
+  <%= link_to 'New post', publication_new_draft_path(@publication, path: @publication.repo_drafts_or_posts_folder), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
 
   <div class='tabs border-b border-base-200 mt-8'>
     <%= link_to 'Overview', publication_path(@publication), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
-    <%= link_to 'Drafts', publication_draft_path(@publication, path: @publication.repo.posts_folder), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
+    <%= link_to 'Drafts', publication_drafts_path(@publication, path: @publication.repo.posts_folder), type: 'button', role: 'tab', 'aria-selected': 'true', class: 'tab' %>
     <%= link_to 'Settings', publication_settings_path(@publication), type: 'button', role: 'tab', 'aria-selected': 'false', class: 'tab' %>
   </div>
 

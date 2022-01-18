@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
+  include Breadcrumbable
+
   before_action :find_user
   before_action :set_content_partial, only: :show
 

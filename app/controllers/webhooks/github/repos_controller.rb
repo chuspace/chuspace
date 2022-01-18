@@ -7,27 +7,15 @@ module Webhooks
 
       def create
         @commit['added'].each do |blob_path|
-          if blob_path == @publication.repo_readme_path
-            update_readme
-          else
-            create_post(blob_path)
-          end
+          create_post(blob_path)
         end
 
         @commit['removed'].each do |blob_path|
-          if blob_path == @publication.repo_readme_path
-            update_readme
-          else
-            delete_post(blob_path)
-          end
+          delete_post(blob_path)
         end
 
         @commit['modified'].each do |blob_path|
-          if blob_path == @publication.repo_readme_path
-            update_readme
-          else
-            update_post(blob_path)
-          end
+          update_post(blob_path)
         end
 
         render head: :ok
@@ -42,7 +30,6 @@ module Webhooks
           unless post.persisted?
             post.author = @author || @publication.owner
             post.save
-            create_revision(post: post)
           end
         end
       end
@@ -53,36 +40,11 @@ module Webhooks
 
       def update_post(blob_path)
         post = @publication.posts.find_by(blob_path: blob_path)
-
-        if post
-          create_revision(post: post)
-        else
-          create_post(blob_path)
-        end
-      end
-
-      def update_readme
-        @publication.update!(readme: @publication.repository.readme)
-      end
-
-      def create_revision(post:)
-        Revision.transaction do
-          git_blob = post.git_blob(ref: @commit['id'])
-
-          post.revisions.create!(
-            message: @commit['message'],
-            committer: @author,
-            originator: post.publication.git_provider.name,
-            fallback_committer: @commit['author'] || @commit['committer'],
-            sha: @commit['id'],
-            blob_sha: git_blob.sha,
-            blob_content: Base64.decode64(git_blob.content)
-          )
-        end
+        post.publish!
       end
 
       def find_publication
-        @publication = Blog.find_by(repo_fullname: params['repository']['full_name'])
+        @publication = Publication.find_by("repo ->'fullname' = ?", params['repository']['full_name'])
       end
 
       def find_author

@@ -1,0 +1,17 @@
+<%= turbo_frame_tag draft do %>
+  <%= simple_form_for(draft, url: publication_create_draft_path(@publication, draft), html: { data: { "turbo-frame": '_top' } }) do |form| %>
+    <%= form.label :name, class: 'mb-2 block' %>
+    <div class="form-control w-full">
+      <div class="input-group input-group-xs w-full">
+        <span><%= @publication.repo_drafts_or_posts_folder %>/</span>
+        <%= form.input :name, label: false, hint: false, error: false, wrapper: false, input_html: { class: 'w-full' } %>
+      </div>
+    </div>
+
+    <%= form.error :name, class: 'mb-2 block' %>
+    <%= form.hint :name, class: 'mb-2 block' unless draft.errors.key?(:name) %>
+    <%= form.input :commit_message, class: 'mb-2 block' %>
+
+    <%= form.button :submit, 'Create', class: 'mt-4 float-right btn-primary', data: { 'disable-with': 'Wait...' } %>
+  <% end %>
+<% end %>

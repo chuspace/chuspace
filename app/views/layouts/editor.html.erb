@@ -2,7 +2,7 @@
 <html lang='en' class='h-full'>
   <%= render 'layouts/head' %>
   <body class="flex flex-col h-full">
-    <chu-editor data-autofocus='true'>
+    <chu-editor data-autofocus='true' data-image-provider-path='<%= publication_assets_path(@publication) %>'>
       <%= render 'layouts/flash' %>
       <%= render 'publications/drafts/header', draft: @draft %>
 

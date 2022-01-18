@@ -19,8 +19,8 @@ module ApplicationHelper
     get_request ? link_to(name, options, html_options, &block) : button_to(name, options, html_options, &block)
   end
 
-  def tab_selected?(path)
-    request.fullpath == path ? 'font-bold border-b-2 pb-1' : ''
+  def active_tab?(path)
+    request.fullpath == path ? ' font-bold border-l-2 border-l-primary bg-base-200' : ''
   end
 
   def user_menu

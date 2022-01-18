@@ -21,6 +21,7 @@ gem 'mini_mime'
 gem 'wicked'
 
 # JSONB attributes
+gem 'active_type'
 gem 'attr_json'
 
 # Cache

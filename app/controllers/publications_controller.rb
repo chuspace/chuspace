@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PublicationsController < ApplicationController
-  include AutoCheckable
+  include AutoCheckable, Breadcrumbable
 
   before_action :authenticate!, except: :show
   before_action :set_content_partial, only: :show

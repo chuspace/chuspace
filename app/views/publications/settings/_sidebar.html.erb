@@ -1,8 +1,9 @@
 <aside>
   <ul class='card bordered'>
-    <li class='border-b border-base-200 px-4 py-2'><%= link_to 'Basics', '#'%></li>
-    <li class='border-b border-base-200 px-4 py-2'><%= link_to 'Content', '#'%></li>
-    <li class='border-b border-base-200 px-4 py-2'><%= link_to 'Frontmatter', '#'%></li>
-    <li class='border-b border-base-200 px-4 py-2'><%= link_to 'Permission', '#'%></li>
+    <% PublicationSettings::PAGES.each do |page| %>
+      <li class="border-b last:border-b-0 border-base-200 px-4 py-3<%= active_tab?(publication_setting_path(publication, id: page)) %>">
+        <%= link_to t("publications.settings.actions.#{page}"), publication_setting_path(publication, id: page) %>
+      </li>
+    <% end %>
   </ul>
 </aside>

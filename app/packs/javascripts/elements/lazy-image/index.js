@@ -10,6 +10,7 @@ export default class LazyImage extends LitElement {
       src: { type: String },
       alt: { type: String },
       title: { type: String },
+      filename: { type: String },
       editable: { type: Boolean }
     }
   }
@@ -41,23 +42,20 @@ export default class LazyImage extends LitElement {
 
   render() {
     return html`
-      <figure class="image__container">
+      <figure class="relative">
         ${
           this.editable
             ? svg`
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  height="16"
-                  @click=${this.delete}
-                  class="absolute close right-0 cursor-pointer bg-primary p-2 shadow-md"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2.343 13.657A8 8 0 1113.657 2.343 8 8 0 012.343 13.657zM6.03 4.97a.75.75 0 00-1.06 1.06L6.94 8 4.97 9.97a.75.75 0 101.06 1.06L8 9.06l1.97 1.97a.75.75 0 101.06-1.06L9.06 8l1.97-1.97a.75.75 0 10-1.06-1.06L8 6.94 6.03 4.97z"
-                  ></path>
-                </svg>
+                <div class="bg-primary flex items-center justify-between py-2 px-4 rounded-t-md" contenteditable="false">
+                  <svg contenteditable="false" xmlns="http://www.w3.org/2000/svg" width="54" height="14" viewBox="0 0 54 14">
+                    <g fill="none" fillRule="evenodd" transform="translate(1 1)">
+                      <circle cx="6" cy="6" r="6" fill="#FF5F56" stroke="#E0443E" strokeWidth=".5" @click=${this.delete} />
+                      <circle cx="26" cy="6" r="6" fill="#FFBD2E" stroke="#DEA123" strokeWidth=".5" />
+                      <circle cx="46" cy="6" r="6" fill="#27C93F" stroke="#1AAB29" strokeWidth=".5" />
+                    </g>
+                  </svg>
+                  <span class='text-sm leading-none font-mono'>${this.filename}</span>
+                </div>
               `
             : null
         }

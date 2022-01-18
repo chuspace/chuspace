@@ -88,6 +88,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_type (2.1.0)
+      activerecord (>= 3.2)
     activejob (7.0.1)
       activesupport (= 7.0.1)
       globalid (>= 0.3.6)
@@ -552,6 +554,7 @@ PLATFORMS
 DEPENDENCIES
   aasm
   action_policy
+  active_type
   acts-as-taggable-on!
   ancestry
   anyway_config

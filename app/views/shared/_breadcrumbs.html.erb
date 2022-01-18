@@ -1,0 +1,13 @@
+<div class="text-sm breadcrumbs">
+  <ul>
+    <% breadcrumbs.each do |breadcrumb| %>
+      <li>
+        <% if breadcrumb.link? %>
+          <%= link_to breadcrumb.name, breadcrumb.path, class: 'link link-primary' %>
+        <% else %>
+          <%= content_tag :span, breadcrumb.name %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

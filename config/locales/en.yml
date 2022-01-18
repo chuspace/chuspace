@@ -16,6 +16,13 @@ en:
             username:
               blank: A valid username is required
   publications:
+    settings:
+      actions:
+        profile: Profile
+        permissions: Permissions
+        front_matter: FrontMatter
+        content: Content
+
     show:
       personal_publication: Your personal publication content is attached to your profile
   connect:

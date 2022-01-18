@@ -12,18 +12,18 @@ class Post < ApplicationRecord
 
   enum visibility: PublicationConfig.to_enum, _suffix: true
 
+  acts_as_taggable_on :topics
+
+  has_one_attached :preview_image do |attachable|
+    attachable.variant :post, resize_to_limit: [800, 300]
+    attachable.variant :list, resize_to_limit: [250, 150]
+    attachable.variant :icon, resize_to_limit: [64, 64]
+  end
+
   class << self
     def valid_blob?(name:)
       MarkdownConfig.new.extensions.include?(File.extname(name))
     end
-  end
-
-  def git_blob(ref: nil)
-    publication.repository.blob(path: blob_path, ref: ref)
-  end
-
-  def git_commits
-    publication.repository.commits(path: blob_path)
   end
 
   private

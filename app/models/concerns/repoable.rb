@@ -12,10 +12,6 @@ module Repoable
     [repo.assets_folder].freeze
   end
 
-  def repository
-    Repository.new(publication: self, fullname: repo.fullname)
-  end
-
   def posts_folders
     [repo.posts_folder, repo.drafts_folder].reject(&:blank?).freeze
   end

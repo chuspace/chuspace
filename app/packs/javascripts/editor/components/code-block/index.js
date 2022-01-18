@@ -93,7 +93,7 @@ export default class CodeEditor extends LitElement {
           clearTimeout(this.timer)
           this.timer = null
         }
-      } else if (intersectionRatio > 0.2) {
+      } else if (intersectionRatio > 0.1) {
         this.timer = setTimeout(() => this.loadEditor(), this.delay)
       }
     })
@@ -107,9 +107,10 @@ export default class CodeEditor extends LitElement {
     if (this.onInit) await this.onInit(this.cm)
 
     this.loaded = true
+    this.removeObserver()
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback()
     this.lines = this.content.split(/\r\n|\r|\n/).length
 

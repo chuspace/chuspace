@@ -9,12 +9,17 @@ en:
     error_notification:
       default_message: 'Please review the problems below:'
     placeholders:
+      draft:
+        name: 'first-post.{markdown, mdown, mkdn, mkd, md, text, txt}'
+        commit_message: Start a new post
       user:
         email: Type your email
 
     labels:
       defaults:
         password: 'Password'
+      draft:
+        name: Filename
       publication:
         repo:
           posts_folder: Posts/Drafts folder
@@ -23,8 +28,9 @@ en:
           readme_path: Readme
 
     hints:
+      draft:
+        name: valid file extensions are .markdown .mdown .mkdn, .mkd .md .text .txt
       publication:
-        framework: static site generator framework to be used to generate publication from
         visibility: visibility of publication - public, internal or private
         repo:
           posts_folder: choose folder where your publication posts are stored in markdown format

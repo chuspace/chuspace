@@ -33,6 +33,7 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
   def image(node)
     out('<lazy-image')
     out(' src="', escape_href(node.url), '"')
+    out(' filename="', escape_href(File.basename(node.url)), '"')
     plain { out(' alt="', :children, '"') }
     out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?
     out(' >')

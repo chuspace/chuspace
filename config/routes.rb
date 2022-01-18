@@ -78,15 +78,30 @@ Rails.application.routes.draw do
     resources :settings, only: %i[index show update], module: :publications
 
     scope constraints: { path: /[^\0]+/ }, format: false do
+      scope controller: :assets, module: :publications do
+        get '/asset/*path', action: :show, as: :asset
+        post '/assets', action: :create, as: :assets
+        delete '/delete/*path', action: :destroy, as: :delete_asset
+      end
+    end
+
+    scope constraints: { path: /[^\0]+/ }, format: false do
       scope controller: :drafts, module: :publications do
-        get '/drafts/*path', action: :show, as: :draft
+        get '/drafts/*path', action: :show, as: :drafts
         get '/new/*path', action: :new, as: :new_draft
         post '/create/*path', action: :create, as: :create_draft
         get '/edit/*path', action: :edit, as: :edit_draft
-        put '/update/*path', action: :update, as: :update_draft
-        delete '/delete/*path', action: :update, as: :delete_draft
-        post '/publish/*path', action: :preview, as: :publish_draft
-        post '/preview/*path', action: :preview, as: :preview_draft
+        patch '/update/*path', action: :update, as: :update_draft
+        delete '/delete/*path', action: :destroy, as: :delete_draft
+
+        scope controller: :previews, module: :drafts do
+          get '/preview/*path', action: :show, as: :preview_draft
+        end
+
+        scope controller: :publishings, module: :drafts do
+          get '/publish/*path', action: :new, as: :new_publish_draft
+          post '/publish/*path', action: :publish, as: :publish_draft
+        end
       end
     end
 

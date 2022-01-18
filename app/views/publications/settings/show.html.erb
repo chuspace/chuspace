@@ -1,0 +1,22 @@
+<%= render 'publications/layout' do %>
+  <div class='grid grid-cols-4 gap-8 mt-8'>
+    <%= render 'sidebar', publication: @publication %>
+
+    <section class='col-span-3'>
+      <div class="text-sm breadcrumbs">
+        <ul>
+          <li>
+            <%= link_to @publication.permalink, publication_path(@publication) %>
+          </li>
+          <li>
+            settings
+          </li>
+          <li>
+            <%= @partial %>
+          </li>
+        </ul>
+      </div>
+      <%= render "#{@partial}", publication: @publication, url: publication_setting_path(@publication, id: @partial.parameterize) %>
+    </section>
+  </div>
+<% end %>

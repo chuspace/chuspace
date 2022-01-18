@@ -54,6 +54,14 @@
   .card {
     @apply rounded-md;
   }
+
+  .title-input {
+    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none text-4xl;
+  }
+
+  .summary-input {
+    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none text-xl mt-2;
+  }
 }
 
 .ProseMirror {
@@ -78,7 +86,8 @@ auto-complete {
 }
 
 .header {
-  @apply sm:fixed top-0 w-full bg-neutral shadow-lg dark:border-0 dark:bg-base-200 z-10;
+  @apply sm:fixed top-0 w-full bg-base-100 border-b border-base-200 z-10;
+  height: 55px;
 
   will-change: transform;
   transition: transform 200ms linear;
@@ -94,4 +103,18 @@ auto-complete {
 
 textarea {
   resize: none;
+}
+
+.lazy,
+.lazyloading {
+  opacity: 0;
+}
+
+.lazyloaded {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+img.lazy:not([src]) {
+  visibility: hidden;
 }

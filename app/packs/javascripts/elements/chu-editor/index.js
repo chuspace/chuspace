@@ -4,10 +4,12 @@ import { attr, controller, target } from '@github/catalyst'
 
 import Editor from 'editor'
 import { Transaction } from 'prosemirror-state'
+import matter from 'gray-matter'
 
 @controller
 export default class ChuEditor extends HTMLElement {
   @attr autofocus: boolean = true
+  @attr imageProviderPath: string = ''
   @target content: HTMLElement
   @target revisionsModal: HTMLElement
   editor: Editor
@@ -19,6 +21,7 @@ export default class ChuEditor extends HTMLElement {
       autoFocus: this.autofocus,
       editable: true,
       onChange: this.onChange,
+      imageProviderPath: this.imageProviderPath,
       content: this.content.querySelector('textarea').value || '',
       revision: this.revision || '',
       appearance: 'default'

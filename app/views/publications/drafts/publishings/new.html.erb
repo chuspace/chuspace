@@ -1,0 +1,35 @@
+<div class='container border border-base-200 p-8 rounded-md'>
+  <%= turbo_frame_tag(@post) do %>
+    <div class='mt-4'>
+      <%= simple_form_for @post, url: publication_publish_draft_path(@publication, @draft) do |form| %>
+        <div class='grid grid-cols-2 gap-8'>
+        <div class='basics'>
+          <h5 class='mb-4'>Post preview</h5>
+          <%= form.input :preview_image, as: :hidden, input_html: { value: @draft.preview_image_url_or_path } %>
+
+          <% if @draft.preview_image_url_or_path.present? %>
+            <%= image_tag(@draft.preview_image_url_or_path, class: 'w-full h-40 rounded-md') %>
+          <% else %>
+            <div class='bg-secondary w-full h-40 rounded-md'></div>
+          <% end %>
+
+          <div class='mt-8 chu-editor'>
+            <%= form.input :title, label: false, input_html: { class: 'title-input' } %>
+            <%= form.input :summary, label: false, input_html: { class: 'summary-input' } %>
+          </div>
+
+        </div>
+        <div class='meta'>
+          <%= form.input :visibility, as: :select, collection: Post.visibilities, input_html: { class: 'bg-transparent' } %>
+          <date-time-picker>
+            <%= form.input :date, as: :string, input_html: { 'data-target': 'date-time-picker.element', class: 'bg-transparent' } %>
+          </date-time-picker>
+
+          <input-tags>
+            <%= form.input :topic_list, input_html: { 'data-target': 'input-tags.element', class: 'bg-transparent' } %>
+          </input-tags>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

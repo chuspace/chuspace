@@ -10,8 +10,7 @@
             <%= link_to(
                 config[:label],
                 user_path(@user, tab: config[:tab]),
-                'aria-selected': false,
-                class: tab_selected?(user_path(@user, tab: config[:tab]))
+                'aria-selected': false
               )
             %>
           </li>

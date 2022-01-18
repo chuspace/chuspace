@@ -1,2 +1,3 @@
-<%= link_to 'Save', '#', class: 'btn btn-primary btn-xs mr-4', 'data-action': 'click:chu-editor#onSave' %>
-<%= link_to 'Publish', '#', class: 'btn btn-accent btn-xs mr-4', 'data-action': 'click:chu-editor#onPublish' %>
+<%= content_tag :button, 'Save', class: 'btn btn-primary btn-xs mr-4', 'data-action': 'click:chu-editor#onSave' %>
+<%= link_to 'Publish', publication_new_publish_draft_path(publication, draft), class: 'btn btn-accent btn-xs mr-4', 'data-action': 'click:chu-editor#onPublish' %>
+<%= link_to 'Preview', publication_preview_draft_path(publication, draft), class: 'btn btn-info btn-xs mr-4' %>

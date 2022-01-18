@@ -1,0 +1,21 @@
+<div class='sm:w-2/3 mx-auto w-full'>
+  <h3>Create a new draft</h3>
+  <p class='text-sm mt-2 text-secondary'>
+    The new draft will be persisted into the connected Git repository.
+  </p>
+
+  <div class="text-sm breadcrumbs">
+    <ul>
+      <li>
+        <%= link_to @publication.permalink, user_path(@publication), class: 'link link-primary' %>
+      </li>
+      <li>
+        <%= link_to @publication.repo.fullname, publication_path(@publication), class: 'link link-primary' %>
+      </li>
+    </ul>
+  </div>
+
+  <div class='mt-8'>
+    <%= render 'form', draft: @draft, publication: @publication %>
+  </div>
+</div>
