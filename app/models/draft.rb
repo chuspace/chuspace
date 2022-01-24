@@ -5,6 +5,7 @@ class Draft < ActiveType::Object
   attribute :path, :string
   attribute :name, :string
   attribute :commit_message, :string
+  attribute :type, :string
   attribute :raw_content, :string, default: proc { '' }
   attribute :publication, Publication.new
 
@@ -13,6 +14,10 @@ class Draft < ActiveType::Object
 
   def body
     parsed.content
+  end
+
+  def repo_fullname
+    publication.repo.fullname
   end
 
   def last_commit
@@ -25,7 +30,7 @@ class Draft < ActiveType::Object
 
     publication.git_repository.git_adapter.create_or_update_blob(
       path: path,
-      content: Base64.encode64(raw_content),
+      content: raw_content,
       sha: id,
       message: commit_message,
       committer: committer,
@@ -100,8 +105,14 @@ class Draft < ActiveType::Object
     Base64.decode64(raw_content).force_encoding('UTF-8')
   end
 
+  def relative_path
+    base_path = Pathname.new(publication.repo.posts_folder)
+    file_path = Pathname.new(path)
+    file_path.relative_path_from(base_path).to_s
+  end
+
   def to_param
-    path
+    relative_path
   end
 
   def to_raw_content(title:, summary:, date: nil, topics: nil, body:)
@@ -117,7 +128,7 @@ class Draft < ActiveType::Object
       ---
     STR
 
-    [front_matter_str, body].join("\n")
+    Base64.encode64([front_matter_str, body].join("\n"))
   end
 
   private

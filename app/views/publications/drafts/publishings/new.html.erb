@@ -5,7 +5,9 @@
         <div class='grid grid-cols-2 gap-8'>
         <div class='basics'>
           <h5 class='mb-4'>Post preview</h5>
-          <%= form.input :preview_image, as: :hidden, input_html: { value: @draft.preview_image_url_or_path } %>
+          <file-attachment directory>
+            <%= form.input :preview_image, as: :hidden, input_html: { value: @draft.preview_image_url_or_path } %>
+          </file-attachment>
 
           <% if @draft.preview_image_url_or_path.present? %>
             <%= image_tag(@draft.preview_image_url_or_path, class: 'w-full h-40 rounded-md') %>
@@ -25,9 +27,16 @@
             <%= form.input :date, as: :string, input_html: { 'data-target': 'date-time-picker.element', class: 'bg-transparent' } %>
           </date-time-picker>
 
-          <input-tags>
+          <auto-complete src="/users/search" for="topics-popup">
             <%= form.input :topic_list, input_html: { 'data-target': 'input-tags.element', class: 'bg-transparent' } %>
-          </input-tags>
+            <button id="topics-clear">X</button>
+            <ul id="topics-popup"></ul>
+            <!--
+              Optional div for screen reader feedback. Note the ID matches the ul, but with -feedback appended.
+              Recommended: Use a "Screen Reader Only" class to position the element off the visual boundary of the page.
+            -->
+            <div id="topics-popup-feedback" class="sr-only"></div>
+          </auto-complete>
         </div>
       <% end %>
     </div>

@@ -43,39 +43,6 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        light: {
-          primary: '#3B82F6' /* Primary color */,
-          'primary-focus': '#2563EB' /* Primary color - focused */,
-          'primary-content':
-            '#ffffff' /* Foreground content color to use on primary color */,
-
-          secondary: '#71717A' /* Secondary color */,
-          'secondary-focus': '#52525b' /* Secondary color - focused */,
-          'secondary-content':
-            '#fff' /* Foreground content color to use on secondary color */,
-
-          accent: '#111827' /* Accent color */,
-          'accent-focus': '#D97706' /* Accent color - focused */,
-          'accent-content':
-            '#fff' /* Foreground content color to use on accent color */,
-
-          neutral: '#fff' /* Neutral color */,
-          'neutral-focus': '#f4f4f4' /* Neutral color - focused */,
-          'neutral-content':
-            '#111827' /* Foreground content color to use on neutral color */,
-
-          'base-100':
-            '#ffffff' /* Base color of page, used for blank backgrounds */,
-          'base-200': '#e4e4e7' /* Base color, a little darker */,
-          'base-300': '#d4d4d8' /* Base color, even more darker */,
-          'base-content':
-            '#333333' /* Foreground content color to use on base color */,
-
-          info: '#2094f3' /* Info */,
-          success: '#009485' /* Success */,
-          warning: '#ff9900' /* Warning */,
-          error: '#ff5724' /* Error */
-        },
         dark: {
           primary: '#3B82F6' /* Primary color */,
           'primary-focus': '#2563EB' /* Primary color - focused */,
@@ -99,8 +66,8 @@ module.exports = {
 
           'base-100':
             '#111827' /* Base color of page, used for blank backgrounds */,
-          'base-200': '#292f3d' /* Base color, a little darker */,
-          'base-300': '#414652' /* Base color, even more darker */,
+          'base-200': '#1A243B' /* Base color, a little darker */,
+          'base-300': '#313a4f' /* Base color, even more darker */,
           'base-content':
             '#D4D4D4' /* Foreground content color to use on base color */,
 

@@ -3,6 +3,8 @@
 module Publications
   module Drafts
     class PublishingsController < BaseController
+      layout 'publish'
+
       def new
         @post = @publication.posts.build
         @post.assign_attributes(@draft.post_attributes)

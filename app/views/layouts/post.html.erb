@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang='en' class='h-full'>
+  <%= render 'layouts/head' %>
+  <body class="flex flex-col h-full">
+    <%= render 'layouts/flash' %>
+
+    <section class="container flex-1 pt-24">
+      <%= yield %>
+    </section>
+  </body>
+</html>

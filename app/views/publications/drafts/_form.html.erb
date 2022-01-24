@@ -1,5 +1,5 @@
 <%= turbo_frame_tag draft do %>
-  <%= simple_form_for(draft, url: publication_create_draft_path(@publication, draft), html: { data: { "turbo-frame": '_top' } }) do |form| %>
+  <%= simple_form_for(draft, url: publication_create_draft_path(@publication), html: { data: { "turbo-frame": '_top' } }) do |form| %>
     <%= form.label :name, class: 'mb-2 block' %>
     <div class="form-control w-full">
       <div class="input-group input-group-xs w-full">

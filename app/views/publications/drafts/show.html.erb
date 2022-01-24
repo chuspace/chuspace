@@ -1,5 +1,5 @@
 <%= render 'publications/layout' do %>
-  <%= turbo_frame_tag dom_id(@publication, :drafts), src: publication_drafts_path(@publication, path: @path), lazy: true do %>
-    Loading
+  <%= turbo_frame_tag dom_id(@publication, :drafts), src: publication_drafts_path(@publication, path: params[:path]), lazy: true do %>
+    <%= render 'shared/card_loader', count: 10 %>
   <% end %>
 <% end %>

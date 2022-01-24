@@ -85,22 +85,28 @@ Rails.application.routes.draw do
       end
     end
 
-    scope constraints: { path: /[^\0]+/ }, format: false do
+    scope constraints: { path: /[^\0]+/ } do
       scope controller: :drafts, module: :publications do
+        get '/drafts', action: :index, as: :drafts_root
         get '/drafts/*path', action: :show, as: :drafts
-        get '/new/*path', action: :new, as: :new_draft
-        post '/create/*path', action: :create, as: :create_draft
-        get '/edit/*path', action: :edit, as: :edit_draft
-        patch '/update/*path', action: :update, as: :update_draft
-        delete '/delete/*path', action: :destroy, as: :delete_draft
+        get '/new', action: :new, as: :new_draft
+        post '/create', action: :create, as: :create_draft
+        get '/*path/edit', action: :edit, as: :edit_draft
+        patch '/*path/update', action: :update, as: :update_draft
+        delete '/*path/delete', action: :destroy, as: :delete_draft
 
         scope controller: :previews, module: :drafts do
-          get '/preview/*path', action: :show, as: :preview_draft
+          get '/*path/preview', action: :show, as: :preview_draft
         end
 
         scope controller: :publishings, module: :drafts do
-          get '/publish/*path', action: :new, as: :new_publish_draft
-          post '/publish/*path', action: :publish, as: :publish_draft
+          get '/*path/publish', action: :new, as: :new_publish_draft
+          post '/*path/publish', action: :publish, as: :publish_draft
+        end
+
+        scope controller: :commits, module: :drafts do
+          get '/*path/commit', action: :new, as: :new_commit_draft
+          post '/*path/commit', action: :create, as: :commit_draft
         end
       end
     end

@@ -30,11 +30,13 @@ class Repository
 
   def draft(path:)
     blob = git_adapter.blob(path: path)
-    @draft ||= Draft.new(id: blob.id || blob.sha, name: blob.name, path: blob.path, raw_content: blob.content, publication: publication)
+    @draft ||= Draft.new(id: blob.id || blob.sha, name: blob.name, type: blob.type, path: blob.path, raw_content: blob.content, publication: publication)
   end
 
   def drafts(path: nil)
-    @drafts ||= git_adapter.blobs(path: path || publication.repo.posts_folder)
+    @drafts ||= git_adapter.blobs(path: path || publication.repo.posts_folder).map do |blob|
+      Draft.new(id: blob.id || blob.sha, name: blob.name, path: blob.path, type: blob.type, raw_content: blob.content, publication: publication)
+    end
   end
 
   def files

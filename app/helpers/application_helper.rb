@@ -19,8 +19,14 @@ module ApplicationHelper
     get_request ? link_to(name, options, html_options, &block) : button_to(name, options, html_options, &block)
   end
 
-  def active_tab?(path)
-    request.fullpath == path ? ' font-bold border-l-2 border-l-primary bg-base-200' : ''
+  def tab_link_to(title, path, options = {})
+    active_condition = options.delete(:active_condition) || :exact
+
+    active = is_active_link?(path, active_condition)
+    class_name = options.delete(:class) || ''
+    class_name += ' active' if active
+
+    link_to title, path, class: class_name, role: 'tab', 'aria-selected': active, tabindex: '-1', **options
   end
 
   def user_menu
@@ -36,5 +42,18 @@ module ApplicationHelper
   def url_or_mailto?(url_str)
     url = URI.parse(url_str)
     url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS) || url.kind_of?(URI::MailTo)
+  end
+
+  def is_active_link?(path, condition = nil)
+    case condition
+    when :inclusive, nil
+      !request.fullpath.match(/^#{Regexp.escape(path).chomp('/')}(\/.*|\?.*)?$/).blank?
+    when :exclusive
+      !request.fullpath.match(/^#{Regexp.escape(path)}\/?(\?.*)?$/).blank?
+    when Regexp
+      !request.fullpath.match(condition).blank?
+    else
+      request.fullpath == path
+    end
   end
 end

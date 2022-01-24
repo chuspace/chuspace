@@ -74,7 +74,6 @@ export default class Heading extends Node {
             const { schema, doc, tr, selection } = view.state
             const parent = findParentNodeOfType(schema.nodes.heading)(selection)
 
-            console.log(parent)
             if (!parent) return
             if (!parent.node) return
 

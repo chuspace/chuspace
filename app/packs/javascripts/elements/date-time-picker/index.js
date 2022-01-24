@@ -15,6 +15,5 @@ export default class DateTimePicker extends HTMLElement {
       enableTime: true,
       dateFormat: 'Y-m-d H:i'
     })
-    console.log(picker)
   }
 }

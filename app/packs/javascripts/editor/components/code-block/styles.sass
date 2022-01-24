@@ -1,3 +1,6 @@
+.CodeMirror
+  height: calc(100vh - 3rem)
+
 
 code-editor
   position: relative
@@ -6,7 +9,7 @@ code-editor
 
 
   .code-editor-container
-    @apply rounded shadow-lg
+    @apply rounded shadow-lg border border-base-200
     border-radius: 0.5rem
 
     .CodeMirror
@@ -17,7 +20,7 @@ code-editor
         max-height: 600px
 
   .code-editor-toolbar
-    @apply flex items-center p-4 w-full relative rounded-t text-base text-sm bg-primary
+    @apply flex items-center p-4 w-full relative rounded-t text-base text-sm bg-base-200
     height: 40px
 
   .code-editor-toolbar-heading

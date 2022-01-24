@@ -4,15 +4,17 @@ import { attr, controller, target } from '@github/catalyst'
 
 import Editor from 'editor'
 import { Transaction } from 'prosemirror-state'
-import matter from 'gray-matter'
 
 @controller
 export default class ChuEditor extends HTMLElement {
   @attr autofocus: boolean = true
   @attr imageProviderPath: string = ''
   @target content: HTMLElement
-  @target revisionsModal: HTMLElement
+  @target form: HTMLElement
+  @target diff: HTMLElement
+
   editor: Editor
+  currentContent: string = ''
   status: 'Saved'
 
   connectedCallback() {
@@ -30,27 +32,26 @@ export default class ChuEditor extends HTMLElement {
     this.editor.focus()
   }
 
+  setTextareaContent = (newContent) =>
+    (this.content.querySelector('textarea').value = newContent)
+
   onChange = (transaction: Transaction) => {
-    // if (this.saving) return
-
-    // this.saving = true
-
-    this.content.querySelector('textarea').value = this.editor.content
-
-    // if (this.id) {
-    //   this.autosave()
-    // } else {
-    //   this.create()
-    // }
+    const newContent = this.editor.content
+    this.diff.dataset.newContent = newContent
+    this.setTextareaContent(newContent)
   }
 
-  onSave = (event) => {
-    event.preventDefault()
-    this.revisionsModal.classList.add('modal-open')
+  openCommitModal = (event) => {
+    if (this.diff.dataset.newContent) {
+      event.preventDefault()
+      this.form.classList.add('modal-open')
+      document.body.classList.add('overflow-hidden')
+    }
   }
 
-  closeRevisionsModal = () => {
+  closeCommitModal = () => {
     event.preventDefault()
-    this.revisionsModal.classList.remove('modal-open')
+    this.form.classList.remove('modal-open')
+    document.body.classList.remove('overflow-hidden')
   }
 }

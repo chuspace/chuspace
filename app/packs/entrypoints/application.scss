@@ -6,27 +6,27 @@
 
 @layer base {
   h1 {
-    @apply text-8xl font-bold font-sans;
+    @apply text-6xl font-bold font-sans;
   }
 
   h2 {
-    @apply text-6xl font-semibold font-sans;
-  }
-
-  h3 {
     @apply text-4xl font-semibold font-sans;
   }
 
-  h4 {
-    @apply text-2xl font-bold font-sans;
+  h3 {
+    @apply text-2xl font-semibold font-sans;
   }
 
-  h5 {
+  h4 {
     @apply text-xl font-bold font-sans;
   }
 
+  h5 {
+    @apply text-base font-bold font-sans;
+  }
+
   h6 {
-    @apply text-lg font-bold font-sans;
+    @apply text-sm font-bold font-sans;
   }
 
   strong {
@@ -61,6 +61,32 @@
 
   .summary-input {
     @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none text-xl mt-2;
+  }
+
+  .tab {
+    @apply h-12;
+  }
+
+  .tabs {
+    .tab {
+      &.active {
+        @apply relative text-primary;
+
+        &::after {
+          @apply absolute w-full bottom-0 border-b-2 border-b-primary;
+          content: '';
+        }
+      }
+    }
+  }
+
+  .active[dir='vertical'] {
+    @apply relative bg-base-200 text-primary;
+
+    &::before {
+      @apply absolute border-l-2 border-l-primary left-0 h-full top-0;
+      content: '';
+    }
   }
 }
 

@@ -1,37 +1,25 @@
 <div class='relative h-full'>
-  <div class='flex h-full'>
-    <div class='profile sm:w-1/4 w-full min-h-full'>
-      <%= image_tag @user.avatar_url(variant: :profile), class: 'mask mask-square rounded-md' %>
-      <h4 class='mt-4'><%= @user.name %></h4>
-      <h5 class='text-secondary font-normal'><%= @user.username %></h5>
-      <ul class='mt-8'>
-        <% user_menu.each do |key, config| %>
-          <li class='mb-4 last-mb-0'>
-            <%= link_to(
-                config[:label],
-                user_path(@user, tab: config[:tab]),
-                'aria-selected': false
-              )
-            %>
-          </li>
-        <% end %>
-      </ul>
+  <div class='h-full'>
+
+    <%= image_tag @user.avatar_url(variant: :profile), class: 'mask mask-square rounded-md' %>
+    <h4 class='mt-4'><%= @user.name %></h4>
+    <h5 class='text-secondary font-normal'><%= @user.username %></h5>
+
+    <ul class='flex items-center bg-base-200 px-4 py-2 rounded-md'>
+      <% user_menu.each do |key, config| %>
+        <li class='ml-8 first:ml-0'>
+          <%= link_to(
+              config[:label],
+              user_path(@user, tab: config[:tab]),
+              'aria-selected': false
+            )
+          %>
+        </li>
+      <% end %>
+    </ul>
+    <div class='mt-4'>
+      <%= render @partial %>
     </div>
 
-    <div class='content sm:w-3/4 ml-8 w-full'>
-      <div class="text-sm breadcrumbs">
-        <ul>
-          <li>
-            <a><%= @user.username %></a>
-          </li>
-          <li>
-            <a><%= params[:tab] || :about %></a>
-          </li>
-        </ul>
-      </div>
-      <div class='mt-4'>
-        <%= render @partial %>
-      </div>
-    </div>
   </div>
 </div>
