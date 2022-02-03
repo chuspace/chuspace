@@ -12,7 +12,7 @@ module Publications
       private
 
       def find_draft
-        @draft = @publication.git_repository.draft(path: @draft_path)
+        @draft = @publication.draft(path: @draft_path)
         add_breadcrumb(:drafts, publication_drafts_root_path(@publication))
         add_breadcrumb(@draft.relative_path, publication_edit_draft_path(@publication, @draft))
       end

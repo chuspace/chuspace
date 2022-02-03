@@ -7,7 +7,7 @@ module Publications
 
       def new
         @post = @publication.posts.build
-        @post.assign_attributes(@draft.post_attributes)
+        @post.assign_attributes(@draft.to_post_attributes)
         add_breadcrumb('Publish')
       end
     end

@@ -6,7 +6,7 @@ module Publications
     before_action :find_publication
 
     def show
-      @blob = @publication.git_repository.asset(path: CGI.unescape(params[:path]))
+      @blob = @publication.asset(path: CGI.unescape(params[:path]))
 
       http_cache_forever(public: true) do
         send_data Base64.decode64(@blob.content), disposition: params[:disposition], filename: @blob.name
@@ -14,7 +14,7 @@ module Publications
     end
 
     def create
-      image = @publication.git_repository.git_adapter.create_or_update_blob(
+      image = @publication.repository.git_adapter.create_or_update_blob(
         path: File.join(@publication.repo.assets_folder, params[:image].original_filename),
         content: Base64.encode64(params[:image].read),
         sha: '',

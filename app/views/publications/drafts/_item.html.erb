@@ -1,9 +1,13 @@
 <% cache draft do %>
-  <article class='border-b last:border-b-0 border-base-200 p-4'>
+  <article class='border-b last:border-b-0 border-base-200 p-4 px-8'>
     <div class='flex-1'>
       <% path = draft.type == 'file' ? publication_edit_draft_path(publication, draft) : publication_drafts_path(publication, draft) %>
       <%= link_to path, data: { 'turbo-frame': :_top } do %>
-        <%= tag.h5 draft.name, class: 'link link-primary link-hover mt-1' %>
+        <%= tag.h5 class: 'link link-primary link-hover' do %>
+          <%= draft.name %>
+          <%= content_tag :span, draft.type, class: 'badge badge-outline badge-secondary ml-2' %>
+        <% end %>
+
         <%= tag.p draft.path, class: 'text-sm text-secondary mt-1 sm:w-2/3 w-full' %>
       <% end %>
     </div>

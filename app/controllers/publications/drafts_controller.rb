@@ -7,6 +7,13 @@ module Publications
 
     layout 'editor', only: %i[new edit]
 
+    def index
+      if turbo_frame_request?
+        @drafts = @publication.drafts(path: @draft_path)
+        render partial: 'list', locals: { drafts: @drafts, publication: @publication }
+      end
+    end
+
     def create
       path = @drafts_root_path.join(create_params[:name] || '').to_s
       @draft = Draft.new(publication: @publication, path: path, **create_params)
@@ -61,7 +68,7 @@ module Publications
     end
 
     def find_draft
-      @draft = @publication.git_repository.draft(path: @draft_path)
+      @draft = @publication.draft(path: @draft_path)
     end
   end
 end

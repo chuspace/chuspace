@@ -14,7 +14,7 @@ module Git
     def create_or_update!(commit:)
       fail NotAllowedError, 'Can not recommit' if commit.persisted?
 
-      publication.git_repository.git_adapter.create_or_update_blob(
+      publication.repository.git_adapter.create_or_update_blob(
         path: path,
         content: Base64.encode64(content),
         sha: id,
@@ -25,8 +25,6 @@ module Git
     end
 
     def to_draft(publication:)
-      puts name.inspect
-
       if MarkdownConfig.valid?(name: name)
         Draft.new(publication: publication, **attributes)
       else
@@ -40,6 +38,10 @@ module Git
 
     def persisted?
       id.present?
+    end
+
+    def to_param
+      name
     end
   end
 end

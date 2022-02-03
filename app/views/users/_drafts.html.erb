@@ -1,6 +1,6 @@
 <% if @user.personal_publication.present? %>
   <div class='card bordered'>
-    <%= render partial: 'publications/drafts/item', collection: @user.personal_publication.git_repository.drafts, locals: { publication: @user.personal_publication }, as: :draft, cached: true %>
+    <%= render partial: 'publications/drafts/item', collection: @user.personal_publication.repository.drafts, locals: { publication: @user.personal_publication }, as: :draft, cached: true %>
   </div>
 <% else %>
   <div class='text-center py-16'>

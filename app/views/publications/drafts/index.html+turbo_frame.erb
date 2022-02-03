@@ -1,7 +1,0 @@
-<%= turbo_frame_tag dom_id(@publication, :drafts) do %>
-  <ul class='card bordered mt-8'>
-    <% @publication.git_repository.drafts.each do |draft| %>
-      <%= render 'item', draft: draft, publication: @publication %>
-    <% end %>
-  </ul>
-<% end %>

@@ -1,5 +1,5 @@
 <div class='sm:w-2/3 mx-auto w-full chu-editor editable'>
-  <% if @draft.body != @draft.unsaved_content.value %>
+  <% if @draft.stale? %>
     <alert-notification>
       <div data-target='alert-notification.element' class="alert alert-notice w-full z-20 rounded-none flex">
         <span class='flex-1 text-center block'>You have uncommitted changes</span>
@@ -9,5 +9,6 @@
       </div>
     </alert-notification>
   <% end %>
+
   <%= render 'edit_form', draft: @draft, publication: @publication %>
 </div>

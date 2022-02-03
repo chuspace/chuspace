@@ -12,7 +12,7 @@
               as: :text,
               label: false,
               wrapper: false,
-              input_html: { class: 'hidden', value: @draft.body, readonly: true }
+              input_html: { class: 'hidden', value: @post.body, readonly: true }
             )
           %>
         </div>
@@ -23,7 +23,7 @@
               as: :text,
               label: false,
               wrapper: false,
-              input_html: { class: 'hidden', value: @draft.unsaved_content.value, readonly: true }
+              input_html: { class: 'hidden', value: @draft.body, readonly: true }
             )
           %>
         </div>
@@ -34,25 +34,9 @@
   <div class='col-span-1 p-8 bg-base-200 overflow-scroll h-full'>
     <%= turbo_frame_tag(@post, class: 'h-full') do %>
       <%= simple_form_for @post, url: publication_publish_draft_path(@publication, @draft), html: { form: 'h-full' } do |form| %>
-        <div class='basics'>
-          <h5 class='mb-4'>Publish</h5>
-          <file-attachment directory>
-            <%= form.input :preview_image, as: :hidden, input_html: { value: @draft.preview_image_url_or_path } %>
-          </file-attachment>
-
-          <% if @draft.preview_image_url_or_path.present? %>
-            <%= image_tag(@draft.preview_image_url_or_path, class: 'w-full h-40 rounded-md') %>
-          <% else %>
-            <div class='bg-secondary w-full h-40 rounded-md'></div>
-          <% end %>
-
-          <div class='mt-8 chu-editor'>
-            <%= form.input :title, label: false, input_html: { class: 'title-input' } %>
-            <%= form.input :summary, label: false, input_html: { class: 'summary-input' } %>
-          </div>
-        </div>
-
         <div class='meta'>
+          <h5 class='mb-4'>Publish</h5>
+
           <%= form.input :visibility, as: :select, collection: Post.visibilities, input_html: { class: 'bg-transparent' } %>
           <date-time-picker>
             <%= form.input :date, as: :string, input_html: { 'data-target': 'date-time-picker.element', class: 'bg-transparent' } %>

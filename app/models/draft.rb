@@ -10,8 +10,8 @@ class Draft < Git::Blob
     end
   end
 
-  kredis_boolean :stale, expires_in: 1.week, key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}" }
-  kredis_string  :local_content, expires_in: 1.week, key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}" }
+  kredis_boolean :stale, expires_in: 1.week, key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:stale" }
+  kredis_string  :local_content, expires_in: 1.week, key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:local_content" }
 
   attribute :publication, Publication
   validates :path, :name, markdown: true
@@ -85,11 +85,9 @@ class Draft < Git::Blob
       title: title,
       summary: summary,
       topic_list: topics,
-      body: body,
-      body_html: content_html,
       blob_path: path,
       blob_sha: id,
-      commit_sha: last_commit&.id || last_commit&.sha
+      commit_sha: commits.first&.id || commits.first&.sha
     }
   end
 

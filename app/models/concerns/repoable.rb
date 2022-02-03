@@ -12,20 +12,30 @@ module Repoable
     [repo.assets_folder].freeze
   end
 
-  def assets
-    @assets ||= repository.assets(assets_folders)
+  def assets(path: assets_folders)
+    path = path.is_a?(Array) ? path : [path]
+    @assets ||= repository.assets(path)
+  end
+
+  def asset(path:)
+    @asset ||= repository.asset(path)
   end
 
   def drafts_folder
     [repo.posts_folder, repo.drafts_folder].reject(&:blank?).freeze
   end
 
-  def drafts
-    @drafts ||= repository.drafts(drafts_folder)
+  def drafts(path: drafts_folder)
+    path = path.is_a?(Array) ? path : [path]
+    @drafts ||= repository.drafts(path)
+  end
+
+  def draft(path:)
+    @draft ||= repository.draft(path)
   end
 
   def readme
-    @readme ||= repository.draft(repo.readme_path)
+    @readme ||= repository.draft(repo.readme_path).content_html
   end
 
   def repository(ref: 'HEAD')

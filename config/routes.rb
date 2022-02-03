@@ -88,7 +88,7 @@ Rails.application.routes.draw do
     scope constraints: { path: /[^\0]+/ } do
       scope controller: :drafts, module: :publications do
         get '/drafts', action: :index, as: :drafts_root
-        get '/drafts/*path', action: :show, as: :drafts
+        get '/drafts/*path', action: :index, as: :drafts
         get '/new', action: :new, as: :new_draft
         post '/create', action: :create, as: :create_draft
         get '/*path/edit', action: :edit, as: :edit_draft

@@ -15,6 +15,7 @@ module SetPublicationRoot
   end
 
   def set_draft_path
-    @draft_path ||= @drafts_root_path.join(params[:path] || '').to_s
+    @path = params[:path] || ''
+    @draft_path ||= @drafts_root_path.join(@path).to_s
   end
 end

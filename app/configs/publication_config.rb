@@ -12,7 +12,7 @@ class PublicationConfig < ApplicationConfig
     repo: {
       readme_path: 'README.md'
     },
-    draft: {
+    settings: {
       auto_publish: false,
       extensions: %w[.markdown .mdown .mkdn .mkd .md .text .txt]
     },
