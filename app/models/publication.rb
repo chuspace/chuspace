@@ -18,13 +18,13 @@ class Publication < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :git_provider
 
+  delegate :adapter, to: :git_provider, prefix: true
+
   after_create :create_owning_membership
 
   validates :name, uniqueness: { scope: :owner_id }
   validates :name, :visibility, presence: true
   validate  :one_personal_publication_per_owner, on: :create
-
-  has_rich_text :readme
 
   acts_as_taggable_on :topics
 
@@ -35,16 +35,10 @@ class Publication < ApplicationRecord
   scope :personal, -> { where(personal: true) }
   scope :except_personal, -> { where(personal: false) }
 
-  accepts_nested_attributes_for :members
-
   enum visibility: PublicationConfig.to_enum, _suffix: true
 
   def visibility
     super ? ActiveSupport::StringInquirer.new(super) : nil
-  end
-
-  def git_repository
-    @git_repository ||= Repository.for(publication: self)
   end
 
   private

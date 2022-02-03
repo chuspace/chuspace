@@ -5,25 +5,32 @@ class GithubAdapter < ApplicationAdapter
     'github'
   end
 
-  def blobs(path: [])
-    blob_from_response(get("repos/#{repo_fullname}/contents/#{CGI.escape(path)}"))
-      .sort_by { |blob| %w[dir file].index(blob.type) }
+  def blobs(paths: [])
+    opts = { ref: ref }
+    blobs = []
+
+    paths.each do |path|
+      blobs += blob_from_response(get("repos/#{repo_fullname}/contents/#{CGI.escape(path)}", **opts))
+        .sort_by { |blob| %w[dir file].index(blob.type) }
+    end
+
+    blobs
   end
 
   def blob(path:)
     opts = { ref: ref }
-    blob_from_response(get "repos/#{repo_fullname}/contents/#{CGI.escape(path)}", opts)
+    blob_from_response(get("repos/#{repo_fullname}/contents/#{CGI.escape(path)}", **opts))
   end
 
   def commits(path: nil)
     opts = { ref: ref }
     opts[:path] = path if path
 
-    get("repos/#{repo_fullname}/commits", **opts)
+    commit_from_response(get("repos/#{repo_fullname}/commits", **opts))
   end
 
   def commit(sha:)
-    get("repos/#{repo_fullname}/commits/#{sha}")
+    commit_from_response(get("repos/#{repo_fullname}/commits/#{sha}"))
   end
 
   def create_or_update_blob(path:, content:, committer:, author:, sha: nil, message: nil)

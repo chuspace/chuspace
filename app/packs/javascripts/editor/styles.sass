@@ -60,7 +60,6 @@
 
   h1, h2, h3, h4, h5, h6
     @apply my-4
-    letter-spacing: -0.07rem
 
     a
       text-decoration: none
@@ -68,7 +67,10 @@
       &:hover
         text-decoration: underline
   .title, .title__empty
-    @apply mb-2
+    @apply mb-2 font-sans text-4xl
+
+  .summary, .summary__empty
+    @apply font-sans text-xl font-medium
 
   strong
     @apply mb-6 font-bold
@@ -89,7 +91,7 @@
     display: none
 
   .insertion
-    @apply bg-success text-success max-w-full whitespace-normal
+    @apply bg-success text-neutral max-w-full whitespace-normal
 
     pre
       @apply p-4 overflow-x-auto text-base
@@ -102,7 +104,7 @@
       @apply border-4 border-success
 
   .deletion
-    @apply bg-error line-through text-error max-w-full whitespace-normal
+    @apply bg-error line-through text-neutral max-w-full whitespace-normal
     *
       background: inherit
       color: inherit

@@ -1,49 +1,50 @@
 <%= turbo_frame_tag(draft) do %>
   <%= simple_form_for draft, url: publication_update_draft_path(publication, draft), html: { 'data-turbo-frame': '_top' } do |form| %>
     <div class='title' data-target='chu-editor.title'>
-      <%= form.input :title, as: :string, label: false, wrapper: false, input_html: { class: 'title-input', value: draft.title, placeholder: 'Title' } %>
+      <%= form.input(
+          :title,
+          as: :text,
+          label: false,
+          wrapper: false,
+          input_html: {
+            rows: 1,
+            maxlength: '100',
+            class: 'title-input autosize',
+            value: draft.title,
+            placeholder: 'Title',
+            data: { attribute: @publication.front_matter.title, action: 'input:chu-editor#handleFrontMatterChange' }
+          }
+        )
+      %>
     </div>
 
     <div class='summary' data-target='chu-editor.summary'>
-      <%= form.input :summary, as: :text, label: false, wrapper: false, input_html: { rows: 2, class: 'summary-input', value: draft.summary, placeholder: 'Type summary' } %>
+      <%= form.input(
+          :summary,
+          as: :text,
+          label: false,
+          wrapper: false,
+          input_html: {
+            rows: 2,
+            maxlength: '140',
+            class: 'summary-input autosize',
+            value: draft.summary,
+            placeholder: 'Type summary',
+            data: { attribute: @publication.front_matter.summary, action: 'input:chu-editor#handleFrontMatterChange' }
+          }
+        )
+      %>
     </div>
 
     <div class='mt-8' spellcheck="false" data-text='content' data-target='chu-editor.content'>
-      <%= form.input :body, as: :text, label: false, wrapper: false, input_html: { class: 'hidden', value: draft.body } %>
-    </div>
-
-    <div class="modal font-sans max-w-full max-h-screen overflow-hidden" id="commit-modal" data-target='chu-editor.form'>
-      <div class="modal-box w-full h-screen top-0 max-w-full max-h-screen overflow-hidden rounded-none">
-        <div class='grid grid-cols-3 gap-8 h-screen'>
-          <div class='col-span-2'>
-            <diff-editor
-              class='max-h-screen h-screen mb-8'
-              data-target='chu-editor.diff'
-              data-filepath='<%= @draft.repo_fullname %>/<%= @draft.path %>'
-              data-initial-content='<%= draft.body %>'
-            >
-              <textarea data-target='diff-editor.codemirror'></textarea>
-            </diff>
-          </div>
-
-          <div class='col-span-1'>
-            <h4>Commit changes</h4>
-            <div class="form-control mt-4">
-              <%= form.input :commit_message, label: false, placeholder: 'Commit message' %>
-              <div class='mt-8 font-mono'>
-                <label class='text-sm block'>Commit author: <%= link_to Current.user.name, user_path(Current.user), class: 'font-bold' %></label>
-                <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>
-                <label class='text-sm block'>Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>
-              </div>
-            </div>
-
-            <div class="modal-action">
-              <%= form.submit 'Commit', class: 'btn btn-primary btn-sm' %>
-              <%= button_to 'Cancel', '#', class: "btn btn-error btn-sm", data: { action: 'click:chu-editor#closeCommitModal', turbo: { frame: :_top } } %>
-            </div>
-          </div>
-        </div>
-      </div>
+      <%= form.input(
+          :body,
+          as: :text,
+          label: false,
+          wrapper: false,
+          input_html: { class: 'hidden', value: draft.unsaved_content.value || draft.body }
+        )
+      %>
     </div>
   <% end %>
 <% end %>

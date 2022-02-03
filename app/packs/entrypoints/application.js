@@ -13,6 +13,7 @@ import 'lazysizes/plugins/parent-fit/ls.parent-fit'
 import '@hotwired/turbo-rails'
 import 'dialog-polyfill/dialog-polyfill.css'
 
+import autosize from '@github/textarea-autosize'
 import lazySizes from 'lazysizes'
 
 lazySizes.cfg.lazyClass = 'lazy'
@@ -38,3 +39,5 @@ window
   })
 
 importAll(require.context('../javascripts/elements', true, /.(ts)$/))
+
+document.querySelectorAll('textarea.autosize').forEach(autosize)

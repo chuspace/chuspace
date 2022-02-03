@@ -1,5 +1,6 @@
-import { createConsumer } from '@rails/actioncable'
+import { createConsumer, logger } from '@rails/actioncable'
 
+logger.enabled = true
 class ActionCableClient {
   static instance
 
@@ -23,9 +24,9 @@ class ActionCableClient {
     return subscription
   }
 
-  subscribedTo = channel => this.subscriptions.has(channel)
+  subscribedTo = (channel) => this.subscriptions.has(channel)
 
-  unsubscribe = channel => {
+  unsubscribe = (channel) => {
     const subscription = this.subscriptions.get(channel)
     this.subscriptions.delete(channel)
     this.consumer.subscriptions.remove(subscription)

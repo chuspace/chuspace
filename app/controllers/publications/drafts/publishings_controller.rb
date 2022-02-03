@@ -3,7 +3,7 @@
 module Publications
   module Drafts
     class PublishingsController < BaseController
-      layout 'publish'
+      layout 'blank'
 
       def new
         @post = @publication.posts.build

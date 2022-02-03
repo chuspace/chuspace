@@ -22,14 +22,7 @@ module Publications
     end
 
     def update
-      @draft.commit_message = update_params[:commit_message]
-      new_content = @draft.to_raw_content(
-        title: update_params[:title],
-        summary: update_params[:summary],
-        body: update_params[:body]
-      )
-
-      @draft.raw_content = new_content
+      @draft.assign_attributes(update_params)
 
       if @draft.valid? && @draft.commit!
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
@@ -53,7 +46,7 @@ module Publications
 
     def edit
       add_breadcrumb(:drafts, publication_drafts_root_path(@publication))
-      add_breadcrumb(@draft.name, publication_preview_draft_path(@publication, @draft))
+      add_breadcrumb(@draft.relative_path, publication_preview_draft_path(@publication, @draft))
       add_breadcrumb('Edit')
     end
 
@@ -64,7 +57,7 @@ module Publications
     end
 
     def update_params
-      params.require(:draft).permit(:title, :summary, :body, :commit_message)
+      params.require(:draft).permit(:raw_content, :commit_message)
     end
 
     def find_draft

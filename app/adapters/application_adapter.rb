@@ -22,14 +22,35 @@ class ApplicationAdapter
     case response
     when Array then response.map { |item| blob_from_response(item) }
     when Sawyer::Resource
-      Sawyer::Resource.new(
-        agent, {
-          id: response.sha || response.id,
-          name: response.name,
-          path: response.path,
-          type: response.type,
-          content: response.content || ''
-        }
+      Git::Blob.new(
+        id: response.sha || response.id,
+        name: response.name,
+        path: response.path,
+        type: response.type,
+        content: response.content,
+        adapter: self
+      )
+    else
+      response
+    end
+  end
+
+  def commit_from_response(response)
+    case response
+    when Array then response.map { |item| commit_from_response(item) }
+    when Sawyer::Resource
+      commit = response.commit
+      author_hash = commit.author.to_h.merge(username: response.author.login || response.author.username)
+      committer_hash = commit.committer.to_h.merge(username: response.author.login || response.author.username)
+
+      Git::Commit.new(
+        id: response.id || response.sha,
+        message: commit.message,
+        author: Git::Author.from(author_hash),
+        committed_at: commit.committer.date,
+        patch: response.files&.first&.patch,
+        committer: Git::Committer.from(committer_hash),
+        adapter: self
       )
     else
       response
@@ -40,18 +61,17 @@ class ApplicationAdapter
     case response
     when Array then response.map { |item| repository_from_response(item) }
     when Sawyer::Resource
-      Sawyer::Resource.new(
-        agent, {
-          id: response.id,
-          fullname: response.full_name&.squish || response.path_with_namespace&.squish,
-          name: response.name,
-          owner: response.namespace&.path || response.owner&.login,
-          description: response.description,
-          visibility: response.visibility,
-          ssh_url: response.ssh_url_to_repo || response.ssh_url,
-          html_url: response.web_url || response.html_url,
-          default_branch: response.default_branch
-        }
+      Git::Repository.new(
+        id: response.id,
+        fullname: response.full_name&.squish || response.path_with_namespace&.squish,
+        name: response.name,
+        owner: response.namespace&.path || response.owner&.login,
+        description: response.description,
+        visibility: response.visibility,
+        ssh_url: response.ssh_url_to_repo || response.ssh_url,
+        html_url: response.web_url || response.html_url,
+        default_branch: response.default_branch,
+        adapter: self
       )
     else
       response

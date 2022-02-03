@@ -12,8 +12,27 @@ module Repoable
     [repo.assets_folder].freeze
   end
 
-  def posts_folders
+  def assets
+    @assets ||= repository.assets(assets_folders)
+  end
+
+  def drafts_folder
     [repo.posts_folder, repo.drafts_folder].reject(&:blank?).freeze
+  end
+
+  def drafts
+    @drafts ||= repository.drafts(drafts_folder)
+  end
+
+  def readme
+    @readme ||= repository.draft(repo.readme_path)
+  end
+
+  def repository(ref: 'HEAD')
+    @repository ||= git_provider_adapter
+      .apply_repository_scope(repo_fullname: repo.fullname, ref: ref)
+      .repository
+      .with_publication(self)
   end
 
   def repo_drafts_or_posts_folder
