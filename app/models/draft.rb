@@ -75,6 +75,14 @@ class Draft < Git::Blob
     file_path.relative_path_from(base_path).to_s
   end
 
+  def status
+    if stale?
+      'Uncommitted changes'
+    else
+      'Everything up to date'
+    end
+  end
+
   def to_param
     relative_path
   end

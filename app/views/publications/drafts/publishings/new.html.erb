@@ -1,34 +1,14 @@
 <div class='grid grid-cols-3 h-screen max-h-screen overflow-hidden'>
   <div class='col-span-2 p-8 px-24 h-full overflow-scroll'>
     <%= render 'shared/breadcrumbs' %>
-
-    <%= simple_form_for '', url: '#' do |form| %>
-      <chu-editor class='h-full chu-editor mb-8' data-read-only='true'>
-        <h1 class='title'><%= @draft.title %></h1>
-        <h2 class='summary'><%= @draft.summary %></h2>
-        <div data-target='chu-editor.content'>
-          <%= form.input(
-              :content,
-              as: :text,
-              label: false,
-              wrapper: false,
-              input_html: { class: 'hidden', value: @post.body, readonly: true }
-            )
-          %>
-        </div>
-
-        <div data-target='chu-editor.revision'>
-          <%= form.input(
-              :revision,
-              as: :text,
-              label: false,
-              wrapper: false,
-              input_html: { class: 'hidden', value: @draft.body, readonly: true }
-            )
-          %>
-        </div>
-      </chu-editor>
-    <% end %>
+    <%= render(
+        'publications/drafts/shared/diff',
+        title: @draft.title,
+        summary: @draft.summary,
+        old_content: @post.body,
+        new_content: @draft.body
+      )
+    %>
   </div>
 
   <div class='col-span-1 p-8 bg-base-200 overflow-scroll h-full'>

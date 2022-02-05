@@ -40,4 +40,6 @@ window
 
 importAll(require.context('../javascripts/elements', true, /.(ts)$/))
 
-document.querySelectorAll('textarea.autosize').forEach(autosize)
+document.addEventListener('turbo:load', () => {
+  document.querySelectorAll('textarea.autosize').forEach(autosize)
+})

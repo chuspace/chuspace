@@ -11,6 +11,10 @@ module.exports = {
   ],
 
   theme: {
+    fontFamily: {
+      sans: 'darkmode-on, sans-serif',
+      serif: 'darkmode-on, sans-serif'
+    },
     container: {
       center: true,
       padding: '1rem'
@@ -69,7 +73,7 @@ module.exports = {
           'base-200': '#1A243B' /* Base color, a little darker */,
           'base-300': '#313a4f' /* Base color, even more darker */,
           'base-content':
-            '#D4D4D4' /* Foreground content color to use on base color */,
+            '#C4C4C4' /* Foreground content color to use on base color */,
 
           info: '#2094f3' /* Info */,
           success: '#009485' /* Success */,

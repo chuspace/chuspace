@@ -1,4 +1,5 @@
 @import '~prosemirror-view/style/prosemirror.css';
+@import url('https://use.typekit.net/mvj4rge.css');
 
 @tailwind base;
 @tailwind components;
@@ -6,27 +7,27 @@
 
 @layer base {
   h1 {
-    @apply text-6xl font-bold font-sans;
+    @apply text-5xl font-semibold font-sans;
   }
 
   h2 {
-    @apply text-4xl font-semibold font-sans;
+    @apply text-3xl font-medium font-sans;
   }
 
   h3 {
-    @apply text-2xl font-semibold font-sans;
+    @apply text-xl font-medium font-sans;
   }
 
   h4 {
-    @apply text-xl font-bold font-sans;
+    @apply text-lg font-semibold font-sans;
   }
 
   h5 {
-    @apply text-base font-bold font-sans;
+    @apply text-base font-semibold font-sans;
   }
 
   h6 {
-    @apply text-sm font-bold font-sans;
+    @apply text-sm font-semibold font-sans;
   }
 
   strong {
@@ -53,14 +54,6 @@
 
   .card {
     @apply rounded-md;
-  }
-
-  .title-input {
-    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none text-4xl;
-  }
-
-  .summary-input {
-    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none text-xl mt-2;
   }
 
   .tab {

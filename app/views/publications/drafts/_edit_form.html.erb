@@ -7,9 +7,9 @@
           label: false,
           wrapper: false,
           input_html: {
-            rows: 1,
+            rows: 2,
             maxlength: '100',
-            class: 'title-input autosize',
+            class: 'title autosize',
             value: draft.title,
             placeholder: 'Title',
             data: { attribute: @publication.front_matter.title, action: 'input:chu-editor#handleFrontMatterChange' }
@@ -27,7 +27,7 @@
           input_html: {
             rows: 2,
             maxlength: '140',
-            class: 'summary-input autosize',
+            class: 'summary autosize',
             value: draft.summary,
             placeholder: 'Type summary',
             data: { attribute: @publication.front_matter.summary, action: 'input:chu-editor#handleFrontMatterChange' }
