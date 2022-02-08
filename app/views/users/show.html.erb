@@ -1,25 +1,28 @@
 <div class='relative h-full'>
   <div class='h-full'>
+    <div class='grid grid-cols-9 gap-8 mt-8'>
+      <div class='col-span-2'>
+        <%= image_tag @user.avatar_url(variant: :profile), class: 'mask mask-square rounded-md' %>
+        <h4 class='mt-4'><%= @user.name %></h4>
+        <h5 class='text-secondary font-normal'><%= @user.username %></h5>
 
-    <%= image_tag @user.avatar_url(variant: :profile), class: 'mask mask-square rounded-md' %>
-    <h4 class='mt-4'><%= @user.name %></h4>
-    <h5 class='text-secondary font-normal'><%= @user.username %></h5>
+        <ul class='mt-8'>
+          <% user_menu.each do |key, config| %>
+            <li class='link link-hover mt-4 first:mt-0'>
+              <%= link_to(
+                  config[:label],
+                  user_path(@user, tab: config[:tab]),
+                  'aria-selected': false
+                )
+              %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
 
-    <ul class='flex items-center bg-base-200 px-4 py-2 rounded-md'>
-      <% user_menu.each do |key, config| %>
-        <li class='ml-8 first:ml-0'>
-          <%= link_to(
-              config[:label],
-              user_path(@user, tab: config[:tab]),
-              'aria-selected': false
-            )
-          %>
-        </li>
-      <% end %>
-    </ul>
-    <div class='mt-4'>
-      <%= render @partial %>
+      <div class='col-span-7'>
+        <%= render @partial %>
+      </div>
     </div>
-
   </div>
 </div>

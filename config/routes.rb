@@ -101,7 +101,7 @@ Rails.application.routes.draw do
 
         scope controller: :publishings, module: :drafts do
           get '/*path/publish', action: :new, as: :new_publish_draft
-          post '/*path/publish', action: :publish, as: :publish_draft
+          post '/*path/publish', action: :create, as: :publish_draft
         end
 
         scope controller: :commits, module: :drafts do

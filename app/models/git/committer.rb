@@ -2,7 +2,7 @@
 
 module Git
   class Committer < Author
-    def self.default
+    def self.chuspace
       Committer.new(GitConfig.new.committer)
     end
   end

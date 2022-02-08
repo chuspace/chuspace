@@ -37,7 +37,7 @@ class Draft < Git::Blob
   end
 
   def markdown_doc
-    CommonMarker.render_doc(parsed.content)
+    CommonMarker.render_doc(body)
   end
 
   def persisted?
@@ -95,6 +95,8 @@ class Draft < Git::Blob
       topic_list: topics,
       blob_path: path,
       blob_sha: id,
+      body: body,
+      body_html: content_html,
       commit_sha: commits.first&.id || commits.first&.sha
     }
   end

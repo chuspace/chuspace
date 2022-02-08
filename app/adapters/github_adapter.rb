@@ -99,7 +99,7 @@ class GithubAdapter < ApplicationAdapter
 
   def repository_files
     tree
-      .select { |item| item.type == 'blob' }
+      .select { |item| item.type == 'blob' && MarkdownConfig.valid?(name: item.path) }
       .map(&:path)
       .sort
   rescue FaradayClient::NotFound

@@ -87,6 +87,7 @@ export default class Heading extends Node {
           decorations: (state) => {
             const plugins = state.plugins
             const doc = state.doc
+            const [firstChild, secondChild] = doc.content.content
 
             const editablePlugin = plugins.find((plugin) =>
               plugin.key.startsWith('editable$')
@@ -102,10 +103,25 @@ export default class Heading extends Node {
             doc.descendants((node, pos) => {
               if (node.type.name !== 'heading') return
 
-              let text = decorations.push(
+              let className = 'heading'
+              let text = `h${node.attrs.level}`
+
+              if (firstChild === node) {
+                className = 'title'
+                text = 'Title'
+              }
+
+              if (secondChild === node) {
+                className = 'summary'
+                text = 'Summary'
+              }
+
+              if (node.content.size === 0) className += '-empty'
+
+              decorations.push(
                 Decoration.node(pos, pos + node.nodeSize, {
-                  class: 'heading',
-                  'data-text': `h${node.attrs.level}`
+                  class: className,
+                  'data-text': text
                 })
               )
             })

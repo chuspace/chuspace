@@ -38,11 +38,12 @@ module Repoable
     @readme ||= repository.draft(repo.readme_path).content_html
   end
 
-  def repository(ref: 'HEAD')
-    @repository ||= git_provider_adapter
-      .apply_repository_scope(repo_fullname: repo.fullname, ref: ref)
-      .repository
-      .with_publication(self)
+  def repository
+    @repository ||= git_provider_adapter.repository.with_publication(self)
+  end
+
+  def git_provider_adapter(ref: 'HEAD')
+    @git_provider_adapter ||= git_provider.adapter.apply_repository_scope(repo_fullname: repo.fullname, ref: ref)
   end
 
   def repo_drafts_or_posts_folder

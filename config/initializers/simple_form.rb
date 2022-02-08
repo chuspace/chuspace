@@ -16,6 +16,21 @@ SimpleForm.setup do |config|
     input.use :hint, wrap_with: { tag: :div, class: 'input-hint-message text-xs mt-2 text-info' }
   end
 
+  config.wrappers :file, tag: 'div', class: 'form-control', error_class: 'input-error' do |input|
+    input.use :html5
+    input.use :placeholder
+    input.optional :maxlength
+    input.optional :minlength
+    input.optional :pattern
+    input.optional :min_max
+    input.optional :readonly
+    input.use :label, class: 'label mt-2'
+    input.use :input, autocomplete: 'off', spellcheck: 'off'
+
+    input.use :error, wrap_with: { tag: 'div', class: 'input-error-message text-xs mt-2 text-error' }
+    input.use :hint, wrap_with: { tag: :div, class: 'input-hint-message text-xs mt-2 text-info' }
+  end
+
   config.wrappers :textarea, tag: 'div', class: 'form-control', error_class: 'textarea-error' do |input|
     input.use :html5
     input.use :placeholder
@@ -74,6 +89,7 @@ SimpleForm.setup do |config|
   config.wrapper_mappings = {
     boolean: :horizontal_boolean,
     text: :textarea,
-    select: :select
+    select: :select,
+    file: :file
   }
 end

@@ -11,10 +11,6 @@ module.exports = {
   ],
 
   theme: {
-    fontFamily: {
-      sans: 'darkmode-on, sans-serif',
-      serif: 'darkmode-on, sans-serif'
-    },
     container: {
       center: true,
       padding: '1rem'
@@ -53,8 +49,8 @@ module.exports = {
           'primary-content':
             '#ffffff' /* Foreground content color to use on primary color */,
 
-          secondary: '#cccccc' /* Secondary color */,
-          'secondary-focus': '#d6d6d6' /* Secondary color - focused */,
+          secondary: '#b3b3b3' /* Secondary color */,
+          'secondary-focus': '#999999' /* Secondary color - focused */,
           'secondary-content':
             '#111827' /* Foreground content color to use on secondary color */,
 
@@ -76,9 +72,9 @@ module.exports = {
             '#C4C4C4' /* Foreground content color to use on base color */,
 
           info: '#2094f3' /* Info */,
-          success: '#009485' /* Success */,
+          success: '#4ade80' /* Success */,
           warning: '#ff9900' /* Warning */,
-          error: '#ff5724' /* Error */
+          error: '#f87171' /* Error */
         }
       }
     ]

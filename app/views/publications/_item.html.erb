@@ -7,7 +7,8 @@
             <%= publication.name %>
             <%= content_tag :span, publication.visibility, class: 'badge badge-outline badge-secondary ml-2' %>
           <% end %>
-          <%= tag.div publication.description, class: 'text-secondary mt-1' %>
+
+          <%= tag.div publication.description, class: 'text-secondary mt-1 w-full sm:w-3/4' %>
 
           <div class='mt-8 text-sm'>
             <%= publication.topic_list %>

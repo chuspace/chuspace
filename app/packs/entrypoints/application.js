@@ -41,5 +41,11 @@ window
 importAll(require.context('../javascripts/elements', true, /.(ts)$/))
 
 document.addEventListener('turbo:load', () => {
+  document.addEventListener('file-attachment-accepted', function(event) {
+    const pre = event.target.querySelector('pre')
+    const { attachments } = event.detail
+    pre.textContent = attachments.map((a) => a.file.name).join('\n')
+  })
+
   document.querySelectorAll('textarea.autosize').forEach(autosize)
 })

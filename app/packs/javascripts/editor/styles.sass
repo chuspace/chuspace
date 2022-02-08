@@ -2,17 +2,19 @@
   @apply h-0
 
 .chu-editor
-  @apply antialiased text-xl
+  @apply antialiased font-sans
 
   line-height: 2rem
+  font-size: 18px
+  letter-spacing: 0.003rem
   text-rendering: optimizeLegibility
   outline: none
 
-  .title
-    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none font-medium text-3xl
+  > h1:nth-child(1)
+    @apply mb-2 mt-0 font-serif text-5xl whitespace-nowrap
 
-  .summary
-    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none font-medium opacity-75 text-xl mt-2
+  > h2:nth-child(2)
+    @apply mt-2 text-secondary opacity-80 text-xl
 
 
   &.editable
@@ -61,7 +63,7 @@
     @apply text-base font-medium
 
   h1, h2, h3, h4, h5, h6
-    @apply my-4
+    @apply my-8
 
     a
       text-decoration: none
@@ -88,7 +90,11 @@
     display: none
 
   .insertion
-    @apply bg-success text-neutral max-w-full whitespace-normal
+    @apply text-neutral max-w-full whitespace-normal relative
+
+    &::before
+      @apply inline absolute left-0 -ml-4 text-success
+      content: '+'
 
     pre
       @apply p-4 overflow-x-auto text-base

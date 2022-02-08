@@ -1,5 +1,14 @@
 <main>
-  Posts here
+  <div class='grid grid-cols-12 gap-8 mt-8'>
+    <div class='col-span-8'>
+      <%= render 'posts/list', posts: @posts %>
+    </div>
 
-  <%= link_to 'Connect', connect_root_path, class: 'btn btn-primary' %>
+    <div class='col-span-4'>
+      <div class='card bordered'>
+        <h3 class='p-4 pb-0'>Publications</h3>
+        <%= render partial: 'publications/mini_item', collection: @publications, as: :publication, cached: true %>
+      </div>
+    </div>
+  </div>
 </main>

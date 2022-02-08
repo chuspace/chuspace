@@ -1,48 +1,12 @@
 <%= turbo_frame_tag(draft) do %>
   <%= simple_form_for draft, url: publication_update_draft_path(publication, draft), html: { 'data-turbo-frame': '_top' } do |form| %>
-    <div class='title' data-target='chu-editor.title'>
-      <%= form.input(
-          :title,
-          as: :text,
-          label: false,
-          wrapper: false,
-          input_html: {
-            rows: 2,
-            maxlength: '100',
-            class: 'title autosize',
-            value: draft.title,
-            placeholder: 'Title',
-            data: { attribute: @publication.front_matter.title, action: 'input:chu-editor#handleFrontMatterChange' }
-          }
-        )
-      %>
-    </div>
-
-    <div class='summary' data-target='chu-editor.summary'>
-      <%= form.input(
-          :summary,
-          as: :text,
-          label: false,
-          wrapper: false,
-          input_html: {
-            rows: 2,
-            maxlength: '140',
-            class: 'summary autosize',
-            value: draft.summary,
-            placeholder: 'Type summary',
-            data: { attribute: @publication.front_matter.summary, action: 'input:chu-editor#handleFrontMatterChange' }
-          }
-        )
-      %>
-    </div>
-
     <div class='mt-8' spellcheck="false" data-text='content' data-target='chu-editor.content'>
       <%= form.input(
           :body,
           as: :text,
           label: false,
           wrapper: false,
-          input_html: { class: 'hidden', value: draft.local_content.value || draft.body }
+          input_html: { class: 'hidden', value: draft.local_content.value.presence || draft.body }
         )
       %>
     </div>

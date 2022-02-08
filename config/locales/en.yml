@@ -85,8 +85,7 @@ en:
           description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . Hexo
         - title: Publishing and collaboration
           description: Write . Read . Learn . Contribute . Write again
-      intro:
-        An integrated publicationging platform for developers to write, learn
+      intro: An integrated blogging platform for developers to write, learn
         and grow together
       welcome: Welcome to Chuspace
   user_mailer:
@@ -116,4 +115,4 @@ en:
     index:
       heading: Defragging dev blogs
       intro: Chuspace is a collaborative bloging and indexing platform, which
-        works with any markdown powered static site blog hosted on Github & Gitlab.
+        works with any markdown powered static site blog hosted on Github, Gitlab or Gitea.

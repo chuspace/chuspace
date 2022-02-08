@@ -149,7 +149,7 @@ export default class Editor {
     view.dom.title = 'Enter post content'
     view.dom.id = 'editor-content'
     view.dom.classList.add(
-      'post-editor',
+      'chu-editor',
       this.options.editable ? 'editable' : 'read-only'
     )
 

@@ -35,7 +35,7 @@ class Post < ApplicationRecord
   private
 
   def slug_candidates
-    %i[%i[title short_commit_sha] %i[name short_commit_sha version]]
+    [[:title, :short_commit_sha], [:title, :short_commit_sha, :version]]
   end
 
   def set_visibility

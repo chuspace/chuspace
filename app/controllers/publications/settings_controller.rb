@@ -23,10 +23,16 @@ module Publications
       @user = Current.user
       @publication = Publication.friendly.find(params[:publication_permalink])
       @publication.update(publication_params)
+
+      redirect_to publication_setting_path(@publication, id: params[:id])
     end
 
     def publication_params
-      params.require(:publication).permit(:front_matter_attributes_map)
+      params.require(:publication).permit(
+        :name,
+        :description,
+        repo_attributes: %i[posts_folder drafts_folder assets_folder readme_path]
+      )
     end
   end
 end

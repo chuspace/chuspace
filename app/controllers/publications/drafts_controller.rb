@@ -15,10 +15,20 @@ module Publications
     end
 
     def create
-      path = @drafts_root_path.join(create_params[:name] || '').to_s
-      @draft = Draft.new(publication: @publication, path: path, **create_params)
+      @commit = Git::Commit.new(
+        author: Git::Author.for(user: Current.user),
+        committer: Git::Committer.chuspace,
+        message: draft_params[:commit_message],
+        adapter: @publication.git_provider_adapter
+      )
 
-      if @draft.valid? && @draft.commit!
+      @draft = Draft.new(
+        publication: @publication,
+        name: draft_params[:name],
+        path: @drafts_root_path.join(draft_params[:name]).to_s
+      )
+
+      if @commit.valid? && @commit.create_for!(blob: @draft)
         redirect_to publication_edit_draft_path(@publication, @draft)
       else
         respond_to do |format|
@@ -29,9 +39,14 @@ module Publications
     end
 
     def update
-      @draft.assign_attributes(update_params)
+      @commit = Git::Commit.new(
+        author: Git::Author.for(user: Current.user),
+        committer: Git::Committer.chuspace,
+        message: draft_params[:commit_message],
+        adapter: @publication.git_provider_adapter
+      )
 
-      if @draft.valid? && @draft.commit!
+      if @commit.valid? && @commit.create_for!(blob: @draft)
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
       else
         respond_to do |format|
@@ -59,12 +74,8 @@ module Publications
 
     private
 
-    def create_params
+    def draft_params
       params.require(:draft).permit(:name, :commit_message)
-    end
-
-    def update_params
-      params.require(:draft).permit(:raw_content, :commit_message)
     end
 
     def find_draft

@@ -1,8 +1,8 @@
 <% cache publication do %>
   <div class='border-b last:border-b-0 p-4 border-base-200'>
     <div class='flex-1'>
-      <%= link_to publication.owner.name, user_path(publication.owner), class: 'link link-accent link-hover font-medium' %>
-      <%= link_to(publication_path(publication.owner, publication), 'data-turbo-frame': :_top) do %>
+      <%= link_to publication.owner.name, user_path(publication.owner), class: 'link link-hover font-medium' %>
+      <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
         <%= tag.h5 publication.name, class: 'link link-primary link-hover' %>
         <%= tag.div publication.description, class: 'text-sm mt-1 text-secondary' %>
       <% end %>

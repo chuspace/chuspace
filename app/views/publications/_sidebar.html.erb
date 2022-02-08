@@ -1,0 +1,15 @@
+<aside>
+  <div class='card bordered'>
+    <div class='chu-editor card-body'>
+      <div class='card-title'>
+        <code>People</code>
+      </div>
+
+      <div class='flex items-center'>
+        <% publication.members.each do |member| %>
+          <%= image_tag member.avatar_url, class: 'w-8 h-8 mask mask-circle'%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</aside>

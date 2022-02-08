@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 2022_01_06_163942) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "git_provider_enum_type", ["github", "gitlab"]
+  create_enum "git_provider_enum_type", ["github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
   create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "manager", "owner", "subscriber"]
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 2022_01_06_163942) do
     t.text "blob_path", null: false
     t.text "blob_sha", null: false
     t.text "commit_sha", null: false
+    t.integer "version", default: 1, null: false
     t.bigint "publication_id", null: false
     t.bigint "author_id", null: false
     t.jsonb "original_author", default: {}, null: false
@@ -181,8 +182,10 @@ ActiveRecord::Schema.define(version: 2022_01_06_163942) do
     t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["blob_path"], name: "index_posts_on_blob_path"
     t.index ["date"], name: "index_posts_on_date"
+    t.index ["permalink"], name: "index_posts_on_permalink"
     t.index ["publication_id", "blob_path"], name: "index_posts_on_publication_id_and_blob_path", unique: true
     t.index ["publication_id", "permalink"], name: "index_posts_on_publication_id_and_permalink", unique: true
+    t.index ["publication_id", "version"], name: "index_posts_on_publication_id_and_version", unique: true
     t.index ["publication_id"], name: "index_posts_on_publication_id"
   end
 

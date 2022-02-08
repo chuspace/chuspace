@@ -11,19 +11,6 @@ module Git
 
     validates :path, :name, :content, :adapter, presence: true
 
-    def create_or_update!(commit:)
-      fail NotAllowedError, 'Can not recommit' if commit.persisted?
-
-      publication.repository.git_adapter.create_or_update_blob(
-        path: path,
-        content: Base64.encode64(content),
-        sha: id,
-        message: commit.message,
-        committer: commit.committer.git_attrs,
-        author: commit.author.git_attrs
-      )
-    end
-
     def to_draft(publication:)
       if MarkdownConfig.valid?(name: name)
         Draft.new(publication: publication, **attributes)

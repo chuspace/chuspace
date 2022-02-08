@@ -3,8 +3,6 @@
     <%= render 'shared/breadcrumbs' %>
     <%= render(
         'publications/drafts/shared/diff',
-        title: @draft.title,
-        summary: @draft.summary,
         old_content: @draft.body,
         new_content: @draft.local_content.value
       )
@@ -13,10 +11,10 @@
 
   <div class='col-span-1 p-8 bg-base-200'>
     <%= turbo_frame_tag(dom_id(@draft, :new_commit)) do %>
-      <%= simple_form_for :commit, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>
+      <%= simple_form_for @draft, method: :patch, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>
         <h4>Commit changes</h4>
         <div class="form-control mt-8">
-          <%= form.input :message, label: false, placeholder: 'Commit message' %>
+          <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
           <div class='mt-8 font-mono'>
             <label class='text-sm block'>Commit author: <%= link_to Current.user.name, user_path(Current.user), class: 'font-bold' %></label>
             <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>

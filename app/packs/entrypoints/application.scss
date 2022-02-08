@@ -1,5 +1,4 @@
 @import '~prosemirror-view/style/prosemirror.css';
-@import url('https://use.typekit.net/mvj4rge.css');
 
 @tailwind base;
 @tailwind components;
@@ -136,4 +135,12 @@ textarea {
 
 img.lazy:not([src]) {
   visibility: hidden;
+}
+
+file-attachment {
+  @apply block w-full p-16 text-center border-2 border-dashed border-base-100;
+
+  &[hover] {
+    @apply border-base-300;
+  }
 }

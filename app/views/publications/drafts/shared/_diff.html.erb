@@ -1,7 +1,5 @@
 <%= simple_form_for '', url: '#' do |form| %>
-  <chu-editor class='h-full chu-editor mb-8' data-read-only='true'>
-    <%= render 'publications/drafts/shared/header', title: title, summary: summary %>
-
+  <chu-editor class='h-full my-8 block' data-read-only='true'>
     <div data-target='chu-editor.content'>
       <%= form.input(
           :content,

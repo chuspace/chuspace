@@ -18,8 +18,6 @@ class Publication < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :git_provider
 
-  delegate :adapter, to: :git_provider, prefix: true
-
   after_create :create_owning_membership
 
   validates :name, uniqueness: { scope: :owner_id }
