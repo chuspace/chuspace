@@ -104,10 +104,6 @@ gem 'inline_svg'
 # App configs
 gem 'anyway_config'
 
-# Graphql API
-gem 'graphql'
-gem 'graphql-client'
-
 group :production do
   # Resource monitoring
   gem 'easymon'
@@ -154,3 +150,4 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
+gem "graphiql-rails", group: :development

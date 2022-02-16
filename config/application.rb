@@ -3,8 +3,6 @@
 require_relative 'boot'
 require 'rails/all'
 require 'sprockets/railtie'
-require 'graphql/client'
-require 'graphql/client/http'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -50,25 +48,4 @@ module Chuspace
     # Active Job
     config.active_job.queue_adapter = :good_job
   end
-
-  GithubGraphqlHTTPAdapter = GraphQL::Client::HTTP.new('https://api.github.com/graphql') do
-    def headers(context)
-      unless token = context[:access_token] || Rails.application.credentials.github[:personal_access_token]
-        fail 'Missing GitHub access token'
-      end
-
-      {
-        'Authorization' => "Bearer #{token}",
-        'User-Agent' => 'Chuspace'
-      }
-    end
-  end
-
-  Client = GraphQL::Client.new(
-    schema: Application.root.join('db/schema.json').to_s,
-    execute: GithubGraphqlHTTPAdapter,
-  )
-
-  Application.config.graphql_client = ActiveSupport::OrderedOptions.new
-  Application.config.graphql_client.github = Client
 end
