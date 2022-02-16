@@ -34,7 +34,7 @@ export default class CodeBlockView extends BaseView {
     // Custom attrs for code block node view
     this.mode = mode
     this.node.attrs.language = mode
-    this.content = this.node.textContent || ''
+    this.content = this.node.textContent
     this.readOnly = props.editable ? false : 'nocursor'
     this.lines = this.content.split(/\r\n|\r|\n/).length
 
@@ -245,7 +245,7 @@ export default class CodeBlockView extends BaseView {
   selectNode = () => this.cm.focus()
 }
 
-function computeChange(oldVal: string, newVal: string) {
+export function computeChange(oldVal: string, newVal: string) {
   if (oldVal === newVal) return null
   let start = 0
 

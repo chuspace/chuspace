@@ -8,7 +8,12 @@ import HighlightItem from './item'
 import cssClasses from './constants'
 
 function createInlineDecoration(from, to, highlight) {
-  return Decoration.inline(from, to, { class: cssClasses[highlight.type] }, { highlight })
+  return Decoration.inline(
+    from,
+    to,
+    { class: cssClasses[highlight.type] },
+    { highlight }
+  )
 }
 
 class HighlightState {
@@ -32,7 +37,9 @@ class HighlightState {
 
     if (action.action == 'add') {
       if (!action.type) return this
-      decos = decos.add(tr.doc, [Decoration.inline(fromPos, toPos, { class: cssClasses[action.type] })])
+      decos = decos.add(tr.doc, [
+        Decoration.inline(fromPos, toPos, { class: cssClasses[action.type] })
+      ])
     } else if (action.action == 'remove') {
       decos = decos.remove(this.highlightsAt(fromPos))
     }
@@ -41,7 +48,9 @@ class HighlightState {
   }
 
   static init(state: EditorState) {
-    const decos = state.highlights.map((c) => createInlineDecoration(c.from, c.to, new HighlightItem(c.action, c.type)))
+    const decos = state.highlights.map((c) =>
+      createInlineDecoration(c.from, c.to, new HighlightItem(c.action, c.type))
+    )
     return new HighlightState(DecorationSet.create(state.doc, decos))
   }
 }

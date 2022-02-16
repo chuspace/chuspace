@@ -6,6 +6,7 @@ import { Change, ChangeSet, Span, simplifyChanges } from 'prosemirror-changeset'
 import { DOMSerializer, Schema } from 'prosemirror-model'
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
+import { NodeSelection, Selection } from 'prosemirror-state'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
@@ -14,11 +15,12 @@ import { markdownParser, markdownSerializer } from 'editor/markdowner'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import SchemaManager from 'editor/schema'
-import { Selection } from 'prosemirror-state'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
 import { recreateTransform } from './recreate'
+
+const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
 
 function arrowHandler(dir) {
   return (state, dispatch, view) => {
@@ -30,11 +32,18 @@ function arrowHandler(dir) {
         side
       )
 
-      if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
-        dispatch(state.tr.setSelection(nextPos))
+      if (CUSTOM_ARROW_HANDLERS.includes(nextPos?.$head?.parent?.type?.name)) {
+        if (nextPos.$head.parent.type.name === 'front_matter') {
+          nextPos = state.doc.resolve(0, nextPos.$head.parent.nodeSize)
+
+          dispatch(state.tr.setSelection(new NodeSelection(nextPos)))
+        } else {
+          dispatch(state.tr.setSelection(nextPos))
+        }
         return true
       }
     }
+
     return false
   }
 }
@@ -161,14 +170,25 @@ export default class Editor {
     let revisionDoc = this.markdownParser.parse(this.options.revision)
     let tr = recreateTransform(revisionDoc, baseDoc, true, true)
 
-    // create decorations corresponding to the changes
-    const decorations = []
-    let changeSet = ChangeSet.create(revisionDoc).addSteps(
-      tr.doc,
-      tr.mapping.maps
+    let diff = ChangeSet.computeDiff(
+      revisionDoc.content,
+      baseDoc.content,
+      new Change(
+        0,
+        revisionDoc.content.size,
+        0,
+        baseDoc.content.size,
+        [new Span(revisionDoc.content.size, 0)],
+        [new Span(baseDoc.content.size, 0)]
+      )
     )
 
-    let changes = simplifyChanges(changeSet.changes, tr.doc)
+    console.log(simplifyChanges(diff, tr.doc))
+
+    // create decorations corresponding to the changes
+    const decorations = []
+
+    let changes = simplifyChanges(diff, tr.doc)
 
     // deletion
     function findDeleteEndIndex(startIndex) {
@@ -249,11 +269,9 @@ export default class Editor {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
-    if (!transaction.docChanged) {
-      return
-    }
+    if (transaction.docChanged) this.emitUpdate(transaction)
 
-    this.emitUpdate(transaction)
+    return true
   }
 
   emitUpdate(transaction: Transaction) {

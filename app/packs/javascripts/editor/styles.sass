@@ -5,17 +5,25 @@
   @apply antialiased font-sans
 
   line-height: 2rem
-  font-size: 18px
+  font-size: 21px
   letter-spacing: 0.003rem
   text-rendering: optimizeLegibility
   outline: none
 
-  > h1:nth-child(1)
-    @apply mb-2 mt-0 font-serif text-5xl whitespace-nowrap
+  &-sm
+    font-size: 18px
 
-  > h2:nth-child(2)
+  .title
+    @apply mb-2 mt-0 text-4xl
+
+  .summary
     @apply mt-2 text-secondary opacity-80 text-xl
 
+  .front-matter
+    @apply mb-6
+
+    &[open]
+      @apply mb-0
 
   &.editable
     .title-empty, .summary-empty, .body-empty
@@ -90,11 +98,7 @@
     display: none
 
   .insertion
-    @apply text-neutral max-w-full whitespace-normal relative
-
-    &::before
-      @apply inline absolute left-0 -ml-4 text-success
-      content: '+'
+    @apply bg-success text-neutral max-w-full whitespace-normal
 
     pre
       @apply p-4 overflow-x-auto text-base
@@ -121,3 +125,9 @@
 
   ol
     @apply list-decimal
+
+  textarea.title
+    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none font-medium text-4xl
+
+  textarea.summary
+    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none font-medium opacity-75 text-xl mt-2

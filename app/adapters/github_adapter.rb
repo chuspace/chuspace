@@ -11,6 +11,7 @@ class GithubAdapter < ApplicationAdapter
 
     paths.each do |path|
       blobs += blob_from_response(get("repos/#{repo_fullname}/contents/#{CGI.escape(path)}", **opts))
+        .select { |blob| MarkdownConfig.valid?(name: blob.path) }
         .sort_by { |blob| %w[dir file].index(blob.type) }
     end
 

@@ -1,4 +1,12 @@
 <div class='sm:w-2/3 mx-auto w-full'>
   <%= render 'shared/breadcrumbs' %>
-  <%= content_tag :article, @draft.content_html.html_safe, class: 'chu-editor read-only mt-8' %>
+
+  <div class='chu-editor'>
+    <div class='my-8'>
+      <%= content_tag :h1, @draft.title, class: 'title' %>
+      <%= content_tag :h2, @draft.summary, class: 'summary' %>
+    </div>
+
+    <%= content_tag :article, @draft.content_html.html_safe %>
+  </div>
 </div>

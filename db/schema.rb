@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2022_01_06_163942) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "git_provider_enum_type", ["github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
-  create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
+  create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket", "gitea"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "manager", "owner", "subscriber"]
   create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]

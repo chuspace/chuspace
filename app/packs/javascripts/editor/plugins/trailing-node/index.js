@@ -12,7 +12,7 @@ export default class TrailingNode extends Element {
   get defaultOptions() {
     return {
       node: 'paragraph',
-      notAfter: ['paragraph']
+      notAfter: ['paragraph', 'blockquote']
     }
   }
 

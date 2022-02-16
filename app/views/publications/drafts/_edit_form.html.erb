@@ -6,7 +6,7 @@
           as: :text,
           label: false,
           wrapper: false,
-          input_html: { class: 'hidden', value: draft.local_content.value.presence || draft.body }
+          input_html: { class: 'hidden', value: draft.local_content.value.presence || draft.decoded_content  }
         )
       %>
     </div>

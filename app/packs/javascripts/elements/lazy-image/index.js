@@ -54,7 +54,6 @@ export default class LazyImage extends LitElement {
                       <circle cx="46" cy="6" r="6" fill="#27C93F" stroke="#1AAB29" strokeWidth=".5" />
                     </g>
                   </svg>
-                  <span class='text-sm leading-none font-mono'>${this.filename}</span>
                 </div>
               `
             : null

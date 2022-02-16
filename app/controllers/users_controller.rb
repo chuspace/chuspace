@@ -24,6 +24,7 @@ class UsersController < ApplicationController
 
   def find_user
     @user = User.friendly.find(params[:username])
+    add_breadcrumb(@user.username, user_path(@user))
   end
 
   def set_content_partial
@@ -34,6 +35,8 @@ class UsersController < ApplicationController
                when 'posts' then 'users/posts'
     else 'users/overview'
     end
+
+    add_breadcrumb(params[:tab] || 'about')
   end
 
   def user_params

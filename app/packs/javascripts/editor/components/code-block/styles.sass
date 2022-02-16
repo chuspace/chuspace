@@ -12,6 +12,9 @@ code-editor
     @apply rounded shadow-lg border border-base-300 overflow-hidden
     border-radius: 0.5rem
 
+    &.no-wrapper
+      @apply border-t-0 rounded-none
+
     .CodeMirror
       @apply rounded-b max-w-full pt-4 font-normal overflow-y-auto pb-4
       height: auto

@@ -26,6 +26,10 @@ module.exports = {
         light: '#151413',
         dark: '#111827'
       },
+      gitea: {
+        light: '#87ab63',
+        dark: '#528321'
+      },
       gitlab: {
         light: '#e65528',
         dark: '#c43f17'
@@ -39,7 +43,7 @@ module.exports = {
   variants: {
     extend: {}
   },
-  plugins: [require('daisyui')],
+  plugins: [require('@tailwindcss/typography'), require('daisyui')],
   daisyui: {
     themes: [
       {
@@ -69,7 +73,7 @@ module.exports = {
           'base-200': '#1A243B' /* Base color, a little darker */,
           'base-300': '#313a4f' /* Base color, even more darker */,
           'base-content':
-            '#C4C4C4' /* Foreground content color to use on base color */,
+            '#d4d4d4' /* Foreground content color to use on base color */,
 
           info: '#2094f3' /* Info */,
           success: '#4ade80' /* Success */,

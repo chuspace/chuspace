@@ -3,6 +3,8 @@
     <%= render 'shared/breadcrumbs' %>
     <%= render(
         'publications/drafts/shared/diff',
+        title: @draft.title,
+        summary: @draft.summary,
         old_content: @post.body,
         new_content: @draft.body
       )

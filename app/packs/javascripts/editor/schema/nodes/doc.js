@@ -12,7 +12,7 @@ export default class Doc extends Node {
   }
 
   get content() {
-    let content = 'block+'
+    let content = 'front_matter block+'
 
     switch (this.options.appearance) {
       case 'comment':

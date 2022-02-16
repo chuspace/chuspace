@@ -1,13 +1,41 @@
 <main>
   <div class='grid grid-cols-12 gap-8 mt-8'>
     <div class='col-span-8'>
-      <%= render 'posts/list', posts: @posts %>
+      <%= render 'dummy' %>
     </div>
 
     <div class='col-span-4'>
       <div class='card bordered'>
-        <h3 class='p-4 pb-0'>Publications</h3>
-        <%= render partial: 'publications/mini_item', collection: @publications, as: :publication, cached: true %>
+
+        <div class='card-body'>
+          <h3>Publications</h3>
+
+          <div class='mt-8'>
+            <div class='border-b last:border-b-0 border-base-200 pb-4'>
+              <div class='flex-1'>
+                <%= link_to 'Netlify', '#', class: 'link link-hover font-medium' %>
+                <%= link_to('#', 'data-turbo-frame': :_top) do %>
+                  <%= tag.h5 'Netlify engineering', class: 'link link-primary link-hover' %>
+                  <%= tag.div 'Learn from experts', class: 'text-sm mt-1 text-secondary' %>
+                <% end %>
+              </div>
+            </div>
+
+            <div class='border-b last:border-b-0 border-base-200 mt-4'>
+              <div class='flex-1'>
+                <%= link_to 'John doe', '#', class: 'link link-hover font-medium' %>
+                <%= link_to('#', 'data-turbo-frame': :_top) do %>
+                  <%= tag.h5 'Rails', class: 'link link-primary link-hover' %>
+                  <%= tag.div "Learn about Rails from it's makers", class: 'text-sm mt-1 text-secondary' %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <div class='card-actions'>
+            <%= link_to 'Connect', connect_root_path, class: 'btn btn-primary btn-outline btn-sm mt-8' %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -20,8 +20,13 @@ class Draft < Git::Blob
     parsed.content
   end
 
-  def content_html
-    MarkdownRenderer.new.render(markdown_doc).html_safe
+  def content_html(content: body)
+    doc = CommonMarker.render_doc(content)
+    MarkdownRenderer.new.render(doc).html_safe
+  end
+
+  def preview_html
+    content_html(content: local_content.value || body)
   end
 
   def date
@@ -34,6 +39,11 @@ class Draft < Git::Blob
 
   def front_matter
     parsed&.front_matter.presence || {}
+  end
+
+  def front_matter_str
+    str = front_matter.to_yaml
+    str += "---\n"
   end
 
   def markdown_doc
@@ -58,7 +68,7 @@ class Draft < Git::Blob
   end
 
   def summary
-    front_matter.dig(publication.front_matter.summary)
+    front_matter.dig('description')
   end
 
   def title

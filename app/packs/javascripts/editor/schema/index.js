@@ -4,7 +4,7 @@ import * as marks from 'editor/schema/marks'
 import * as nodes from 'editor/schema/nodes'
 import * as plugins from 'editor/plugins'
 
-import { CodeBlockView, ImageView } from 'editor/views'
+import { CodeBlockView, FrontMatterView, ImageView } from 'editor/views'
 import Editor, { type Options } from '..'
 import { ellipsis, emDash, smartQuotes } from 'prosemirror-inputrules'
 
@@ -68,6 +68,13 @@ export default class SchemaManager {
 
   get nodeViews(): {} {
     return {
+      front_matter: (node, view, getPos) =>
+        new FrontMatterView({
+          node,
+          view,
+          getPos,
+          editable: this.editor.options.editable
+        }),
       code_block: (node, view, getPos) =>
         new CodeBlockView({
           node,
@@ -75,6 +82,7 @@ export default class SchemaManager {
           getPos,
           editable: this.editor.options.editable
         }),
+
       image: (node, view, getPos) =>
         new ImageView({
           node,
