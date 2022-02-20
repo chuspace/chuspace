@@ -103,25 +103,10 @@ export default class Heading extends Node {
             doc.descendants((node, pos) => {
               if (node.type.name !== 'heading') return
 
-              let className = 'heading'
-              let text = `h${node.attrs.level}`
-
-              if (firstChild === node) {
-                className = 'title'
-                text = 'Title'
-              }
-
-              if (secondChild === node) {
-                className = 'summary'
-                text = 'Summary'
-              }
-
-              if (node.content.size === 0) className += '-empty'
-
-              decorations.push(
+              let text = decorations.push(
                 Decoration.node(pos, pos + node.nodeSize, {
-                  class: className,
-                  'data-text': text
+                  class: 'heading',
+                  'data-text': `h${node.attrs.level}`
                 })
               )
             })

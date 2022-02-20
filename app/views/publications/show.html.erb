@@ -2,11 +2,9 @@
   <div class='grid grid-cols-3 gap-4 mt-8'>
     <section class='col-span-2'>
       <div class='card bordered'>
-        <div class='chu-editor chu-editor-sm card-body'>
-          <div class='card-title'>
-            <code>About</code>
-          </div>
-          <%= @publication.readme %>
+        <div class='card-body'>
+          <div class='card-title'>About</div>
+          <%= content_tag :article, @publication.readme, class: 'chu-editor chu-editor-sm' %>
         </div>
       </div>
 

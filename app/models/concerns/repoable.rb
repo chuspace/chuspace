@@ -23,21 +23,28 @@ module Repoable
     @asset ||= repository.asset(path)
   end
 
-  def drafts_folder
+  def content_folders
     [repo.posts_folder, repo.drafts_folder].reject(&:blank?).freeze
   end
 
-  def drafts(path: drafts_folder)
+  def drafts(path: content_folders)
     path = path.is_a?(Array) ? path : [path]
-    @drafts ||= repository.drafts(path)
+
+    @drafts ||= Rails.cache.fetch([self, path.join(':')]) do
+      repository.drafts(path)
+    end
   end
 
   def draft(path:)
-    @draft ||= repository.draft(path)
+    @draft ||= Rails.cache.fetch([self, path]) do
+      repository.draft(path)
+    end
   end
 
   def readme
-    @readme ||= repository.draft(repo.readme_path).content_html
+    @readme ||= Rails.cache.fetch([self, repo.readme_path]) do
+      repository.draft(repo.readme_path).content_html
+    end
   end
 
   def repository

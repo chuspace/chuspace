@@ -10,8 +10,7 @@ class GithubAdapter < ApplicationAdapter
     blobs = []
 
     paths.each do |path|
-      blobs += blob_from_response(get("repos/#{repo_fullname}/contents/#{CGI.escape(path)}", **opts))
-        .sort_by { |blob| %w[dir file].index(blob.type) }
+      blobs += blob_from_response(blob(path: path)).sort_by { |blob| %w[dir file].index(blob.type) }
     end
 
     blobs
