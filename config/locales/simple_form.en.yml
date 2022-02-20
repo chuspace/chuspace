@@ -9,48 +9,35 @@ en:
     error_notification:
       default_message: 'Please review the problems below:'
     placeholders:
-      storage:
-        description: What's this storage for?
-        endpoint: API endpoint for self-hosted or enterprise instances
-        access_token: Personal access token generated for selected provider
+      draft:
+        name: 'first-post.{markdown, mdown, mkdn, mkd, md, text, txt}'
+        commit_message: Start a new post
       user:
         email: Type your email
-      post:
-        blob_path: read-about-chuspace.md
 
     labels:
       defaults:
         password: 'Password'
-      storage:
-        default: Set this to be a default storage
-      blog:
-        storage_id: Select a git storage
-        repo_posts_folder: Posts folder
-        repo_drafts_folder: Drafts folder (optional)
-        repo_assets_folder: Assets folder
-        repo_readme_path: Readme path
-      post:
-        blob_path: File name
+      draft:
+        name: Filename
+      publication:
+        repo:
+          posts_folder: Posts/Drafts folder
+          drafts_folder: Drafts folder (optional)
+          assets_folder: Assets folder
+          readme_path: Readme
 
     hints:
-      storage:
-        access_token: the access token should have following scopes <pre>%{scopes}</pre>
-      blog:
-        storage_id: Choose from the list of connected storages
-        framework: static site generator framework to be used to generate blog from
-        visibility: visibility of blog - public, internal or private
-        repo_posts_folder: your posts will be stored here
-        repo_drafts_folder: use a different folder for storing draft posts
-        repo_assets_folder: your images would be stored here
+      draft:
+        name: valid file extensions are .markdown, .mkd, .md
+      publication:
+        visibility: visibility of publication - public, internal or private
+        repo:
+          posts_folder: choose folder where your publication posts are stored in markdown format
+          drafts_folder: optional drafts folder in case it's stored separately
+          assets_folder: choose where to store images for your publication posts
+          readme_path: select markdown file to fetch your publication about section
+
       user:
         email: Your email is safe with us
         username: Username should be maximum 40 characters
-      post:
-        blob_path: filename should end with .md extension
-
-    include_blanks:
-      defaults:
-        age: 'Rather not say'
-    prompts:
-      defaults:
-        age: 'Select your age'

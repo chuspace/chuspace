@@ -5,7 +5,7 @@ module Immutable
 
   included do
     class UpdateNotAllowedError < StandardError; end
-    before_save :check_immutability
+    before_update :raise_immutable_error
   end
 
   def update(*)
@@ -27,7 +27,7 @@ module Immutable
 
   private
 
-  def check_immutability
-    self.class.raise_immutable_error if persisted?
+  def raise_immutable_error
+    self.class.raise_immutable_error
   end
 end

@@ -1,0 +1,15 @@
+<main class='min-h-full block sm:flex items-center justify-between'>
+  <section>
+    <h1 class='font-black text-8xl leading-none'>
+      <%= t('.heading') %>
+    </h1>
+    <h4 class="mt-8 w-full text-2xl sm:w-3/4 font-normal text-secondary">
+      <%= t('.intro') %>
+    </h4>
+
+    <div class='mt-12'>
+      <%= link_to 'Get started', signups_path, class: 'btn btn-primary', 'data-turbo': false %>
+      <%= link_to 'Know more', '#', class: 'btn btn-outline ml-2' %>
+    </div>
+  </section>
+</main>

@@ -1,83 +1,97 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
-  include Sourceable
+  include Immutable
+  extend FriendlyId
 
-  VALID_MIME = 'text/markdown'.freeze
-  DEFAULT_FRONT_MATTER = <<~YAML
-    ---
-    title: Untitled
-    summary:
-    topics:
-    published_at:
-    ---
-  YAML
+  self.implicit_order_column = 'version'
 
-  belongs_to :blog, touch: true
+  belongs_to :publication, touch: true
   belongs_to :author, class_name: 'User', touch: true
-  has_many   :revisions, dependent: :destroy, inverse_of: :post
-  has_many   :editions, through: :revisions, dependent: :destroy
 
-  validates :blob_path, presence: :true, uniqueness: { scope: :blog_id }, markdown: true
-  validate  :blob_paths_are_stored_correctly
+  validates :title, :summary, :permalink, :date, :body, :body_html, :blob_sha, :commit_sha, :visibility, :topic_list, presence: true
+  validates :blob_path, presence: :true, uniqueness: { scope: %i[version publication_id] }, markdown: true
+  validates :version, presence: :true, uniqueness: { scope: :publication_id }
 
-  before_validation :set_root_folder, :set_visibility
+  before_validation :set_visibility
+  before_validation :assign_next_version, on: :create
+  after_create_commit :unpublish_previous_versions
 
-  enum visibility: {
-    private: 'private',
-    public: 'public',
-    subscriber: 'subscriber'
-  }, _suffix: true
+  enum visibility: PublicationConfig.to_enum, _suffix: true
 
-  class << self
-    def published
-      joins(revisions: :edition)
-    end
+  acts_as_taggable_on :topics
 
-    def drafts
-      joins(:revisions).distinct(:revision_id)
-    end
+  friendly_id :slug_candidates, use: %i[slugged history], slug_column: :permalink
 
-    def valid_mime?(name:)
-      VALID_MIME == MiniMime.lookup_by_filename(name).content_type
-    end
+  has_one_attached :preview_image do |attachable|
+    attachable.variant :post, resize_to_limit: [800, 300]
+    attachable.variant :list, resize_to_limit: [250, 150]
+    attachable.variant :icon, resize_to_limit: [64, 64]
+    attachable.variant :social, resize_to_limit: [600, 315]
   end
 
-  def git_blob(ref: nil)
-    blog.repository.blob(path: blob_path, ref: ref)
+  def self.default_scope
+    where(published: true).order(date: :desc)
   end
 
-  def git_commits
-    blog.repository.commits(path: blob_path)
+  def draft
+    @draft ||= publication.draft(path: path)
   end
 
-  def published?
-    editions.any?
+  def short_commit_sha
+    commit_sha.first(7)
   end
 
-  def status
-    published? ? 'published' : 'draft'
+  def stale?
+    commit_sha != draft.sha
+  end
+
+  def to_meta_tags
+    {
+      site: ChuspaceConfig.new.app_name,
+      title: title,
+      image_src: preview_image.variant(:list),
+      description: summary,
+      keywords: topic_list,
+      index: true,
+      follow: true,
+      author: author.name,
+      canonical: canonical_url || Rails.application.routes.url_helpers.publication_post_url(publication, self),
+      og: {
+        title: :title,
+        type: :article,
+        description: :description,
+        site_name: :site,
+        image: preview_image.variant(:social),
+        url: Rails.application.routes.url_helpers.publication_post_url(publication, self)
+      },
+      twitter: {
+        title: :title,
+        card: :summary,
+        description: :description,
+        site: ChuspaceConfig.new.twitter,
+        url: Rails.application.routes.url_helpers.publication_post_url(publication, self),
+        image: preview_image.variant(:list)
+      },
+      article: { published_time: date, modified_time: updated_at, tag: topic_list, author: author.username }
+    }
   end
 
   private
 
-  def blob_paths_are_stored_correctly
-    unless (blog.repo_drafts_folder && blob_path&.include?(blog.repo_drafts_folder)) || blob_path&.include?(blog.repo_posts_folder)
-      errors.add(:blob_path, 'should be contained in valid folder')
-    end
-  end
-
-  def set_root_folder
-    if blob_path.present?
-      self.blob_path = if blob_path.include?('/')
-        blob_path
-      else
-        File.join(blog.repo_drafts_or_posts_folder, File.basename(blob_path))
-      end
-    end
+  def slug_candidates
+    [[:title, :short_commit_sha, :version]]
   end
 
   def set_visibility
-    self.visibility ||= blog.visibility
+    self.visibility ||= publication.visibility
+  end
+
+  def assign_next_version
+    self.version = (publication.posts.maximum(:version) || 0) + 1
+  end
+
+  def unpublish_previous_versions
+    publication.posts.where(blob_path: blob_path).where('version < ?', version).update_all(published: false)
   end
 end

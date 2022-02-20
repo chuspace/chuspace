@@ -1,0 +1,21 @@
+<%= turbo_frame_tag(publication) do %>
+  <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+    <div class='mt-8'>
+      <div class='border-b border-base-200'></div>
+      <%= form.simple_fields_for :repo do |repo_form| %>
+        <%= repo_form.input :posts_folder, as: :select, collection: publication.repository.repository_folders, include_blank: 'Choose' %>
+        <%= repo_form.input :drafts_folder, as: :select, collection: publication.repository.repository_folders, include_blank: 'Choose' %>
+        <%= repo_form.input :assets_folder, as: :select, collection: publication.repository.repository_folders, include_blank: 'Choose' %>
+        <%= repo_form.input(
+            :readme_path,
+            as: :select,
+            collection: publication.repository.markdown_files,
+            include_blank: 'Choose'
+          )
+        %>
+      <% end %>
+    </div>
+
+    <%= form.button :submit, publication.persisted? ? 'Save' : 'Connect', class: "mt-12 btn btn-primary" %>
+  <% end %>
+<% end %>

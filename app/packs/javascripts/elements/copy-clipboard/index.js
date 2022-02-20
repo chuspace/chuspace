@@ -45,7 +45,7 @@ export default class CopyClipboard extends LitElement {
     const width = SVG_RATIO * 16
 
     return html`
-      <div class="link link-neutral">
+      <div class="link link-primary">
         <svg
           contenteditable="false"
           class="cursor-pointer block fill-current"

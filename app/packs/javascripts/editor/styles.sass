@@ -2,22 +2,31 @@
   @apply h-0
 
 .chu-editor
-  font-weight: 400
-  font-style: normal
-  font-size: 22px
-  letter-spacing: -0.003em
+  @apply antialiased font-sans
+
   line-height: 2rem
-  font-family: 'Charter', 'Georgia', 'sans-serif'
+  font-size: 21px
+  letter-spacing: 0.003rem
   text-rendering: optimizeLegibility
-  -webkit-font-smoothing: antialiased
   outline: none
 
+  .title
+    @apply mb-2 mt-0 text-4xl
+
+  .summary
+    @apply mt-2 text-secondary opacity-80 text-xl
+
+  .front-matter
+    @apply mb-6
+
+    &[open]
+      @apply mb-0
 
   &.editable
-    .title__empty, .summary__empty, .body__empty
+    .title-empty, .summary-empty, .body-empty
       &::before
-        @apply absolute pointer-events-none float-none h-auto
-        content: attr(data-empty-text)
+        @apply absolute pointer-events-none float-none h-auto text-base-300
+        content: attr(data-text)
 
     .heading, .title, .summary
       @apply relative
@@ -36,7 +45,7 @@
     @apply mb-0
 
   blockquote
-    @apply border-l-2 -ml-4 pl-4 mb-6
+    @apply border-l-2 border-l-base-300 mb-8 w-full pl-4  sm:w-4/5
     font-style: italic
   a
     hyphens: auto
@@ -46,35 +55,32 @@
     overflow-wrap: break-word
 
   h1
-    @apply text-6xl
+    @apply text-3xl
   h2
-    @apply text-4xl
+    @apply text-2xl
   h3
-    @apply text-2xl font-medium
-  h4
     @apply text-xl font-medium
-  h5
+  h4
     @apply text-lg font-medium
+  h5
+    @apply text-base font-medium
   h6
     @apply text-base font-medium
 
   h1, h2, h3, h4, h5, h6
-    @apply my-4
-    letter-spacing: -0.07rem
+    @apply my-8
 
     a
       text-decoration: none
 
       &:hover
         text-decoration: underline
-  .title, .title__empty
-    @apply mb-2
 
   strong
-    @apply mb-6 font-bold
+    @apply mb-8 font-bold
 
   code-editor, lazy-image, p
-    @apply mb-6 block
+    @apply mb-8 block
 
   figure, p > div
     @apply whitespace-nowrap
@@ -89,7 +95,7 @@
     display: none
 
   .insertion
-    @apply bg-success text-success max-w-full whitespace-normal
+    @apply bg-success text-neutral max-w-full whitespace-normal
 
     pre
       @apply p-4 overflow-x-auto text-base
@@ -102,13 +108,13 @@
       @apply border-4 border-success
 
   .deletion
-    @apply bg-error line-through text-error max-w-full whitespace-normal
+    @apply bg-error line-through text-neutral max-w-full whitespace-normal
     *
       background: inherit
       color: inherit
 
   ul, ol
-    @apply ml-8 mb-6 list-disc
+    @apply ml-8 mb-8 list-disc
 
     li
       p
@@ -116,3 +122,16 @@
 
   ol
     @apply list-decimal
+
+  textarea.title
+    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none font-medium text-4xl
+
+  textarea.summary
+    @apply w-full bg-transparent p-0 m-0 border-0 focus:outline-none focus:shadow-none font-medium opacity-75 text-xl mt-2
+
+  &-sm
+    font-size: 16px
+    line-height: 1.5rem
+
+    p, h1, h2, h3, h4, h5, h6, lazy-image, code-editor, blockquote
+      @apply mb-4

@@ -1,0 +1,28 @@
+<div class='relative'>
+  <div class='flex items-center w-full'>
+    <% if  @publication.icon.attached? %>
+      <%= image_tag(@publication.icon.variant(:profile)) %>
+    <% else %>
+      <div class="avatar placeholder">
+        <div class="bg-neutral-focus text-neutral-content rounded-full w-32 h-32">
+          <span class="text-5xl"><%= @publication.name.first(2).upcase %></span>
+        </div>
+      </div>
+    <% end %>
+    <div class='ml-4 w-2/3'>
+      <h1><%= @publication.name %></h1>
+      <p class='sm:w-2/3 w-full text-secondary mt-2'><%= @publication.description %></p>
+      <%= link_to 'Subscribe', '#', class: 'btn btn-primary btn-outline btn-xs mt-4' %>
+    </div>
+  </div>
+
+  <%= link_to 'New draft', publication_new_draft_path(@publication), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
+
+  <div class='tabs border-b border-base-200 my-12' dir='horizontal'>
+    <%= tab_link_to 'Overview', publication_path(@publication), class: 'tab' %>
+    <%= tab_link_to 'Drafts', publication_drafts_root_path(@publication), class: 'tab' %>
+    <%= tab_link_to 'Settings', publication_settings_path(@publication), class: 'tab', active_condition: :inclusive %>
+  </div>
+
+  <%= yield %>
+</div>

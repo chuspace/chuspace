@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class MarkdownValidator < ActiveModel::EachValidator
-  VALID_MIME = 'text/markdown'.freeze
+  def self.valid?(name_or_path:)
+    MiniMime.lookup_by_filename(name_or_path)&.content_type == 'text/markdown'
+  end
 
   def validate_each(record, attribute, value)
-    unless Marcel::MimeType.for(name: value) == VALID_MIME
-      record.errors.add attribute, (options[:message] || 'is not a valid markdown file')
+    unless MarkdownValidator.valid?(name_or_path: value)
+      record.errors.add attribute, (options[:message] || "#{value} does not have a valid markdown file extension")
     end
   end
 end

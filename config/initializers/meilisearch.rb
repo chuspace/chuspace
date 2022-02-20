@@ -1,6 +1,3 @@
 # frozen_string_literal: true
 
-MeiliSearch.configuration = {
-  meilisearch_host: Rails.application.credentials.meilisearch[:host],
-  meilisearch_api_key: Rails.application.credentials.meilisearch[:api_key],
-}
+$meliasearch_client = MeiliSearch::Client.new(Rails.application.credentials.meilisearch[:host], Rails.application.credentials.meilisearch[:api_key])

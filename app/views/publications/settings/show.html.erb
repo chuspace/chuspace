@@ -1,0 +1,12 @@
+<%= render 'publications/layout' do %>
+  <div class='grid grid-cols-4 gap-8 mt-8'>
+    <%= render 'sidebar', publication: @publication %>
+    <section class='col-span-3'>
+      <div class='card bordered bg-base-200'>
+        <div class='card-body'>
+          <%= render "#{@partial}", publication: @publication, url: publication_setting_path(@publication, id: @partial.parameterize) %>
+        </div>
+      </div>
+    </section>
+  </div>
+<% end %>

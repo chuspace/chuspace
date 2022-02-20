@@ -1,36 +1,26 @@
 <div class='relative h-full'>
-  <div class='flex h-full'>
-    <div class='profile sm:w-1/4 w-full min-h-full'>
-      <%= image_tag @user.avatar_url(variant: :thumb), class: 'mask mask-circle' %>
-      <h4 class='mt-4'><%= @user.name %></h4>
-      <h5 class='text-secondary font-normal'><%= @user.username %></h5>
-      <ul class='mt-8'>
-        <% user_menu.each do |key, config| %>
-          <li class='mb-4 last-mb-0'>
-            <%= link_to(
-                config[:label],
-                user_path(@user, tab: config[:tab]),
-                'aria-selected': false,
-                class: tab_selected?(user_path(@user, tab: config[:tab]))
-              )
-            %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
+  <div class='h-full'>
+    <div class='grid grid-cols-9 gap-8 mt-8'>
+      <div class='col-span-2'>
+        <%= image_tag @user.avatar_url(variant: :profile), class: 'mask mask-square rounded-md' %>
+        <h4 class='mt-4'><%= @user.name %></h4>
+        <h5 class='text-secondary font-normal'><%= @user.username %></h5>
 
-    <div class='content sm:w-3/4 w-full'>
-      <div class="text-sm breadcrumbs">
-        <ul>
-          <li>
-            <a><%= @user.username %></a>
-          </li>
-          <li>
-            <a><%= params[:tab] || :about %></a>
-          </li>
+        <ul class='mt-8'>
+          <% user_menu.each do |key, config| %>
+            <li class='link link-hover mt-4 first:mt-0'>
+              <%= link_to(
+                  config[:label],
+                  user_path(@user, tab: config[:tab]),
+                  'aria-selected': false
+                )
+              %>
+            </li>
+          <% end %>
         </ul>
       </div>
-      <div class='mt-4'>
+
+      <div class='col-span-7'>
         <%= render @partial %>
       </div>
     </div>

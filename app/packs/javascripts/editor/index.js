@@ -2,10 +2,11 @@
 
 import './styles.sass'
 
-import { Change, ChangeSet, Span, simplifyChanges } from 'prosemirror-changeset'
 import { DOMSerializer, Schema } from 'prosemirror-model'
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
+import { NodeSelection, Selection } from 'prosemirror-state'
+import TrackPlugin, { getTrackPluginState } from '@manuscripts/track-changes'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
@@ -14,10 +15,12 @@ import { markdownParser, markdownSerializer } from 'editor/markdowner'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import SchemaManager from 'editor/schema'
-import { Selection } from 'prosemirror-state'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
+import { recreateTransform } from './recreate'
+
+const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
 
 function arrowHandler(dir) {
   return (state, dispatch, view) => {
@@ -29,11 +32,18 @@ function arrowHandler(dir) {
         side
       )
 
-      if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
-        dispatch(state.tr.setSelection(nextPos))
+      if (CUSTOM_ARROW_HANDLERS.includes(nextPos?.$head?.parent?.type?.name)) {
+        if (nextPos.$head.parent.type.name === 'front_matter') {
+          nextPos = state.doc.resolve(0, nextPos.$head.parent.nodeSize)
+
+          dispatch(state.tr.setSelection(new NodeSelection(nextPos)))
+        } else {
+          dispatch(state.tr.setSelection(nextPos))
+        }
         return true
       }
     }
+
     return false
   }
 }
@@ -75,8 +85,6 @@ export default class Editor {
     this.view = this.createView()
     this.view.props.commands = this.manager.commands
     this.setActiveNodesAndMarks()
-
-    if (this.options.autoFocus) this.focus()
   }
 
   get plugins() {
@@ -101,6 +109,7 @@ export default class Editor {
 
       dropCursor(),
       gapCursor(),
+
       new Plugin({
         key: new PluginKey('editable'),
         props: {
@@ -108,6 +117,7 @@ export default class Editor {
         }
       }),
       new Plugin({
+        key: new PluginKey('tabindex'),
         props: {
           attributes: {
             tabindex: 0
@@ -117,18 +127,14 @@ export default class Editor {
     ]
   }
 
-  createState = () => {
-    let doc = this.markdownParser.parse(this.options.content)
-    let plugins = this.plugins
-
-    return EditorState.create({
+  createState = () =>
+    EditorState.create({
       schema: this.schema,
-      doc: doc,
+      doc: this.markdownParser.parse(this.options.content),
       highlights: [],
       editions: [],
-      plugins
+      plugins: this.plugins
     })
-  }
 
   createView() {
     const view = new EditorView(this.element, {
@@ -143,7 +149,7 @@ export default class Editor {
     view.dom.title = 'Enter post content'
     view.dom.id = 'editor-content'
     view.dom.classList.add(
-      'post-editor',
+      'chu-editor',
       this.options.editable ? 'editable' : 'read-only'
     )
 
@@ -159,18 +165,18 @@ export default class Editor {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
-    if (!transaction.docChanged) {
-      return
-    }
+    if (transaction.docChanged) this.emitUpdate(transaction)
 
-    this.emitUpdate(transaction)
+    return true
   }
 
   emitUpdate(transaction: Transaction) {
-    this.options.editable ? this.options.onChange(transaction) : false
+    this.options.editable ? this.options.onChange() : false
   }
 
   focus() {
+    const tr = this.state.tr.setSelection(Selection.atEnd(this.state.doc))
+    this.view.dispatch(tr)
     this.view.focus()
   }
 

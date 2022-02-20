@@ -18,11 +18,12 @@ import 'codemirror/addon/fold/brace-fold'
 import 'codemirror/addon/fold/comment-fold'
 import 'codemirror/addon/fold/markdown-fold'
 import 'codemirror/addon/display/autorefresh'
+import 'codemirror/addon/mode/multiplex'
 import './language-switcher'
 
 import * as CodeMirror from 'codemirror'
 
-import { LitElement, html } from 'lit'
+import { LitElement, css, html, svg } from 'lit'
 import { MODES, loadMode } from 'editor/modes'
 
 import ClipboardJS from 'clipboard'
@@ -34,18 +35,20 @@ import tippy from 'tippy.js'
 export default class CodeEditor extends LitElement {
   cm: ?CodeMirror
 
-  static get properties() {
-    return {
-      mode: { type: String, reflect: true },
-      readonly: { type: String },
-      theme: { type: String },
-      loaded: { type: Boolean },
-      content: { type: String, reflect: true },
-      onInit: { type: Function },
-      codeMirrorKeymap: { type: Function },
-      onLanguageChange: { type: Function },
-      onDestroy: { type: Function }
-    }
+  static properties = {
+    mode: { type: String, reflect: true },
+    readonly: { type: String },
+    lazy: { type: String },
+    wrapper: { type: String },
+    theme: { type: String },
+    filename: { type: String },
+    downloadable: { type: String },
+    loaded: { type: Boolean },
+    content: { type: String, reflect: true },
+    onInit: { type: Function },
+    codeMirrorKeymap: { type: Function },
+    onLanguageChange: { type: Function },
+    onDestroy: { type: Function }
   }
 
   constructor() {
@@ -53,6 +56,9 @@ export default class CodeEditor extends LitElement {
 
     this.theme = window.colorScheme
     this.loaded = false
+    this.wrapper = true
+    this.lazy = true
+    this.downloadable = true
     this.lines = 0
 
     this.options = {
@@ -93,7 +99,7 @@ export default class CodeEditor extends LitElement {
           clearTimeout(this.timer)
           this.timer = null
         }
-      } else if (intersectionRatio > 0.2) {
+      } else if (intersectionRatio > 0.1) {
         this.timer = setTimeout(() => this.loadEditor(), this.delay)
       }
     })
@@ -107,17 +113,35 @@ export default class CodeEditor extends LitElement {
     if (this.onInit) await this.onInit(this.cm)
 
     this.loaded = true
+
+    if (this.lazy) this.removeObserver()
   }
 
   async connectedCallback() {
-    super.connectedCallback()
+    await super.connectedCallback()
     this.lines = this.content.split(/\r\n|\r|\n/).length
 
     try {
       this.readonly = JSON.parse(this.readonly)
     } catch (e) {}
 
-    this.attachObserver()
+    try {
+      this.wrapper = JSON.parse(this.wrapper)
+    } catch (e) {}
+
+    try {
+      this.lazy = JSON.parse(this.lazy)
+    } catch (e) {}
+
+    try {
+      this.downloadable = JSON.parse(this.downloadable)
+    } catch (e) {}
+
+    if (this.lazy) {
+      this.attachObserver()
+    } else {
+      await this.loadEditor()
+    }
   }
 
   createRenderRoot() {
@@ -168,35 +192,52 @@ export default class CodeEditor extends LitElement {
   }
 
   render = () => {
+    const downloadIcon = svg`
+      <svg class='fill-current' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M4.97 11.03a.75.75 0 111.06-1.06L11 14.94V2.75a.75.75 0 011.5 0v12.19l4.97-4.97a.75.75 0 111.06 1.06l-6.25 6.25a.75.75 0 01-1.06 0l-6.25-6.25zm-.22 9.47a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H4.75z"></path></svg>
+    `
+
     return html`
       <div
-        class="code-editor-container code-editor-container--${this.theme}"
+        class="code-editor-container ${this.wrapper
+          ? 'has-wrapper'
+          : 'no-wrapper'} font-sans code-editor-container--${this.theme}"
         contenteditable="false"
       >
-        <div class="code-editor-toolbar" contenteditable="false">
-          ${this.readonly ? null : Controls({ destroy: this.onDestroy })}
-          <div class="code-editor-toolbar-menu" contenteditable="false">
-            ${this.readonly
-              ? html`
-                  <div
-                    class="code-editor-language-badge badge badge--grey mr-4"
-                  >
-                    ${this.mode}
-                  </div>
-                `
-              : html`
-                  <code-editor-language-switcher
-                    mode=${this.mode}
-                    readonly=${this.readonly}
-                    .setMode=${this.setMode}
-                  ></code-editor-language-switcher>
-                `}
+        ${this.wrapper
+          ? html`
+              <div class="code-editor-toolbar" contenteditable="false">
+                ${this.readonly && this.downloadable ? downloadIcon : null}
+                ${!this.readonly ? Controls({ destroy: this.onDestroy }) : null}
+                ${this.filename
+                  ? html`
+                      <span>${this.filename}</span>
+                    `
+                  : null}
 
-            <copy-clipboard
-              .initClipboardJS=${this.initClipboardJS}
-            ></copy-clipboard>
-          </div>
-        </div>
+                <div class="code-editor-toolbar-menu" contenteditable="false">
+                  ${this.readonly
+                    ? html`
+                        <div
+                          class="code-editor-language-badge badge badge-primary mr-4"
+                        >
+                          ${this.mode}
+                        </div>
+                      `
+                    : html`
+                        <code-editor-language-switcher
+                          mode=${this.mode}
+                          readonly=${this.readonly}
+                          .setMode=${this.setMode}
+                        ></code-editor-language-switcher>
+                      `}
+
+                  <copy-clipboard
+                    .initClipboardJS=${this.initClipboardJS}
+                  ></copy-clipboard>
+                </div>
+              </div>
+            `
+          : null}
 
         <div class="code-editor">
           ${!this.loaded

@@ -1,17 +1,20 @@
 <div class='flex items-center'>
   <div class="dropdown dropdown-end">
     <div tabindex="0" class="m-1 cursor-pointer mask mask-circle"><%= image_tag Current.user.avatar_url %></div>
-    <ul tabindex="0" class="shadow menu dropdown-content bg-base-100 rounded-box w-52">
+    <ul tabindex="0" class="shadow menu dropdown-content bg-base-300 rounded-box w-52">
       <li>
-        <%= content_tag :div, "Signed in as <strong>#{Current.user.username}</strong>".html_safe, role: 'menuitem', class: 'px-4 py-4 text-current', tabindex: '-1' %>
+        <%= content_tag :div, "Signed in as <strong>#{Current.user.username}</strong>".html_safe, role: 'menuitem', class: 'block text-current', tabindex: '-1' %>
       </li>
       <div class='divider my-0 h-0'></div>
       <li>
         <%= link_to 'Your profile', user_path(Current.user), class: link_class(user_path(Current.user)), role: 'menuitem', tabindex: '-1' %>
       </li>
+      <li>
+        <%= link_to 'Your Publications', user_path(Current.user, tab: :publications), class: link_class(user_path(Current.user)), role: 'menuitem', tabindex: '-1' %>
+      </li>
       <div class='divider my-0 h-0'></div>
       <li>
-        <%= button_to 'Sign out', session_path(Current.user), class: 'px-4 py-4 text-current', form: { role: 'menuitem', tabindex: '-1' }, method: :delete, remote: true %>
+        <%= button_to 'Sign out', session_path(Current.user), class: 'text-current', form: { role: 'menuitem', tabindex: '-1' }, method: :delete, remote: true %>
       </li>
     </ul>
   </div>

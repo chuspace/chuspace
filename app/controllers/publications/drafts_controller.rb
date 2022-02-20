@@ -1,0 +1,87 @@
+# frozen_string_literal: true
+
+module Publications
+  class DraftsController < ApplicationController
+    include Breadcrumbable, SetPublicationRoot
+    before_action :build_draft, only: %i[new create]
+    before_action :find_draft, only: %w[update edit destroy]
+
+    layout 'editor', only: %i[new edit]
+
+    def index
+      if turbo_frame_request?
+        @drafts = @publication.drafts(path: @draft_path)
+        render partial: 'list', locals: { drafts: @drafts, publication: @publication }
+      end
+    end
+
+    def create
+      @draft.assign_attributes(name: draft_params[:name], path: @drafts_root_path.join(draft_params[:name]).to_s)
+
+      if @draft.valid? && @draft.create(**commit_params)
+        redirect_to publication_edit_draft_path(@publication, @draft)
+      else
+        respond_to do |format|
+          format.html { publication_new_draft_path(@publication, @draft) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace(@draft, partial: 'form', locals: { draft: @draft }) }
+        end
+      end
+    end
+
+    def destroy
+      if @draft.delete(**commit_params)
+        redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
+      else
+        redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
+      end
+    end
+
+    def update
+      if @draft.update(**commit_params)
+        redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
+      else
+        respond_to do |format|
+          format.html { publication_edit_draft_path(@publication, @draft) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace(@draft, partial: 'edit_form', locals: { draft: @draft, publication: @publication }) }
+        end
+      end
+    end
+
+    def new
+      add_breadcrumb(:drafts, find_publication_drafts_root_path)
+      add_breadcrumb('New')
+    end
+
+    def show
+      @path = @draft_path
+    end
+
+    def edit
+      add_breadcrumb(:drafts, find_publication_drafts_root_path)
+      add_breadcrumb(@draft.relative_path, publication_preview_draft_path(@publication, @draft))
+      add_breadcrumb('Edit')
+    end
+
+    private
+
+    def build_draft
+      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.git_provider_adapter, path: @drafts_root_path)
+    end
+
+    def commit_params
+      {
+        message: draft_params[:commit_message],
+        committer: Git::Committer.chuspace,
+        author: Git::Committer.for(user: Current.user)
+      }.freeze
+    end
+
+    def draft_params
+      params.require(:draft).permit(:name, :commit_message)
+    end
+
+    def find_draft
+      @draft = @publication.draft(path: @draft_path)
+    end
+  end
+end

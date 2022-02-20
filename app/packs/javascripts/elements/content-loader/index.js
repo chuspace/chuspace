@@ -39,10 +39,10 @@ export default class ContentLoader extends LitElement {
       boxHeight: 400,
       interval: 0.25,
       preserveAspectRatio: 'none',
-      primaryColor: '#f0f0f0',
+      primaryColor: '#1A243B',
       primaryOpacity: 1,
       rtl: false,
-      secondaryColor: '#e0e0e0',
+      secondaryColor: '#313a4f',
       secondaryOpacity: 1,
       speed: 2,
       style: {},
@@ -93,7 +93,7 @@ export default class ContentLoader extends LitElement {
                     svg`
                   <rect x="15" y="${index * 20}" rx="2" ry="2" width=${
                       this.width
-                    } height='15' />
+                    } height='10' />
                 `
                 )
           }

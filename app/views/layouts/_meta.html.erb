@@ -1,4 +1,5 @@
-
+<%= csrf_meta_tags %>
+<%= action_cable_meta_tag %>
 <meta charset="utf-8" />
 <meta name="language" content="english" />
 <meta http-equiv="content-type" content="text/html" />
@@ -8,4 +9,4 @@
 <meta name="theme-color" content="#000000" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="turbo-cache-control" content="no-cache" />
-<%= csrf_meta_tags %>
+ <%= display_meta_tags site: ChuspaceConfig.new.app_name %>

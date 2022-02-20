@@ -1,0 +1,36 @@
+<div class='grid grid-cols-3 h-screen max-h-screen overflow-hidden'>
+  <div class='col-span-2 p-8 h-full overflow-scroll'>
+    <%= render 'shared/breadcrumbs' %>
+    <div class='mt-4'>
+      <%= turbo_frame_tag dom_id(@draft, :diff), src: publication_new_draft_diff_path(@publication, @draft), loading: :lazy do  %>
+         <div class="code-editor">
+          <content-loader
+              lines='28'
+              class="block whitespace-no-wrap py-4"
+            ></content-loader>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class='col-span-1 p-8 bg-base-200'>
+    <%= turbo_frame_tag(dom_id(@draft, :new_commit)) do %>
+      <%= simple_form_for @draft, method: :patch, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>
+        <h4>Commit changes</h4>
+        <div class="form-control mt-8">
+          <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
+          <div class='mt-8 font-mono'>
+            <label class='text-sm block'>Commit author: <%= link_to Current.user.name, user_path(Current.user), class: 'font-bold' %></label>
+            <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>
+            <label class='text-sm block'>Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>
+          </div>
+        </div>
+
+        <div class="modal-action">
+          <%= form.submit 'Commit', class: 'btn btn-primary btn-sm' %>
+          <%= link_to 'Cancel', publication_edit_draft_path(@publication, @draft), class: "btn btn-error btn-sm", data: { 'turbo-frame': :_top } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

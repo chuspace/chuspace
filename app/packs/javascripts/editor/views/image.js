@@ -27,6 +27,7 @@ export default class ImageView extends BaseView {
           src=${this.node.attrs.src || ''}
           alt=${this.node.attrs.alt || ''}
           title=${this.node.attrs.title || this.node.attrs.alt || ''}
+          filename=${this.node.attrs.src.split('/').pop() || ''}
           .handleChange=${this.editable ? this.handleChange : null}
           .handleDelete=${this.handleDelete}
         ></lazy-image>

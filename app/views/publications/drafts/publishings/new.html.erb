@@ -1,0 +1,12 @@
+<div class='grid grid-cols-3 h-screen max-h-screen overflow-hidden'>
+  <div class='col-span-2 p-8 px-24 h-full overflow-scroll'>
+    <%= render 'shared/breadcrumbs' %>
+    <%= render 'publications/drafts/shared/preview' %>
+  </div>
+
+  <div class='col-span-1 p-8 bg-base-200 overflow-scroll h-full'>
+    <%= turbo_frame_tag(@post, class: 'h-full') do %>
+      <%= render 'form', draft: @draft, post: @post, publication: @publication %>
+    <% end %>
+  </div>
+</div>

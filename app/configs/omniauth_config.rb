@@ -19,6 +19,12 @@ class OmniauthConfig < ApplicationConfig
       scope: 'email account',
       method: :post,
       url: '/auth/bitbucket'
+    },
+    gitea: {
+      label: 'Gitea',
+      scope: 'user',
+      method: :post,
+      url: '/auth/gitea'
     }
   )
 

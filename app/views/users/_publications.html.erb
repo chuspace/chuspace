@@ -1,0 +1,29 @@
+<div class='flex'>
+  <div class='flex-1'>
+    <%= render 'shared/breadcrumbs' %>
+  </div>
+
+  <%= link_to 'Connect', connect_root_path, class: 'btn btn-primary btn-outline btn-sm' %>
+</div>
+
+<div class='mt-8'>
+  <% if @user.publications.except_personal.any? %>
+    <div class='card bordered'>
+      <%= render 'publications/list', publications: @user.publications.except_personal %>
+    </div>
+  <% else %>
+    <div class='text-center py-16'>
+      <div class='text-secondary w-2/3 mx-auto'>
+        <h3>404</h3>
+        <p class='mt-4'>
+          Chuspace publications uses git repositories to store and retrieve posts.
+          Connect one to get started
+        </p>
+      </div>
+
+      <div class='mt-8'>
+        <%= link_to 'Connect', connect_other_publications_path, class: 'btn btn-primary btn-sm', data: { turbo: :_top } %>
+      </div>
+    </div>
+  <% end %>
+</div>

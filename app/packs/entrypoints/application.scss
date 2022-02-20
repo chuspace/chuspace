@@ -6,37 +6,94 @@
 
 @layer base {
   h1 {
-    @apply text-8xl font-bold font-sans;
+    @apply text-5xl font-semibold font-sans;
   }
 
   h2 {
-    @apply text-6xl font-semibold font-sans;
+    @apply text-3xl font-medium font-sans;
   }
 
   h3 {
-    @apply text-4xl font-semibold font-sans;
+    @apply text-xl font-medium font-sans;
   }
 
   h4 {
-    @apply text-2xl font-bold font-sans;
+    @apply text-lg font-semibold font-sans;
   }
 
   h5 {
-    @apply text-xl font-bold font-sans;
+    @apply text-base font-semibold font-sans;
   }
 
   h6 {
-    @apply text-lg font-bold font-sans;
+    @apply text-sm font-semibold font-sans;
   }
 
   strong {
     @apply font-sans font-semibold;
+  }
+
+  details > summary {
+    list-style: none;
+  }
+
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details[as='tab'] {
+    &[open] > summary {
+      @apply border-b-0 rounded-b-none;
+      list-style-type: disclosure-open;
+    }
+
+    & > summary {
+      list-style: inside disclosure-closed;
+    }
+
+    & > summary::-webkit-details-marker {
+      display: list-item;
+    }
   }
 }
 
 @layer components {
   label {
     justify-content: flex-start !important;
+  }
+
+  .btn {
+    @apply normal-case font-medium;
+  }
+
+  .card {
+    @apply rounded-md;
+  }
+
+  .tab {
+    @apply h-12;
+  }
+
+  .tabs {
+    .tab {
+      &.active {
+        @apply relative text-primary;
+
+        &::after {
+          @apply absolute w-full bottom-0 border-b-2 border-b-primary;
+          content: '';
+        }
+      }
+    }
+  }
+
+  .active[dir='vertical'] {
+    @apply relative bg-base-200 text-primary;
+
+    &::before {
+      @apply absolute border-l-2 border-l-primary left-0 h-full top-0;
+      content: '';
+    }
   }
 }
 
@@ -62,8 +119,8 @@ auto-complete {
 }
 
 .header {
-  @apply fixed top-0 w-full bg-neutral shadow-lg dark:border-0 dark:bg-base-200 z-10;
-  height: 60px;
+  @apply sm:fixed top-0 w-full bg-base-200 z-10;
+  height: 55px;
 
   will-change: transform;
   transition: transform 200ms linear;
@@ -79,4 +136,26 @@ auto-complete {
 
 textarea {
   resize: none;
+}
+
+.lazy,
+.lazyloading {
+  opacity: 0;
+}
+
+.lazyloaded {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+
+img.lazy:not([src]) {
+  visibility: hidden;
+}
+
+file-attachment {
+  @apply block w-full p-16 text-center border-2 border-dashed border-base-100;
+
+  &[hover] {
+    @apply border-base-300;
+  }
 }

@@ -3,10 +3,10 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.3'
+ruby '3.1.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.0'
+gem 'rails', '~> 7.x'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 1.x'
@@ -18,6 +18,17 @@ gem 'action_policy'
 gem 'name_of_person'
 gem 'good_job'
 gem 'mini_mime'
+gem 'wicked'
+gem 'kredis'
+
+# JSONB attributes
+gem 'active_type'
+gem 'attr_json'
+
+# Cache
+gem 'hiredis'
+gem 'oj'
+gem 'redis'
 
 # Sprockets
 gem 'sprockets-rails'
@@ -78,6 +89,9 @@ gem 'sawyer', github: 'lostisland/sawyer'
 gem 'faraday-http-cache'
 gem 'typhoeus'
 
+gem 'fast_diff', path: '/Users/gaurav/oss/fast_diff'
+gem 'diffy'
+
 #  SEO
 gem 'meta-tags'
 
@@ -91,6 +105,10 @@ gem 'inline_svg'
 # App configs
 gem 'anyway_config'
 
+# Analytics
+gem 'ahoy_matey'
+gem 'maxminddb'
+
 group :production do
   # Resource monitoring
   gem 'easymon'
@@ -99,8 +117,6 @@ end
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec_junit_formatter'
-  gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'coveralls', require: false
@@ -139,3 +155,4 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
+gem "graphiql-rails", group: :development

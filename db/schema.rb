@@ -10,32 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_11_122552) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_02_20_132044) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
+  enable_extension "hstore"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "blog_repo_status_enum_type", ["syncing", "synced", "failed"]
-  create_enum "blog_visibility_enum_type", ["private", "public", "subscriber"]
-  create_enum "content_source_enum_type", ["chuspace", "remote"]
-  create_enum "git_storage_provider_enum_type", ["chuspace", "github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
-  create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
+  create_enum "git_provider_enum_type", ["github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
+  create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket", "gitea"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "manager", "owner", "subscriber"]
   create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
-  create_enum "template_visibility_enum_type", ["private", "public", "subscriber"]
+  create_enum "publication_visibility_enum_type", ["private", "public", "member"]
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
     t.text "body"
     t.string "record_type", null: false
     t.bigint "record_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
@@ -44,7 +41,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", precision: 6, null: false
+    t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -57,7 +54,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum"
-    t.datetime "created_at", precision: 6, null: false
+    t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -67,110 +64,100 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "blog_templates", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "description"
-    t.string "permalink", null: false
-    t.string "language", null: false
-    t.string "framework", null: false
-    t.string "css"
-    t.bigint "author_id"
-    t.string "chuspace_mirror_path"
-    t.string "preview_url"
-    t.string "repo_url", null: false
-    t.string "repo_posts_folder", null: false
-    t.string "repo_drafts_folder"
-    t.string "repo_assets_folder", null: false
-    t.string "repo_readme_path", default: "README.md", null: false
-    t.boolean "default", default: false, null: false
-    t.boolean "approved", default: false, null: false
-    t.boolean "system", default: false, null: false
-    t.bigint "downloads_count", default: 0, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.enum "visibility", default: "public", enum_type: "template_visibility_enum_type"
-    t.index ["approved"], name: "index_blog_templates_on_approved"
-    t.index ["author_id"], name: "index_blog_templates_on_author_id"
-    t.index ["css"], name: "index_blog_templates_on_css"
-    t.index ["default"], name: "index_blog_templates_on_default"
-    t.index ["framework"], name: "index_blog_templates_on_framework"
-    t.index ["language"], name: "index_blog_templates_on_language"
-    t.index ["permalink"], name: "index_blog_templates_on_permalink", unique: true
-    t.index ["system"], name: "index_blog_templates_on_system"
-    t.index ["visibility"], name: "index_blog_templates_on_visibility"
+  create_table "ahoy_events", force: :cascade do |t|
+    t.bigint "visit_id"
+    t.bigint "user_id"
+    t.string "name"
+    t.jsonb "properties"
+    t.datetime "time"
+    t.index ["name", "time"], name: "index_ahoy_events_on_name_and_time"
+    t.index ["properties"], name: "index_ahoy_events_on_properties", opclass: :jsonb_path_ops, using: :gin
+    t.index ["user_id"], name: "index_ahoy_events_on_user_id"
+    t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
   end
 
-  create_table "blogs", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "permalink", null: false
-    t.text "description"
-    t.bigint "owner_id", null: false
-    t.bigint "storage_id", null: false
-    t.bigint "template_id"
-    t.boolean "personal", default: false, null: false
-    t.string "repo_fullname", null: false
-    t.string "repo_posts_folder", null: false
-    t.string "repo_drafts_folder"
-    t.string "repo_assets_folder", null: false
-    t.string "repo_readme_path", default: "README.md"
-    t.datetime "repo_last_synced_at"
-    t.bigint "repo_webhook_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.enum "visibility", default: "private", null: false, enum_type: "blog_visibility_enum_type"
-    t.enum "repo_status", default: "syncing", null: false, enum_type: "blog_repo_status_enum_type"
-    t.index ["owner_id"], name: "index_blogs_on_owner_id"
-    t.index ["permalink", "owner_id"], name: "index_blogs_on_permalink_and_owner_id", unique: true
-    t.index ["personal"], name: "index_blogs_on_personal"
-    t.index ["storage_id"], name: "index_blogs_on_storage_id"
-    t.index ["template_id"], name: "index_blogs_on_template_id"
-  end
-
-  create_table "editions", force: :cascade do |t|
-    t.text "title", null: false
-    t.text "summary", null: false
-    t.bigint "publisher_id", null: false
-    t.bigint "revision_id", null: false
-    t.bigint "number", null: false
-    t.datetime "published_at", precision: 6, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["published_at"], name: "index_editions_on_published_at"
-    t.index ["publisher_id"], name: "index_editions_on_publisher_id"
-    t.index ["revision_id", "number"], name: "index_editions_on_revision_id_and_number", unique: true
-    t.index ["revision_id"], name: "index_editions_on_revision_id"
+  create_table "ahoy_visits", force: :cascade do |t|
+    t.string "visit_token"
+    t.string "visitor_token"
+    t.bigint "user_id"
+    t.string "ip"
+    t.text "user_agent"
+    t.text "referrer"
+    t.string "referring_domain"
+    t.text "landing_page"
+    t.string "browser"
+    t.string "os"
+    t.string "device_type"
+    t.string "country"
+    t.string "region"
+    t.string "city"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "utm_source"
+    t.string "utm_medium"
+    t.string "utm_term"
+    t.string "utm_content"
+    t.string "utm_campaign"
+    t.string "app_version"
+    t.string "os_version"
+    t.string "platform"
+    t.datetime "started_at"
+    t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
+    t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
-    t.string "slug", null: false
+    t.citext "slug", null: false
     t.bigint "sluggable_id", null: false
     t.string "sluggable_type", limit: 50
     t.string "scope"
-    t.datetime "created_at", precision: 6
+    t.datetime "created_at"
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "git_providers", force: :cascade do |t|
+    t.string "label", null: false
+    t.text "access_token"
+    t.text "refresh_access_token"
+    t.text "endpoint"
+    t.bigint "user_id", null: false
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.enum "name", null: false, enum_type: "git_provider_enum_type"
+    t.index ["user_id", "name"], name: "one_provider_per_user_index", unique: true
+    t.index ["user_id"], name: "index_git_providers_on_user_id"
+  end
+
+  create_table "good_job_processes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "state"
   end
 
   create_table "good_jobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "queue_name"
     t.bigint "priority"
     t.jsonb "serialized_params"
-    t.datetime "scheduled_at"
-    t.datetime "performed_at"
-    t.datetime "finished_at"
+    t.datetime "scheduled_at", precision: nil
+    t.datetime "performed_at", precision: nil
+    t.datetime "finished_at", precision: nil
     t.text "error"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.uuid "active_job_id"
     t.text "concurrency_key"
     t.text "cron_key"
     t.uuid "retried_good_job_id"
-    t.datetime "cron_at"
+    t.datetime "cron_at", precision: nil
     t.index ["active_job_id", "created_at"], name: "index_good_jobs_on_active_job_id_and_created_at"
+    t.index ["active_job_id"], name: "index_good_jobs_on_active_job_id"
     t.index ["concurrency_key"], name: "index_good_jobs_on_concurrency_key_when_unfinished", where: "(finished_at IS NULL)"
     t.index ["cron_key", "created_at"], name: "index_good_jobs_on_cron_key_and_created_at"
     t.index ["cron_key", "cron_at"], name: "index_good_jobs_on_cron_key_and_cron_at", unique: true
+    t.index ["finished_at"], name: "index_good_jobs_jobs_on_finished_at", where: "((retried_good_job_id IS NULL) AND (finished_at IS NOT NULL))"
     t.index ["queue_name", "scheduled_at"], name: "index_good_jobs_on_queue_name_and_scheduled_at", where: "(finished_at IS NULL)"
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
@@ -178,10 +165,10 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
   create_table "identities", force: :cascade do |t|
     t.text "uid", null: false
     t.string "magic_auth_token", null: false
-    t.datetime "magic_auth_token_expires_at"
+    t.datetime "magic_auth_token_expires_at", precision: nil
     t.bigint "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.enum "provider", null: false, enum_type: "identity_provider_enum_type"
     t.index ["magic_auth_token"], name: "index_identities_on_magic_auth_token", unique: true
     t.index ["uid", "provider"], name: "index_identities_on_uid_and_provider", unique: true
@@ -190,81 +177,75 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
 
   create_table "invites", force: :cascade do |t|
     t.bigint "sender_id", null: false
-    t.bigint "blog_id", null: false
-    t.string "identifier", null: false
+    t.bigint "publication_id", null: false
+    t.citext "identifier", null: false
     t.text "code"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.enum "role", default: "writer", null: false, enum_type: "membership_role_enum_type"
     t.enum "status", default: "pending", null: false, enum_type: "invite_status_enum_type"
-    t.index ["blog_id"], name: "index_invites_on_blog_id"
     t.index ["code"], name: "index_invites_on_code", unique: true
-    t.index ["identifier", "blog_id"], name: "index_invites_on_identifier_and_blog_id", unique: true
+    t.index ["identifier", "publication_id"], name: "index_invites_on_identifier_and_publication_id", unique: true
     t.index ["identifier"], name: "index_invites_on_identifier"
+    t.index ["publication_id"], name: "index_invites_on_publication_id"
     t.index ["role"], name: "index_invites_on_role"
     t.index ["sender_id"], name: "index_invites_on_sender_id"
     t.index ["status"], name: "index_invites_on_status"
   end
 
   create_table "memberships", force: :cascade do |t|
-    t.bigint "blog_id", null: false
+    t.bigint "publication_id", null: false
     t.bigint "user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.enum "role", default: "writer", null: false, enum_type: "membership_role_enum_type"
-    t.index ["blog_id"], name: "index_memberships_on_blog_id"
+    t.index ["publication_id"], name: "index_memberships_on_publication_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
-    t.string "blob_path", null: false
-    t.bigint "blog_id", null: false
-    t.bigint "author_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.citext "permalink", null: false
+    t.text "title", null: false
+    t.text "summary", null: false
+    t.text "body", null: false
+    t.text "body_html", null: false
+    t.text "blob_path", null: false
+    t.text "blob_sha", null: false
+    t.text "commit_sha", null: false
+    t.text "canonical_url"
+    t.integer "version", default: 1, null: false
+    t.bigint "publication_id", null: false
+    t.bigint "author_id", null: false
+    t.jsonb "original_author", default: {}, null: false
+    t.boolean "published", default: true, null: false
+    t.datetime "date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.enum "visibility", default: "public", enum_type: "post_visibility_enum_type"
-    t.enum "source", default: "chuspace", null: false, enum_type: "content_source_enum_type"
     t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["blob_path"], name: "index_posts_on_blob_path"
-    t.index ["blog_id", "blob_path"], name: "index_posts_on_blog_id_and_blob_path", unique: true
-    t.index ["blog_id"], name: "index_posts_on_blog_id"
+    t.index ["date"], name: "index_posts_on_date"
+    t.index ["permalink"], name: "index_posts_on_permalink"
+    t.index ["publication_id", "blob_path", "version"], name: "index_posts_on_publication_id_and_blob_path_and_version", unique: true
+    t.index ["publication_id", "permalink"], name: "index_posts_on_publication_id_and_permalink", unique: true
+    t.index ["publication_id"], name: "index_posts_on_publication_id"
   end
 
-  create_table "revisions", force: :cascade do |t|
-    t.bigint "post_id", null: false
-    t.bigint "committer_id"
-    t.jsonb "fallback_committer", default: {}, null: false
-    t.text "message", default: "", null: false
-    t.text "content", default: "", null: false
-    t.text "sha", null: false
-    t.bigint "number", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.enum "source", default: "chuspace", null: false, enum_type: "content_source_enum_type"
-    t.index ["committer_id"], name: "index_revisions_on_committer_id"
-    t.index ["number"], name: "index_revisions_on_number"
-    t.index ["post_id", "number"], name: "index_revisions_on_post_id_and_number", unique: true
-    t.index ["post_id"], name: "index_revisions_on_post_id"
-    t.index ["sha"], name: "index_revisions_on_sha"
-  end
-
-  create_table "storages", force: :cascade do |t|
-    t.string "description", null: false
-    t.string "endpoint"
-    t.string "scopes"
-    t.string "access_token", null: false
-    t.bigint "user_id", null: false
-    t.boolean "default", default: false
-    t.boolean "active", default: false
-    t.boolean "self_hosted", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.enum "provider", null: false, enum_type: "git_storage_provider_enum_type"
-    t.index ["active"], name: "index_storages_on_active"
-    t.index ["default"], name: "index_storages_on_default"
-    t.index ["self_hosted"], name: "index_storages_on_self_hosted"
-    t.index ["user_id", "provider"], name: "index_storages_on_user_id_and_provider", unique: true
-    t.index ["user_id"], name: "index_storages_on_user_id"
+  create_table "publications", force: :cascade do |t|
+    t.string "name", null: false
+    t.citext "permalink", null: false
+    t.text "description"
+    t.bigint "owner_id", null: false
+    t.bigint "git_provider_id", null: false
+    t.boolean "personal", default: false, null: false
+    t.jsonb "settings", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.enum "visibility", default: "private", null: false, enum_type: "publication_visibility_enum_type"
+    t.index ["git_provider_id"], name: "index_publications_on_git_provider_id"
+    t.index ["owner_id"], name: "index_publications_on_owner_id"
+    t.index ["permalink", "owner_id"], name: "index_publications_on_permalink_and_owner_id", unique: true
+    t.index ["personal"], name: "index_publications_on_personal"
   end
 
   create_table "taggings", id: :serial, force: :cascade do |t|
@@ -274,7 +255,7 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.string "tagger_type"
     t.integer "tagger_id"
     t.string "context", limit: 128
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.string "tenant", limit: 128
     t.index ["context"], name: "index_taggings_on_context"
     t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
@@ -298,37 +279,29 @@ ActiveRecord::Schema.define(version: 2021_12_11_122552) do
     t.string "first_name", null: false
     t.string "last_name"
     t.citext "username", null: false
-    t.string "email", null: false
-    t.bigint "blogs_count", default: 0, null: false
-    t.bigint "storages_count", default: 0, null: false
-    t.bigint "templates_count", default: 0, null: false
+    t.citext "email", null: false
+    t.bigint "publications_count", default: 0, null: false
     t.bigint "sign_in_count", default: 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "blog_templates", "users", column: "author_id"
-  add_foreign_key "blogs", "blog_templates", column: "template_id"
-  add_foreign_key "blogs", "storages"
-  add_foreign_key "blogs", "users", column: "owner_id"
-  add_foreign_key "editions", "revisions"
-  add_foreign_key "editions", "users", column: "publisher_id"
+  add_foreign_key "git_providers", "users"
   add_foreign_key "identities", "users"
-  add_foreign_key "invites", "blogs"
+  add_foreign_key "invites", "publications"
   add_foreign_key "invites", "users", column: "sender_id"
-  add_foreign_key "memberships", "blogs"
+  add_foreign_key "memberships", "publications"
   add_foreign_key "memberships", "users"
-  add_foreign_key "posts", "blogs"
+  add_foreign_key "posts", "publications"
   add_foreign_key "posts", "users", column: "author_id"
-  add_foreign_key "revisions", "posts"
-  add_foreign_key "revisions", "users", column: "committer_id"
-  add_foreign_key "storages", "users"
+  add_foreign_key "publications", "git_providers"
+  add_foreign_key "publications", "users", column: "owner_id"
 end

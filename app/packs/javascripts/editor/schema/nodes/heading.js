@@ -1,13 +1,12 @@
 // @flow
 
+import { Decoration, DecorationSet } from 'prosemirror-view'
+import { Plugin, PluginKey } from 'prosemirror-state'
 import { setBlockType, toggleBlockType } from 'editor/commands'
 
-import { MarkdownSerializerState } from 'prosemirror-markdown'
 import { Node } from 'editor/base'
 import { Node as PMNode } from 'prosemirror-model'
-import { Plugin } from 'prosemirror-state'
 import { findParentNodeOfType } from 'prosemirror-utils'
-import { markdownSerializer } from 'editor/markdowner'
 import { textblockTypeInputRule } from 'prosemirror-inputrules'
 
 type Options = {
@@ -26,9 +25,6 @@ export default class Heading extends Node {
       attrs: {
         level: {
           default: 1
-        },
-        class: {
-          default: 'heading'
         }
       },
       content: 'text*',
@@ -72,6 +68,7 @@ export default class Heading extends Node {
   get plugins() {
     return [
       new Plugin({
+        key: new PluginKey('headingPlaceholder'),
         props: {
           handleKeyDown: (view, event) => {
             const { schema, doc, tr, selection } = view.state
@@ -86,6 +83,35 @@ export default class Heading extends Node {
             }
 
             return false
+          },
+          decorations: (state) => {
+            const plugins = state.plugins
+            const doc = state.doc
+            const [firstChild, secondChild] = doc.content.content
+
+            const editablePlugin = plugins.find((plugin) =>
+              plugin.key.startsWith('editable$')
+            )
+            const editable = editablePlugin.props.editable()
+
+            if (!editable) {
+              return false
+            }
+
+            const decorations = []
+
+            doc.descendants((node, pos) => {
+              if (node.type.name !== 'heading') return
+
+              let text = decorations.push(
+                Decoration.node(pos, pos + node.nodeSize, {
+                  class: 'heading',
+                  'data-text': `h${node.attrs.level}`
+                })
+              )
+            })
+
+            return DecorationSet.create(doc, decorations)
           }
         }
       })

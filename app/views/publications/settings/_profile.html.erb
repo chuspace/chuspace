@@ -1,0 +1,12 @@
+<%= turbo_frame_tag(publication) do %>
+  <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+    <%= form.label :icon, 'Upload publication icon' %>
+    <file-attachment directory class='mt-4'>
+      <%= form.input :icon, wrapper: false, label: false %>
+      <pre></pre>
+    </file-attachment>
+    <%= form.input :name %>
+    <%= form.input :description %>
+    <%= form.button :submit, 'Save', class: "mt-12 btn btn-primary" %>
+  <% end %>
+<% end %>

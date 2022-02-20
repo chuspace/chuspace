@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang='en' class='h-full'>
+  <%= render 'layouts/head' %>
+  <body class="flex flex-col h-full">
+    <%= render 'layouts/flash' %>
+
+    <section class="container flex-1 pt-24 relative">
+      <%= link_to publication_edit_draft_path(@publication) do %>
+        <%= inline_svg_tag 'icons/x', class: 'w-6 h-6 absolute right-0 mr-12 mt-8 fill-current' %>
+      <% end %>
+      <%= yield %>
+    </section>
+  </body>
+</html>

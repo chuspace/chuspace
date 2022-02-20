@@ -1,0 +1,11 @@
+<%= turbo_frame_tag dom_id(@draft, :diff) do %>
+  <code-editor
+    mode='markdown-diff'
+    content='<%=  @diff %>'
+    readonly="nocursor"
+    downloadable="false"
+    filename="<%= @draft.name %>"
+    lazy='false'
+  >
+  </code-editor>
+<% end %>

@@ -1,0 +1,12 @@
+<%= render 'publications/layout' do %>
+  <div class='grid grid-cols-3 gap-4 mt-8'>
+    <section class='col-span-2'>
+      <% path = @path.blank? ? publication_drafts_root_path(@publication) : publication_drafts_path(@publication, path: @path) %>
+      <%= turbo_frame_tag dom_id(@publication, :drafts), src: path, lazy: true do %>
+        <%= render 'shared/card_loader', count: 10 %>
+      <% end %>
+    </section>
+
+    <%= render 'publications/sidebar', publication: @publication %>
+  </div>
+<% end %>

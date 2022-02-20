@@ -4,7 +4,7 @@ import * as marks from 'editor/schema/marks'
 import * as nodes from 'editor/schema/nodes'
 import * as plugins from 'editor/plugins'
 
-import { CodeBlockView, ImageView } from 'editor/views'
+import { CodeBlockView, FrontMatterView, ImageView } from 'editor/views'
 import Editor, { type Options } from '..'
 import { ellipsis, emDash, smartQuotes } from 'prosemirror-inputrules'
 
@@ -15,18 +15,6 @@ import toArray from 'lodash/toArray'
 export const filterElementsBy = (elements: [], type: string) => {
   return elements
     .filter((element) => element.type === type)
-    .reduce(
-      (nodes, { name, schema }) => ({
-        ...nodes,
-        [name]: schema
-      }),
-      {}
-    )
-}
-
-export const filterElementsByName = (elements: [], name: string) => {
-  return elements
-    .filter((element) => element.name === name)
     .reduce(
       (nodes, { name, schema }) => ({
         ...nodes,
@@ -56,34 +44,6 @@ export default class SchemaManager {
     let nodeElements = filterElementsBy(this.elements, 'node')
     let markElements = filterElementsBy(this.elements, 'mark')
 
-    switch (editor.options.appearance) {
-      case 'title':
-        nodeElements = {
-          ...filterElementsByName(this.elements, 'doc'),
-          ...filterElementsByName(this.elements, 'text'),
-          ...filterElementsByName(this.elements, 'paragraph'),
-          ...filterElementsByName(this.elements, 'heading'),
-          ...filterElementsBy(this.elements, 'title')
-        }
-
-        markElements = []
-        break
-      case 'summary':
-        nodeElements = {
-          ...filterElementsByName(this.elements, 'doc'),
-          ...filterElementsByName(this.elements, 'text'),
-          ...filterElementsByName(this.elements, 'paragraph'),
-          ...filterElementsByName(this.elements, 'heading'),
-          ...filterElementsBy(this.elements, 'summary')
-        }
-
-        markElements = []
-        break
-
-      default:
-        break
-    }
-
     this.schema = new Schema({
       nodes: nodeElements,
       marks: markElements
@@ -108,6 +68,13 @@ export default class SchemaManager {
 
   get nodeViews(): {} {
     return {
+      front_matter: (node, view, getPos) =>
+        new FrontMatterView({
+          node,
+          view,
+          getPos,
+          editable: this.editor.options.editable
+        }),
       code_block: (node, view, getPos) =>
         new CodeBlockView({
           node,
@@ -115,6 +82,7 @@ export default class SchemaManager {
           getPos,
           editable: this.editor.options.editable
         }),
+
       image: (node, view, getPos) =>
         new ImageView({
           node,

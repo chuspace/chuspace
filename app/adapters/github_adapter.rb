@@ -5,45 +5,39 @@ class GithubAdapter < ApplicationAdapter
     'github'
   end
 
-  def blobs(fullname:, folders: [])
-    items = []
+  def blobs(paths: [])
+    opts = { ref: ref }
+    blobs = []
 
-    folders.each do |folder|
-      response = get("repos/#{fullname}/contents/#{CGI.escape(folder)}")
-      items += response.select { |item| item.type == 'file' && Post.valid_mime?(name: item.path) }
-
-      dirs = response.select { |item| item.type == 'dir' }
-      next if dirs.blank?
-
-      items += blobs(fullname: fullname, folders: dirs.map(&:path))
-    rescue FaradayClient::NotFound
-      next
+    paths.each do |path|
+      blobs += blob_from_response(blob(path: path)).sort_by { |blob| %w[dir file].index(blob.type) }
     end
 
-    items
+    blobs
   end
 
-  def blob(fullname:, path:, ref: nil)
-    opts = {}
-    opts[:ref] = ref if ref
-
-    get "repos/#{fullname}/contents/#{CGI.escape(path)}", opts
-  rescue FaradayClient::NotFound
-    Sawyer::Resource.new(agent, {})
+  def blob(path:)
+    opts = { ref: ref }
+    blob_from_response(get("repos/#{repo_fullname}/contents/#{CGI.escape(path)}", **opts))
   end
 
-  def commits(fullname:, path: nil)
-    opts = {}
+  def commits(path: nil)
+    opts = { ref: ref }
     opts[:path] = path if path
 
-    get("repos/#{fullname}/commits", **opts)
+    commit_from_response(get("repos/#{repo_fullname}/commits", **opts))
   end
 
-  def commit(fullname:, sha:)
-    get("repos/#{fullname}/commits/#{sha}")
+  def commit(sha:)
+    commit_from_response(get("repos/#{repo_fullname}/commits/#{sha}"))
   end
 
-  def create_repository_webhook(fullname:, type: nil)
+  def create_or_update_blob(path:, content:, committer:, author:, sha: nil, message: nil)
+    message ||= sha.blank? ? "Create #{path}" : "Update #{path}"
+    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }).content)
+  end
+
+  def create_repository_webhook(type: nil)
     url = if Rails.env.production?
       Rails.application.routes.url_helpers.webhooks_github_repos_url
     else
@@ -61,59 +55,74 @@ class GithubAdapter < ApplicationAdapter
     }
 
     payload[:type] = type if type
-    post("repos/#{fullname}/hooks", payload)
+    post("repos/#{repo_fullname}/hooks", payload)
   end
 
-  def delete_repository_webhook(fullname:, id:)
-    boolean_from_response(:delete, "repos/#{fullname}/hooks/#{id}")
+  def delete_repository_webhook(id:)
+    boolean_from_response(:delete, "repos/#{repo_fullname}/hooks/#{id}")
   end
 
-  def delete_blob(fullname:, path:, id:, message: nil)
+  def delete_blob(path:, id:, message: nil, committer:, author:)
     message ||= "Delete #{path}"
-    delete "repos/#{fullname}/contents/#{path}", { sha: id, message: message }
+    blob_from_response(delete("repos/#{repo_fullname}/contents/#{path}", { sha: id, message: message }).content)
   end
 
-  def head_sha(fullname:)
-    @head_sha ||= paginate("repos/#{fullname}/commits", { per_page: 1 }).first.sha
+  def head_sha
+    @head_sha ||= paginate("repos/#{repo_fullname}/commits", { per_page: 1 }).first.sha
+  rescue FaradayClient::NotFound
+    nil
   end
 
-  def repository(fullname:)
-    repository_from_response(get("repos/#{fullname}"))
+  def orgs(options: {})
+    get('user/orgs', options)
   end
 
-  def repository_folders(fullname:)
-    tree(fullname: fullname)
+  def repositories(username:)
+    repository_from_response(get("users/#{username}/repos", { affiliation: 'owner,organization_member' }))
+  end
+
+  def repository
+    repository_from_response(get("repos/#{repo_fullname}"))
+  rescue FaradayClient::NotFound
+    nil
+  end
+
+  def repository_folders
+    tree
       .select { |item| item.type == 'tree' }
       .map(&:path)
       .sort
+  rescue FaradayClient::NotFound
+    nil
   end
 
-  def repository_files(fullname:)
-    tree(fullname: fullname)
-      .select { |item| item.type == 'blob' && Post.valid_mime?(name: item.path) }
+  def repository_files
+    tree
+      .select { |item| item.type == 'blob' }
       .map(&:path)
       .sort
+  rescue FaradayClient::NotFound
+    nil
   end
 
   def search_repositories(query:, options: { sort: 'asc', per_page: 5 })
     repository_from_response(search('search/repositories', query, options).items)
   end
 
-  def tree(fullname:, sha: head_sha(fullname: fullname))
-    get("repos/#{fullname}/git/trees/#{sha}", { recursive: true }).tree
-  end
-
-  def create_or_update_blob(fullname:, path:, content:, committer:, author:, sha: nil, message: nil)
-    message ||= sha.blank? ? "Create #{path}" : "Update #{path}"
-    put "repos/#{fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }
+  def tree(sha: head_sha)
+    get("repos/#{repo_fullname}/git/trees/#{sha}", { recursive: true }).tree
   end
 
   def user(options: {})
     get('user', options)
   end
 
-  def webhooks(fullname:, options: { per_page: 30 })
-    get("repos/#{fullname}/hooks", options)
+  def users
+    [user] + orgs
+  end
+
+  def webhooks(options: { per_page: 30 })
+    get("repos/#{repo_fullname}/hooks", options)
   end
 
   private

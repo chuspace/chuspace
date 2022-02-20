@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Membership < ApplicationRecord
-  belongs_to :blog
+  belongs_to :publication
   belongs_to :user
 
   enum role: RolesConfig.to_enum

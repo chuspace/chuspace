@@ -1,0 +1,13 @@
+<%= turbo_frame_tag(publication) do %>
+  <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+
+    <h2 class='flex items-center'>
+      <%= inline_svg_tag 'icons/netlify', class: 'h-16' %>
+      <span class='ml-2'>Deploy with netlify</span>
+    </h2>
+
+    <%= form.input :enabled, as: :boolean, input_html: { checked: false } %>
+    <%= form.input :domain, input_html: { value: '', placeholder: 'example.com' } %>
+    <%= form.button :submit, 'Save', class: "mt-12 btn btn-primary" %>
+  <% end %>
+<% end %>

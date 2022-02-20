@@ -10,19 +10,18 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :destroy, inverse_of: :user
   has_many :identities, dependent: :destroy, inverse_of: :user
-  has_many :blogs, through: :memberships, source: :blog
-  has_many :owning_blogs, class_name: 'Blog', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
-  has_one  :personal_blog, -> { where(personal: true) }, class_name: 'Blog', foreign_key: :owner_id, inverse_of: :owner
-  has_many :blog_templates, dependent: :nullify, foreign_key: 'author_id', inverse_of: :author
-  has_many :storages, dependent: :destroy, inverse_of: :user
-  has_one  :chuspace_storage, -> { where(provider: ::Storage.chuspace_config['provider']) }, class_name: 'Storage', dependent: :destroy, inverse_of: :user
+  has_many :publications, through: :memberships, source: :publication
+  has_many :owning_publications, class_name: 'Publication', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
+  has_one  :personal_publication, -> (user) { where(personal: true, permalink: user.username) }, class_name: 'Publication', foreign_key: :owner_id, inverse_of: :owner
   has_many :posts, foreign_key: :author_id, dependent: :destroy
-  has_many :contributions, through: :posts, source: :revisions
+  has_many :git_providers, dependent: :destroy
 
   validates :email, :username, :first_name, :name, presence: true
   validates :username, uniqueness: true, length: { in: 1..39 }, format: { with: /\A^[a-z0-9]+(?:-[a-z0-9]+)*$\z/i }
   validates :email, uniqueness: true, email: true
   encrypts  :email, deterministic: true, downcase: true
+
+  after_create_commit :seed_git_providers
 
   class << self
     def build_with_email_identity(email_params)
@@ -44,5 +43,20 @@ class User < ApplicationRecord
 
   def resolve_friendly_id_conflict(candidates)
     self.username = normalize_friendly_id(username)
+  end
+
+  def seed_git_providers
+    data = GitStorageConfig.new.to_h.map do |key, hash|
+      {
+        user_id: id,
+        name: key,
+        label: hash[:label],
+        endpoint: hash[:endpoint],
+        created_at: Time.current,
+        updated_at: Time.current
+      }
+    end
+
+    GitProvider.upsert_all(data, returning: false, unique_by: :one_provider_per_user_index)
   end
 end

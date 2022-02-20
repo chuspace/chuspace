@@ -3,7 +3,7 @@
 module Webhooks
   module Github
     class ReposController < ActionController::API
-      before_action :verify_signature, :set_commit, :verify_commit, :find_blog, :find_author
+      before_action :verify_signature, :set_commit, :verify_commit, :find_publication, :find_author
 
       def create
         @commit['added'].each do |blob_path|
@@ -25,46 +25,30 @@ module Webhooks
 
       def create_post(blob_path)
         Post.transaction do
-          post = @blog.posts.find_or_initialize_by(blob_path: blob_path)
+          post = @publication.posts.find_or_initialize_by(blob_path: blob_path)
 
           unless post.persisted?
-            post.author = @author || @blog.owner
+            post.author = @author || @publication.owner
             post.save
-            create_revision(post: post)
           end
         end
       end
 
       def delete_post(blob_path)
-        @blog.posts.find_by(blob_path: blob_path)&.destroy
+        @publication.posts.find_by(blob_path: blob_path)&.destroy
       end
 
       def update_post(blob_path)
-        post = @blog.posts.find_by(blob_path: blob_path)
-        create_revision(post: post)
+        post = @publication.posts.find_by(blob_path: blob_path)
+        post.publish!
       end
 
-      def create_revision(post:)
-        Revision.transaction do
-          git_blob = post.git_blob(ref: @commit['id'])
-
-          post.revisions.create!(
-            message: @commit['message'],
-            committer: @author,
-            source: :remote,
-            fallback_committer: @commit['author'] || @commit['committer'],
-            sha: @commit['id'],
-            content: Base64.decode64(git_blob.content)
-          )
-        end
-      end
-
-      def find_blog
-        @blog = Blog.find_by(repo_fullname: params['repository']['full_name'])
+      def find_publication
+        @publication = Publication.find_by("repo ->'fullname' = ?", params['repository']['full_name'])
       end
 
       def find_author
-        @author = @blog.members.joins(:user).find_by(users: { username: @commit['author']['login'] })
+        @author = @publication.members.find_by(username: @commit['author']['login'])
       end
 
       def set_commit

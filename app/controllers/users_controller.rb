@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
+  include Breadcrumbable
+
   before_action :find_user
   before_action :set_content_partial, only: :show
 
@@ -22,17 +24,19 @@ class UsersController < ApplicationController
 
   def find_user
     @user = User.friendly.find(params[:username])
+    add_breadcrumb(@user.username, user_path(@user))
   end
 
   def set_content_partial
     @partial = case params[:tab]
                when 'settings' then 'users/form'
-               when 'storages' then 'users/storages'
-               when 'blogs' then 'users/blogs'
+               when 'publications' then 'users/publications'
                when 'drafts' then 'users/drafts'
                when 'posts' then 'users/posts'
-    else 'users/about'
+    else 'users/overview'
     end
+
+    add_breadcrumb(params[:tab] || 'about')
   end
 
   def user_params

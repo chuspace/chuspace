@@ -3,10 +3,11 @@
 class InstallRepositoryWebhooksJob < ApplicationJob
   queue_as :default
 
-  def perform(blog:)
-    Blog.transaction do
-      webhook = blog.storage.adapter.create_repository_webhook(fullname: blog.repo_fullname)
-      blog.update!(repo_webhook_id: webhook.id)
+  def perform(publication:)
+    Publication.transaction do
+      webhook = publication.git_provider.adapter.create_repository_webhook(fullname: publication.repo_fullname)
+      publication.repo.webhook_id = webhook.id
+      publication.save!
     end
   end
 end

@@ -118,21 +118,12 @@ module FaradayClient
         http.headers[:accept] = default_media_type
         http.headers[:content_type] = 'application/json'
         http.headers[:user_agent] = user_agent
-        http.headers['Sudo'] = @sudo if @sudo
 
         case name
-        when 'github', 'github_enterprise'
+        when 'github'
           http.authorization 'token', @access_token
-        when 'gitlab', 'gitlab_foss'
+        when 'gitlab'
           http.authorization 'Bearer', @access_token
-        when 'chuspace', 'gitea'
-          http.authorization 'token', @access_token
-        end
-
-        if @basic_auth
-          username = Rails.application.credentials.storage[:chuspace].dig(:username)
-          password = Rails.application.credentials.storage[:chuspace].dig(:password)
-          http.basic_auth username, password
         end
       end
     end
@@ -193,17 +184,32 @@ module FaradayClient
         links_parser: Sawyer::LinkParsers::Simple.new
       }
 
-      conn_opts = {
+      opts[:faraday] = connection
+      opts
+    end
+
+    def connection
+      opts = {
         headers: {
           accept: default_media_type,
-          user_agent: user_agent
+          user_agent: user_agent,
+          content_type: 'application/json'
         },
+        url: endpoint,
         ssl: { verify: false }
       }
 
-      conn_opts[:builder] = MIDDLEWARE
-      opts[:faraday] = Faraday.new(conn_opts)
-      opts
+      opts[:builder] = MIDDLEWARE
+      http = Faraday.new(opts)
+
+      case name
+      when 'github'
+        http.authorization 'token', @access_token
+      when 'gitlab'
+        http.authorization 'Bearer', @access_token
+      end
+
+      http
     end
 
     def parse_query_and_convenience_headers(options)

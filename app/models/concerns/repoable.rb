@@ -4,59 +4,68 @@ module Repoable
   extend ActiveSupport::Concern
 
   included do
-    before_validation    :create_git_repo, on: :create, if: -> { name.present? && storage.chuspace? }
-    before_destroy       :uninstall_repository_webhooks
-    before_destroy       :delete_git_repo, if: -> { storage.chuspace? }
-    after_create_commit  :install_repository_webhooks, :sync_repository_content
-
-    validates_presence_of :repo_fullname, :repo_posts_folder, :repo_assets_folder
-
-    enum repo_status: {
-      syncing: 'syncing',
-      synced: 'synced',
-      failed: 'failed'
-    }, _suffix: true
+    after_destroy        :uninstall_repository_webhooks, unless: -> { git_provider.github? }
+    after_create_commit  :install_repository_webhooks, unless: -> { git_provider.github? }
+    after_create_commit  -> { AddRepositoryConfigJob.perform_later(publication: self) }
+    after_destroy_commit -> { RemoveRepositoryConfigJob.perform_later(publication: self) }
   end
 
   def assets_folders
-    [repo_assets_folder].freeze
+    [repo.assets_folder].freeze
+  end
+
+  def assets(path: assets_folders)
+    path = path.is_a?(Array) ? path : [path]
+    @assets ||= repository.assets(path)
+  end
+
+  def asset(path:)
+    @asset ||= repository.asset(path)
+  end
+
+  def content_folders
+    [repo.posts_folder, repo.drafts_folder].reject(&:blank?).freeze
+  end
+
+  def drafts(path: content_folders)
+    path = path.is_a?(Array) ? path : [path]
+
+    @drafts ||= Rails.cache.fetch([self, path.join(':')]) do
+      repository.drafts(path)
+    end
+  end
+
+  def draft(path:)
+    @draft ||= Rails.cache.fetch([self, path]) do
+      repository.draft(path)
+    end
+  end
+
+  def readme
+    @readme ||= Rails.cache.fetch([self, repo.readme_path]) do
+      repository.draft(repo.readme_path).content_html
+    end
   end
 
   def repository
-    Repository.new(blog: self, fullname: repo_fullname)
+    @repository ||= git_provider_adapter.repository.with_publication(self)
   end
 
-  def posts_folders
-    [repo_posts_folder, repo_drafts_folder].reject(&:blank?).freeze
+  def git_provider_adapter(ref: 'HEAD')
+    @git_provider_adapter ||= git_provider.adapter.apply_repository_scope(repo_fullname: repo.fullname, ref: ref)
   end
 
   def repo_drafts_or_posts_folder
-    repo_drafts_folder.presence || repo_posts_folder
+    repo.drafts_folder.presence || repo.posts_folder.presence
   end
 
   private
 
-  def create_git_repo
-    slug = normalize_friendly_id(name)
-    repository = storage.adapter.create_repository(path: template.chuspace_mirror_path, name: slug, owner: owner.username)
-    self.repo_fullname = repository.fullname
-  rescue StandardError
-    delete_git_repo
-  end
-
-  def delete_git_repo
-    storage.adapter.delete_repository(fullname: repo_fullname)
-  end
-
   def install_repository_webhooks
-    InstallRepositoryWebhooksJob.perform_later(blog: self)
+    InstallRepositoryWebhooksJob.perform_later(publication: self)
   end
 
   def uninstall_repository_webhooks
-    storage.adapter.delete_repository_webhook(fullname: repo_fullname, id: repo_webhook_id)
-  end
-
-  def sync_repository_content
-    SyncRepositoryContentsJob.perform_later(blog: self)
+    git_provider.adapter.delete_repository_webhook(fullname: repo.fullname, id: repo.webhook_id)
   end
 end

@@ -4,20 +4,28 @@ module Avatarable
   extend ActiveSupport::Concern
 
   AVATAR_VARIANTS = {
-    xs: 32,
-    sm: 48,
-    md: 64,
-    lg: 80,
-    xl: 120,
-    thumb: 150,
-    profile: 250
-  }.freeze
+    icon: 32,
+    thumb: 100,
+    profile: 200
+  }
 
-  def gravatar_url(variant: :xs)
+  included do
+    has_one_attached :avatar do |attachable|
+      AVATAR_VARIANTS.each do |name, size|
+        attachable.variant name, resize_to_limit: [size, size]
+      end
+    end
+  end
+
+  def avatar_url(variant: :icon)
+    avatar.variant(variant) || gravatar_url(variant: variant)
+  end
+
+  private
+
+  def gravatar_url(variant: :icon)
     size = AVATAR_VARIANTS[variant] || fail(AvatarVariantNotFound, 'Avatar variant not found')
     gravatar_id = Digest::MD5.hexdigest(email)
     "//secure.gravatar.com/avatar/#{gravatar_id}?d=identicon&s=#{size}"
   end
-
-  alias avatar_url gravatar_url
 end
