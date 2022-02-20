@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
+  skip_verify_authorized
+
   layout 'marketing'
   include SessionRedirect
 

@@ -109,6 +109,9 @@ gem 'anyway_config'
 gem 'ahoy_matey'
 gem 'maxminddb'
 
+# Votable
+gem 'acts_as_votable'
+
 group :production do
   # Resource monitoring
   gem 'easymon'

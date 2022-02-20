@@ -1,0 +1,8 @@
+<%= turbo_frame_tag @invite do %>
+  <div class="modal modal-open">
+    <div class="modal-box">
+      <h1 class='text-base font-normal mb-8'>Add to publication</h1>
+      <%= render 'form', invite: @invite %>
+    </div>
+  </div>
+<% end %>

@@ -19,6 +19,8 @@ class GithubAdapter < ApplicationAdapter
   def blob(path:)
     opts = { ref: ref }
     blob_from_response(get("repos/#{repo_fullname}/contents/#{CGI.escape(path)}", **opts))
+  rescue FaradayClient::NotFound
+    Git::Blob.new
   end
 
   def commits(path: nil)

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OauthsController < ApplicationController
+  skip_verify_authorized
+
   include Omniauthable
   attr_reader :identity, :user
 

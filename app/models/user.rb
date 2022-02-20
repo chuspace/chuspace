@@ -29,6 +29,17 @@ class User < ApplicationRecord
       user.identities.build(uid: user.email, provider: :email)
       user
     end
+
+    def search(query:)
+      sql = <<-SQL
+        unaccent(users.first_name) ILIKE unaccent(concat('%', ?, '%')) OR
+        unaccent(users.last_name) ILIKE unaccent(concat('%', ?, '%')) OR
+        unaccent(users.username) ILIKE unaccent(concat('%', ?, '%')) OR
+        unaccent(users.email) ILIKE unaccent(concat('%', ?, '%'))
+      SQL
+
+      where(sql, query, query, query, query)
+    end
   end
 
   private

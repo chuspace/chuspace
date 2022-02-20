@@ -77,6 +77,14 @@ Rails.application.routes.draw do
   resources :publications, path: '', only: :show, param: :permalink, constraints: PublicationConstraint.new do
     resources :settings, only: %i[index show update], module: :publications
 
+    resources :people, path: 'people', only: %i[index update destroy], module: :publications do
+      collection { get :autocomplete }
+    end
+
+    resources :invites, only: %i[new create], module: :publications do
+      collection { get :accept }
+    end
+
     scope constraints: { path: /[^\0]+/ }, format: false do
       scope controller: :assets, module: :publications do
         get '/asset/*path', action: :show, as: :asset

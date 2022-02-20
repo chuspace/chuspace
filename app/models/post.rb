@@ -19,6 +19,7 @@ class Post < ApplicationRecord
 
   enum visibility: PublicationConfig.to_enum, _suffix: true
 
+  acts_as_votable
   acts_as_taggable_on :topics
 
   friendly_id :slug_candidates, use: %i[slugged history], slug_column: :permalink

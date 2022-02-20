@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AutoChecksController < ApplicationController
+  skip_verify_authorized
+
   def create
     case params[:attribute].to_sym
     when :email

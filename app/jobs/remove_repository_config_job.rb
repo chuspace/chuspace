@@ -4,11 +4,13 @@ class RemoveRepositoryConfigJob < ApplicationJob
   queue_as :default
 
   def perform(publication:)
-    publication.git_provider_adapter.delete_blob(
-      path: Git::Repository::CONFIG_FILE_PATH,
-      message: Git::Repository::DISCONNECT_MESSAGE,
-      committer: Git::Committer.chuspace,
-      author: Git::Committer.chuspace
-    )
+    if publication.repository.config_exists?
+      publication.git_provider_adapter.delete_blob(
+        path: Git::Repository::CONFIG_FILE_PATH,
+        message: Git::Repository::DISCONNECT_MESSAGE,
+        committer: Git::Committer.chuspace,
+        author: Git::Committer.chuspace
+      )
+    end
   end
 end

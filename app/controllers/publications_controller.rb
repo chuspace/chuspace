@@ -5,6 +5,7 @@ class PublicationsController < ApplicationController
 
   before_action :authenticate!, except: :show
   before_action :set_content_partial, only: :show
+  skip_verify_authorized only: %i[index show]
 
   def new
   end
@@ -15,6 +16,7 @@ class PublicationsController < ApplicationController
 
   def show
     @publication = Publication.friendly.find(params[:permalink])
+    @invite = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
   end
 
   private

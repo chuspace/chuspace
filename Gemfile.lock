@@ -116,6 +116,7 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+    acts_as_votable (0.13.2)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     ahoy_matey (4.0.3)
@@ -572,6 +573,7 @@ DEPENDENCIES
   action_policy
   active_type
   acts-as-taggable-on!
+  acts_as_votable
   ahoy_matey
   ancestry
   anyway_config

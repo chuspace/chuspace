@@ -3,6 +3,7 @@
 module Connect
   class BaseController < ApplicationController
     before_action :authenticate!, :find_git_provider, :build_publication
+    skip_verify_authorized
 
     def index
       @git_providers = Current.user.git_providers

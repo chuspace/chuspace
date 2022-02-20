@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class MagicLoginsController < ApplicationController
+  skip_verify_authorized
+
   include SessionRedirect
 
   def index

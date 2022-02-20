@@ -19,7 +19,7 @@ class Invite < ApplicationRecord
   has_secure_token :code
 
   def recipient
-    @recipient ||= User.find_by_email(identifier)
+    @recipient ||= User.find_by(email: identifier) || User.find_by(username: identifier)
   end
 
   def recipient_email

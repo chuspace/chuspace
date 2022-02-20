@@ -1,0 +1,7 @@
+<tr><td><h3 class='mb-10 salutation'><%= t('.salutation', name: @invite.identifier) %></h3></td></tr>
+<tr><td><p class='mb-10'><%= @subject %></p></td></tr>
+<tr>
+  <td style='text-align: center;' >
+    <%= link_to "Join #{@publication.permalink}", accept_publication_invites_url(@publication, invite_token: @invite.code), class: 'button my-20' %>
+  </td>
+</tr>

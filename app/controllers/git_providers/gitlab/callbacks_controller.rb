@@ -4,6 +4,8 @@ module GitProviders
   module Gitlab
     class CallbacksController < ApplicationController
       include Omniauthable
+      before_action :authenticate!
+      skip_verify_authorized
 
       def index
         gitlab_provider = Current.user.git_providers.gitlab.first

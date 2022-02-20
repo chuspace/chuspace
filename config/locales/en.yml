@@ -89,6 +89,10 @@ en:
         and grow together
       welcome: Welcome to Chuspace
   user_mailer:
+    invite:
+      subject: '%{person} invited you to join %{publication}'
+      salutation: Hey %{name},
+      body: '%{person} invited you to join %{publication}'
     email_welcome:
       body:
         Thank you for signing up! Chuspace is currently in alpha and we're really

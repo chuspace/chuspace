@@ -7,6 +7,10 @@
           <%= image_tag member.avatar_url, class: 'w-8 h-8 mask mask-circle'%>
         <% end %>
       </div>
+
+      <%= turbo_frame_tag @invite do %>
+        <%= link_to 'Invite', new_publication_invite_path(publication), class: 'btn btn-outline btn-primary btn-sm mt-4' %>
+      <% end %>
     </div>
   </div>
 </aside>

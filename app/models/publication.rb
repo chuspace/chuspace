@@ -11,6 +11,7 @@ class Publication < ApplicationRecord
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
 
+  has_many :invites, dependent: :destroy, inverse_of: :publication
   has_many :memberships, dependent: :destroy, inverse_of: :publication
   has_many :members, through: :memberships, source: :user
   has_many :posts, dependent: :destroy, inverse_of: :publication

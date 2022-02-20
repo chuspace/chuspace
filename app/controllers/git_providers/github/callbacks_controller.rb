@@ -5,6 +5,7 @@ module GitProviders
     class CallbacksController < ApplicationController
       include Omniauthable
       before_action :authenticate!
+      skip_verify_authorized
 
       def index
         github_provider = Current.user.git_providers.github.first

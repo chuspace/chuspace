@@ -24,6 +24,10 @@ module Git
       PublicationConfig.new.to_h.deep_stringify_keys.to_yaml
     end
 
+    def config_exists?
+      adapter.blob(path: CONFIG_FILE_PATH).persisted?
+    end
+
     %w[assets drafts].each do |name|
       define_method "#{name}" do |paths|
         adapter.blobs(paths: paths)
