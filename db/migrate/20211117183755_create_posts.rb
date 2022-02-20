@@ -14,6 +14,7 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.text :blob_path, null: false
       t.text :blob_sha, null: false
       t.text :commit_sha, null: false
+      t.text :canonical_url
 
       t.integer :version, null: false, default: 1
 

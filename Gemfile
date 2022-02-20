@@ -105,6 +105,10 @@ gem 'inline_svg'
 # App configs
 gem 'anyway_config'
 
+# Analytics
+gem 'ahoy_matey'
+gem 'maxminddb'
+
 group :production do
   # Resource monitoring
   gem 'easymon'

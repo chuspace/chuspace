@@ -27,6 +27,7 @@ class Post < ApplicationRecord
     attachable.variant :post, resize_to_limit: [800, 300]
     attachable.variant :list, resize_to_limit: [250, 150]
     attachable.variant :icon, resize_to_limit: [64, 64]
+    attachable.variant :social, resize_to_limit: [600, 315]
   end
 
   def self.default_scope
@@ -43,6 +44,37 @@ class Post < ApplicationRecord
 
   def stale?
     commit_sha != draft.sha
+  end
+
+  def to_meta_tags
+    {
+      site: ChuspaceConfig.new.app_name,
+      title: title,
+      image_src: preview_image.variant(:list),
+      description: summary,
+      keywords: topic_list,
+      index: true,
+      follow: true,
+      author: author.name,
+      canonical: canonical_url || Rails.application.routes.url_helpers.publication_post_url(publication, self),
+      og: {
+        title: :title,
+        type: :article,
+        description: :description,
+        site_name: :site,
+        image: preview_image.variant(:social),
+        url: Rails.application.routes.url_helpers.publication_post_url(publication, self)
+      },
+      twitter: {
+        title: :title,
+        card: :summary,
+        description: :description,
+        site: ChuspaceConfig.new.twitter,
+        url: Rails.application.routes.url_helpers.publication_post_url(publication, self),
+        image: preview_image.variant(:list)
+      },
+      article: { published_time: date, modified_time: updated_at, tag: topic_list, author: author.username }
+    }
   end
 
   private

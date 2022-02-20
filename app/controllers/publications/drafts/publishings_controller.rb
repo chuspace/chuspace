@@ -18,7 +18,7 @@ module Publications
         @post.assign_attributes(@draft.to_post_attributes)
         @post.assign_attributes(publish_params)
 
-        if @post.save
+        if @post.save!
           redirect_to publication_post_path(@publication, @post)
         else
           respond_to do |format|
