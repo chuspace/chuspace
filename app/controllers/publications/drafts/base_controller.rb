@@ -13,7 +13,7 @@ module Publications
 
       def find_draft
         @draft = @publication.draft(path: @draft_path)
-        add_breadcrumb(:drafts, publication_drafts_root_path(@publication))
+        add_breadcrumb(:drafts, find_publication_drafts_root_path)
         add_breadcrumb(@draft.relative_path, publication_edit_draft_path(@publication, @draft))
       end
     end

@@ -46,7 +46,7 @@ class ApplicationAdapter
       Git::Commit.new(
         id: response.id || response.sha,
         message: commit.message,
-        author: Git::Author.from(author_hash),
+        author: Git::Committer.from(author_hash),
         committed_at: commit.committer.date,
         patch: response.files&.first&.patch,
         committer: Git::Committer.from(committer_hash),

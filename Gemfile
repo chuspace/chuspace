@@ -90,6 +90,7 @@ gem 'faraday-http-cache'
 gem 'typhoeus'
 
 gem 'fast_diff', path: '/Users/gaurav/oss/fast_diff'
+gem 'diffy'
 
 #  SEO
 gem 'meta-tags'

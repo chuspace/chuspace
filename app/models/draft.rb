@@ -1,17 +1,12 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
-  # Add until it's added to upstream
-  def self.kredis_boolean(name, key: nil, config: :shared, after_change: nil, expires_in: nil)
-    kredis_connection_with __method__, name, key, config: config, after_change: after_change, expires_in: expires_in
+  include Turbo::Broadcastable
 
-    define_method("#{name}?") do
-      send(name).value == true
-    end
-  end
-
-  kredis_boolean :stale, expires_in: 1.week, key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:stale" }
-  kredis_string  :local_content, expires_in: 1.week, key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:local_content" }
+  kredis_string :local_content,
+                expires_in: 1.week,
+                key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:local_content" },
+                after_change: :broadcast_editor_updates
 
   attribute :publication, Publication
   validates :path, :name, markdown: true
@@ -50,6 +45,14 @@ class Draft < Git::Blob
     CommonMarker.render_doc(body)
   end
 
+  def post
+    @post ||= publication.posts.find_by(blob_path: path)
+  end
+
+  def publishable?
+    post&.blob_sha != sha
+  end
+
   def persisted?
     id.present?
   end
@@ -68,7 +71,7 @@ class Draft < Git::Blob
   end
 
   def summary
-    front_matter.dig('description')
+    front_matter.dig(publication.front_matter.summary)
   end
 
   def title
@@ -83,6 +86,10 @@ class Draft < Git::Blob
     base_path = Pathname.new(publication.repo.posts_folder)
     file_path = Pathname.new(path)
     file_path.relative_path_from(base_path).to_s
+  end
+
+  def stale?
+    local_content.value.present? && local_content.value != decoded_content
   end
 
   def status
@@ -112,6 +119,10 @@ class Draft < Git::Blob
   end
 
   private
+
+  def broadcast_editor_updates
+    broadcast_replace_to self, :actions, target: "actions_draft_#{id}", partial: 'publications/drafts/actions', locals: { publication: publication, draft: self }
+  end
 
   def parsed
     yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])

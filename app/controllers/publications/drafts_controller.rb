@@ -3,6 +3,7 @@
 module Publications
   class DraftsController < ApplicationController
     include Breadcrumbable, SetPublicationRoot
+    before_action :build_draft, only: %i[new create]
     before_action :find_draft, only: %w[update edit destroy]
 
     layout 'editor', only: %i[new edit]
@@ -15,20 +16,9 @@ module Publications
     end
 
     def create
-      @commit = Git::Commit.new(
-        author: Git::Author.for(user: Current.user),
-        committer: Git::Committer.chuspace,
-        message: draft_params[:commit_message],
-        adapter: @publication.git_provider_adapter
-      )
+      @draft.assign_attributes(name: draft_params[:name], path: @drafts_root_path.join(draft_params[:name]).to_s)
 
-      @draft = Draft.new(
-        publication: @publication,
-        name: draft_params[:name],
-        path: @drafts_root_path.join(draft_params[:name]).to_s
-      )
-
-      if @commit.valid? && @commit.create_for!(blob: @draft)
+      if @draft.valid? && @draft.create(**commit_params)
         redirect_to publication_edit_draft_path(@publication, @draft)
       else
         respond_to do |format|
@@ -38,15 +28,16 @@ module Publications
       end
     end
 
-    def update
-      @commit = Git::Commit.new(
-        author: Git::Author.for(user: Current.user),
-        committer: Git::Committer.chuspace,
-        message: draft_params[:commit_message],
-        adapter: @publication.git_provider_adapter
-      )
+    def destroy
+      if @draft.delete(**commit_params)
+        redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
+      else
+        redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
+      end
+    end
 
-      if @commit.valid? && @commit.create_for!(blob: @draft)
+    def update
+      if @draft.update(**commit_params)
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
       else
         respond_to do |format|
@@ -57,8 +48,7 @@ module Publications
     end
 
     def new
-      @draft = Draft.new(publication: @publication, path: @drafts_root_path)
-      add_breadcrumb(:drafts, publication_drafts_root_path(@publication))
+      add_breadcrumb(:drafts, find_publication_drafts_root_path)
       add_breadcrumb('New')
     end
 
@@ -67,12 +57,24 @@ module Publications
     end
 
     def edit
-      add_breadcrumb(:drafts, publication_drafts_root_path(@publication))
+      add_breadcrumb(:drafts, find_publication_drafts_root_path)
       add_breadcrumb(@draft.relative_path, publication_preview_draft_path(@publication, @draft))
       add_breadcrumb('Edit')
     end
 
     private
+
+    def build_draft
+      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.git_provider_adapter, path: @drafts_root_path)
+    end
+
+    def commit_params
+      {
+        message: draft_params[:commit_message],
+        committer: Git::Committer.chuspace,
+        author: Git::Committer.for(user: Current.user)
+      }.freeze
+    end
 
     def draft_params
       params.require(:draft).permit(:name, :commit_message)

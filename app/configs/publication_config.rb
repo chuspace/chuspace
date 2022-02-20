@@ -13,8 +13,7 @@ class PublicationConfig < ApplicationConfig
       readme_path: 'README.md'
     },
     settings: {
-      auto_publish: false,
-      extensions: %w[.markdown .mdown .mkdn .mkd .md .text .txt]
+      auto_publish: false
     },
     visibility: {
       private: 'private',

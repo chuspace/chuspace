@@ -29,7 +29,7 @@ en:
 
     hints:
       draft:
-        name: valid file extensions are .markdown .mdown .mkdn, .mkd .md .text .txt
+        name: valid file extensions are .markdown, .mkd, .md
       publication:
         visibility: visibility of publication - public, internal or private
         repo:

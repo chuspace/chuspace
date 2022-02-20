@@ -210,6 +210,7 @@ GEM
       activerecord (>= 3.2)
     database_validations (1.1.0)
       activerecord (>= 4.2.0)
+    diffy (3.4.0)
     digest (3.1.0)
     docile (1.4.0)
     domain_name (0.5.20190701)
@@ -579,6 +580,7 @@ DEPENDENCIES
   coveralls
   database_consistency
   database_validations
+  diffy
   dotenv-rails
   down
   easymon

@@ -7,11 +7,16 @@
 
       <div class='flex items-center flex-1'>
         <div class='divider divider-vertical'></div>
-        <%= render 'shared/breadcrumbs' %>
+        <div class='ml-8'>
+          <%= render 'shared/breadcrumbs' %>
+        </div>
       </div>
 
       <div class='flex items-center'>
-        <%= render 'publications/drafts/actions', draft: @draft, publication: @publication if @draft.persisted? %>
+        <%= turbo_stream_from @draft, :actions if @draft.persisted? %>
+        <%= turbo_frame_tag dom_id(@draft, :actions), class: 'flex items-center' do %>
+          <%= render 'publications/drafts/actions', draft: @draft, publication: @publication if @draft.persisted? %>
+        <% end %>
         <%= render 'layouts/user' %>
       </div>
     </nav>

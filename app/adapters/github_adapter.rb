@@ -11,7 +11,6 @@ class GithubAdapter < ApplicationAdapter
 
     paths.each do |path|
       blobs += blob_from_response(get("repos/#{repo_fullname}/contents/#{CGI.escape(path)}", **opts))
-        .select { |blob| MarkdownConfig.valid?(name: blob.path) }
         .sort_by { |blob| %w[dir file].index(blob.type) }
     end
 
@@ -36,7 +35,7 @@ class GithubAdapter < ApplicationAdapter
 
   def create_or_update_blob(path:, content:, committer:, author:, sha: nil, message: nil)
     message ||= sha.blank? ? "Create #{path}" : "Update #{path}"
-    put "repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }
+    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }).content)
   end
 
   def create_repository_webhook(type: nil)
@@ -64,9 +63,9 @@ class GithubAdapter < ApplicationAdapter
     boolean_from_response(:delete, "repos/#{repo_fullname}/hooks/#{id}")
   end
 
-  def delete_blob(path:, id:, message: nil)
+  def delete_blob(path:, id:, message: nil, committer:, author:)
     message ||= "Delete #{path}"
-    delete "repos/#{repo_fullname}/contents/#{path}", { sha: id, message: message }
+    blob_from_response(delete("repos/#{repo_fullname}/contents/#{path}", { sha: id, message: message }).content)
   end
 
   def head_sha
@@ -100,7 +99,7 @@ class GithubAdapter < ApplicationAdapter
 
   def repository_files
     tree
-      .select { |item| item.type == 'blob' && MarkdownConfig.valid?(name: item.path) }
+      .select { |item| item.type == 'blob' }
       .map(&:path)
       .sort
   rescue FaradayClient::NotFound

@@ -92,6 +92,11 @@ export const MODES: ModesType = [
     custom: true
   },
   {
+    name: 'Markdown Diff',
+    mode: 'markdown-diff',
+    custom: true
+  },
+  {
     name: 'Elm',
     mode: 'elm'
   },
@@ -187,6 +192,11 @@ export const MODES: ModesType = [
   {
     name: 'Markdown',
     mode: 'markdown'
+  },
+  {
+    name: 'Gfm',
+    mode: 'gfm',
+    mime: 'text/x-gfm'
   },
   {
     name: 'Mathematica',

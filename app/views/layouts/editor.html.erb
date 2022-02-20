@@ -6,10 +6,8 @@
     <chu-editor
       data-autofocus='true'
       data-saving='false'
-      data-status='<%= @draft.status %>'
       data-image-provider-path='<%= publication_assets_path(@publication) %>'
-      data-draft-path='<%= @draft.path %>'
-      data-publication-permalink='<%= @publication.permalink %>'
+      data-auto-save-path='<%= publication_autosave_draft_path(@publication, @draft) %>'
     >
       <%= render 'publications/drafts/header', draft: @draft %>
 

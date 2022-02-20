@@ -16,21 +16,37 @@ module Git
 
     delegate :repository_files, :repository_folders, :webhooks, to: :adapter
 
-    def with_publication(publication)
-      self.publication = publication
-      self
+    CONFIG_FILE_PATH = 'chuspace.yml'
+    CONNECT_MESSAGE = 'Connect chuspace'
+    DISCONNECT_MESSAGE = 'Disconnect chuspace'
+
+    def self.chuspace_yaml_config
+      PublicationConfig.new.to_h.deep_stringify_keys.to_yaml
     end
 
     %w[assets drafts].each do |name|
       define_method "#{name}" do |paths|
-        adapter.blobs(paths: paths).map { |blob| blob.to_draft(publication: publication) }
+        adapter.blobs(paths: paths)
+               .select { |blob| Git::Blob.valid?(name: blob.name) }
+               .map { |blob| blob.decorate(publication: publication) }
       end
     end
 
     %w[asset draft].each do |name|
       define_method "#{name}" do |path|
-        adapter.blob(path: path).to_draft(publication: publication)
+        fail ActiveRecord::RecordNotFound, 'not found' unless Git::Blob.valid?(name: path)
+
+        adapter.blob(path: path).decorate(publication: publication)
       end
+    end
+
+    def markdown_files
+      repository_files.select { |path| MarkdownValidator.valid?(name_or_path: path) }
+    end
+
+    def with_publication(publication)
+      self.publication = publication
+      self
     end
   end
 end

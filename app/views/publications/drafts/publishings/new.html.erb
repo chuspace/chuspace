@@ -1,44 +1,12 @@
 <div class='grid grid-cols-3 h-screen max-h-screen overflow-hidden'>
   <div class='col-span-2 p-8 px-24 h-full overflow-scroll'>
     <%= render 'shared/breadcrumbs' %>
-    <%= render(
-        'publications/drafts/shared/diff',
-        title: @draft.title,
-        summary: @draft.summary,
-        old_content: @post.body,
-        new_content: @draft.body
-      )
-    %>
+    <%= render 'publications/drafts/shared/preview' %>
   </div>
 
   <div class='col-span-1 p-8 bg-base-200 overflow-scroll h-full'>
     <%= turbo_frame_tag(@post, class: 'h-full') do %>
-      <%= simple_form_for @post, url: publication_publish_draft_path(@publication, @draft), html: { form: 'h-full' } do |form| %>
-        <div class='meta'>
-          <h5 class='mb-4'>Publish</h5>
-
-          <%= form.input :visibility, as: :select, collection: Post.visibilities, input_html: { class: 'bg-transparent' } %>
-          <date-time-picker>
-            <%= form.input :date, as: :string, input_html: { 'data-target': 'date-time-picker.element', class: 'bg-transparent' } %>
-          </date-time-picker>
-
-          <auto-complete src="/users/search" for="topics-popup">
-            <%= form.input :topic_list, input_html: { 'data-target': 'input-tags.element', class: 'bg-transparent' } %>
-            <button id="topics-clear">X</button>
-            <ul id="topics-popup"></ul>
-            <!--
-              Optional div for screen reader feedback. Note the ID matches the ul, but with -feedback appended.
-              Recommended: Use a "Screen Reader Only" class to position the element off the visual boundary of the page.
-            -->
-            <div id="topics-popup-feedback" class="sr-only"></div>
-          </auto-complete>
-
-          <div class="modal-action">
-            <%= form.submit 'Publish', class: 'btn btn-primary btn-sm' %>
-            <%= link_to 'Cancel', publication_edit_draft_path(@publication, @draft), class: "btn btn-error btn-sm", data: { 'turbo-frame': :_top } %>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
+      <%= render 'form', draft: @draft, post: @post, publication: @publication %>
+    <% end %>
   </div>
 </div>

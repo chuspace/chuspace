@@ -21,9 +21,9 @@ export default new MarkdownSerializer(
     },
     front_matter: (state, node) => {
       state.write(`---\n`)
-      state.text(node.textContent, false)
+      state.text(node.textContent.trim(), false)
       state.ensureNewLine()
-      state.write('---')
+      state.write(`---`)
       state.closeBlock(node)
     },
     horizontal_rule(state, node) {

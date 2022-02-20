@@ -1,8 +1,13 @@
 <div class='sm:w-2/3 mx-auto w-full'>
-  <%= render 'breadcrumbs', post: @post %>
+  <%= render 'shared/breadcrumbs' %>
 
   <div class='chu-editor'>
-    <%= @post.revisions.current.parsed_content.html.html_safe %>
+    <div class='my-8'>
+      <%= content_tag :h1, @post.title, class: 'title' %>
+      <%= content_tag :h2, @post.summary, class: 'summary' %>
+    </div>
+
+    <%= @post.body_html.html_safe %>
   </div>
 
   <nav class='mr-8 fixed right-0 top-1/2 -translate-y-1/2'>

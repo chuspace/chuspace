@@ -1,10 +1,11 @@
 <% if @user.personal_publication.present? %>
   <div class='card bordered'>
-    <div class='chu-editor chu-editor-sm card-body'>
+    <div class='card-body'>
       <div class='card-title'>
         <code>About</code>
       </div>
-      <%= @user.personal_publication.readme %>
+
+      <%= content_tag :div, @user.personal_publication.readme, class: 'chu-editor chu-editor-sm' %>
     </div>
   </div>
 

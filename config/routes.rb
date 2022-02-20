@@ -108,6 +108,14 @@ Rails.application.routes.draw do
           get '/*path/commit', action: :new, as: :new_commit_draft
           post '/*path/commit', action: :create, as: :commit_draft
         end
+
+        scope controller: :diffs, module: :drafts do
+          get '/*path/diff', action: :new, as: :new_draft_diff
+        end
+
+        scope controller: :autosaves, module: :drafts do
+          post '/*path/autosave', action: :create, as: :autosave_draft
+        end
       end
     end
 

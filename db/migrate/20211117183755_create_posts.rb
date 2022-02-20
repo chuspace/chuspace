@@ -21,13 +21,14 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.references :author, foreign_key: { to_table: :users }, null: false
       t.jsonb :original_author, null: false, default: {}
 
+      t.boolean :published, null: false, default: true
+
       t.datetime :date, null: false, index: true
       t.timestamps
     end
 
-    add_index :posts, %i[publication_id blob_path], unique: true, algorithm: :concurrently
+    add_index :posts, %i[publication_id blob_path version], unique: true, algorithm: :concurrently
     add_index :posts, %i[publication_id permalink], unique: true, algorithm: :concurrently
-    add_index :posts, %i[publication_id version], unique: true, algorithm: :concurrently
 
     add_index :posts, :blob_path, algorithm: :concurrently
     add_index :posts, :permalink, algorithm: :concurrently

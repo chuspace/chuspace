@@ -1,14 +1,16 @@
 <div class='grid grid-cols-3 h-screen max-h-screen overflow-hidden'>
-  <div class='col-span-2 p-8 px-24 h-full overflow-scroll'>
+  <div class='col-span-2 p-8 h-full overflow-scroll'>
     <%= render 'shared/breadcrumbs' %>
-    <%= render(
-        'publications/drafts/shared/diff',
-        title: @draft.title,
-        summary: @draft.summary,
-        old_content: @draft.decoded_content,
-        new_content: @draft.local_content.value
-      )
-    %>
+    <div class='mt-4'>
+      <%= turbo_frame_tag dom_id(@draft, :diff), src: publication_new_draft_diff_path(@publication, @draft), loading: :lazy do  %>
+         <div class="code-editor">
+          <content-loader
+              lines='28'
+              class="block whitespace-no-wrap py-4"
+            ></content-loader>
+        </div>
+      <% end %>
+    </div>
   </div>
 
   <div class='col-span-1 p-8 bg-base-200'>

@@ -18,6 +18,7 @@ import 'codemirror/addon/fold/brace-fold'
 import 'codemirror/addon/fold/comment-fold'
 import 'codemirror/addon/fold/markdown-fold'
 import 'codemirror/addon/display/autorefresh'
+import 'codemirror/addon/mode/multiplex'
 import './language-switcher'
 
 import * as CodeMirror from 'codemirror'
@@ -40,6 +41,8 @@ export default class CodeEditor extends LitElement {
     lazy: { type: String },
     wrapper: { type: String },
     theme: { type: String },
+    filename: { type: String },
+    downloadable: { type: String },
     loaded: { type: Boolean },
     content: { type: String, reflect: true },
     onInit: { type: Function },
@@ -55,6 +58,7 @@ export default class CodeEditor extends LitElement {
     this.loaded = false
     this.wrapper = true
     this.lazy = true
+    this.downloadable = true
     this.lines = 0
 
     this.options = {
@@ -119,8 +123,18 @@ export default class CodeEditor extends LitElement {
 
     try {
       this.readonly = JSON.parse(this.readonly)
+    } catch (e) {}
+
+    try {
       this.wrapper = JSON.parse(this.wrapper)
+    } catch (e) {}
+
+    try {
       this.lazy = JSON.parse(this.lazy)
+    } catch (e) {}
+
+    try {
+      this.downloadable = JSON.parse(this.downloadable)
     } catch (e) {}
 
     if (this.lazy) {
@@ -178,6 +192,10 @@ export default class CodeEditor extends LitElement {
   }
 
   render = () => {
+    const downloadIcon = svg`
+      <svg class='fill-current' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M4.97 11.03a.75.75 0 111.06-1.06L11 14.94V2.75a.75.75 0 011.5 0v12.19l4.97-4.97a.75.75 0 111.06 1.06l-6.25 6.25a.75.75 0 01-1.06 0l-6.25-6.25zm-.22 9.47a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H4.75z"></path></svg>
+    `
+
     return html`
       <div
         class="code-editor-container ${this.wrapper
@@ -188,12 +206,14 @@ export default class CodeEditor extends LitElement {
         ${this.wrapper
           ? html`
               <div class="code-editor-toolbar" contenteditable="false">
-                ${this.readonly ? null : Controls({ destroy: this.onDestroy })}
-                ${this.readonly
-                  ? svg`
-            <svg class='fill-current' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M4.97 11.03a.75.75 0 111.06-1.06L11 14.94V2.75a.75.75 0 011.5 0v12.19l4.97-4.97a.75.75 0 111.06 1.06l-6.25 6.25a.75.75 0 01-1.06 0l-6.25-6.25zm-.22 9.47a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H4.75z"></path></svg>
-            `
+                ${this.readonly && this.downloadable ? downloadIcon : null}
+                ${!this.readonly ? Controls({ destroy: this.onDestroy }) : null}
+                ${this.filename
+                  ? html`
+                      <span>${this.filename}</span>
+                    `
                   : null}
+
                 <div class="code-editor-toolbar-menu" contenteditable="false">
                   ${this.readonly
                     ? html`

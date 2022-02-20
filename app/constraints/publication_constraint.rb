@@ -2,7 +2,7 @@
 
 class PublicationConstraint
   def matches?(request)
-    permalink = request.params[:permalink] || request.params[:publication_permalink]
+    permalink = request.params[:publication_permalink] || request.params[:permalink]
     Publication.exists?(permalink: permalink) if permalink.present?
   end
 end

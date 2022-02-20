@@ -27,7 +27,7 @@
           <%= repo_form.input(
               :readme_path,
               as: :select,
-              collection: @publication.repository.repository_files,
+              collection: @publication.repository.markdown_files,
               include_blank: 'Choose'
             )
           %>
