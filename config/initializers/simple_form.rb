@@ -16,6 +16,24 @@ SimpleForm.setup do |config|
     input.use :hint, wrap_with: { tag: :div, class: 'input-hint-message text-xs mt-2 text-info' }
   end
 
+  config.wrappers :input_group, tag: 'div', class: 'form-control', error_class: 'input-error' do |wrapper|
+    wrapper.use :html5
+    wrapper.use :placeholder
+    wrapper.optional :maxlength
+    wrapper.optional :minlength
+    wrapper.optional :pattern
+    wrapper.optional :min_max
+    wrapper.optional :readonly
+
+    wrapper.wrapper :label_tag, tag: 'label', class: 'input-group' do |ba|
+      ba.use :label_text, wrap_with: { tag: 'span', class: 'label-text' }
+      ba.use :input, class: 'input input-bordered', autocomplete: 'off', spellcheck: 'off'
+    end
+
+    wrapper.use :error, wrap_with: { tag: 'div', class: 'input-error-message text-xs mt-2 text-error' }
+    wrapper.use :hint, wrap_with: { tag: :div, class: 'input-hint-message text-xs mt-2 text-info' }
+  end
+
   config.wrappers :file, tag: 'div', class: 'form-control', error_class: 'input-error' do |input|
     input.use :html5
     input.use :placeholder

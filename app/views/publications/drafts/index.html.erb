@@ -1,12 +1,35 @@
 <%= render 'publications/layout' do %>
-  <div class='grid grid-cols-3 gap-4 mt-8'>
-    <section class='col-span-2'>
-      <% path = @path.blank? ? publication_drafts_root_path(@publication) : publication_drafts_path(@publication, path: @path) %>
-      <%= turbo_frame_tag dom_id(@publication, :drafts), src: path, lazy: true do %>
-        <%= render 'shared/card_loader', count: 10 %>
-      <% end %>
-    </section>
+  <div class='grid grid-cols-12 gap-4 mt-8'>
+    <aside class='col-span-3'>
+      <ul class='card bordered side-menu'>
+        <li class="border-b last:border-b-0 border-base-200">
+          <%= tab_link_to 'All', publication_drafts_root_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
+        </li>
+        <li class="border-b last:border-b-0 border-base-200">
+          <%= tab_link_to 'Published', pending_publication_people_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
+        </li>
+        <li class="border-b last:border-b-0 border-base-200">
+          <%= tab_link_to 'Unpublished', pending_publication_people_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
+        </li>
+      </ul>
+    </aside>
 
-    <%= render 'publications/sidebar', publication: @publication %>
+    <main class='col-span-9'>
+      <div class='flex items-center w-full'>
+        <%= simple_form_for :search, html: { class: 'flex-1' } do |form| %>
+          <%= form.input :query, required: false, label: inline_svg_tag('icons/search', class: 'w-4 h-4 fill-current').html_safe, wrapper: :input_group, input_html: { class: 'w-1/2 input-sm', placeholder: 'Search a draft' } %>
+        <% end %>
+
+        <aside>
+          <%= link_to 'New draft', publication_new_draft_path(@publication), class: 'btn btn-primary btn-outline btn-sm' %>
+        </aside>
+      </div>
+      <div class='card bordered mt-4'>
+        <% path = @path.blank? ? publication_drafts_root_path(@publication) : publication_drafts_path(@publication, path: @path) %>
+        <%= turbo_frame_tag dom_id(@publication, :drafts), src: path, lazy: true do %>
+          <%= render 'shared/card_loader', count: 10 %>
+        <% end %>
+      </div>
+    </main>
   </div>
 <% end %>

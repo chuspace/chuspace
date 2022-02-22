@@ -1,0 +1,71 @@
+<%= render 'publications/layout' do %>
+  <div class='grid grid-cols-12 gap-4 mt-8'>
+    <aside class='col-span-3'>
+      <ul class='card bordered side-menu'>
+        <li class="border-b last:border-b-0 border-base-200">
+          <%= tab_link_to 'Everyone', publication_people_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
+        </li>
+        <li class="border-b last:border-b-0 border-base-200">
+          <%= tab_link_to 'Pending', pending_publication_people_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
+        </li>
+      </ul>
+    </aside>
+
+    <main class='col-span-9'>
+      <div class='flex items-center w-full'>
+        <%= simple_form_for :search, html: { class: 'flex-1' } do |form| %>
+          <%= form.input :query, required: false, label: inline_svg_tag('icons/search', class: 'w-4 h-4 fill-current').html_safe, wrapper: :input_group, input_html: { class: 'w-1/2 input-sm', placeholder: 'Search a member' } %>
+        <% end %>
+
+        <aside>
+          <%= link_to 'Invite member', new_publication_invite_path(@publication), class: 'btn btn-outline btn-primary btn-sm', 'data-turbo-frame': dom_id(@invite, :popup) %>
+          <%= turbo_frame_tag dom_id(@invite, :popup) %>
+        </aside>
+      </div>
+      <div class='card bordered mt-4'>
+        <% cache @memberships do %>
+          <% @memberships.each do |membership| %>
+            <% cache membership.user do %>
+              <div class='border-b last:border-b-0 p-4 border-base-200'>
+                <%= turbo_frame_tag(membership.user, class: 'flex items-center') do %>
+                  <div class='flex-1'>
+                    <div class='flex items-center'>
+                      <%= link_to(user_path(membership.user), 'data-turbo-frame': :_top, class: 'link link-primary link-hover') do %>
+                        <%= image_tag membership.user.avatar_url(variant: :thumb), class: 'w-12 h-12 mask mask-circle mr-2'  %>
+                      <% end %>
+
+                      <div>
+                        <%= link_to(user_path(membership.user), 'data-turbo-frame': :_top, class: 'link link-primary link-hover') do %>
+                          <%= content_tag :h5, membership.user.name %>
+                        <% end %>
+
+                        <%= content_tag :p, membership.user.username, class: 'text-sm text-base-content' %>
+                      </div>
+                    </div>
+                  </div>
+
+                  <%= tag.span membership.role %>
+
+                  <details class='dropdown dropdown-end'>
+                    <summary class='btn btn-outline btn-sm ml-4'>
+                      <div class='flex items-center' data-menu-button>
+                        <%= inline_svg_tag('icons/gear', class: 'w-4 h-4 fill-current') %>
+                      </div>
+                    </summary>
+                    <details-menu
+                      role="menu"
+                      tabindex="0"
+                      class="p-2 shadow menu dropdown-content absolute z-10 bg-base-300 rounded-box w-52"
+                    >
+                      <li><%= link_to 'Change role', '#' %></li>
+                    </details-menu>
+                  </details>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </main>
+  </div>
+<% end %>

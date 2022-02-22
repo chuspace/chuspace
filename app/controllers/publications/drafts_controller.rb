@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 
 module Publications
-  class DraftsController < ApplicationController
-    include Breadcrumbable, SetPublicationRoot
-    before_action :build_draft, only: %i[new create]
+  class DraftsController < BaseController
+    include SetPublicationRoot
+
+    prepend_before_action :authenticate!
+    before_action :build_draft, only: %i[index new create]
     before_action :find_draft, only: %w[update edit destroy]
 
     layout 'editor', only: %i[new edit]
 
     def index
+      authorize! @draft
+      @invite = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
       if turbo_frame_request?
         @drafts = @publication.drafts(path: @draft_path)
         render partial: 'list', locals: { drafts: @drafts, publication: @publication }
@@ -16,6 +20,8 @@ module Publications
     end
 
     def create
+      authorize! @draft
+
       @draft.assign_attributes(name: draft_params[:name], path: @drafts_root_path.join(draft_params[:name]).to_s)
 
       if @draft.valid? && @draft.create(**commit_params)
@@ -29,6 +35,8 @@ module Publications
     end
 
     def destroy
+      authorize! @draft
+
       if @draft.delete(**commit_params)
         redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
       else
@@ -37,7 +45,10 @@ module Publications
     end
 
     def update
+      authorize! @draft
+
       if @draft.update(**commit_params)
+        @draft.auto_publish(author: Current.user) if draft_params[:auto_publish]
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
       else
         respond_to do |format|
@@ -48,15 +59,15 @@ module Publications
     end
 
     def new
+      authorize! @draft
+
       add_breadcrumb(:drafts, find_publication_drafts_root_path)
       add_breadcrumb('New')
     end
 
-    def show
-      @path = @draft_path
-    end
-
     def edit
+      authorize! @draft
+
       add_breadcrumb(:drafts, find_publication_drafts_root_path)
       add_breadcrumb(@draft.relative_path, publication_preview_draft_path(@publication, @draft))
       add_breadcrumb('Edit')
@@ -77,7 +88,7 @@ module Publications
     end
 
     def draft_params
-      params.require(:draft).permit(:name, :commit_message)
+      params.require(:draft).permit(:name, :commit_message, :auto_publish)
     end
 
     def find_draft

@@ -19,6 +19,7 @@
         <h4>Commit changes</h4>
         <div class="form-control mt-8">
           <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
+          <%= form.input :auto_publish, as: :boolean, label: false, input_html: { checked: @publication.content.auto_publish }, placeholder: 'Commit message' %>
           <div class='mt-8 font-mono'>
             <label class='text-sm block'>Commit author: <%= link_to Current.user.name, user_path(Current.user), class: 'font-bold' %></label>
             <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>

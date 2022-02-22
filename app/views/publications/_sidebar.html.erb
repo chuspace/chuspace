@@ -2,15 +2,16 @@
   <div class='card bordered'>
     <div class='card-body'>
       <div class='card-title'>People</div>
-      <div class='flex items-center'>
+      <div class='flex items-center mt-4'>
         <% publication.members.each do |member| %>
-          <%= image_tag member.avatar_url, class: 'w-8 h-8 mask mask-circle'%>
+          <%= image_tag member.avatar_url, class: 'w-8 h-8 ml-2 first:ml-0 mask mask-circle'%>
         <% end %>
       </div>
 
-      <%= turbo_frame_tag @invite do %>
-        <%= link_to 'Invite', new_publication_invite_path(publication), class: 'btn btn-outline btn-primary btn-sm mt-4' %>
-      <% end %>
+      <div class='card-actions'>
+        <%= link_to 'Invite someone', new_publication_invite_path(publication), class: 'btn btn-outline btn-primary btn-sm mt-4', 'data-turbo-frame': dom_id(@invite, :popup) %>
+        <%= turbo_frame_tag dom_id(@invite, :popup) %>
+      </div>
     </div>
   </div>
 </aside>

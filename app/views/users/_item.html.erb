@@ -1,0 +1,19 @@
+<% cache user do %>
+  <div class='border-b last:border-b-0 p-4 border-base-200'>
+    <%= turbo_frame_tag(user, class: 'flex') do %>
+      <div class='flex-1'>
+        <%= link_to(user_path(user), 'data-turbo-frame': :_top) do %>
+          <%= tag.div class: 'link link-primary link-hover' do %>
+            <div class='flex items-center'>
+              <%= image_tag user.avatar_url(variant: :thumb), class: 'w-12 h-12 mask mask-circle mr-2'  %>
+              <div>
+                <%= content_tag :h3, user.name %>
+                <%= content_tag :p, user.username, class: 'text-sm text-base-content' %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

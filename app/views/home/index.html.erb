@@ -1,13 +1,18 @@
 <main>
   <div class='grid grid-cols-12 gap-8 mt-8'>
     <div class='col-span-8'>
-      <%= render 'posts/list', posts: @posts %>
+      <div class='card bordered'>
+        <div class='card-body'>
+          <h1 class='card-title'>Posts</h1>
+          <%= render 'posts/list', posts: @posts %>
+        </div>
+      </div>
     </div>
 
     <div class='col-span-4'>
       <div class='card bordered'>
         <div class='card-body'>
-          <h3>Publications</h3>
+          <h1 class='card-title'>Publications</h1>
 
           <div class='mt-4'>
             <% @publications.each do |publication| %>

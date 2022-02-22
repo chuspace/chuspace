@@ -1,17 +1,14 @@
+# frozen_string_literal: true
+
 module SetPublicationRoot
   extend ActiveSupport::Concern
 
   included do
-    before_action :find_publication, :set_drafts_root_path, :set_draft_path
-  end
-
-  def find_publication
-    @publication = Publication.friendly.find(params[:publication_permalink])
-    add_breadcrumb(@publication.permalink, publication_path(@publication))
+    before_action :set_drafts_root_path, :set_draft_path
   end
 
   def set_drafts_root_path
-    @drafts_root_path = Pathname.new(@publication.repo.posts_folder)
+    @drafts_root_path = Pathname.new(@publication.repo_drafts_or_posts_folder)
   end
 
   def set_draft_path

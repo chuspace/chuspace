@@ -5,6 +5,7 @@ class PostsController < ApplicationController
 
   before_action :find_publication
   before_action :find_post, only: %i[show update destroy edit]
+  skip_verify_authorized only: :show
 
   private
 

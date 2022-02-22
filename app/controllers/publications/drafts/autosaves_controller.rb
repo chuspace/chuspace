@@ -6,6 +6,8 @@ module Publications
       layout 'blank'
 
       def create
+        authorize! @draft
+
         @draft.local_content.value = autosave_params['content']
         head :ok
       end

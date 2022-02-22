@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 class PublicationsController < ApplicationController
-  include AutoCheckable, Breadcrumbable
+  include AutoCheckable
+  before_action :authenticate!, only: :new
+  skip_verify_authorized except: :new
 
-  before_action :authenticate!, except: :show
-  before_action :set_content_partial, only: :show
-  skip_verify_authorized only: %i[index show]
-
-  def new
+  def index
+    @publications = Publication.except_personal.limit(10)
   end
 
   def auto_check
@@ -17,16 +16,5 @@ class PublicationsController < ApplicationController
   def show
     @publication = Publication.friendly.find(params[:permalink])
     @invite = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
-  end
-
-  private
-
-  def set_content_partial
-    @partial = case params[:tab]
-               when 'settings' then 'publications/form'
-               when 'posts' then 'publications/posts'
-               when 'drafts' then 'publications/drafts'
-    else 'publications/about'
-    end
   end
 end

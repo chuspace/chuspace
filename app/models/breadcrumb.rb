@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Breadcrumb < ActiveType::Object
   attribute :name, :string
   attribute :path, :string

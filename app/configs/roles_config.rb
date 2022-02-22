@@ -12,4 +12,16 @@ class RolesConfig < ApplicationConfig
   def self.to_enum
     defaults
   end
+
+  def self.editors
+    %w[writer editor manager owner]
+  end
+
+  def self.managers
+    %w[manager owner]
+  end
+
+  def self.publishers
+    %w[editor manager owner]
+  end
 end

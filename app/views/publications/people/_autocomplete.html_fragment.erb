@@ -1,26 +1,28 @@
-<% if @users.any? %>
-  <% @users.each do |user| %>
-    <%= content_tag :li, role: 'option', 'data-autocomplete-value': user.username, 'aria-disabled': @publication.members.include?(user) do  %>
-      <div class='flex items-center'>
-        <%= image_tag user.avatar_url, class: 'w-4 h-4 mask mask-circle mr-2'  %>
-        <div class='flex-1'>
-          <%= user.name %>
-          <span class='text-sm text-grey'><%= user.username %></span>
-          <% if @publication.members.include?(user) %>
-            <span class='text-xs'>Already a member</span>
+<% if @query.present? %>
+  <% if @users.any? %>
+    <% @users.each do |user| %>
+      <%= content_tag :li, role: 'option', class: 'block', 'data-autocomplete-value': user.username, 'aria-disabled': @publication.members.include?(user) do  %>
+        <div class='flex items-center' data-action='click:autocomplete-reset#select'>
+          <%= image_tag user.avatar_url, class: 'w-4 h-4 mask mask-circle mr-2'  %>
+          <div class='flex-1' data-action='click:autocomplete-reset#select'>
+            <%= user.name %>
+            <span class='text-sm text-grey'><%= user.username %></span>
+            <% if @publication.members.include?(user) %>
+              <span class='text-xs'>Already a member</span>
+            <% end %>
+          </div>
+          <% if @publication.members.exclude?(user) %>
+            <%= inline_svg_tag('icons/plus', class: 'w-4 h-4 mr-2 fill-current') %>
           <% end %>
         </div>
-        <% if @publication.members.exclude?(user) %>
-          <svg-icon name='plus' feather='true' width='15' height='15' class='text-grey-lighter ml-2'></svg-icon>
-        <% end %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= content_tag :li, role: 'option', 'data-autocomplete-value': @query do  %>
+      <div class='flex items-center'>
+        <div class='flex-1'><%= @query %></div>
+        <%= inline_svg_tag('icons/email', class: 'w-4 h-4 mr-2 fill-current') %>
       </div>
     <% end %>
-  <% end %>
-<% else %>
-  <%= content_tag :li, role: 'option', 'data-autocomplete-value': @query do  %>
-    <div class='flex items-center'>
-      <div class='flex-1'><%= @query %></div>
-      <%= inline_svg_tag('icons/email', class: 'w-4 h-4 mr-2 fill-current') %>
-    </div>
   <% end %>
 <% end %>

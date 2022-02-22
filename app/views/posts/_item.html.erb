@@ -1,10 +1,10 @@
 <% cache post do %>
-  <article class='border-b last:border-b-0 border-base-200 p-4'>
+  <article class='border-b last:border-b-0 py-4 first:pt-0 last:pb-0 border-base-200'>
     <%= turbo_frame_tag(post, class: 'flex') do %>
       <div class='flex-1'>
         <%= link_to publication_post_path(post.publication, post), data: { 'turbo-frame': :_top } do %>
-          <%= tag.h5 post.title, class: 'link link-primary link-hover mt-1' %>
-          <%= tag.p post.summary, class: 'text-sm text-secondary mt-1 sm:w-2/3 w-full' %>
+          <%= tag.h5 post.title, class: 'link link-primary link-hover' %>
+          <%= tag.p post.summary, class: 'text-sm text-secondary mt-1' %>
         <% end %>
 
         <div class='mt-4'>

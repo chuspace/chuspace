@@ -16,11 +16,10 @@
     </div>
   </div>
 
-  <%= link_to 'New draft', publication_new_draft_path(@publication), class: 'btn btn-primary btn-outline btn-sm absolute right-0' %>
-
   <div class='tabs border-b border-base-200 my-12' dir='horizontal'>
     <%= tab_link_to 'Overview', publication_path(@publication), class: 'tab' %>
     <%= tab_link_to 'Drafts', publication_drafts_root_path(@publication), class: 'tab' %>
+    <%= tab_link_to 'People', publication_people_path(@publication), class: 'tab' %>
     <%= tab_link_to 'Settings', publication_settings_path(@publication), class: 'tab', active_condition: :inclusive %>
   </div>
 

@@ -8,6 +8,7 @@ module Publications
       layout 'blank'
 
       def new
+        authorize! @draft
         add_breadcrumb('Commit')
       end
 

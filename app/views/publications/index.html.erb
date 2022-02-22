@@ -1,16 +1,32 @@
-<div class='sm:w-2/3 mx-auto'>
-  <h3>Blogs</h1>
-  <div class='mt-4 mb-8 intro'>
-    <p>
-      Chuspace publications are powered by git repositories connected to one of the
-      git storage providers.
-      You can either connect an existing publication repository from your git storage
-      providers or add a new one.
-    </p>
-    <p class='mt-2'>Adding a new publication is only possible through Chuspace.com git storage</p>
-  </div>
+<main>
+  <div class='grid grid-cols-12 gap-8 mt-8'>
+    <div class='col-span-8'>
+      <%= render 'publications/list', publications: @publications %>
+    </div>
 
-  <%= turbo_frame_tag :publications do %>
-    <%= render 'publications/list', publications: @user.publications %>
-  <% end %>
-</div>
+    <div class='col-span-4'>
+      <div class='card bordered'>
+        <div class='card-body'>
+          <h3>Publications</h3>
+
+          <div class='mt-4'>
+            <% @publications.each do |publication| %>
+              <div class='border-b last:border-b-0 border-base-200 pb-4 first:pt-0 pt-4'>
+                <div class='flex-1'>
+                  <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
+                    <%= tag.h5 publication.name, class: 'link link-primary link-hover' %>
+                    <%= tag.div publication.description, class: 'text-sm mt-1 text-secondary' %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <div class='card-actions'>
+            <%= link_to 'Connect', connect_root_path, class: 'btn btn-primary btn-outline btn-sm' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

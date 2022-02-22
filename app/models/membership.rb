@@ -8,7 +8,17 @@ class Membership < ApplicationRecord
 
   DEFAULT_ROLE = :writer
 
-  def self.publishers
-    where(role: %w[editor manager])
+  class << self
+    def managers
+      where(role: RolesConfig.managers)
+    end
+
+    def editors
+      where(role: RolesConfig.editors)
+    end
+
+    def publishers
+      where(role: RolesConfig.publishers)
+    end
   end
 end

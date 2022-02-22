@@ -8,12 +8,15 @@ module Publications
       layout 'blank'
 
       def new
+        authorize! @draft, to: :publish?
         @post = @publication.posts.build
         @post.assign_attributes(@draft.to_post_attributes)
         add_breadcrumb('Publish')
       end
 
       def create
+        authorize! @draft, to: :publish?
+
         @post = @publication.posts.build(author: Current.user)
         @post.assign_attributes(@draft.to_post_attributes)
         @post.assign_attributes(publish_params)

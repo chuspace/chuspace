@@ -89,7 +89,7 @@ gem 'sawyer', github: 'lostisland/sawyer'
 gem 'faraday-http-cache'
 gem 'typhoeus'
 
-gem 'fast_diff', path: '/Users/gaurav/oss/fast_diff'
+# Text diff
 gem 'diffy'
 
 #  SEO
@@ -158,4 +158,4 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
-gem "graphiql-rails", group: :development
+gem 'graphiql-rails', group: :development

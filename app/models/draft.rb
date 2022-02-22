@@ -10,6 +10,10 @@ class Draft < Git::Blob
 
   attribute :publication, Publication
   validates :path, :name, markdown: true
+  validates :publication, presence: true
+
+  delegate :owner, :memberships, to: :publication
+  delegate :editors, :publishers, to: :memberships
 
   def body
     parsed.content
@@ -116,6 +120,10 @@ class Draft < Git::Blob
       body_html: content_html,
       commit_sha: commits.first&.id || commits.first&.sha
     }
+  end
+
+  def auto_publish(author:)
+    publication.posts.create(author: author, **to_post_attributes)
   end
 
   private

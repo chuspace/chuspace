@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 
   before_action :find_user
   before_action :set_content_partial, only: :show
+  skip_verify_authorized only: :show
 
   def show
   end

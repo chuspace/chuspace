@@ -9,7 +9,16 @@
       </div>
 
       <div class='mt-8'>
-        <%= render 'posts/list', posts: @publication.posts %>
+        <div class='card bordered'>
+          <div class='card-body'>
+            <div class='card-title'>Posts</div>
+            <% if @publication.posts.any? %>
+              <%= render 'posts/list', posts: @publication.posts %>
+            <% else %>
+              <div class='text-center text-2xl py-16'>No published posts in this publication</div>
+            <% end %>
+          </div>
+        </div>
       </div>
     </section>
 

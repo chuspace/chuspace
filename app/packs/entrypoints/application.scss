@@ -109,6 +109,10 @@
 auto-complete {
   ul {
     @apply hidden;
+
+    li[aria-selected='true'] {
+      @apply bg-base-300;
+    }
   }
 
   &[open] {

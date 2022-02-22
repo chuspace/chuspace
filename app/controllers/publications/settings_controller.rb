@@ -1,31 +1,35 @@
 # frozen_string_literal: true
 
 module Publications
-  class SettingsController < ApplicationController
-    before_action :authenticate!, except: :show
+  class SettingsController < BaseController
+    skip_before_action :authenticate!, only: :show
+
     PARTIALS = %w[profile content front_matter permissions].freeze
 
     def index
-      @user = Current.user
-      @publication = Publication.friendly.find(params[:publication_permalink])
+      authorize! @publication, to: :edit?
+
       redirect_to publication_setting_path(@publication, id: PublicationSettings::DEFAULT_PAGE)
     end
 
     def show
-      @user = Current.user
-      @publication = Publication.friendly.find(params[:publication_permalink])
       @partial = params[:id]
+      authorize! @publication, to: :edit?
 
-      fail ActiveRecord::RecordNotFoundError if PublicationSettings::PAGES.exclude?(params[:id])
+      add_breadcrumb('Settings', publication_settings_path(@publication))
+      add_breadcrumb(@partial.humanize)
+
+      fail ActiveRecord::RecordNotFoundError if PublicationSettings::PAGES.exclude?(@partial)
     end
 
     def update
-      @user = Current.user
-      @publication = Publication.friendly.find(params[:publication_permalink])
+      authorize! @publication, to: :edit?
       @publication.update(publication_params)
 
       redirect_to publication_setting_path(@publication, id: params[:id])
     end
+
+    private
 
     def publication_params
       params.require(:publication).permit(

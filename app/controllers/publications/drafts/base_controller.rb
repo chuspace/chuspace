@@ -3,8 +3,11 @@
 module Publications
   module Drafts
     class BaseController < ApplicationController
-      before_action :authenticate!
-      include Breadcrumbable, SetPublicationRoot
+      include Breadcrumbable
+      include FindPublication
+      include SetPublicationRoot
+
+      prepend_before_action :authenticate!
       before_action :find_draft
 
       layout 'editor'

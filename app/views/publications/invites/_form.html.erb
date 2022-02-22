@@ -1,21 +1,26 @@
 <%= turbo_frame_tag dom_id(@invite, :form) do %>
-  <%= simple_form_for invite, url: publication_invites_path(@publication), remote: true do |f| %>
-    <auto-complete
-      src="<%= autocomplete_publication_people_path(@publication) %>"
-      for="users-popup"
-      class='w-full dropdown'
-    >
-      <%= f.input :identifier, label: 'Email or Username', autofocus: true, input_html: { popup_id: 'users-popup', class: 'input', autocomplete: 'off', spellcheck: 'off' } %>
-      <button id="users-clear" class='absolute right-0 bottom-0 mb-4 mr-4'>
-        <%= inline_svg_tag('icons/x', class: 'w-4 h-4 fill-current') %>
-      </button>
-      <ul id="users-popup" class='shadow menu dropdown-content absolute z-10 bg-base-200 rounded-box w-full'></ul>
-      <!--
-        Optional div for screen reader feedback. Note the ID matches the ul, but with -feedback appended.
-        Recommended: Use a "Screen Reader Only" class to position the element off the visual boundary of the page.
-      -->
-      <div id="users-popup-feedback" class="sr-only"></div>
-    </auto-complete>
+  <%= simple_form_for invite, url: publication_invites_path(@publication), html: { 'data-turbo-frame': :_top } do |f| %>
+    <autocomplete-reset>
+      <auto-complete
+        src="<%= autocomplete_publication_people_path(@publication) %>"
+        for="users-popup"
+        class='w-full dropdown'
+        data-autoselect="true"
+      >
+        <%= f.input :identifier, label: 'Email or Username', autofocus: true, input_html: { 'data-target': 'autocomplete-reset.input', 'data-action': 'input:autocomplete-reset#toggle' } %>
+
+        <button data-target='autocomplete-reset.handle' class='hidden absolute right-0 bottom-0 mb-4 mr-4' data-action='click:autocomplete-reset#clear'>
+          <%= inline_svg_tag('icons/x', class: 'w-4 h-4 fill-current', 'data-action': 'click:autocomplete-reset#clear') %>
+        </button>
+
+        <ul id="users-popup" class='shadow menu dropdown-content absolute z-10 bg-base-200 rounded-box w-full'></ul>
+        <!--
+          Optional div for screen reader feedback. Note the ID matches the ul, but with -feedback appended.
+          Recommended: Use a "Screen Reader Only" class to position the element off the visual boundary of the page.
+        -->
+        <div id="users-popup-feedback" class="sr-only"></div>
+      </auto-complete>
+    </autocomplete-reset>
 
     <%= f.input :role, collection: Membership.roles, required: true %>
 

@@ -1,46 +1,26 @@
 // @flow
 
-import { LitElement, html } from 'lit'
+import { controller, target } from '@github/catalyst'
 
-import Dialog from '../../helpers/dialog'
+@controller
+export default class DialogOpener extends HTMLElement {
+  @target dialog: HTMLDialogElement
 
-export default class DialogOpener extends LitElement {
-  static get properties() {
-    return {
-      target: { type: String }
+  connectedCallback() {
+    if (this.dialog.classList.contains('modal-open')) {
+      document.body.classList.add('overflow-hidden')
     }
-  }
-
-  async connectedCallback() {
-    await super.connectedCallback()
-
-    this.dialogElement = document.getElementById(this.target)
-    if (!this.dialogElement) return
-
-    this.dialog = new Dialog(this.dialogElement)
-    this.addEventListener('click', this.open)
-
-    this.dialogElement
-      .querySelector('.close')
-      .addEventListener('click', this.close)
   }
 
   open = (e: MouseEvent) => {
     e.preventDefault()
-    this.dialog.show()
+
+    this.dialog.classList.add('modal-open')
   }
 
   close = (e: MouseEvent) => {
-    this.dialog.hide()
-  }
-
-  createRenderRoot() {
-    return this
+    e.preventDefault()
+    this.dialog.classList.remove('modal-open')
+    document.body.classList.remove('overflow-hidden')
   }
 }
-
-document.addEventListener('turbo:load', () => {
-  if (!window.customElements.get('dialog-opener')) {
-    customElements.define('dialog-opener', DialogOpener)
-  }
-})

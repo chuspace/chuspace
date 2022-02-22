@@ -6,6 +6,8 @@ module Publications
       layout 'blank'
 
       def new
+        authorize! @draft
+
         @diff = Diffy::Diff.new("#{@draft.decoded_content}\n", "#{@draft.local_content.value}\n", Diffy::Diff.default_options).to_s(:text)
 
         respond_to do |format|

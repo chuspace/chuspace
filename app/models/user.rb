@@ -34,11 +34,10 @@ class User < ApplicationRecord
       sql = <<-SQL
         unaccent(users.first_name) ILIKE unaccent(concat('%', ?, '%')) OR
         unaccent(users.last_name) ILIKE unaccent(concat('%', ?, '%')) OR
-        unaccent(users.username) ILIKE unaccent(concat('%', ?, '%')) OR
-        unaccent(users.email) ILIKE unaccent(concat('%', ?, '%'))
+        unaccent(users.username) ILIKE unaccent(concat('%', ?, '%'))
       SQL
 
-      where(sql, query, query, query, query)
+      where(sql, query, query, query).or(where(email: query))
     end
   end
 

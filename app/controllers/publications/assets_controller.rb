@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 module Publications
-  class AssetsController < ApplicationController
+  class AssetsController < BaseController
     include ActiveStorage::Streaming
-    before_action :find_publication
 
     def show
       @blob = @publication.asset(path: CGI.unescape(params[:path]))
@@ -27,12 +26,6 @@ module Publications
       )
 
       render json: { url: publication_asset_path(@publication, path: image.content.path) }
-    end
-
-    private
-
-    def find_publication
-      @publication = Publication.friendly.find(params[:publication_permalink])
     end
   end
 end

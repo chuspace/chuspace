@@ -74,11 +74,13 @@ Rails.application.routes.draw do
     resources :settings, only: %i[index show update], module: :users
   end
 
+  resources :publications, only: :index
   resources :publications, path: '', only: :show, param: :permalink, constraints: PublicationConstraint.new do
     resources :settings, only: %i[index show update], module: :publications
 
-    resources :people, path: 'people', only: %i[index update destroy], module: :publications do
+    resources :people, path: 'people', only: %i[index show update destroy], module: :publications do
       collection { get :autocomplete }
+      collection { get :pending }
     end
 
     resources :invites, only: %i[new create], module: :publications do

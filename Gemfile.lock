@@ -36,12 +36,6 @@ GIT
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.7.1)
 
-PATH
-  remote: /Users/gaurav/oss/fast_diff
-  specs:
-    fast_diff (0.1.0)
-      ffi
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -601,7 +595,6 @@ DEPENDENCIES
   faker
   faraday
   faraday-http-cache
-  fast_diff!
   friendly_id
   front_matter_parser
   good_job

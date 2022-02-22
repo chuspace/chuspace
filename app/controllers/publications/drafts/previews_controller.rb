@@ -6,6 +6,7 @@ module Publications
       layout 'post'
 
       def show
+        authorize! @draft
         add_breadcrumb('Preview')
       end
     end
