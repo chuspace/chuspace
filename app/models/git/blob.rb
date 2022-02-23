@@ -15,14 +15,14 @@ module Git
       @commits ||= adapter.commits(path: path)
     end
 
-    def commit(message: nil, committer:, author:)
+    def commit(content:, message: nil, committer:, author:)
       fail ArgumentError, 'Not a valid author' unless committer.is_a?(Git::Committer) || author.is_a?(Git::Committer)
       fail TypeError, 'Can not be committed' unless is_a?(Draft) || is_a?(Asset)
 
       if valid?
         adapter.create_or_update_blob(
           path: path,
-          content: Base64.encode64(local_content.value || ''),
+          content: Base64.encode64(content),
           sha: id,
           message: message,
           committer: committer,

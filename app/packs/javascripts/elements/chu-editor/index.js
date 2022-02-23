@@ -9,9 +9,8 @@ import { post } from '@rails/request.js'
 
 @controller
 export default class ChuEditor extends HTMLElement {
-  @attr saving: boolean = false
-  @attr readOnly: boolean = false
-  @attr autofocus: boolean = true
+  @attr editable: string = 'true'
+  @attr autofocus: string = 'true'
   @attr imageProviderPath: string = ''
   @attr autoSavePath: string = ''
   @target content: HTMLElement
@@ -21,12 +20,10 @@ export default class ChuEditor extends HTMLElement {
   channel: string = 'AutosaveChannel'
 
   connectedCallback() {
-    const readOnly = JSON.parse(this.readOnly)
-
     this.editor = new Editor({
       element: this.content,
-      autoFocus: this.autofocus,
-      editable: !readOnly,
+      autoFocus: JSON.parse(this.autofocus),
+      editable: JSON.parse(this.editable),
       onChange: this.onChange,
       imageProviderPath: this.imageProviderPath,
       content: this.content.querySelector('textarea')?.value || '',
@@ -36,23 +33,17 @@ export default class ChuEditor extends HTMLElement {
 
   autosave = debounce(
     async () => {
-      this.saving = true
+      this.status.textContent = 'Auto saving...'
+
       const response = await post(this.autoSavePath, {
         body: JSON.stringify({ draft: { content: this.editor.content } })
       })
-
-      if (response.ok) {
-        this.saving = false
-      }
     },
-    1000,
-    { maxWait: 1000 }
+    2000,
+    { maxWait: 5000 }
   )
 
   onChange = () => {
-    this.status.textContent = 'Auto saving...'
-    if (this.saving == 'true') return
-
     this.autosave()
   }
 }

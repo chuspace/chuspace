@@ -13,6 +13,7 @@ module Publications
     def index
       authorize! @draft
       @invite = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
+
       if turbo_frame_request?
         @drafts = @publication.drafts(path: @draft_path)
         render partial: 'list', locals: { drafts: @drafts, publication: @publication }
@@ -45,7 +46,7 @@ module Publications
     end
 
     def update
-      authorize! @draft
+      authorize! @draft, to: :commit?
 
       if @draft.update(**commit_params)
         @draft.auto_publish(author: Current.user) if draft_params[:auto_publish]
@@ -81,6 +82,7 @@ module Publications
 
     def commit_params
       {
+        content: @draft.editing_lock.content,
         message: draft_params[:commit_message],
         committer: Git::Committer.chuspace,
         author: Git::Committer.for(user: Current.user)

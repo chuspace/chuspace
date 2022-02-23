@@ -30,7 +30,7 @@ export default class FrontMatterView extends CodeBlockView {
         <details class="whitespace-nowrap front-matter" as="tab">
           <summary
             class="border font-mono text-base border-base-300 rounded-md p-2 px-4"
-            >FrontMatter</summary
+            ><span>FrontMatter</span></summary
           >
           <code-editor
             mode=${this.mode}

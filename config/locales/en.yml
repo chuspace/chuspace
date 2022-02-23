@@ -22,16 +22,19 @@ en:
           personal:
             connected: Already connected
             cta: Start publishing as %{name}
-            description: Connect your personal publication Git repository from GitHub
+            description:
+              Connect your personal publication Git repository from GitHub
               or GitLab to start publishing under your own name.
             title: Connect your personal publication
           publication:
             cta: Start publishing under a publication
-            description: Connect your publication Git repository from GitHub or GitLab
+            description:
+              Connect your publication Git repository from GitHub or GitLab
               to start publishing under the publication name.
             title: Connect your publication
         heading: Start publishing
-        intro: Connect any markdown powered static publication git repository to start
+        intro:
+          Connect any markdown powered static publication git repository to start
           publishing on Chuspace. You can either write under your own name or a publication.
     personal_publications:
       exists: You already have a connected personal publication
@@ -43,6 +46,9 @@ en:
       expired: Your magic auth token is expired
       success: Successfully signed in
   publications:
+    drafts:
+      edit_form:
+        locked: Document editing locked by %{name}
     layout:
       content:
         title: Content settings
@@ -62,7 +68,8 @@ en:
         permissions: Permissions
         profile: Profile
     show:
-      personal_publication: Your personal publication content is attached to your
+      personal_publication:
+        Your personal publication content is attached to your
         profile
   sessions:
     already_signedin: Already signed in
@@ -91,39 +98,46 @@ en:
     index:
       cta: Sign up with one of the following
       features:
-      - title: Truly own your content
-        description: Connect your publications from Github . Gitlab or Gitea
-      - title: Any static site framework
-        description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . Hexo
-      - title: Publishing and collaboration
-        description: Write . Read . Learn . Contribute . Write again
-      intro: An integrated blogging platform for developers to write, learn and grow
+        - title: Truly own your content
+          description: Connect your publications from Github . Gitlab or Gitea
+        - title: Any static site framework
+          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . Hexo
+        - title: Publishing and collaboration
+          description: Write . Read . Learn . Contribute . Write again
+      intro:
+        An integrated blogging platform for developers to write, learn and grow
         together
       welcome: Welcome to Chuspace
   user_mailer:
     email_welcome:
-      body: Thank you for signing up! Chuspace is currently in alpha and we're really
+      body:
+        Thank you for signing up! Chuspace is currently in alpha and we're really
         happy to have you onboard. Please give it a try and help us make it better.
-      outro: Hope you will have a good experience. Just send us an email if you have
+      outro:
+        Hope you will have a good experience. Just send us an email if you have
         any questions.
       salutation: Hey %{name},
       subject: Welcome to Chuspace, %{name}
     invite:
-      body: "%{person} invited you to join %{publication}"
+      body: '%{person} invited you to join %{publication}'
       salutation: Hey %{name},
-      subject: "%{person} invited you to join %{publication}"
+      subject: '%{person} invited you to join %{publication}'
     send_magic_login:
-      body: Click on the button below to sign in to your Chuspace account. This magic
+      body:
+        Click on the button below to sign in to your Chuspace account. This magic
         link will expire in %{expires_in} minutes and can only be used once.
       compliance: If you did not make this request, you can safely ignore this email.
-      direct_url: If the button above doesn’t work, paste this link into your web
+      direct_url:
+        If the button above doesn’t work, paste this link into your web
         browser
       salutation: Hey %{name},
       subject: Log in to Chuspace, %{name}
-      token: If you can't use the magic login link, for example when using our PWA
+      token:
+        If you can't use the magic login link, for example when using our PWA
         app, please %{link} and enter the token below
   welcome:
     index:
       heading: Defragging dev blogs
-      intro: Chuspace is a collaborative bloging and indexing platform, which works
+      intro:
+        Chuspace is a collaborative bloging and indexing platform, which works
         with any markdown powered static site blog hosted on Github, Gitlab or Gitea.

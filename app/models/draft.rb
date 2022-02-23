@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
-  include Turbo::Broadcastable
-
-  kredis_string :local_content,
-                expires_in: 1.week,
-                key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:local_content" },
-                after_change: :broadcast_editor_updates
-
   attribute :publication, Publication
   validates :path, :name, markdown: true
   validates :publication, presence: true
@@ -22,10 +15,6 @@ class Draft < Git::Blob
   def content_html(content: body)
     doc = CommonMarker.render_doc(content)
     MarkdownRenderer.new.render(doc).html_safe
-  end
-
-  def preview_html
-    content_html(content: local_content.value || body)
   end
 
   def date
@@ -47,6 +36,14 @@ class Draft < Git::Blob
 
   def markdown_doc
     CommonMarker.render_doc(body)
+  end
+
+  def editor_lock
+    publication.editing_locks.find_by(blob_path: path)
+  end
+
+  def local_content
+    editor_lock&.content
   end
 
   def post
@@ -93,7 +90,11 @@ class Draft < Git::Blob
   end
 
   def stale?
-    local_content.value.present? && local_content.value != decoded_content
+    local_content.present? && local_content != decoded_content
+  end
+
+  def locked?
+    editor_lock.present?
   end
 
   def status
@@ -127,10 +128,6 @@ class Draft < Git::Blob
   end
 
   private
-
-  def broadcast_editor_updates
-    broadcast_replace_to self, :actions, target: "actions_draft_#{id}", partial: 'publications/drafts/actions', locals: { publication: publication, draft: self }
-  end
 
   def parsed
     yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
