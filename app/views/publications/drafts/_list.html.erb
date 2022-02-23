@@ -1,9 +1,7 @@
 <%= turbo_frame_tag dom_id(publication, :drafts) do %>
-  <div class='card bordered'>
-    <% if drafts.any? %>
-      <%= render partial: 'publications/drafts/item', collection: drafts, locals: { publication: publication }, as: :draft, cached: true %>
-    <% else %>
-      <div class='text-center text-2xl py-16'>No drafts in this publication</div>
-    <% end %>
-  </div>
+  <% if drafts.any? %>
+    <%= render partial: 'publications/drafts/item', collection: drafts, locals: { publication: publication }, as: :draft, cached: true %>
+  <% else %>
+    <div class='text-center text-2xl py-16'>No drafts in this publication</div>
+  <% end %>
 <% end %>

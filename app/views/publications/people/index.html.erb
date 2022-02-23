@@ -6,7 +6,7 @@
           <%= tab_link_to 'Everyone', publication_people_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
         </li>
         <li class="border-b last:border-b-0 border-base-200">
-          <%= tab_link_to 'Pending', pending_publication_people_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
+          <%= tab_link_to 'Pending', publication_invites_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
         </li>
       </ul>
     </aside>
@@ -25,7 +25,7 @@
       <div class='card bordered mt-4'>
         <% cache @memberships do %>
           <% @memberships.each do |membership| %>
-            <% cache membership.user do %>
+            <% cache [membership, membership.user] do %>
               <div class='border-b last:border-b-0 p-4 border-base-200'>
                 <%= turbo_frame_tag(membership.user, class: 'flex items-center') do %>
                   <div class='flex-1'>

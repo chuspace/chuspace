@@ -80,10 +80,9 @@ Rails.application.routes.draw do
 
     resources :people, path: 'people', only: %i[index show update destroy], module: :publications do
       collection { get :autocomplete }
-      collection { get :pending }
     end
 
-    resources :invites, only: %i[new create], module: :publications do
+    resources :invites, only: %i[index new create], module: :publications do
       collection { get :accept }
     end
 

@@ -1,7 +1,7 @@
 <div class='relative'>
   <div class='flex items-center w-full'>
     <% if  @publication.icon.attached? %>
-      <%= image_tag(@publication.icon.variant(:profile)) %>
+      <%= image_tag(@publication.icon.variant(:thumb), class: 'mask mask-circle') %>
     <% else %>
       <div class="avatar placeholder">
         <div class="bg-neutral-focus text-neutral-content rounded-full w-32 h-32">
@@ -9,9 +9,10 @@
         </div>
       </div>
     <% end %>
+
     <div class='ml-4 w-2/3'>
-      <h1><%= @publication.name %></h1>
-      <p class='sm:w-2/3 w-full text-secondary mt-2'><%= @publication.description %></p>
+      <h2><%= @publication.name %></h2>
+      <p class='sm:w-2/3 w-full text-secondary'><%= @publication.description %></p>
       <%= link_to 'Subscribe', '#', class: 'btn btn-primary btn-outline btn-xs mt-4' %>
     </div>
   </div>

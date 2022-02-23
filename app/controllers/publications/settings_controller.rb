@@ -35,6 +35,7 @@ module Publications
       params.require(:publication).permit(
         :name,
         :description,
+        :icon,
         repo_attributes: %i[posts_folder drafts_folder assets_folder readme_path]
       )
     end

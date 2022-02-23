@@ -163,3 +163,10 @@ file-attachment {
     @apply border-base-300;
   }
 }
+
+.separated {
+  > *:not(:last-child)::after {
+    @apply px-2;
+    content: '•';
+  }
+}

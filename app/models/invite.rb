@@ -8,7 +8,7 @@ class Invite < ApplicationRecord
   validates :identifier, presence: true, email: true, if: -> { recipient.blank? }
   validate  :check_if_recipient_can_be_invited
 
-  validates_uniqueness_of :identifier, scope: :publication_id
+  validates_uniqueness_of :identifier, scope: :publication_id, message: 'Already invited'
   validates_uniqueness_of :code
 
   after_create :send_email

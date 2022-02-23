@@ -22,6 +22,19 @@ en:
         permissions: Permissions
         front_matter: FrontMatter
         content: Content
+        deployment: Deployment
+
+    layout:
+      profile:
+        title: Profile settings
+      content:
+        title: Content settings
+      front_matter:
+        title: Frontmatter settings
+      permissions:
+        title: Visibility settings
+      deployment:
+        title: Deployment settings
 
     show:
       personal_publication: Your personal publication content is attached to your profile
@@ -48,6 +61,7 @@ en:
         intro:
           Connect any markdown powered static publication git repository to start
           publishing on Chuspace. You can either write under your own name or a publication.
+
   magic_logins:
     index:
       expired: Your magic auth token is expired

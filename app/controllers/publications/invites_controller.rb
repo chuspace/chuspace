@@ -8,6 +8,13 @@ module Publications
 
     skip_verify_authorized only: :accept, if: -> { Current.user.blank? }
 
+    def index
+      authorize! @publication, to: :invite?
+
+      @invites = @publication.invites.pending.order(id: :desc)
+      @invite = @publication.invites.build
+    end
+
     def new
       @invite = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
       authorize! @invite
@@ -26,7 +33,7 @@ module Publications
 
       if @invite.save
         redirect_to(
-          publication_people_path(@publication),
+          publication_invites_path(@publication),
           notice: t('invites.create.success', identifier: @invite.identifier, publication: @publication.name)
         )
       else

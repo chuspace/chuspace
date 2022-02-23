@@ -7,7 +7,6 @@ module Publications
     skip_verify_authorized only: :index
 
     def index
-      @publications = Publication.except_personal.limit(5)
       @memberships = @publication.memberships.order(:created_at)
       @invite = @publication.invites.build
 

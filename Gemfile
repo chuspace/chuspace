@@ -89,6 +89,9 @@ gem 'sawyer', github: 'lostisland/sawyer'
 gem 'faraday-http-cache'
 gem 'typhoeus'
 
+# Image
+gem 'image_processing'
+
 # Text diff
 gem 'diffy'
 
