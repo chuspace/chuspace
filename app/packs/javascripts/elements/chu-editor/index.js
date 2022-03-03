@@ -13,6 +13,7 @@ export default class ChuEditor extends HTMLElement {
   @attr autofocus: string = 'true'
   @attr imageProviderPath: string = ''
   @attr autoSavePath: string = ''
+  @attr username: string = ''
   @target content: HTMLElement
   @target status: HTMLElement
 
@@ -27,6 +28,7 @@ export default class ChuEditor extends HTMLElement {
       onChange: this.onChange,
       imageProviderPath: this.imageProviderPath,
       content: this.content.querySelector('textarea')?.value || '',
+      username: this.username,
       appearance: 'default'
     })
   }
@@ -44,6 +46,6 @@ export default class ChuEditor extends HTMLElement {
   )
 
   onChange = () => {
-    this.autosave()
+    //this.autosave()
   }
 }

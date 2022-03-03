@@ -18,7 +18,19 @@ import SchemaManager from 'editor/schema'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
-import { recreateTransform } from './recreate'
+
+import * as Y from 'yjs'
+
+import {
+  ySyncPlugin,
+  yCursorPlugin,
+  yUndoPlugin,
+  undo,
+  redo,
+  prosemirrorToYDoc
+} from 'y-prosemirror'
+
+import { WebsocketProvider } from './websocket-provider'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
 
@@ -52,6 +64,7 @@ export type Options = {
   autoFocus: boolean,
   element: HTMLElement,
   imageProviderPath: string,
+  username: string,
   content: string,
   revision: string,
   editable: boolean,
@@ -81,13 +94,23 @@ export default class Editor {
     this.markdownParser = markdownParser(this.schema)
     this.markdownSerializer = markdownSerializer
 
+    this.doc = this.markdownParser.parse(this.options.content)
     this.state = this.createState()
     this.view = this.createView()
+
     this.view.props.commands = this.manager.commands
     this.setActiveNodesAndMarks()
   }
 
   get plugins() {
+    const ydoc = new prosemirrorToYDoc(this.doc)
+
+    const provider = new WebsocketProvider('CollabChannel', ydoc, {
+      params: { username: this.options.username }
+    })
+
+    const yXmlFragment = ydoc.getXmlFragment('prosemirror')
+
     return [
       ...this.manager.plugins,
       inputRules({
@@ -104,7 +127,10 @@ export default class Editor {
         ArrowDown: arrowHandler('down'),
         'Ctrl-s': this.handleSave,
         'Mod-s': this.handleSave,
-        Escape: selectParentNode
+        Escape: selectParentNode,
+        'Mod-z': undo,
+        'Mod-y': redo,
+        'Mod-Shift-z': redo
       }),
 
       dropCursor(),
@@ -123,14 +149,17 @@ export default class Editor {
             tabindex: 0
           }
         }
-      })
+      }),
+      ySyncPlugin(yXmlFragment),
+      yCursorPlugin(provider.awareness),
+      yUndoPlugin()
     ]
   }
 
   createState = () =>
     EditorState.create({
       schema: this.schema,
-      doc: this.markdownParser.parse(this.options.content),
+      doc: this.doc,
       highlights: [],
       editions: [],
       plugins: this.plugins

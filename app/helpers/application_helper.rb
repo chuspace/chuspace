@@ -11,7 +11,7 @@ module ApplicationHelper
       gitlab: ['bg-gitlab-light text-dark', 'hover:bg-gitlab-dark'],
       bitbucket: ['bg-bitbucket-light text-primary-content', 'hover:bg-bitbucket-dark'],
       gitea: ['bg-gitea-light text-dark', 'hover:bg-gitea-dark'],
-      email: ['btn-secondary'],
+      email: ['bg-primary-content', 'hover:btn-secondary'],
     }.with_indifferent_access.freeze
   end
 

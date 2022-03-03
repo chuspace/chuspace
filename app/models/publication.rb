@@ -15,7 +15,6 @@ class Publication < ApplicationRecord
   has_many :memberships, dependent: :destroy, inverse_of: :publication
   has_many :members, through: :memberships, source: :user
   has_many :posts, dependent: :destroy, inverse_of: :publication
-  has_many :editing_locks, dependent: :destroy, inverse_of: :publication
 
   belongs_to :owner, class_name: 'User'
   belongs_to :git_provider

@@ -82,7 +82,7 @@ module Publications
 
     def commit_params
       {
-        content: @draft.editing_lock.content,
+        content: @draft.local_content.value,
         message: draft_params[:commit_message],
         committer: Git::Committer.chuspace,
         author: Git::Committer.for(user: Current.user)

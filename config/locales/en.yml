@@ -11,10 +11,12 @@ en:
           attributes:
             email:
               blank: A valid email is required
+              invalid: Email is invalid or already taken
             name:
               blank: Your full name is required
             username:
               blank: A valid username is required
+              invalid: Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.
   connect:
     home:
       index:
@@ -81,9 +83,23 @@ en:
       welcome: Login with email
     index:
       cta: Log in with one of the following
-      intro: Write . Read . Learn . Contribute . Write again
       welcome: Welcome back to Chuspace
   shared:
+    pitch: Integrated blogging platform for developers and teams
+    features:
+      list:
+        - title: Truly own your content
+          description: Publish from your git repository hosted on Github . Gitlab or Gitea
+          available: true
+        - title: Any static site framework
+          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
+          available: true
+        - title: Publishing and collaboration
+          description: Collaborate with community and teams in realtime
+          available: true
+        - title: Custom domains and hosting
+          description: Integrated deployment coming soon
+          available: false
     identities:
       login_with: Click to log in with %{provider}
     login_prompt: Click to go to log  in page
@@ -97,16 +113,6 @@ en:
       welcome: Create a Chuspace account
     index:
       cta: Sign up with one of the following
-      features:
-        - title: Truly own your content
-          description: Connect your publications from Github . Gitlab or Gitea
-        - title: Any static site framework
-          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . Hexo
-        - title: Publishing and collaboration
-          description: Write . Read . Learn . Contribute . Write again
-      intro:
-        An integrated blogging platform for developers to write, learn and grow
-        together
       welcome: Welcome to Chuspace
   user_mailer:
     email_welcome:
@@ -139,5 +145,5 @@ en:
     index:
       heading: Defragging dev blogs
       intro:
-        Chuspace is a collaborative bloging and indexing platform, which works
+        Chuspace is an indexing and collaborative blogging platform, which works
         with any markdown powered static site blog hosted on Github, Gitlab or Gitea.

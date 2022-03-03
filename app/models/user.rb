@@ -44,7 +44,7 @@ class User < ApplicationRecord
   private
 
   def unset_slug_if_invalid
-    self.username = normalize_friendly_id(username)
+    self.username = username
   end
 
   def should_generate_new_friendly_id?
@@ -52,7 +52,7 @@ class User < ApplicationRecord
   end
 
   def resolve_friendly_id_conflict(candidates)
-    self.username = normalize_friendly_id(username)
+    self.username = username
   end
 
   def seed_git_providers

@@ -36,8 +36,9 @@
 
           <%= render 'layouts/user' %>
         <% else %>
-          <%= link_to 'Our Story', '#', class: 'link link-primary link-hover ml-8' %>
-          <%= link_to 'Sign in', '#', class: 'link link-primary link-hover ml-8' %>
+          <%= link_to 'Our Story', '#', class: 'link link-primary link-hover text-sm ml-8' %>
+          <%= link_to 'Sign up', signups_path, class: 'link link-primary link-hover text-sm ml-8' %>
+          <%= link_to 'Sign in', sessions_path, class: 'link link-primary link-hover text-sm ml-8' %>
         <% end %>
       </div>
     </nav>

@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
+  kredis_string :local_content,
+                expires_in: 1.week,
+                key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:local_content" }
+
   attribute :publication, Publication
   validates :path, :name, markdown: true
   validates :publication, presence: true
@@ -15,6 +19,10 @@ class Draft < Git::Blob
   def content_html(content: body)
     doc = CommonMarker.render_doc(content)
     MarkdownRenderer.new.render(doc).html_safe
+  end
+
+  def preview_html
+    content_html(content: local_content.value || body)
   end
 
   def date
@@ -36,14 +44,6 @@ class Draft < Git::Blob
 
   def markdown_doc
     CommonMarker.render_doc(body)
-  end
-
-  def editor_lock
-    publication.editing_locks.find_by(blob_path: path)
-  end
-
-  def local_content
-    editor_lock&.content
   end
 
   def post
@@ -90,11 +90,7 @@ class Draft < Git::Blob
   end
 
   def stale?
-    local_content.present? && local_content != decoded_content
-  end
-
-  def locked?
-    editor_lock.present?
+    local_content.value.present? && local_content.value != decoded_content
   end
 
   def status

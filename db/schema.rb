@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_23_145047) do
+ActiveRecord::Schema[7.0].define(version: 2022_02_20_181333) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -22,7 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_145047) do
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "git_provider_enum_type", ["github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
-  create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket", "gitea"]
+  create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "manager", "owner", "subscriber"]
   create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
@@ -106,19 +106,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_145047) do
     t.datetime "started_at"
     t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
-  end
-
-  create_table "editing_locks", force: :cascade do |t|
-    t.bigint "publication_id", null: false
-    t.string "blob_path"
-    t.text "content"
-    t.bigint "owner_id", null: false
-    t.datetime "expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["blob_path", "publication_id"], name: "index_editing_locks_on_blob_path_and_publication_id", unique: true
-    t.index ["owner_id"], name: "index_editing_locks_on_owner_id"
-    t.index ["publication_id"], name: "index_editing_locks_on_publication_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -332,8 +319,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_23_145047) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "editing_locks", "publications"
-  add_foreign_key "editing_locks", "users", column: "owner_id"
   add_foreign_key "git_providers", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "invites", "publications"

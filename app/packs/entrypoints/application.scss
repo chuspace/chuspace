@@ -95,6 +95,11 @@
       content: '';
     }
   }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
 }
 
 .ProseMirror {
@@ -123,7 +128,7 @@ auto-complete {
 }
 
 .header {
-  @apply sm:fixed top-0 w-full bg-base-200 z-10;
+  @apply sm:fixed top-0 w-full z-10 py-2;
   height: 55px;
 
   will-change: transform;
@@ -168,5 +173,16 @@ file-attachment {
   > *:not(:last-child)::after {
     @apply px-2;
     content: '•';
+  }
+}
+
+@layer utilities {
+  .input,
+  .select {
+    @apply h-10;
+
+    &:focus {
+      @apply ring-1 ring-primary outline-none;
+    }
   }
 }
