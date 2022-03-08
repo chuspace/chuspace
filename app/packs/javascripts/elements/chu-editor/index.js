@@ -4,7 +4,7 @@ import { attr, controller, target } from '@github/catalyst'
 
 import Editor from 'editor'
 import { Transaction } from 'prosemirror-state'
-import debounce from 'lodash/debounce'
+import debounce from 'lodash.debounce'
 import { post } from '@rails/request.js'
 
 @controller

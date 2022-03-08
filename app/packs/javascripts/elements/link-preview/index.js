@@ -7,7 +7,7 @@ import 'tippy.js/animations/scale.css'
 import { LitElement, html, render } from 'lit'
 import tippy, { followCursor, inlinePositioning, sticky } from 'tippy.js'
 
-import truncate from 'lodash/truncate'
+import truncate from 'lodash.truncate'
 
 export default class LinkPreview extends LitElement {
   static get properties() {

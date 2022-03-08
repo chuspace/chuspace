@@ -2,37 +2,35 @@
 
 import './styles.sass'
 
-import { LitElement, html } from 'lit'
-import { Schema } from 'prosemirror-model'
+import * as Y from 'yjs'
+
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
+import { LitElement, html } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
 import { markdownParser, markdownSerializer } from 'editor/markdowner'
+import {
+  prosemirrorToYDoc,
+  redo,
+  undo,
+  yCursorPlugin,
+  ySyncPlugin,
+  yUndoPlugin
+} from 'y-prosemirror'
 
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
+import { Schema } from 'prosemirror-model'
 import SchemaManager from 'editor/schema'
+import { WebsocketProvider } from './websocket-provider'
+import debounce from 'lodash.debounce'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
-import debounce from 'lodash/debounce'
 import { post } from '@rails/request.js'
-
-import * as Y from 'yjs'
-
-import {
-  ySyncPlugin,
-  yCursorPlugin,
-  yUndoPlugin,
-  undo,
-  redo,
-  prosemirrorToYDoc
-} from 'y-prosemirror'
-
-import { WebsocketProvider } from './websocket-provider'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
 const DEFAULT_EDITOR_NODES = ['doc', 'text', 'paragraph']

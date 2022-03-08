@@ -49,6 +49,8 @@
     "lodash.includes": "^4.3.0",
     "lodash.pick": "^4.4.0",
     "lodash.throttle": "^4.1.1",
+    "lodash.toarray": "^4.4.0",
+    "lodash.truncate": "^4.4.2",
     "markdown-it-front-matter": "^0.2.3",
     "mini-css-extract-plugin": "2.6.0",
     "modern-normalize": "^1.1.0",

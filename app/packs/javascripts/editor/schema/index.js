@@ -10,7 +10,7 @@ import { ellipsis, emDash, smartQuotes } from 'prosemirror-inputrules'
 
 import { Schema } from 'prosemirror-model'
 import { keymap } from 'prosemirror-keymap'
-import toArray from 'lodash/toArray'
+import toArray from 'lodash.toarray'
 
 export const filterElementsBy = (elements: [], type: string) => {
   return elements
