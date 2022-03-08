@@ -22,7 +22,7 @@
       </auto-complete>
     </autocomplete-reset>
 
-    <%= f.input :role, collection: Membership.roles, required: true %>
+    <%= f.input :role, collection: invitable_roles_collection, label_method: :second, value_method: :first, required: true %>
 
     <div class='mt-8'>
       <%= f.submit 'Invite', class: 'btn btn-primary btn-sm' %>

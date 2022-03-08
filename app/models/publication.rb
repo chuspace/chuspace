@@ -2,6 +2,7 @@
 
 class Publication < ApplicationRecord
   extend FriendlyId
+  include PgSearch::Model
   include Repoable, Iconable
   include AttrJson::Record
   include AttrJson::Record::QueryScopes
@@ -10,6 +11,7 @@ class Publication < ApplicationRecord
   attr_json_config(default_container_attribute: :settings, default_rails_attribute: true, default_accepts_nested_attributes: { reject_if: :all_blank })
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
+  multisearchable against: :name
 
   has_many :invites, dependent: :destroy, inverse_of: :publication
   has_many :memberships, dependent: :destroy, inverse_of: :publication

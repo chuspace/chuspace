@@ -36,7 +36,7 @@ class Post < ApplicationRecord
   end
 
   def draft
-    @draft ||= publication.draft(path: path)
+    @draft ||= publication.draft(path: blob_path)
   end
 
   def short_commit_sha

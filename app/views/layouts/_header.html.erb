@@ -8,32 +8,7 @@
 
       <div class='flex items-center py-2'>
         <% if signed_in? %>
-          <% if Current.user.owning_publications.where.not(id: nil).any? %>
-            <details>
-              <summary class='btn btn-outline btn-primary btn-sm min-w-fit mr-4'>
-                <div class='flex items-center' data-menu-button>
-                  <%= content_tag :span, 'Start writing' %>
-                </div>
-              </summary>
-              <details-menu
-                role="menu"
-                tabindex="0"
-                class="shadow menu dropdown-content absolute z-10 bg-base-200 rounded-box w-52"
-              >
-                <% Current.user.owning_publications.where.not(id: nil).each do |publication| %>
-                  <li tabindex="0" role="menuitem">
-                    <%= link_to publication_new_draft_path(publication), class: 'flex items-center' do %>
-                      <%= image_tag Current.user.avatar_url, class: 'w-4 h-4 mask mask-circle mr-2'  %>
-                      <%= content_tag :span, publication.name %>
-                    <% end %>
-                  </li>
-                <% end %>
-              </details-menu>
-            </details>
-          <% else %>
-            <%= link_to 'Connect', connect_root_path, class: 'btn btn-primary btn-outline btn-sm mr-4' %>
-          <% end %>
-
+          <%= yield :header_actions %>
           <%= render 'layouts/user' %>
         <% else %>
           <%= link_to 'Our Story', '#', class: 'link link-primary link-hover text-sm ml-8' %>

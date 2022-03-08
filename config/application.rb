@@ -28,11 +28,11 @@ module Chuspace
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_record.encryption.extend_queries = true
-    StrongMigrations.start_after = 20211128142958
+    StrongMigrations.start_after = 20220303151152
 
     # Cache store
     config.cache_store = :redis_cache_store, {
-      url: ENV['REDIS_CACHE_SERVERS'].split(','),
+      url: Rails.application.credentials.redis[:cache].split(','),
       connect_timeout:    30,  # Defaults to 20 seconds
       read_timeout:       0.2, # Defaults to 1 second
       write_timeout:      0.2, # Defaults to 1 second

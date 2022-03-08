@@ -5,7 +5,7 @@ module Publications
     class PublishingsController < BaseController
       before_action :redirect_to_editing, unless: -> { @draft.publishable? }
 
-      layout 'blank'
+      layout 'full'
 
       def new
         authorize! @draft, to: :publish?

@@ -2,7 +2,6 @@
 
 module Connect
   class HomeController < ApplicationController
-    layout 'marketing', only: :index
     skip_verify_authorized
 
     def index

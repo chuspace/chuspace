@@ -2,19 +2,18 @@
 
 class SignupsController < ApplicationController
   skip_verify_authorized
-
-  layout 'marketing'
   include SessionRedirect
 
   def email
-    @user = User.new
+    @user = User.new(email: params[:email])
   end
 
   def create
     @user = User.build_with_email_identity(signup_params)
 
     if @user.save
-      redirect_to signups_path, notice: t('.success')
+      signin(@user.identities.email.first)
+      redirect_to redirect_location_for(:user) || signups_path, notice: t('.success')
     else
       respond_to do |format|
         format.html { redirect_to email_signups_path, notice: t('.failure') }

@@ -3,7 +3,7 @@
 
 module Publications
   class PeopleController < BaseController
-    before_action :find_membership, only: %i[update destroy]
+    before_action :find_membership, only: %i[edit destroy update]
     skip_verify_authorized only: :index
 
     def index
@@ -14,24 +14,36 @@ module Publications
     end
 
     def update
-      @membership.update(update_params)
       authorize! @membership
 
-      redirect_to publication_people_path(@publication), notice: t('publications.people.update.success')
+      if @membership.update(update_params)
+        redirect_to publication_people_path(@publication), notice: t('publications.people.update.notice')
+      else
+        respond_to do |format|
+          format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@membership, :form), partial: 'form', locals: { membership: @membership }) }
+          format.html do
+            redirect_to publication_people_path(@publication), notice: @membership.errors.full_messages.to_sentence
+          end
+        end
+      end
+    end
+
+    def edit
+      authorize! @membership
     end
 
     def destroy
-      @membership.destroy
       authorize! @membership
+      @membership.destroy
 
-      redirect_to publication_people_path(@publication), notice: t('publications.people.destroy.success')
+      redirect_to publication_people_path(@publication), notice: t('publications.people.destroy.notice')
     end
 
     def autocomplete
       authorize! @publication, to: :invite?
 
       @query = params[:q]
-      @users = User.search(query: @query).with_attached_avatar
+      @users = User.search(@query).with_attached_avatar
 
       respond_to { |type| type.html_fragment { render partial: 'publications/people/autocomplete' } }
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_20_181333) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -24,7 +24,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_20_181333) do
   create_enum "git_provider_enum_type", ["github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
   create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
-  create_enum "membership_role_enum_type", ["writer", "editor", "manager", "owner", "subscriber"]
+  create_enum "membership_role_enum_type", ["writer", "editor", "admin", "owner", "member"]
   create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
   create_enum "publication_visibility_enum_type", ["private", "public", "member"]
 
@@ -203,6 +203,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_20_181333) do
     t.enum "role", default: "writer", null: false, enum_type: "membership_role_enum_type"
     t.index ["publication_id"], name: "index_memberships_on_publication_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "pg_search_documents", force: :cascade do |t|
+    t.text "content"
+    t.string "searchable_type"
+    t.bigint "searchable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable"
   end
 
   create_table "posts", force: :cascade do |t|

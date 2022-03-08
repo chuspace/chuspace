@@ -14,7 +14,11 @@ export default class Doc extends Node {
   get content() {
     let content = 'front_matter block+'
 
-    switch (this.options.appearance) {
+    switch (this.editor.mode) {
+      case 'node':
+        let node = this.editor.nodeName || 'paragraph'
+        content = `${this.editor.nodeName}`
+        break
       case 'comment':
         content = 'block+'
         break

@@ -27,6 +27,9 @@ module Authentication
     Current.identity.present? && Current.user.present?
   end
 
+  def store_location
+  end
+
   private
 
   def authenticate

@@ -22,12 +22,12 @@
 
 /* This renders the username above the caret */
 .ProseMirror-yjs-cursor > div
+  @apply font-sans
   position: absolute
   top: -1.05em
   left: -1px
   font-size: 13px
   background-color: rgb(250, 129, 0)
-  font-family: serif
   font-style: normal
   font-weight: normal
   line-height: normal
@@ -171,3 +171,6 @@
 
     p, h1, h2, h3, h4, h5, h6, lazy-image, code-editor, blockquote
       @apply mb-4
+
+  contribution-modal
+    @apply whitespace-nowrap

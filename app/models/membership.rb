@@ -9,8 +9,8 @@ class Membership < ApplicationRecord
   DEFAULT_ROLE = :writer
 
   class << self
-    def managers
-      where(role: RolesConfig.managers)
+    def admins
+      where(role: RolesConfig.admins)
     end
 
     def editors

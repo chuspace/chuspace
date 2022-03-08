@@ -2,7 +2,7 @@
 
 require 'aws-sdk-s3'
 
-SitemapGenerator::Sitemap.default_host = ENV.fetch('CHUSPACE_URL')
+SitemapGenerator::Sitemap.default_host = Rails.application.credentials.chuspace[:url]
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 SitemapGenerator::Sitemap.public_path = 'public/'
 
@@ -10,8 +10,8 @@ if Rails.env.production?
   SitemapGenerator::Sitemap.adapter =
     SitemapGenerator::AwsSdkAdapter.new(
       ENV['AWS_S3_BUCKET'],
-      aws_access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
-      aws_secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
+      aws_access_key_id: Rails.application.credentials.aws[:key],
+      aws_secret_access_key: Rails.application.credentials.aws[:secret],
       aws_region: 'eu-west-2'
     )
 

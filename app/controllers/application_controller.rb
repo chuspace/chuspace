@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include Authentication
   include SetCurrentRequestDetails
   include SetSentryContext
+  include Redirectable
   include ActiveStorage::SetCurrent
 
   after_action :verify_authorized

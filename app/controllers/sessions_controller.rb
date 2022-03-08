@@ -2,15 +2,13 @@
 
 class SessionsController < ApplicationController
   skip_verify_authorized
-
-  layout 'marketing'
   include SessionRedirect
 
   def index
   end
 
   def email
-    @user = User.new
+    @user = User.new(email: params[:email])
   end
 
   def create
@@ -18,7 +16,7 @@ class SessionsController < ApplicationController
 
     if @identity
       @identity.send_magic_auth_email!
-      redirect_to root_path, notice: t('.success')
+      redirect_to redirect_location_for(:user) || root_path, notice: t('.success')
     else
       @user = User.new(email: session_params[:email])
       @user.errors.add(:email, 'Email not found')

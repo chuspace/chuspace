@@ -2,7 +2,15 @@
 
 class User < ApplicationRecord
   include Avatarable, Trackable
+  include PgSearch::Model
   extend FriendlyId
+
+  multisearchable against: %i[first_name last_name username email]
+  pg_search_scope :search,
+                  against: %i[first_name last_name username email],
+                  using: {
+                    tsearch: { prefix: true, negation: true }
+                  }
 
   friendly_id :username, use: :history, slug_column: :username
 
@@ -28,16 +36,6 @@ class User < ApplicationRecord
       user = User.new(email_params)
       user.identities.build(uid: user.email, provider: :email)
       user
-    end
-
-    def search(query:)
-      sql = <<-SQL
-        unaccent(users.first_name) ILIKE unaccent(concat('%', ?, '%')) OR
-        unaccent(users.last_name) ILIKE unaccent(concat('%', ?, '%')) OR
-        unaccent(users.username) ILIKE unaccent(concat('%', ?, '%'))
-      SQL
-
-      where(sql, query, query, query).or(where(email: query))
     end
   end
 

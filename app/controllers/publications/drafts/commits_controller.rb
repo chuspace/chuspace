@@ -3,9 +3,9 @@
 module Publications
   module Drafts
     class CommitsController < BaseController
-      before_action :redirect_to_editing, unless: -> { @draft.stale? }
+      layout false
 
-      layout 'blank'
+      before_action :redirect_to_editing, unless: -> { @draft.stale? }
 
       def new
         authorize! @draft, to: :commit?

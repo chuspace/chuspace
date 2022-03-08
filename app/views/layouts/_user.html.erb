@@ -1,7 +1,7 @@
 <div class='flex items-center'>
   <div class="dropdown dropdown-end">
     <div tabindex="0" class="m-1 cursor-pointer mask mask-circle"><%= image_tag Current.user.avatar_url %></div>
-    <ul tabindex="0" class="shadow menu dropdown-content bg-base-300 rounded-box w-52">
+    <ul tabindex="0" class="shadow menu dropdown-content bg-base-300 rounded-box w-52 z-50">
       <li>
         <%= content_tag :div, "Signed in as <strong>#{Current.user.username}</strong>".html_safe, role: 'menuitem', class: 'block text-current', tabindex: '-1' %>
       </li>

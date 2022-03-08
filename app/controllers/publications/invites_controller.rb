@@ -1,4 +1,3 @@
-# typed: ignore
 # frozen_string_literal: true
 
 module Publications
@@ -34,7 +33,7 @@ module Publications
       if @invite.save
         redirect_to(
           publication_invites_path(@publication),
-          notice: t('invites.create.success', identifier: @invite.identifier, publication: @publication.name)
+          notice: t('invites.create.notice', identifier: @invite.identifier, publication: @publication.name)
         )
       else
         respond_to do |format|
@@ -51,14 +50,12 @@ module Publications
 
       if @invite
         if Current.user.blank?
+          store_location_for(:user, accept_publication_invites_path(@publication, invite_token: @invite.code))
+
           if @invite.recipient.blank?
-            redirect_to(
-              email_signups_path(return_to: accept_publication_invites_path(@publication, invite_token: @invite.code))
-            )
+            redirect_to email_signups_path(email: @invite.recipient_email)
           else
-            redirect_to(
-              email_sessions_path(return_to: accept_publication_invites_path(@publication, invite_token: @invite.code))
-            )
+            redirect_to email_sessions_path(email: @invite.recipient.email)
           end
         else
           @invite = @publication.invites.find_by_code(params[:invite_token])
@@ -69,7 +66,7 @@ module Publications
 
           redirect_to(
             publication_people_path(@publication),
-            notice: t('invites.accept.success', publication: @publication.name, role: @invite.role)
+            notice: t('invites.accept.notice', publication: @publication.name, role: @invite.role)
           )
         end
       else

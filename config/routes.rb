@@ -78,7 +78,7 @@ Rails.application.routes.draw do
   resources :publications, path: '', only: :show, param: :permalink, constraints: PublicationConstraint.new do
     resources :settings, only: %i[index show update], module: :publications
 
-    resources :people, path: 'people', only: %i[index show update destroy], module: :publications do
+    resources :people, path: 'people', module: :publications do
       collection { get :autocomplete }
     end
 
@@ -124,6 +124,12 @@ Rails.application.routes.draw do
 
         scope controller: :autosaves, module: :drafts do
           post '/*path/autosave', action: :create, as: :autosave_draft
+        end
+
+        scope controller: :contributions, module: :drafts do
+          get '/*path/contribute', action: :index, as: :draft_contributions
+          get '/*path/contribute/new', action: :new, as: :new_draft_contribution
+          post '/*path/contribute', action: :create, as: :draft_contribution
         end
       end
     end

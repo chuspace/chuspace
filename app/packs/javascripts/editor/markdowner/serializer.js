@@ -1,77 +1,89 @@
 // @flow
 
 import { MarkdownSerializer } from 'prosemirror-markdown'
+import { Schema } from 'prosemirror-model'
 
-export default new MarkdownSerializer(
-  {
-    blockquote(state, node) {
-      state.wrapBlock('> ', null, node, () => state.renderContent(node))
-    },
-    code_block(state, node) {
-      state.write('```' + (node.attrs.language || '') + '\n')
-      state.text(node.textContent, false)
-      state.ensureNewLine()
-      state.write('```')
-      state.closeBlock(node)
-    },
-    heading(state, node) {
-      state.write(state.repeat('#', node.attrs.level) + ' ')
-      state.renderInline(node)
-      state.closeBlock(node)
-    },
-    front_matter: (state, node) => {
-      state.write(`---\n`)
-      state.text(node.textContent.trim(), false)
-      state.ensureNewLine()
-      state.write(`---`)
-      state.closeBlock(node)
-    },
-    horizontal_rule(state, node) {
-      state.write(node.attrs.markup || '---')
-      state.closeBlock(node)
-    },
-    bullet_list(state, node) {
-      state.renderList(node, '  ', () => (node.attrs.bullet || '*') + ' ')
-    },
-    ordered_list(state, node) {
-      let start = node.attrs.order || 1
-      let maxW = String(start + node.childCount - 1).length
-      let space = state.repeat(' ', maxW + 2)
-      state.renderList(node, space, (i) => {
-        let nStr = String(start + i)
-        return state.repeat(' ', maxW - nStr.length) + nStr + '. '
-      })
-    },
-    list_item(state, node) {
-      state.renderContent(node)
-    },
-    paragraph(state, node) {
-      state.renderInline(node)
-      state.closeBlock(node)
-    },
-
-    image(state, node) {
-      state.write(
-        '![' +
-          state.esc(node.attrs.alt || '') +
-          '](' +
-          state.esc(node.attrs.src) +
-          (node.attrs.title ? ' ' + state.quote(node.attrs.title) : '') +
-          ')'
-      )
-    },
-    hard_break(state, node, parent, index) {
-      for (let i = index + 1; i < parent.childCount; i++)
-        if (parent.child(i).type != node.type) {
-          state.write('\\\n')
-          return
-        }
-    },
-    text(state, node) {
-      state.text(node.text)
-    }
+const serializableNodes = {
+  blockquote(state, node) {
+    state.wrapBlock('> ', null, node, () => state.renderContent(node))
   },
-  {
+  code_block(state, node) {
+    state.write('```' + (node.attrs.language || '') + '\n')
+    state.text(node.textContent, false)
+    state.ensureNewLine()
+    state.write('```')
+    state.closeBlock(node)
+  },
+  heading(state, node) {
+    state.write(state.repeat('#', node.attrs.level) + ' ')
+    state.renderInline(node)
+    state.closeBlock(node)
+  },
+  front_matter: (state, node) => {
+    state.write(`---\n`)
+    state.text(node.textContent.trim(), false)
+    state.ensureNewLine()
+    state.write(`---`)
+    state.closeBlock(node)
+  },
+  horizontal_rule(state, node) {
+    state.write(node.attrs.markup || '---')
+    state.closeBlock(node)
+  },
+  bullet_list(state, node) {
+    state.renderList(node, '  ', () => (node.attrs.bullet || '*') + ' ')
+  },
+  ordered_list(state, node) {
+    let start = node.attrs.order || 1
+    let maxW = String(start + node.childCount - 1).length
+    let space = state.repeat(' ', maxW + 2)
+    state.renderList(node, space, (i) => {
+      let nStr = String(start + i)
+      return state.repeat(' ', maxW - nStr.length) + nStr + '. '
+    })
+  },
+  list_item(state, node) {
+    state.renderContent(node)
+  },
+  paragraph(state, node) {
+    state.renderInline(node)
+    state.closeBlock(node)
+  },
+
+  image(state, node) {
+    state.write(
+      '![' +
+        state.esc(node.attrs.alt || '') +
+        '](' +
+        state.esc(node.attrs.src) +
+        (node.attrs.title ? ' ' + state.quote(node.attrs.title) : '') +
+        ')'
+    )
+  },
+  hard_break(state, node, parent, index) {
+    for (let i = index + 1; i < parent.childCount; i++)
+      if (parent.child(i).type != node.type) {
+        state.write('\\\n')
+        return
+      }
+  },
+  text(state, node) {
+    state.text(node.text)
+  }
+}
+
+export default (schema: Schema) => {
+  const schemaNodes = Object.keys(schema.nodes)
+    .filter((node) => Object.keys(serializableNodes).includes(node))
+    .reduce(
+      (nodes, name) => ({
+        ...nodes,
+        [name]: serializableNodes[name]
+      }),
+      {}
+    )
+
+  return new MarkdownSerializer(schemaNodes, {
     em: {
       open: '*',
       close: '*',
@@ -112,8 +124,8 @@ export default new MarkdownSerializer(
       },
       escape: false
     }
-  }
-)
+  })
+}
 
 function backticksFor(node, side) {
   let ticks = /`+/g,

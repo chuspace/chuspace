@@ -1,3 +1,23 @@
 <div class='lg:w-2/3 mx-auto w-full chu-editor editable'>
-  <%= render 'edit_form', draft: @draft, publication: @publication %>
+  <chu-editor
+      username='<%= Current.user.username %>'
+      imageProviderPath='<%= publication_assets_path(@publication) %>'
+      autoSavePath='<%= publication_autosave_draft_path(@publication, @draft) %>'
+      collab
+    >
+    <%= turbo_frame_tag(@draft) do %>
+      <%= simple_form_for @draft, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>
+        <div class='mt-8' spellcheck="false" data-text='content'>
+          <%= form.input(
+              :body,
+              as: :text,
+              label: false,
+              wrapper: false,
+              input_html: { class: 'hidden content', value: @draft.local_content.value.presence || @draft.decoded_content  }
+            )
+          %>
+        </div>
+      <% end %>
+    <% end %>
+  </chu-editor>
 </div>

@@ -2,11 +2,11 @@
 
 import './styles.sass'
 
-import { DOMSerializer, Schema } from 'prosemirror-model'
+import { LitElement, html } from 'lit'
+import { Schema } from 'prosemirror-model'
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { NodeSelection, Selection } from 'prosemirror-state'
-import TrackPlugin, { getTrackPluginState } from '@manuscripts/track-changes'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
@@ -18,6 +18,8 @@ import SchemaManager from 'editor/schema'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
+import debounce from 'lodash/debounce'
+import { post } from '@rails/request.js'
 
 import * as Y from 'yjs'
 
@@ -33,6 +35,7 @@ import {
 import { WebsocketProvider } from './websocket-provider'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
+const DEFAULT_EDITOR_NODES = ['doc', 'text', 'paragraph']
 
 function arrowHandler(dir) {
   return (state, dispatch, view) => {
@@ -60,41 +63,62 @@ function arrowHandler(dir) {
   }
 }
 
-export type Options = {
-  autoFocus: boolean,
-  element: HTMLElement,
-  imageProviderPath: string,
-  username: string,
-  content: string,
-  revision: string,
-  editable: boolean,
-  appearance: 'default' | 'comment' | 'plain' | 'contribution',
-  onChange: (transaction: Transaction) => void
-}
+export default class ChuEditor extends LitElement {
+  static properties = {
+    autoSavePath: { type: String },
+    autoFocus: { type: Boolean },
+    collab: { type: Boolean },
+    imageProviderPath: { type: String },
+    username: { type: String },
+    editable: { type: Boolean },
+    contribution: { type: Boolean },
+    contributionPath: { type: String },
+    nodeName: { type: String },
+    mode: { type: String },
+    status: { type: String, reflect: true },
+    onChange: { type: Function }
+  }
 
-export default class Editor {
-  options: Options = {}
-  element: HTMLElement
   manager: SchemaManager
   schema: Schema
-  markdownParser: MarkdownParser
-  markdownSerializer: markdownSerializer
+  contentParser: MarkdownParser
+  contentSerializer: contentSerializer
   state: EditorState
   view: EditorView
   activeMarks: {}
   activeNodes: {}
   activeMarkAttrs: {}
 
-  constructor(options: Options) {
-    this.options = options
-    this.element = options.element
-    this.manager = new SchemaManager(this)
+  constructor() {
+    super()
+
+    if (this.contribution && !this.contributionPath) {
+      throw 'Contribution path must be set'
+    }
+
+    this.autoFocus = false
+    this.collab = false
+    this.mode = 'default'
+    this.editable = true
+    this.contribution = false
+
+    if (this.mode === 'node') this.nodeName = 'paragraph'
+  }
+
+  connectedCallback() {
+    super.connectedCallback()
+
+    this.manager = this.isNodeEditor
+      ? new SchemaManager(this, [...DEFAULT_EDITOR_NODES, this.nodeName])
+      : new SchemaManager(this)
 
     this.schema = this.manager.schema
-    this.markdownParser = markdownParser(this.schema)
-    this.markdownSerializer = markdownSerializer
+    this.contentParser = markdownParser(this.schema)
+    this.contentSerializer = markdownSerializer(this.schema)
 
-    this.doc = this.markdownParser.parse(this.options.content)
+    this.initialContent = this.querySelector('textarea.content').value
+    this.doc = this.contentParser.parse(this.initialContent)
+
     this.state = this.createState()
     this.view = this.createView()
 
@@ -102,14 +126,44 @@ export default class Editor {
     this.setActiveNodesAndMarks()
   }
 
+  createRenderRoot() {
+    return this
+  }
+
+  get isNodeEditor() {
+    return this.mode === 'node' && !!this.nodeName
+  }
+
   get plugins() {
-    const ydoc = new prosemirrorToYDoc(this.doc)
+    let collaborationPlugins = []
 
-    const provider = new WebsocketProvider('CollabChannel', ydoc, {
-      params: { username: this.options.username }
-    })
+    if (this.collab) {
+      const ydoc = new prosemirrorToYDoc(this.doc)
 
-    const yXmlFragment = ydoc.getXmlFragment('prosemirror')
+      const provider = new WebsocketProvider('CollabChannel', ydoc, {
+        params: { username: this.username }
+      })
+
+      collaborationPlugins = [
+        ySyncPlugin(ydoc.getXmlFragment('prosemirror')),
+        yCursorPlugin(provider.awareness),
+        yUndoPlugin()
+      ]
+    }
+
+    let fullModePlugins = []
+
+    if (this.mode !== 'node') {
+      fullModePlugins = {
+        ArrowLeft: arrowHandler('left'),
+        ArrowRight: arrowHandler('right'),
+        ArrowUp: arrowHandler('up'),
+        ArrowDown: arrowHandler('down'),
+        'Ctrl-s': this.handleSave,
+        'Mod-s': this.handleSave,
+        Escape: selectParentNode
+      }
+    }
 
     return [
       ...this.manager.plugins,
@@ -120,14 +174,8 @@ export default class Editor {
       ...this.manager.keymaps,
       keymap(baseKeymap),
       keymap({
+        ...fullModePlugins,
         Backspace: undoInputRule,
-        ArrowLeft: arrowHandler('left'),
-        ArrowRight: arrowHandler('right'),
-        ArrowUp: arrowHandler('up'),
-        ArrowDown: arrowHandler('down'),
-        'Ctrl-s': this.handleSave,
-        'Mod-s': this.handleSave,
-        Escape: selectParentNode,
         'Mod-z': undo,
         'Mod-y': redo,
         'Mod-Shift-z': redo
@@ -139,7 +187,7 @@ export default class Editor {
       new Plugin({
         key: new PluginKey('editable'),
         props: {
-          editable: () => !!this.options.editable
+          editable: () => !!this.editable
         }
       }),
       new Plugin({
@@ -150,9 +198,7 @@ export default class Editor {
           }
         }
       }),
-      ySyncPlugin(yXmlFragment),
-      yCursorPlugin(provider.awareness),
-      yUndoPlugin()
+      ...collaborationPlugins
     ]
   }
 
@@ -160,16 +206,17 @@ export default class Editor {
     EditorState.create({
       schema: this.schema,
       doc: this.doc,
-      highlights: [],
-      editions: [],
+      contributions: [],
       plugins: this.plugins
     })
 
   createView() {
-    const view = new EditorView(this.element, {
+    const view = new EditorView(this, {
       state: this.state,
-      editable: () => !!this.options.editable,
-      imageProviderPath: this.options.imageProviderPath,
+      schema: this.schema,
+      editable: () => !!this.editable,
+      imageProviderPath: this.imageProviderPath,
+      contributionPath: this.contributionPath,
       dispatchTransaction: this.dispatchTransaction.bind(this),
       nodeViews: this.manager.nodeViews
     })
@@ -179,28 +226,42 @@ export default class Editor {
     view.dom.id = 'editor-content'
     view.dom.classList.add(
       'chu-editor',
-      this.options.editable ? 'editable' : 'read-only'
+      this.editable ? 'editable' : 'read-only'
     )
 
     return view
   }
 
   handleSave = (e: Event) => {
-    this.options.editable ? this.options.onChange() : false
+    this.emitUpdate()
     return true
   }
+
+  autosave = debounce(
+    async () => {
+      this.status.textContent = 'Auto saving...'
+
+      const response = await post(this.autoSavePath, {
+        body: JSON.stringify({
+          draft: { content: this.content }
+        })
+      })
+    },
+    2000,
+    { maxWait: 5000 }
+  )
 
   dispatchTransaction(transaction: Transaction) {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
-    if (transaction.docChanged) this.emitUpdate(transaction)
+    if (transaction.docChanged) this.emitUpdate()
 
     return true
   }
 
-  emitUpdate(transaction: Transaction) {
-    this.options.editable ? this.options.onChange() : false
+  emitUpdate() {
+    this.editable ? this.onChange && this.onChange(this.content) : false
   }
 
   focus() {
@@ -248,7 +309,7 @@ export default class Editor {
       ...this.activeMarks,
       ...this.activeNodes
     }).reduce(
-      (types, [name, value]: [string, Function]) => ({
+      (types, [name, value]: [{ type: String }, Function]) => ({
         ...types,
         [name]: (attrs = {}) => value(attrs)
       }),
@@ -257,8 +318,7 @@ export default class Editor {
   }
 
   get content() {
-    const markdown = this.markdownSerializer.serialize(this.state.doc)
-    return markdown
+    return this.contentSerializer.serialize(this.state.doc)
   }
 
   destroy() {
@@ -269,3 +329,9 @@ export default class Editor {
     this.view.destroy()
   }
 }
+
+document.addEventListener('turbo:load', () => {
+  if (!window.customElements.get('chu-editor')) {
+    customElements.define('chu-editor', ChuEditor)
+  }
+})

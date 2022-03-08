@@ -59,11 +59,11 @@ gem 'sitemap_generator', require: false
 # State machine
 gem 'aasm'
 
-# Search
-gem 'meilisearch-rails'
-
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
+
+# Full-text search
+gem 'pg_search'
 
 # Turblinks
 gem 'turbo-rails'
@@ -84,7 +84,7 @@ gem 'front_matter_parser'
 # Clients
 gem 'down'
 gem 'http'
-gem 'faraday'
+gem 'faraday', '~> 1.x'
 gem 'sawyer', github: 'lostisland/sawyer'
 gem 'faraday-http-cache'
 gem 'typhoeus'

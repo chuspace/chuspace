@@ -3,7 +3,7 @@
 module Publications
   module Drafts
     class AutosavesController < BaseController
-      layout 'blank'
+      layout false
 
       def create
         authorize! @draft

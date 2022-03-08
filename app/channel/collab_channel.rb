@@ -4,7 +4,6 @@ class CollabChannel < ApplicationCable::Channel
   end
 
   def receive(params)
-    puts params['data'].pack('C*').force_encoding('UTF-8')
     ActionCable.server.broadcast("collab", params)
   end
 

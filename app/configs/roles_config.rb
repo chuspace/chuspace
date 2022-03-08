@@ -4,24 +4,39 @@ class RolesConfig < ApplicationConfig
   attr_config(
     writer: 'writer',
     editor: 'editor',
-    manager: 'manager',
+    admin: 'admin',
     owner: 'owner',
     member: 'member'
   )
 
-  def self.to_enum
-    defaults
-  end
+  class << self
+    def admins
+      %w[admin owner]
+    end
 
-  def self.editors
-    %w[writer editor manager owner]
-  end
+    def editors
+      %w[writer editor admin owner]
+    end
 
-  def self.managers
-    %w[manager owner]
-  end
+    def invitable_enum
+      defaults.except('owner')
+    end
 
-  def self.publishers
-    %w[editor manager owner]
+    def permissions
+      {
+        writer: 'read . write',
+        editor: 'read . write . publish',
+        admin: 'read . write . publish . admin',
+        member: 'read'
+      }
+    end
+
+    def publishers
+      %w[editor admin owner]
+    end
+
+    def to_enum
+      defaults
+    end
   end
 end

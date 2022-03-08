@@ -1,11 +1,10 @@
 // @flow
 
-import { Decoration, DecorationSet, EditorView } from 'prosemirror-view'
+import { Decoration, DecorationSet } from 'prosemirror-view'
 import { Plugin, PluginKey } from 'prosemirror-state'
 
 import { Node } from 'editor/base'
 import { Node as PMNode } from 'prosemirror-model'
-import includes from 'lodash/includes'
 import { setBlockType } from 'prosemirror-commands'
 
 export default class Paragraph extends Node {
@@ -32,7 +31,7 @@ export default class Paragraph extends Node {
   get plugins() {
     return [
       new Plugin({
-        key: new PluginKey('paragraphPlaceholder'),
+        key: new PluginKey('bodyPlaceholder'),
         props: {
           decorations: (state) => {
             const plugins = state.plugins

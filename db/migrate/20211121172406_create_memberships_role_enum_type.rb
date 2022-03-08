@@ -3,7 +3,7 @@
 class CreateMembershipsRoleEnumType < ActiveRecord::Migration[6.1]
   def up
     execute <<-SQL
-      CREATE TYPE membership_role_enum_type AS ENUM ('writer', 'editor', 'manager', 'owner', 'subscriber');
+      CREATE TYPE membership_role_enum_type AS ENUM ('writer', 'editor', 'admin', 'owner', 'member');
     SQL
   end
 

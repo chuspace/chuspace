@@ -13,7 +13,8 @@ export default class History extends Element {
   }
 
   keys() {
-    const isMac = typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false
+    const isMac =
+      typeof navigator !== 'undefined' ? /Mac/.test(navigator.platform) : false
     let keymap = {
       'Mod-z': undo,
       'Shift-Mod-z': redo

@@ -14,7 +14,7 @@ class Invite < ApplicationRecord
   after_create :send_email
 
   enum status: { pending: 'pending', accepted: 'accepted', expired: 'expired' }
-  enum role: RolesConfig.to_enum
+  enum role: RolesConfig.invitable_enum
 
   has_secure_token :code
 

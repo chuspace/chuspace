@@ -29,12 +29,20 @@ export default class SchemaManager {
   schema: Schema
   editor: Editor
 
-  constructor(editor: Editor) {
+  constructor(editor: Editor, filteredNodes: Array<string> = []) {
     this.elements = [
       ...toArray(marks).map((Mark) => new Mark(editor.options)),
       ...toArray(plugins).map((Plugin) => new Plugin(editor.options)),
       ...toArray(nodes).map((Node) => new Node(editor.options))
     ]
+
+    if (filteredNodes.length > 0) {
+      this.elements = this.elements.filter(
+        (element) =>
+          (element.type === 'node' && filteredNodes.includes(element.name)) ||
+          element.type !== 'node'
+      )
+    }
 
     this.elements.forEach((element) => {
       element.bindEditor(editor)
@@ -73,14 +81,14 @@ export default class SchemaManager {
           node,
           view,
           getPos,
-          editable: this.editor.options.editable
+          editable: this.editor.editable
         }),
       code_block: (node, view, getPos) =>
         new CodeBlockView({
           node,
           view,
           getPos,
-          editable: this.editor.options.editable
+          editable: this.editor.editable
         }),
 
       image: (node, view, getPos) =>
@@ -88,14 +96,14 @@ export default class SchemaManager {
           node,
           view,
           getPos,
-          editable: this.editor.options.editable
+          editable: this.editor.editable
         })
     }
   }
 
   get keymaps(): Array<any> {
     const elementKeymaps = this.elements
-      .filter((element) => ['element'].includes(element.type))
+      .filter((element) => element.type === 'element')
       .filter((element) => element.keys)
       .map((element) => element.keys({ schema: this.schema }))
 
@@ -114,7 +122,7 @@ export default class SchemaManager {
 
   get inputRules(): [] {
     const elementInputRules = this.elements
-      .filter((element) => ['element'].includes(element.type))
+      .filter((element) => element.type === 'element')
       .filter((element) => element.inputRules)
       .map((element) => element.inputRules({ schema: this.schema }))
 
@@ -138,7 +146,7 @@ export default class SchemaManager {
 
   get pasteRules(): [] {
     const elementPasteRules = this.elements
-      .filter((element) => ['element'].includes(element.type))
+      .filter((element) => element.type === 'element')
       .filter((element) => element.pasteRules)
       .map((element) => element.pasteRules({ schema: this.schema }))
 
@@ -176,7 +184,7 @@ export default class SchemaManager {
         if (Array.isArray(value)) {
           commands[name] = (attrs) =>
             value.forEach((callback) => {
-              if (!this.editor.options.editable) {
+              if (!this.editor.editable) {
                 return false
               }
               this.editor.view.focus()
@@ -188,7 +196,7 @@ export default class SchemaManager {
             })
         } else if (typeof value === 'function') {
           commands[name] = (attrs) => {
-            if (!this.editor.options.editable) {
+            if (!this.editor.editable) {
               return false
             }
             this.editor.view.focus()
@@ -204,7 +212,7 @@ export default class SchemaManager {
               if (Array.isArray(commandValue)) {
                 commands[commandName] = (attrs) =>
                   commandValue.forEach((callback: Function) => {
-                    if (!this.editor.options.editable) {
+                    if (!this.editor.editable) {
                       return false
                     }
                     this.editor.view.focus()
@@ -216,7 +224,7 @@ export default class SchemaManager {
                   })
               } else {
                 commands[commandName] = (attrs) => {
-                  if (!this.editor.options.editable) {
+                  if (!this.editor.editable) {
                     return false
                   }
                   this.editor.view.focus()

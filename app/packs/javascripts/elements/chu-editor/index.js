@@ -10,8 +10,12 @@ import { post } from '@rails/request.js'
 @controller
 export default class ChuEditor extends HTMLElement {
   @attr editable: string = 'true'
+  @attr collab: string = 'false'
+  @attr mode: string = 'default'
   @attr autofocus: string = 'true'
   @attr imageProviderPath: string = ''
+  @attr contribution: string = 'false'
+  @attr contributionPath: string = ''
   @attr autoSavePath: string = ''
   @attr username: string = ''
   @target content: HTMLElement
@@ -25,11 +29,14 @@ export default class ChuEditor extends HTMLElement {
       element: this.content,
       autoFocus: JSON.parse(this.autofocus),
       editable: JSON.parse(this.editable),
+      mode: this.mode,
+      collab: JSON.parse(this.collab),
       onChange: this.onChange,
       imageProviderPath: this.imageProviderPath,
+      contribution: JSON.parse(this.contribution),
+      contributionPath: this.contributionPath,
       content: this.content.querySelector('textarea')?.value || '',
-      username: this.username,
-      appearance: 'default'
+      username: this.username
     })
   }
 

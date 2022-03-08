@@ -3,7 +3,7 @@
 module Publications
   module Drafts
     class DiffsController < BaseController
-      layout 'blank'
+      layout false
 
       def new
         authorize! @draft

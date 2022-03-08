@@ -48,6 +48,16 @@ en:
       expired: Your magic auth token is expired
       success: Successfully signed in
   publications:
+    invites:
+      create:
+        notice: Invite sent successfully!
+        error: Invite failed!
+      accept:
+        notice: Invite accepted successfully!
+    people:
+      update:
+        notice: Role updated successfully!
+        error: Role update failed!
     drafts:
       edit_form:
         locked: Document editing locked by %{name}
@@ -114,6 +124,7 @@ en:
     index:
       cta: Sign up with one of the following
       welcome: Welcome to Chuspace
+
   user_mailer:
     email_welcome:
       body:

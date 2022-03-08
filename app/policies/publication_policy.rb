@@ -9,7 +9,7 @@ class PublicationPolicy < ApplicationPolicy
   end
 
   def edit?
-    user == record.owner || record.memberships.manager.where(user: user).exists?
+    user == record.owner || record.memberships.admin.where(user: user).exists?
   end
 
   def publish?

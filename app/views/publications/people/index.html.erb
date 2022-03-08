@@ -46,6 +46,7 @@
 
                   <%= tag.span membership.role %>
 
+                  <%= turbo_frame_tag dom_id(membership, :popup) %>
                   <details class='dropdown dropdown-end'>
                     <summary class='btn btn-outline btn-sm ml-4'>
                       <div class='flex items-center' data-menu-button>
@@ -57,7 +58,7 @@
                       tabindex="0"
                       class="p-2 shadow menu dropdown-content absolute z-10 bg-base-300 rounded-box w-52"
                     >
-                      <li><%= link_to 'Change role', '#' %></li>
+                      <li><%= link_to 'Change role', edit_publication_person_path(@publication, membership), 'data-turbo-frame': dom_id(membership, :popup) %></li>
                     </details-menu>
                   </details>
                 <% end %>

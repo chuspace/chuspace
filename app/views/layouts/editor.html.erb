@@ -3,15 +3,9 @@
   <%= render 'layouts/head' %>
   <body class="flex flex-col h-full">
     <%= render 'layouts/flash' %>
-    <chu-editor
-      data-username='<%= Current.user.username %>'
-      data-image-provider-path='<%= publication_assets_path(@publication) %>'
-      data-auto-save-path='<%= publication_autosave_draft_path(@publication, @draft) %>'
-    >
-      <%= render 'publications/drafts/header', draft: @draft %>
-      <section class="container flex-1 sm:pt-24">
-        <%= yield %>
-      </section>
-    </chu-editor>
+    <%= render 'publications/drafts/header', draft: @draft %>
+    <section class="container flex-1 mt-24">
+      <%= yield %>
+    </section>
   </body>
 </html>

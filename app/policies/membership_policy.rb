@@ -9,7 +9,7 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def edit?
-    owner? || publication.memberships.managers.where(user: user).exists?
+    owner? || publication.memberships.admins.where(user: user).exists?
   end
 
   private
