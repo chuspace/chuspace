@@ -10,7 +10,7 @@
         <%= f.input :identifier, label: 'Email or Username', autofocus: true, input_html: { 'data-target': 'autocomplete-reset.input', 'data-action': 'input:autocomplete-reset#toggle' } %>
 
         <button data-target='autocomplete-reset.handle' class='hidden absolute right-0 bottom-0 mb-4 mr-4' data-action='click:autocomplete-reset#clear'>
-          <%= inline_svg_tag('icons/x', class: 'w-4 h-4 fill-current', 'data-action': 'click:autocomplete-reset#clear') %>
+          <%= inline_svg_tag('icons/x.svg', class: 'w-4 h-4 fill-current', 'data-action': 'click:autocomplete-reset#clear') %>
         </button>
 
         <ul id="users-popup" class='shadow menu dropdown-content absolute z-10 bg-base-200 rounded-box w-full'></ul>

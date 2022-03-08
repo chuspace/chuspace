@@ -1,7 +1,7 @@
 <% cache(git_provider) do %>
   <li class='p-4 flex items-center border-b last:border-b-0 border-base-300'>
     <div class='flex flex-1 items-center'>
-      <%= inline_svg_tag "icons/#{git_provider.name}", class: 'w-6 h-6 fill-current' %>
+      <%= inline_svg_tag "icons/#{git_provider.name}.svg", class: 'w-6 h-6 fill-current' %>
       <%= content_tag :span, git_provider.label, class: 'ml-2' %>
     </div>
 

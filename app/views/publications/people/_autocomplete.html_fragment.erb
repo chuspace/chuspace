@@ -12,7 +12,7 @@
             <% end %>
           </div>
           <% if @publication.members.exclude?(user) %>
-            <%= inline_svg_tag('icons/plus', class: 'w-4 h-4 mr-2 fill-current') %>
+            <%= inline_svg_tag('icons/plus.svg', class: 'w-4 h-4 mr-2 fill-current') %>
           <% end %>
         </div>
       <% end %>
@@ -21,7 +21,7 @@
     <%= content_tag :li, role: 'option', 'data-autocomplete-value': @query do  %>
       <div class='flex items-center'>
         <div class='flex-1'><%= @query %></div>
-        <%= inline_svg_tag('icons/email', class: 'w-4 h-4 mr-2 fill-current') %>
+        <%= inline_svg_tag('icons/email.svg', class: 'w-4 h-4 mr-2 fill-current') %>
       </div>
     <% end %>
   <% end %>

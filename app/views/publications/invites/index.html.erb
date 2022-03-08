@@ -14,7 +14,7 @@
     <main class='col-span-9'>
       <div class='flex items-center w-full'>
         <%= simple_form_for :search, html: { class: 'flex-1' } do |form| %>
-          <%= form.input :query, required: false, label: inline_svg_tag('icons/search', class: 'w-4 h-4 fill-current').html_safe, wrapper: :input_group, input_html: { class: 'w-1/2 input-sm', placeholder: 'Search a member' } %>
+          <%= form.input :query, required: false, label: inline_svg_tag('icons/search.svg', class: 'w-4 h-4 fill-current').html_safe, wrapper: :input_group, input_html: { class: 'w-1/2 input-sm', placeholder: 'Search a member' } %>
         <% end %>
 
         <aside>
@@ -54,7 +54,7 @@
                       </div>
                     <% else %>
                       <div class='flex items-center'>
-                        <%= inline_svg_tag 'icons/email', class: 'w-12 h-8 fill-current' %>
+                        <%= inline_svg_tag 'icons/email.svg', class: 'w-12 h-8 fill-current' %>
 
                         <div class='ml-2'>
                                                 <%= content_tag :p, invite.identifier %>
@@ -81,7 +81,7 @@
                   <details class='dropdown dropdown-end'>
                     <summary class='btn btn-outline btn-sm ml-4'>
                       <div class='flex items-center' data-menu-button>
-                        <%= inline_svg_tag('icons/gear', class: 'w-4 h-4 fill-current') %>
+                        <%= inline_svg_tag('icons/gear.svg', class: 'w-4 h-4 fill-current') %>
                       </div>
                     </summary>
                     <details-menu
