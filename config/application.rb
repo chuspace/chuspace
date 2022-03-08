@@ -47,5 +47,8 @@ module Chuspace
 
     # Active Job
     config.active_job.queue_adapter = :good_job
+
+    # Ziet
+    Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
   end
 end

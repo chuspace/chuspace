@@ -150,7 +150,6 @@ group :development do
   gem 'pry-rails'
 
   gem 'database_consistency', require: false
-  gem 'tomo', require: false
 end
 
 group :test do
@@ -161,4 +160,3 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
-gem 'graphiql-rails', group: :development

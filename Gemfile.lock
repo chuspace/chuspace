@@ -126,10 +126,10 @@ GEM
       activerecord (>= 5.0.0, < 7.1)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.562.0)
+    aws-partitions (1.563.0)
     aws-record (2.7.0)
       aws-sdk-dynamodb (~> 1.18)
-    aws-sdk-core (3.127.0)
+    aws-sdk-core (3.128.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -177,7 +177,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    bootsnap (1.10.3)
+    bootsnap (1.11.1)
       msgpack (~> 1.2)
     brakeman (5.2.1)
     builder (3.2.4)
@@ -196,7 +196,7 @@ GEM
       xpath (~> 3.2)
     childprocess (4.1.0)
     coderay (1.1.3)
-    commonmarker (0.23.2)
+    commonmarker (0.23.4)
     concurrent-ruby (1.1.9)
     coveralls (0.7.1)
       multi_json (~> 1.3)
@@ -242,8 +242,8 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faker (2.19.0)
-      i18n (>= 1.6, < 2)
+    faker (2.20.0)
+      i18n (>= 1.8.11, < 2)
     faraday (1.10.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -290,9 +290,6 @@ GEM
       thor (>= 0.14.1)
       webrick (>= 1.3)
       zeitwerk (>= 2.0)
-    graphiql-rails (1.8.0)
-      railties
-      sprockets-rails
     hashie (5.0.0)
     hiredis (0.6.3)
     html_tokenizer (0.0.7)
@@ -315,7 +312,7 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     io-wait (0.2.1)
-    jmespath (1.6.0)
+    jmespath (1.6.1)
     jwt (2.3.0)
     kredis (1.1.0)
       activesupport (>= 6.0.0)
@@ -463,7 +460,7 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.16.0)
       parser (>= 3.1.1.0)
-    rubocop-performance (1.13.2)
+    rubocop-performance (1.13.3)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     rubocop-rails (2.13.2)
@@ -483,13 +480,13 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    sentry-rails (5.1.1)
+    sentry-rails (5.2.0)
       railties (>= 5.0)
-      sentry-ruby-core (~> 5.1.1)
-    sentry-ruby (5.1.1)
+      sentry-ruby-core (~> 5.2.0)
+    sentry-ruby (5.2.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      sentry-ruby-core (= 5.1.1)
-    sentry-ruby-core (5.1.1)
+      sentry-ruby-core (= 5.2.0)
+    sentry-ruby-core (5.2.0)
       concurrent-ruby
     simple_form (5.1.0)
       actionpack (>= 5.2)
@@ -521,7 +518,6 @@ GEM
     timeout (0.2.0)
     tins (1.31.0)
       sync
-    tomo (1.11.0)
     turbo-rails (1.0.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -598,7 +594,6 @@ DEPENDENCIES
   friendly_id
   front_matter_parser
   good_job
-  graphiql-rails
   hiredis
   htmlbeautifier
   http
@@ -638,7 +633,6 @@ DEPENDENCIES
   sitemap_generator
   sprockets-rails
   strong_migrations
-  tomo
   turbo-rails
   typhoeus
   web-console (>= 3.3.0)
