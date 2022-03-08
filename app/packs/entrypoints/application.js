@@ -13,7 +13,7 @@ import 'lazysizes/plugins/parent-fit/ls.parent-fit'
 import '@hotwired/turbo-rails'
 import 'dialog-polyfill/dialog-polyfill.css'
 import '@github/time-elements'
-
+import '@github/g-emoji-element'
 import 'editor'
 
 import autosize from '@github/textarea-autosize'

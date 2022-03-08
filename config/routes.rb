@@ -136,6 +136,7 @@ Rails.application.routes.draw do
 
     resources :posts, path: '', except: :index, param: :permalink do
       resources :settings, only: %i[index show]
+      resources :reactions, only: %i[index create destroy], module: :posts
     end
   end
 end

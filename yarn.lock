@@ -1003,6 +1003,11 @@
   resolved "https://registry.yarnpkg.com/@github/file-attachment-element/-/file-attachment-element-3.1.0.tgz#83de453540248bc28183b51f1d2060bf03b37021"
   integrity sha512-DXQwUlhRHg5W880319cCgRpDpoGDVtnSX8FpqJAdnje6Y3BUf2mwdqIlRfFWZuOtRMfazDttwgSl9MDKz1wzpQ==
 
+"@github/g-emoji-element@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@github/g-emoji-element/-/g-emoji-element-1.1.5.tgz#4fd6b20caf49b88705cf3365d1d1f00a69dfa29a"
+  integrity sha512-qnp14gzcC4AeQ+AK+Hvi3ZjO1MbfiOl9BzUmL+6+yfPpkT3rYpoQYjKuOftPObjVF5XJ3iotENjuvINANfH3Xw==
+
 "@github/include-fragment-element@^6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@github/include-fragment-element/-/include-fragment-element-6.0.0.tgz#d374e7c89916276df358b634e2e88fb6f7ca25ef"

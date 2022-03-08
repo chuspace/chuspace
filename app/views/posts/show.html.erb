@@ -28,8 +28,25 @@
       <%= inline_svg_tag 'icons/bookmark.svg', class: 'w-6 h-6 fill-current' %>
     <% end %>
 
-    <%= link_to '#', class: 'flex items-center block link link-primary mt-4' do  %>
-      <%= inline_svg_tag 'icons/smiley.svg', class: 'w-6 h-6 mx-auto fill-current mt-4' %>
-    <% end %>
+
+    <details class='dropdown dropdown-end'>
+      <summary>
+        <%= inline_svg_tag 'icons/smiley.svg', class: 'w-6 h-6 mx-auto fill-current mt-4' %>
+      </summary>
+      <details-menu
+        role="menu"
+        tabindex="0"
+        src='<%= publication_post_reactions_path(@publication, @post) %>'
+        class="p-2 shadow menu dropdown-content absolute z-10 bg-base-200 rounded-box w-52"
+        data-action='details-menu-selected:details-menu-form#submit'
+      >
+        <include-fragment>
+          <div class="text-center mt-4">
+            <span class='btn btn-lg btn-ghost btn-circle loading'></span>
+          </div>
+        </include-fragment>
+      </details-menu>
+    </details>
+
   </nav>
 </div>
