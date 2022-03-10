@@ -13,12 +13,12 @@ module SetPublicationRoot
 
   def set_draft_path
     @path = params[:path] || ''
-    @draft_path ||= @drafts_root_path.join(@path).to_s
+    @draft_path ||= @path == @publication.repo.readme_path ? @path : @drafts_root_path.join(@path).to_s
   end
 
   def find_publication_drafts_root_path
     if @publication.personal?
-      user_path(@publication.owner, tab: :drafts)
+      user_tab_path(@publication.owner, id: :drafts)
     else
       publication_drafts_root_path(@publication)
     end

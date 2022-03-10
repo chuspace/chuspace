@@ -1,13 +1,19 @@
 
 <%= render 'layout' do %>
   <div class="grid grid-cols-3 gap-4 my-8 w-full">
-    <%= link_to 'Pick your Git Provider', connect_other_publications_path, class: "tab tab-bordered" %>
-    <%= link_to 'Pick a repository', connect_other_publication_path(@git_provider), class: "tab tab-bordered" %>
-    <a class="tab tab-bordered tab-active">Publication settings</a>
+    <%= link_to connect_other_publications_path, class: "tab tab-bordered text-success" do %>
+      <%= inline_svg_tag 'icons/check.svg', class: 'w-4 h-4 fill-current' %>
+      <span class='ml-2'><%= t('connect.publications.shared.tabs.provider') %></span>
+    <% end %>
+    <%= link_to connect_other_publication_path(@git_provider), class: "tab tab-bordered text-success" do %>
+      <%= inline_svg_tag 'icons/check.svg', class: 'w-3 h-3 fill-current' %>
+      <span class='ml-2'><%= t('connect.publications.shared.tabs.repository') %></span>
+    <% end %>
+    <a class="tab tab-bordered tab-active"><%= t('connect.publications.shared.tabs.publication') %></a>
   </div>
 
-  <h4>Publication settings</h4>
-  <div class='mt-2 text-secondary'>
+  <h4><%= t('connect.publications.shared.tabs.publication') %></h4>
+  <div class='text-secondary text-sm'>
     <p>
       Choose folders from your Git repository to read and write contents.
     </p>
@@ -16,10 +22,12 @@
   <div class='mt-8'>
     <%= turbo_frame_tag(@publication) do %>
       <%= simple_form_for(@publication, url: create_connect_other_publication_path(@git_provider, repo_fullname: @publication.repo.fullname), html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
-        <%= form.input :name %>
-        <%= form.input :description %>
+        <h5 class='mt-8 mb-4'>Basics</h5>
 
-        <h5 class='mt-8 mb-4'>Content Settings</h5>
+        <%= form.input :name, input_html: { value: @publication.repo.fullname.tr('/', '-').to_slug.normalize.to_s } %>
+        <%= form.input :description, input_html: { value: @publication.repository.description } %>
+
+        <h5 class='mt-8 mb-4'>Content</h5>
         <%= form.simple_fields_for :repo do |repo_form| %>
           <%= repo_form.input :posts_folder, as: :select, collection: @publication.repository.repository_folders, include_blank: 'Choose' %>
           <%= repo_form.input :drafts_folder, as: :select, collection: @publication.repository.repository_folders, include_blank: 'Choose' %>

@@ -1,0 +1,9 @@
+<aside>
+  <ul class='card bordered side-menu'>
+    <% UserSettings::PAGES.each do |page| %>
+      <li class="border-b last:border-b-0 border-base-200">
+        <%= tab_link_to t("users.settings.actions.#{page}"), user_setting_path(user, id: page), class: 'px-4 py-3 block', dir: :vertical, active_condition: :inclusive %>
+      </li>
+    <% end %>
+  </ul>
+</aside>

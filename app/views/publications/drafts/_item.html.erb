@@ -1,5 +1,5 @@
 <% cache draft do %>
-  <article class='border-b last:border-b-0 border-base-200 p-4 px-8'>
+  <article class='border-base-200 border-b p-4 px-8'>
     <div class='flex-1'>
       <% path = draft.type == 'file' ? publication_edit_draft_path(publication, draft) : publication_drafts_path(publication, draft) %>
       <%= link_to path, data: { 'turbo-frame': :_top } do %>

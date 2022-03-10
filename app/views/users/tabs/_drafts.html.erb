@@ -1,0 +1,17 @@
+<%= render(Card::Component.new) do |card| %>
+  <% card.title do %>
+    <%= render 'shared/breadcrumbs' %>
+  <% end %>
+
+  <% card.actions do %>
+    <%= link_to 'New', publication_new_draft_path(@user.personal_publication), class: 'btn btn-primary btn-sm' %>
+  <% end %>
+
+  <% card.body do %>
+    <% if @user.personal_publication.present? %>
+      <%= render partial: 'publications/drafts/item', collection: @user.personal_publication.drafts, locals: { publication: @user.personal_publication }, as: :draft, cached: true %>
+    <% else %>
+      <%= render 'users/no_content', type: :drafts %>
+    <% end %>
+  <% end %>
+<% end %>

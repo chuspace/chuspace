@@ -3,7 +3,7 @@
       <%= simple_form_for('', url: publication.personal? ? repos_connect_personal_publication_path(git_provider) : repos_connect_other_publication_path(git_provider), html: { class: 'relative' }, method: :get, data: { target: 'details-menu-form.form', 'turbo-frame': dom_id(git_provider, :repositories) }) do |form| %>
         <div class='flex items-center justify-between'>
           <details class='dropdown'>
-            <summary class='btn btn-success btn-sm min-w-fit'>
+            <summary class='btn btn-primary btn-sm min-w-fit'>
               <div class='flex items-center' data-menu-button>
                 <%= image_tag git_provider_user.avatar_url, class: 'w-4 h-4 mask mask-circle mr-2' %>
                 <%= content_tag :span, git_provider_user.login %>
@@ -29,7 +29,7 @@
           <div class="form-control w-1/3">
             <div class="relative">
               <%= form.input :query, label: false, wrapper: false, placeholder: 'Search repos', input_html: { class: 'w-full input-sm pr-16' } %>
-              <%= form.submit 'Go', class: 'absolute top-0 right-0 rounded-l-none btn btn-sm btn-success btn-outline' %>
+              <%= form.submit 'Go', class: 'absolute top-0 right-0 h-full rounded-l-none btn btn-sm btn-primary btn-outline' %>
             </div>
           </div>
         </div>

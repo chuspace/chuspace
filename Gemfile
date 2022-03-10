@@ -115,6 +115,9 @@ gem 'maxminddb'
 # Votable
 gem 'acts_as_votable'
 
+# View component
+gem 'view_component'
+
 group :production do
   # Resource monitoring
   gem 'easymon'

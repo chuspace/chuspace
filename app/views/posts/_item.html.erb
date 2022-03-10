@@ -1,5 +1,5 @@
 <% cache post do %>
-  <article class='border-b last:border-b-0 py-4 first:pt-0 last:pb-0 border-base-200'>
+  <article class='border-base-200 border-b p-4 px-8'>
     <%= turbo_frame_tag(post, class: 'flex') do %>
       <div class='flex-1'>
         <%= link_to publication_post_path(post.publication, post), data: { 'turbo-frame': :_top } do %>

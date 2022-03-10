@@ -1,0 +1,17 @@
+<%= image_tag user.avatar_url(variant: :profile), class: 'mask mask-square rounded-md' %>
+<h4 class='mt-4'><%= user.name %></h4>
+<h5 class='text-secondary font-normal'><%= user.username %></h5>
+
+<ul class='mt-8'>
+  <li class='mt-4 first:mt-0'>
+    <%= tab_link_to('Overview', user_path(user), class: 'link link-hover') %>
+  </li>
+  <% UserTab::PAGES.each do |page| %>
+    <li class='mt-4 first:mt-0'>
+      <%= tab_link_to(page.humanize, user_tab_path(user, id: page), class: 'link link-hover') %>
+    </li>
+  <% end %>
+  <li class='mt-4 first:mt-0'>
+    <%= tab_link_to('Settings', user_setting_path(user, id: UserSetting::DEFAULT_PAGE), class: 'link link-hover') %>
+  </li>
+</ul>

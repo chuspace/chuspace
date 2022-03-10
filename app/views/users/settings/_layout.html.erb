@@ -1,0 +1,10 @@
+<div class='flex items-center w-full'>
+  <%= image_tag(@user.avatar_url(:icon), class: 'mask mask-circle') %>
+
+  <div class='ml-4 w-2/3'>
+    <h2><%= @user.name %></h2>
+    <p class='sm:w-2/3 w-full text-secondary'><%= @user.username %></p>
+  </div>
+</div>
+
+<%= yield %>

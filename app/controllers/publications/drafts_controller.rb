@@ -13,6 +13,7 @@ module Publications
     def index
       authorize! @draft
       @invite = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
+      add_breadcrumb(:drafts)
 
       if turbo_frame_request?
         @drafts = @publication.drafts(path: @draft_path)

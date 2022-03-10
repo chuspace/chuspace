@@ -15,21 +15,22 @@
     </aside>
 
     <main class='col-span-9'>
-      <div class='flex items-center w-full'>
-        <%= simple_form_for :search, html: { class: 'flex-1' } do |form| %>
-          <%= form.input :query, required: false, label: inline_svg_tag('icons/search.svg', class: 'w-4 h-4 fill-current').html_safe, wrapper: :input_group, input_html: { class: 'w-1/2 input-sm', placeholder: 'Search a draft' } %>
+      <%= render(Card::Component.new) do |card| %>
+        <% card.title do %>
+          <%= render 'shared/breadcrumbs' %>
         <% end %>
 
-        <aside>
-          <%= link_to 'New draft', publication_new_draft_path(@publication), class: 'btn btn-primary btn-outline btn-sm' %>
-        </aside>
-      </div>
-      <div class='card bordered mt-4'>
-        <% path = @path.blank? ? publication_drafts_root_path(@publication) : publication_drafts_path(@publication, path: @path) %>
-        <%= turbo_frame_tag dom_id(@publication, :drafts), src: path, lazy: true do %>
-          <%= render 'shared/card_loader', count: 10 %>
+        <% card.actions do %>
+          <%= link_to 'New', publication_new_draft_path(@publication), class: 'btn btn-primary btn-sm' %>
         <% end %>
-      </div>
+
+        <% card.body do %>
+          <% path = @path.blank? ? publication_drafts_root_path(@publication) : publication_drafts_path(@publication, path: @path) %>
+          <%= turbo_frame_tag dom_id(@publication, :drafts), src: path, lazy: true do %>
+            <%= render 'shared/card_loader', count: 10 %>
+          <% end %>
+        <% end %>
+      <% end %>
     </main>
   </div>
 <% end %>

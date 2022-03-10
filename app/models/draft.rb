@@ -83,10 +83,18 @@ class Draft < Git::Blob
     front_matter.dig(publication.front_matter.topics)
   end
 
+  def readme?
+    publication.repo.readme_path == path
+  end
+
   def relative_path
-    base_path = Pathname.new(publication.repo.posts_folder)
-    file_path = Pathname.new(path)
-    file_path.relative_path_from(base_path).to_s
+    if readme?
+      path
+    else
+      base_path = Pathname.new(publication.repo.posts_folder)
+      file_path = Pathname.new(path)
+      file_path.relative_path_from(base_path).to_s
+    end
   end
 
   def stale?

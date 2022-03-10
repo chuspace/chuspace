@@ -2,14 +2,10 @@
 
 module Publications
   class SettingsController < BaseController
-    skip_before_action :authenticate!, only: :show
-
-    PARTIALS = %w[profile content front_matter permissions].freeze
-
     def index
       authorize! @publication, to: :edit?
 
-      redirect_to publication_setting_path(@publication, id: PublicationSettings::DEFAULT_PAGE)
+      redirect_to publication_setting_path(@publication, id: PublicationSetting::DEFAULT_PAGE)
     end
 
     def show
@@ -19,7 +15,7 @@ module Publications
       add_breadcrumb('Settings', publication_settings_path(@publication))
       add_breadcrumb(@partial.humanize)
 
-      fail ActiveRecord::RecordNotFoundError if PublicationSettings::PAGES.exclude?(@partial)
+      fail ActiveRecord::RecordNotFoundError if PublicationSetting::PAGES.exclude?(@partial)
     end
 
     def update

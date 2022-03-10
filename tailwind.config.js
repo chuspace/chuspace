@@ -48,8 +48,8 @@ module.exports = {
     themes: [
       {
         dark: {
-          primary: '#3B82F6' /* Primary color */,
-          'primary-focus': '#2563EB' /* Primary color - focused */,
+          primary: '#2563EB' /* Primary color */,
+          'primary-focus': '#3B82F6' /* Primary color - focused */,
           'primary-content':
             '#ffffff' /* Foreground content color to use on primary color */,
 

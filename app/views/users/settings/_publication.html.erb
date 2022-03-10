@@ -1,0 +1,4 @@
+<% if user.personal_publication %>
+  <h3 class='border-b border-base-200 pb-2 mt-8'>Personal publication</h3>
+  <%= render 'publications/form', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :profile) %>
+<% end %>

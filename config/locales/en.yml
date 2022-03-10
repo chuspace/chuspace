@@ -17,7 +17,32 @@ en:
             username:
               blank: A valid username is required
               invalid: Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.
+  users:
+    settings:
+      actions:
+        profile: Profile
+        publication: Publication
+        front_matter: FrontMatter
+        permissions: Permissions
+      show:
+        publication:
+          title: Publication settings
+        front_matter:
+          title: Frontmatter settings
+        permissions:
+          title: Visibility settings
+        profile:
+          title: Profile settings
+
   connect:
+    publications:
+      shared:
+        provider_not_found: '%{name} Git provider not supported'
+        repo_not_found: '%{name} Repository not found'
+        tabs:
+          provider: Pick your Git Provider
+          repository: Pick your git repository
+          publication: Publication settings
     home:
       index:
         actions:

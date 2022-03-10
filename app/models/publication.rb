@@ -31,7 +31,7 @@ class Publication < ApplicationRecord
 
   attr_json :repo, RepositorySetting.to_type, default: PublicationConfig.new.repo
   attr_json :front_matter, FrontMatterSetting.to_type, default: PublicationConfig.new.front_matter
-  attr_json :content, PublicationSetting.to_type, default: PublicationConfig.new.settings
+  attr_json :content, PublicationContentSetting.to_type, default: PublicationConfig.new.settings
 
   scope :personal, -> { where(personal: true) }
   scope :except_personal, -> { where(personal: false) }

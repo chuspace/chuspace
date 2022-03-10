@@ -7,10 +7,10 @@
       </li>
       <div class='divider my-0 h-0'></div>
       <li>
-        <%= link_to 'Your profile', user_path(Current.user), class: link_class(user_path(Current.user)), role: 'menuitem', tabindex: '-1' %>
+        <%= tab_link_to 'Your profile', user_path(Current.user), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
       </li>
       <li>
-        <%= link_to 'Your Publications', user_path(Current.user, tab: :publications), class: link_class(user_path(Current.user)), role: 'menuitem', tabindex: '-1' %>
+        <%= tab_link_to 'Your Publications', user_tab_path(Current.user, id: :publications), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
       </li>
       <div class='divider my-0 h-0'></div>
       <li>

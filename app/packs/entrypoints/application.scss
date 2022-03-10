@@ -177,10 +177,21 @@ file-attachment {
 @layer utilities {
   .input,
   .select {
-    @apply h-10;
+    @apply h-10 min-h-full;
 
     &:focus {
       @apply ring-1 ring-primary outline-none;
     }
+  }
+}
+
+.card {
+  position: unset;
+  overflow: unset;
+}
+
+.link {
+  &.active {
+    @apply font-bold underline;
   }
 }

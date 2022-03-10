@@ -4,6 +4,8 @@ class SessionsController < ApplicationController
   skip_verify_authorized
   include SessionRedirect
 
+  layout 'marketing'
+
   def index
   end
 

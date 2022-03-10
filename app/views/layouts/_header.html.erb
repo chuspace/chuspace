@@ -1,8 +1,8 @@
 <flexible-header data-on='<%= signed_in? %>'>
-  <header data-target='flexible-header.element' class='header'>
+  <header data-target='flexible-header.element' class='header<%= signed_in? ? ' bg-base-200' : '' %>'>
     <nav class='container flex justify-between items-center'>
       <%= link_to root_path, class: 'pt-1 pb-2' do %>
-        <span class='font-bold text-3xl lowercase inline-block font-monospace'>Chuspace</span>
+        <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= logo %></span>
         <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
       <% end %>
 

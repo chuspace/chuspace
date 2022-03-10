@@ -2,7 +2,10 @@
 
 module Connect
   class BaseController < ApplicationController
-    before_action :authenticate!, :find_git_provider, :build_publication
+    before_action :authenticate!
+    before_action :find_git_provider
+    before_action :build_publication
+
     skip_verify_authorized
 
     def index
@@ -72,10 +75,14 @@ module Connect
     def build_publication
       @publication = Current.user.owning_publications.build(git_provider: @git_provider)
       @publication.build_repo(fullname: params[:repo_fullname])
+
+      fail ActiveRecord::RecordNotFound if @git_provider && params[:repo_fullname] && @publication.repository.blank?
     end
 
     def find_git_provider
       @git_provider = Current.user.git_providers.find_by(name: params[:git_provider])
+    rescue ActiveRecord::StatementInvalid
+      fail ActiveRecord::RecordNotFound
     end
   end
 end

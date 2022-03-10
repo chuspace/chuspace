@@ -1,13 +1,19 @@
 
 <%= render 'layout' do %>
   <div class="grid grid-cols-3 gap-4 my-8 w-full">
-    <%= link_to 'Pick your Git Provider', connect_personal_publications_path, class: "tab tab-bordered" %>
-    <%= link_to 'Pick a repository', connect_personal_publication_path(@git_provider), class: "tab tab-bordered" %>
-    <a class="tab tab-bordered tab-active">Content settings</a>
+    <%= link_to connect_personal_publications_path, class: "tab tab-bordered text-success" do %>
+      <%= inline_svg_tag 'icons/check.svg', class: 'w-4 h-4 fill-current' %>
+      <span class='ml-2'><%= t('connect.publications.shared.tabs.provider')%></span>
+    <% end %>
+    <%= link_to connect_personal_publication_path(@git_provider), class: "tab tab-bordered text-success" do %>
+      <%= inline_svg_tag 'icons/check.svg', class: 'w-4 h-4 fill-current' %>
+      <span class='ml-2'><%= t('connect.publications.shared.tabs.repository')%></span>
+    <% end %>
+    <a class="tab tab-bordered tab-active"><%= t('connect.publications.shared.tabs.publication')%></a>
   </div>
 
-  <h4>Content setting</h4>
-  <div class='mt-2 text-secondary'>
+  <h4><%= t('connect.publications.shared.tabs.publication') %></h4>
+  <div class='text-secondary text-sm'>
     <p>
       Choose folders from your Git repository to read and write contents.
     </p>

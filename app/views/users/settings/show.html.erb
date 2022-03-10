@@ -1,0 +1,27 @@
+<div class='flex items-center w-full'>
+  <div class='w-full flex items-center justify-between'>
+    <div class='flex items-center'>
+      <%= image_tag(@user.avatar_url(variant: :icon), class: 'mask mask-circle') %>
+
+      <div class='ml-2'>
+        <h3><%= @user.name %></h3>
+        <p class='text-secondary'><%= @user.username %></p>
+      </div>
+    </div>
+
+    <%= link_to 'Back to profile', user_path(@user), class: 'btn btn-sm btn-primary' %>
+  </div>
+</div>
+
+<div class='grid grid-cols-4 gap-8 mt-8'>
+  <%= render 'sidebar', user: @user %>
+
+  <section class='col-span-3'>
+    <div class='card bordered bg-base-200'>
+      <div class='card-body'>
+        <h3><%= t(".#{@partial}.title") %></h3>
+        <%= render "#{@partial}", user: @user, url: user_setting_path(@user, id: @partial.parameterize) %>
+      </h3>
+    </div>
+  </section>
+</div>

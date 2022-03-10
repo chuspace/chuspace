@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  def logo
+    signed_in? ? 'Chu' : 'Chuspace'
+  end
+
   def link_class(path)
-    current_page?(path) ? 'font-bold' : ''
+    current_page?(path) ? 'font-bold underline' : ''
   end
 
   def login_button_colors_classes

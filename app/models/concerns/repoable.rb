@@ -48,7 +48,7 @@ module Repoable
   end
 
   def repository
-    @repository ||= git_provider_adapter.repository.with_publication(self)
+    @repository ||= git_provider_adapter.repository&.with_publication(self)
   end
 
   def git_provider_adapter(ref: 'HEAD')

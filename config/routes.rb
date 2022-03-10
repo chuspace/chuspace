@@ -72,9 +72,11 @@ Rails.application.routes.draw do
 
   resources :users, path: '', except: :index, param: :username, constraints: UserConstraint.new do
     resources :settings, only: %i[index show update], module: :users
+    resources :tabs, only: :show, path: '', module: :users, constraints: UserTabConstraint.new
   end
 
   resources :publications, only: :index
+
   resources :publications, path: '', only: :show, param: :permalink, constraints: PublicationConstraint.new do
     resources :settings, only: %i[index show update], module: :publications
 

@@ -1,12 +1,12 @@
 <%= render 'layout' do %>
   <div class="grid grid-cols-3 gap-4 my-8 w-full">
-    <%= link_to 'Connect to Git provider', connect_other_publications_path, class: "tab tab-bordered tab-active" %>
-    <a class="tab tab-bordered">Choose a Git repository</a>
-    <a class="tab tab-bordered ">Content settings</a>
+    <%= link_to t('connect.publications.shared.tabs.provider'), connect_other_publications_path, class: "tab tab-bordered tab-active" %>
+    <a class="tab tab-bordered"><%= t('connect.publications.shared.tabs.repository') %></a>
+    <a class="tab tab-bordered "><%= t('connect.publications.shared.tabs.publication') %></a>
   </div>
 
-  <h4>Connect to Git provider</h4>
-  <div class='mt-2 text-secondary'>
+  <h4><%= t('connect.publications.shared.tabs.provider') %></h4>
+  <div class='text-secondary text-sm'>
     <p>
       Choose the Git provider where your other publication soure code is hosted.
     </p>

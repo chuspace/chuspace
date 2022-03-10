@@ -9,6 +9,7 @@ module Publications
     def index
       @memberships = @publication.memberships.order(:created_at)
       @invite = @publication.invites.build
+      add_breadcrumb(:people)
 
       authorize! @publication.memberships.build
     end

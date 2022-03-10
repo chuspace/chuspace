@@ -4,6 +4,8 @@ class SignupsController < ApplicationController
   skip_verify_authorized
   include SessionRedirect
 
+  layout 'marketing'
+
   def email
     @user = User.new(email: params[:email])
   end
