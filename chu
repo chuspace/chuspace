@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+COLOR_RESET="\033[0m"
+COLOR_BLUE="\033[34m"
+COLOR_RED="\033[33m"
+COLOR_CYAN="\033[36m"
+COLOR_GREY="\033[90m"
+
+CMD_DIR=./bin/chuspace/cmds
+
+right_pad() {
+  echo -ne "$2" | awk "{printf \"%-$1s\n\", \$1}"
+}
+
+show_help() {
+  echo -e "  ${COLOR_BLUE}Chuspace CLI${COLOR_RESET}\n"
+  echo -e "  chuspace [environment] <cmd>\n"
+
+  [[ -n $1 ]] && echo -e "  ${COLOR_RED}Command does not exist: $1${COLOR_RESET}\n"
+
+  echo -e "  ${COLOR_CYAN}Commands:${COLOR_RESET}"
+
+  for cmd in ${CMD_DIR}/*; do
+    local help_text=$(sed -n '3{p;q;}' ${cmd} | awk '{print substr($0, 3)}')
+    echo -ne "    $(right_pad 8 $(basename $cmd))"
+    echo -e  "    ${COLOR_GREY}${help_text}${COLOR_RESET}"
+  done
+}
+
+if echo "staging production development" | grep -Fqw "$1"; then
+  export ENVIRONMENT=$1
+  shift
+else
+  export ENVIRONMENT=development
+fi
+
+
+if [[ -z $1 ]]; then
+  show_help
+elif [[ -f ${CMD_DIR}/$1 ]]; then
+  ${CMD_DIR}/$1 ${@:2}
+else
+  show_help "$1"
+fi

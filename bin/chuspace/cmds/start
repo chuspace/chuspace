@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Run the local development environment
+
+case $ENVIRONMENT in
+  development)
+    if hash overmind 2>/dev/null; then
+      if [ ! -f ./.overmind.sock ]; then
+        rm -rf ./.overmind.sock
+      fi
+      OVERMIND_ENV=.env.local overmind s -f Procfile.dev "$@"
+    else
+      heroku local -f Procfile.dev "$@"
+    fi
+    ;;
+  *)
+    echo 'Only available in development'
+    ;;
+esac
