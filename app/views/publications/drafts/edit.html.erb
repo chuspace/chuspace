@@ -3,7 +3,8 @@
       username='<%= Current.user.username %>'
       imageProviderPath='<%= publication_assets_path(@publication) %>'
       autoSavePath='<%= publication_autosave_draft_path(@publication, @draft) %>'
-      collab
+      <%= @draft.collab? ? 'collab' : '' %>
+      <%= @draft.front_matter? ? '' : 'excludeFrontmatter' %>
     >
     <%= turbo_frame_tag(@draft) do %>
       <%= simple_form_for @draft, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>

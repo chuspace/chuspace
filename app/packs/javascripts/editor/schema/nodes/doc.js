@@ -14,6 +14,10 @@ export default class Doc extends Node {
   get content() {
     let content = 'front_matter block+'
 
+    if (this.editor.excludeFrontmatter) {
+      content = 'block+'
+    }
+
     switch (this.editor.mode) {
       case 'node':
         let node = this.editor.nodeName || 'paragraph'

@@ -11,6 +11,7 @@ import { post } from '@rails/request.js'
 export default class ChuEditor extends HTMLElement {
   @attr editable: string = 'true'
   @attr collab: string = 'false'
+  @attr excludeFrontmatter: boolean = false
   @attr mode: string = 'default'
   @attr autofocus: string = 'true'
   @attr imageProviderPath: string = ''

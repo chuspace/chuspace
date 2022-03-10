@@ -66,6 +66,7 @@ export default class ChuEditor extends LitElement {
     autoSavePath: { type: String },
     autoFocus: { type: Boolean },
     collab: { type: Boolean },
+    excludeFrontmatter: { type: Boolean },
     imageProviderPath: { type: String },
     username: { type: String },
     editable: { type: Boolean },
@@ -96,6 +97,7 @@ export default class ChuEditor extends LitElement {
 
     this.autoFocus = false
     this.collab = false
+    this.excludeFrontmatter = false
     this.mode = 'default'
     this.editable = true
     this.contribution = false

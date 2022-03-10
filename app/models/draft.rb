@@ -21,6 +21,10 @@ class Draft < Git::Blob
     MarkdownRenderer.new.render(doc).html_safe
   end
 
+  def collab?
+    !readme?
+  end
+
   def preview_html
     content_html(content: local_content.value || body)
   end
@@ -37,6 +41,10 @@ class Draft < Git::Blob
     parsed&.front_matter.presence || {}
   end
 
+  def front_matter?
+    !readme?
+  end
+
   def front_matter_str
     str = front_matter.to_yaml
     str += "---\n"
@@ -51,7 +59,7 @@ class Draft < Git::Blob
   end
 
   def publishable?
-    post&.blob_sha != sha
+    post&.blob_sha != sha && !readme?
   end
 
   def persisted?

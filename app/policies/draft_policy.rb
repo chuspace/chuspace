@@ -4,11 +4,11 @@ class DraftPolicy < ApplicationPolicy
   alias_rule :index?, :update?, :create?, :show?, :new?, :destroy?, to: :edit?
 
   def autosave?
-    edit? && (record.editor_lock.blank? || record.editor_lock.owner == user)
+    edit?
   end
 
   def commit?
-    edit? && (record.stale? && record.editor_lock.owner == user)
+    edit? && record.stale?
   end
 
   def edit?
@@ -16,7 +16,7 @@ class DraftPolicy < ApplicationPolicy
   end
 
   def publish?
-    owner? || record.publishers.where(user: user).exists?
+    (owner? || record.publishers.where(user: user).exists?) && record.publishable?
   end
 
   private
