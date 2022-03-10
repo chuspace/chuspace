@@ -12,12 +12,12 @@
           <% end %>
 
           <% card.actions do %>
-            <%= link_to 'Update', publication_edit_draft_path(@user.personal_publication, path: @user.personal_publication.repo.readme_path), class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Update', publication_edit_draft_path(@user.personal_publication, path: @user.personal_publication.readme), class: 'btn btn-primary btn-sm' %>
           <% end %>
 
           <% card.body do %>
             <% if @user.personal_publication.present? %>
-              <%= content_tag :article, @user.personal_publication.readme, class: 'chu-editor chu-editor-sm px-8' %>
+              <%= content_tag :article, @user.personal_publication.readme.content_html, class: 'chu-editor chu-editor-sm px-8' %>
             <% else %>
               <div class='text-center py-8'>
                 <p class='text-secondary w-3/4 mt-4 mx-auto'>

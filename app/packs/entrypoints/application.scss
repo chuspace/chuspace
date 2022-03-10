@@ -101,6 +101,17 @@
   input:-webkit-autofill:focus {
     transition: background-color 600000s 0s, color 600000s 0s;
   }
+
+  .card {
+    position: unset;
+    overflow: unset;
+  }
+
+  .link {
+    &.active {
+      @apply font-bold underline;
+    }
+  }
 }
 
 .ProseMirror {
@@ -182,16 +193,5 @@ file-attachment {
     &:focus {
       @apply ring-1 ring-primary outline-none;
     }
-  }
-}
-
-.card {
-  position: unset;
-  overflow: unset;
-}
-
-.link {
-  &.active {
-    @apply font-bold underline;
   }
 }

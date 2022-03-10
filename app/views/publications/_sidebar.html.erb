@@ -1,17 +1,20 @@
 <aside>
-  <div class='card bordered'>
-    <div class='card-body'>
-      <div class='card-title'>People</div>
-      <div class='flex items-center mt-4'>
+  <%= render(Card::Component.new) do |card| %>
+    <% card.title do %>
+      People
+    <% end %>
+
+    <% card.actions do %>
+      <%= link_to 'Invite', new_publication_invite_path(publication), class: 'btn btn-outline btn-primary btn-sm', 'data-turbo-frame': dom_id(@invite, :popup) %>
+      <%= turbo_frame_tag dom_id(@invite, :popup) %>
+    <% end %>
+
+    <% card.body do %>
+      <div class='flex items-center mt-4 px-8 pb-8'>
         <% publication.members.each do |member| %>
           <%= image_tag member.avatar_url, class: 'w-8 h-8 ml-2 first:ml-0 mask mask-circle'%>
         <% end %>
       </div>
-
-      <div class='card-actions'>
-        <%= link_to 'Invite someone', new_publication_invite_path(publication), class: 'btn btn-outline btn-primary btn-sm mt-4', 'data-turbo-frame': dom_id(@invite, :popup) %>
-        <%= turbo_frame_tag dom_id(@invite, :popup) %>
-      </div>
-    </div>
-  </div>
+    <% end %>
+  <% end %>
 </aside>

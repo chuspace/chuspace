@@ -1,24 +1,38 @@
 <%= render 'layout' do %>
   <div class='grid grid-cols-3 gap-4 mt-8'>
     <section class='col-span-2'>
-      <div class='card bordered'>
-        <div class='card-body'>
-          <div class='card-title'>About</div>
-          <%= content_tag :article, @publication.readme, class: 'chu-editor chu-editor-sm' %>
-        </div>
-      </div>
+      <%= render(Card::Component.new) do |card| %>
+        <% card.title do %>
+          About
+        <% end %>
+
+        <% card.actions do %>
+          <%= link_to 'Update', publication_edit_draft_path(@publication, @publication.readme), class: 'btn btn-primary btn-sm' %>
+        <% end %>
+
+        <% card.body do %>
+          <%= content_tag :article, @publication.readme.content_html, class: 'chu-editor chu-editor-sm px-8' %>
+        <% end %>
+      <% end %>
 
       <div class='mt-8'>
-        <div class='card bordered'>
-          <div class='card-body'>
-            <div class='card-title'>Posts</div>
+        <%= render(Card::Component.new) do |card| %>
+          <% card.title do %>
+            Posts
+          <% end %>
+
+          <% card.actions do %>
+            <%= link_to 'New', publication_new_draft_path(@publication), class: 'btn btn-primary btn-sm' %>
+          <% end %>
+
+          <% card.body do %>
             <% if @publication.posts.any? %>
               <%= render 'posts/list', posts: @publication.posts %>
             <% else %>
               <div class='text-center text-2xl py-16'>No published posts in this publication</div>
             <% end %>
-          </div>
-        </div>
+          <% end %>
+        <% end %>
       </div>
     </section>
 

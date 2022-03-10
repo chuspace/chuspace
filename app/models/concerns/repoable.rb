@@ -43,7 +43,7 @@ module Repoable
 
   def readme
     @readme ||= Rails.cache.fetch([self, repo.readme_path]) do
-      repository.draft(repo.readme_path).content_html
+      repository.draft(repo.readme_path)
     end
   end
 
