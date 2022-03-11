@@ -26,13 +26,18 @@ class Invite < ApplicationRecord
     recipient.blank? ? identifier : recipient.email
   end
 
+  def send_email(resend: false)
+    user.regenerate_code if resend
+    UserMailer.with(invitation: self).invite.deliver_later
+  end
+
+  def to_param
+    code
+  end
+
   private
 
   def check_if_recipient_can_be_invited
     errors.add(:identifier, 'Already a member') if publication.members.include?(recipient)
-  end
-
-  def send_email
-    UserMailer.with(invitation: self).invite.deliver_later
   end
 end

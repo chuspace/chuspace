@@ -77,9 +77,14 @@ en:
       create:
         notice: Invite sent successfully!
         error: Invite failed!
+      destroy:
+        notice: Invite deleted!
       accept:
         notice: Invite accepted successfully!
+        not_found: Invitation not found
     people:
+      destroy:
+        notice: Person removed!
       update:
         notice: Role updated successfully!
         error: Role update failed!

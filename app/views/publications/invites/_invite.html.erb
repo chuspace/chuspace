@@ -1,0 +1,62 @@
+<%= turbo_frame_tag(invite) do %>
+  <div class='flex items-center border-b last:border-b-0 p-4 border-base-200'>
+    <div class='flex-1'>
+      <% if invite.recipient %>
+        <div class='flex items-center'>
+          <%= link_to(user_path(invite.recipient), 'data-turbo-frame': :_top, class: 'link link-primary link-hover') do %>
+            <%= image_tag invite.recipient.avatar_url(variant: :thumb), class: 'w-12 h-12 mask mask-circle mr-2'  %>
+          <% end %>
+
+          <div>
+            <h5>
+              <%= link_to(invite.recipient.name, user_path(invite.recipient), 'data-turbo-frame': :_top, class: 'link link-primary link-hover') %>
+            </h5>
+            <div class='text-xs text-secondary mt-1 separated'>
+              <%= content_tag :span, invite.recipient.username %>
+              <%= tag.span invite.role %>
+              <%= content_tag :span, invite.status %>
+              <span>
+                sent
+                <relative-time datetime="<%= invite.created_at %>">
+                  <%= invite.created_at.strftime('%d %b %Y %H:%M') %>
+                </relative-time>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class='flex items-center'>
+          <%= inline_svg_tag 'icons/email.svg', class: 'w-12 h-8 fill-current' %>
+          <div class='ml-2'>
+            <%= content_tag :p, invite.identifier %>
+            <div class='text-xs text-secondary mt-1 separated'>
+              <%= tag.span invite.role.titlecase %>
+              <%= content_tag :span, invite.status %>
+              <span>
+                sent
+                <relative-time datetime="<%= invite.created_at %>">
+                  <%= invite.created_at.strftime('%d %b %Y %H:%M') %>
+                </relative-time>
+              </span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <details class='dropdown dropdown-end'>
+      <summary class='btn btn-outline btn-sm ml-4'>
+        <div class='flex items-center' data-menu-button>
+          <%= inline_svg_tag('icons/gear.svg', class: 'w-4 h-4 fill-current') %>
+        </div>
+      </summary>
+      <details-menu
+        role="menu"
+        tabindex="0"
+        class="p-2 shadow menu dropdown-content absolute z-10 bg-base-300 rounded-box w-52"
+      >
+        <li><%= button_to 'Resend invite', resend_publication_invite_path(invite.publication, invite), method: :patch %></li>
+        <li><%= button_to 'Delete', publication_invite_path(invite.publication, invite), method: :delete, class: 'text-error', 'data-turbo-frame': :_top %></li>
+      </details-menu>
+    </details>
+  </div>
+<% end %>

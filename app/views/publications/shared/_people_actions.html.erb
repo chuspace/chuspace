@@ -1,0 +1,10 @@
+<ul class='card bordered side-menu'>
+  <li class="border-b last:border-b-0 border-base-200">
+    <%= tab_link_to 'Everyone', publication_people_path(publication), class: 'px-4 py-3 block', dir: :vertical %>
+  </li>
+  <% if allowed_to?(:invite?, publication) %>
+    <li class="border-b last:border-b-0 border-base-200">
+      <%= tab_link_to 'Pending', publication_invites_path(publication), class: 'px-4 py-3 block', dir: :vertical %>
+    </li>
+  <% end %>
+</ul>
