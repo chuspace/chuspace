@@ -2,6 +2,7 @@
 
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey } from 'prosemirror-state'
+
 import { Element } from 'editor/base'
 import { markdownSerializer } from 'editor/markdowner'
 
