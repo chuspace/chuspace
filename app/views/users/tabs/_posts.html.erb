@@ -8,14 +8,14 @@
   <% end %>
 
   <% card.body do %>
-    <% if @user.personal_publication.present? %>
+    <% if @user.publications.present? %>
       <% if user.posts.any? %>
         <%= render 'posts/list', posts: user.posts %>
       <% else %>
         <%= render 'shared/placeholder', content: 'No published posts' %>
       <% end %>
     <% else %>
-      <%= render 'shared/connect_publications' %>
+      <%= render 'shared/connect_publication' %>
     <% end %>
   <% end %>
 <% end %>

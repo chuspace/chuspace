@@ -1,5 +1,5 @@
 <% cache publication do %>
-  <div class='border-base-200 border-b p-4 px-8'>
+  <div class='border-base-200 border-b last:border-b-0 p-4 px-8'>
     <%= turbo_frame_tag(publication, class: 'flex') do %>
       <div class='flex-1'>
         <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
