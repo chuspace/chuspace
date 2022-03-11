@@ -12,8 +12,7 @@ module Users
       @partial = params[:id]
       authorize! @user, to: :edit?
 
-      add_breadcrumb('Settings', user_settings_path(@user))
-      add_breadcrumb(@partial.humanize)
+      add_breadcrumb(t("users.settings.show.#{@partial}.title"))
 
       fail ActiveRecord::RecordNotFoundError if UserSetting::PAGES.exclude?(@partial)
     end

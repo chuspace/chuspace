@@ -1,13 +1,19 @@
 <%= render 'publications/layout' do %>
   <div class='grid grid-cols-4 gap-8 mt-8'>
     <%= render 'sidebar', publication: @publication %>
+
     <section class='col-span-3'>
-      <div class='card bordered bg-base-200'>
-        <div class='card-body'>
-          <h3><%= t(".#{@partial}.title") %></h3>
-          <%= render "#{@partial}", publication: @publication, url: publication_setting_path(@publication, id: @partial.parameterize) %>
-        </h3>
-      </div>
+      <%= render(Card::Component.new) do |card| %>
+        <% card.title do %>
+          <%= render('shared/breadcrumbs') %>
+        <% end %>
+
+        <% card.body do %>
+          <div class='px-8 pb-8'>
+            <%= render "#{@partial}", publication: @publication, url: publication_setting_path(@publication, id: @partial.parameterize) %>
+          </div>
+        <% end %>
+      <% end %>
     </section>
   </div>
 <% end %>

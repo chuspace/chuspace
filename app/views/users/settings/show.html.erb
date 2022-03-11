@@ -17,11 +17,16 @@
   <%= render 'sidebar', user: @user %>
 
   <section class='col-span-3'>
-    <div class='card bordered bg-base-200'>
-      <div class='card-body'>
-        <h3><%= t(".#{@partial}.title") %></h3>
-        <%= render "#{@partial}", user: @user, url: user_setting_path(@user, id: @partial.parameterize) %>
-      </h3>
-    </div>
+    <%= render(Card::Component.new) do |card| %>
+      <% card.title do %>
+        <%= render('shared/breadcrumbs') %>
+      <% end %>
+
+      <% card.body do %>
+        <div class='px-8 pb-8'>
+          <%= render "#{@partial}", user: @user, url: user_setting_path(@user, id: @partial.parameterize) %>
+        </div>
+      <% end %>
+    <% end %>
   </section>
 </div>

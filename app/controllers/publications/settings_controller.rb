@@ -12,8 +12,7 @@ module Publications
       @partial = params[:id]
       authorize! @publication, to: :edit?
 
-      add_breadcrumb('Settings', publication_settings_path(@publication))
-      add_breadcrumb(@partial.humanize)
+      add_breadcrumb(t("publications.settings.show.#{@partial}.title"))
 
       fail ActiveRecord::RecordNotFoundError if PublicationSetting::PAGES.exclude?(@partial)
     end

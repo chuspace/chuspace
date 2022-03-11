@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PublicationSettings
+class PublicationSetting
   include ActiveModel::API
 
   PAGES = %w[profile content front_matter permissions].freeze
