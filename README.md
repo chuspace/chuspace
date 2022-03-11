@@ -41,6 +41,7 @@ git clone git@github.com:chuspace/chuspace.git
 cd chuspace
 bundle
 yarn
+bundle exec rails db:drop db:create db:migrate db:seed
 ./chu start
 ```
 
