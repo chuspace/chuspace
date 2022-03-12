@@ -24,22 +24,26 @@ export default class History extends Element {
       keymap = Object.assign({}, keymap, { 'Mod-y': redo })
     }
 
-    return keymap
+    return this.editor.collab ? {} : keymap
   }
 
   get plugins() {
-    return [
-      history({
-        depth: this.options.depth,
-        newGroupDelay: this.options.newGroupDelay
-      })
-    ]
+    return this.editor.collab
+      ? []
+      : [
+          history({
+            depth: this.options.depth,
+            newGroupDelay: this.options.newGroupDelay
+          })
+        ]
   }
 
   commands() {
-    return {
-      undo: () => undo,
-      redo: () => redo
-    }
+    return this.editor.collab
+      ? {}
+      : {
+          undo: () => undo,
+          redo: () => redo
+        }
   }
 }

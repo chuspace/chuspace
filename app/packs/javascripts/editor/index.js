@@ -21,19 +21,30 @@ import {
   yUndoPlugin
 } from 'y-prosemirror'
 
+import { ActionCableProvider } from 'editor/actioncable-provider'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import { Schema } from 'prosemirror-model'
 import SchemaManager from 'editor/schema'
-import { WebsocketProvider } from './websocket-provider'
+import { createConsumer } from '@rails/actioncable'
 import debounce from 'lodash.debounce'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
 import { post } from '@rails/request.js'
+import { randomColor } from 'helpers/random-color'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
 const DEFAULT_EDITOR_NODES = ['doc', 'text', 'paragraph']
+
+const awarenessStatesToArray = (states: Map<number, Record<string, any>>) => {
+  return Array.from(states.entries()).map(([key, value]) => {
+    return {
+      clientId: key,
+      ...value.user
+    }
+  })
+}
 
 function arrowHandler(dir) {
   return (state, dispatch, view) => {
@@ -66,6 +77,7 @@ export default class ChuEditor extends LitElement {
     autoSavePath: { type: String },
     autoFocus: { type: Boolean },
     collab: { type: Boolean },
+    id: { type: String },
     excludeFrontmatter: { type: Boolean },
     imageProviderPath: { type: String },
     username: { type: String },
@@ -117,7 +129,6 @@ export default class ChuEditor extends LitElement {
     this.contentSerializer = markdownSerializer(this.schema)
 
     this.initialContent = this.querySelector('textarea.content').value
-    this.doc = this.contentParser.parse(this.initialContent)
 
     this.state = this.createState()
     this.view = this.createView()
@@ -136,25 +147,111 @@ export default class ChuEditor extends LitElement {
 
   get plugins() {
     let collaborationPlugins = []
+    let keymaps = {}
 
     if (this.collab) {
-      const ydoc = new prosemirrorToYDoc(this.doc)
+      const ydoc = new Y.Doc()
 
-      const provider = new WebsocketProvider('CollabChannel', ydoc, {
-        params: { username: this.username }
-      })
+      this.user = {
+        color: `#${randomColor(this.username)}`,
+        name: this.username,
+        username: this.username
+      }
+      this.users = []
+
+      this.provider = new ActionCableProvider(
+        createConsumer(),
+        {
+          channel: 'CollabChannel',
+          id: this.id
+        },
+        this,
+        ydoc
+      )
+
+      const render = (user) => {
+        const cursor = document.createElement('span')
+
+        cursor.classList.add('collaboration-cursor__caret')
+        cursor.setAttribute('style', `border-color: ${user.color}`)
+
+        const label = document.createElement('div')
+
+        label.classList.add('collaboration-cursor__label')
+        label.setAttribute('style', `background-color: ${user.color}`)
+        label.insertBefore(document.createTextNode(user.name), null)
+        cursor.insertBefore(label, null)
+
+        return cursor
+      }
 
       collaborationPlugins = [
         ySyncPlugin(ydoc.getXmlFragment('prosemirror')),
-        yCursorPlugin(provider.awareness),
-        yUndoPlugin()
+        yUndoPlugin(),
+        yCursorPlugin(
+          (() => {
+            this.provider.awareness.setLocalStateField('user', this.user)
+
+            this.users = awarenessStatesToArray(this.provider.awareness.states)
+
+            this.provider.awareness.on('update', () => {
+              this.users = awarenessStatesToArray(
+                this.provider.awareness.states
+              )
+            })
+
+            return this.provider.awareness
+          })(),
+          {
+            cursorBuilder: render
+          }
+        )
       ]
+
+      const commands = {
+        undo: () => ({ tr, state, dispatch }) => {
+          tr.setMeta('preventDispatch', true)
+
+          const undoManager: UndoManager = yUndoPluginKey.getState(state)
+            .undoManager
+
+          if (undoManager.undoStack.length === 0) {
+            return false
+          }
+
+          if (!dispatch) {
+            return true
+          }
+
+          return undo(state)
+        },
+        redo: () => ({ tr, state, dispatch }) => {
+          tr.setMeta('preventDispatch', true)
+
+          const undoManager: UndoManager = yUndoPluginKey.getState(state)
+            .undoManager
+
+          if (undoManager.redoStack.length === 0) {
+            return false
+          }
+
+          if (!dispatch) {
+            return true
+          }
+
+          return redo(state)
+        }
+      }
+
+      keymaps = {
+        'Mod-z': undo,
+        'Mod-y': redo,
+        'Mod-Shift-z': redo
+      }
     }
 
-    let fullModePlugins = []
-
     if (this.mode !== 'node') {
-      fullModePlugins = {
+      keymaps = {
         ArrowLeft: arrowHandler('left'),
         ArrowRight: arrowHandler('right'),
         ArrowUp: arrowHandler('up'),
@@ -174,11 +271,8 @@ export default class ChuEditor extends LitElement {
       ...this.manager.keymaps,
       keymap(baseKeymap),
       keymap({
-        ...fullModePlugins,
-        Backspace: undoInputRule,
-        'Mod-z': undo,
-        'Mod-y': redo,
-        'Mod-Shift-z': redo
+        ...keymaps,
+        Backspace: undoInputRule
       }),
 
       dropCursor(),
@@ -205,7 +299,7 @@ export default class ChuEditor extends LitElement {
   createState = () =>
     EditorState.create({
       schema: this.schema,
-      doc: this.doc,
+
       contributions: [],
       plugins: this.plugins
     })
