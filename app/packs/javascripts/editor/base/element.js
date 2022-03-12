@@ -20,6 +20,10 @@ export default class Element {
     return null
   }
 
+  get onCreate() {
+    return null
+  }
+
   constructor(options: {} = {}) {
     this.options = {
       ...this.defaultOptions,

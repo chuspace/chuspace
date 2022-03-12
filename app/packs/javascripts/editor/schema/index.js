@@ -53,6 +53,7 @@ export default class SchemaManager {
     this.elements.forEach((element) => {
       element.bindEditor(editor)
       element.init()
+      if (element.onCreate) editor.on('create', element.onCreate)
     })
 
     let nodeElements = filterElementsBy(this.elements, 'node')

@@ -2,8 +2,6 @@
 
 import './styles.sass'
 
-import * as Y from 'yjs'
-
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { LitElement, html } from 'lit'
@@ -12,25 +10,18 @@ import { baseKeymap, selectParentNode } from 'prosemirror-commands'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
 import { markdownParser, markdownSerializer } from 'editor/markdowner'
-import {
-  prosemirrorToYDoc,
-  redo,
-  undo,
-  yCursorPlugin,
-  ySyncPlugin,
-  yUndoPlugin
-} from 'y-prosemirror'
 
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import { Schema } from 'prosemirror-model'
 import SchemaManager from 'editor/schema'
-import { WebsocketProvider } from './websocket-provider'
 import debounce from 'lodash.debounce'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
+import mitt from 'mitt'
 import { post } from '@rails/request.js'
+import { randomColor } from 'helpers/random-color'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
 const DEFAULT_EDITOR_NODES = ['doc', 'text', 'paragraph']
@@ -95,12 +86,18 @@ export default class ChuEditor extends LitElement {
       throw 'Contribution path must be set'
     }
 
+    const emitter = mitt()
+
     this.autoFocus = false
     this.collab = false
     this.excludeFrontmatter = false
     this.mode = 'default'
     this.editable = true
     this.contribution = false
+
+    this.on = emitter.on
+    this.off = emitter.off
+    this.emit = emitter.emit
 
     if (this.mode === 'node') this.nodeName = 'paragraph'
   }
@@ -124,6 +121,8 @@ export default class ChuEditor extends LitElement {
 
     this.view.props.commands = this.manager.commands
     this.setActiveNodesAndMarks()
+
+    this.emit('create', this)
   }
 
   createRenderRoot() {
@@ -135,22 +134,6 @@ export default class ChuEditor extends LitElement {
   }
 
   get plugins() {
-    let collaborationPlugins = []
-
-    if (this.collab) {
-      const ydoc = new prosemirrorToYDoc(this.doc)
-
-      const provider = new WebsocketProvider('CollabChannel', ydoc, {
-        params: { username: this.username }
-      })
-
-      collaborationPlugins = [
-        ySyncPlugin(ydoc.getXmlFragment('prosemirror')),
-        yCursorPlugin(provider.awareness),
-        yUndoPlugin()
-      ]
-    }
-
     let fullModePlugins = []
 
     if (this.mode !== 'node') {
@@ -175,10 +158,7 @@ export default class ChuEditor extends LitElement {
       keymap(baseKeymap),
       keymap({
         ...fullModePlugins,
-        Backspace: undoInputRule,
-        'Mod-z': undo,
-        'Mod-y': redo,
-        'Mod-Shift-z': redo
+        Backspace: undoInputRule
       }),
 
       dropCursor(),
@@ -197,8 +177,7 @@ export default class ChuEditor extends LitElement {
             tabindex: 0
           }
         }
-      }),
-      ...collaborationPlugins
+      })
     ]
   }
 
@@ -255,6 +234,7 @@ export default class ChuEditor extends LitElement {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
+    this.emit('transaction', this)
     if (transaction.docChanged) this.emitUpdate()
 
     return true
