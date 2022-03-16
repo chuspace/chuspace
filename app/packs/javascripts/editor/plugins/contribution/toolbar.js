@@ -67,6 +67,6 @@ export class ContributionToolbar extends Element {
             }
           })
         ]
-      : []
+      : null
   }
 }

@@ -75,10 +75,13 @@ module.exports = {
           'base-content':
             '#d4d4d4' /* Foreground content color to use on base color */,
 
-          info: '#2094f3' /* Info */,
-          success: '#4ade80' /* Success */,
+          info: '#2563eb' /* Info */,
+          'info-content': '#3b82f6',
+          success: '#22c55e' /* Success */,
+          'success-content': '#86efac',
           warning: '#ff9900' /* Warning */,
-          error: '#f87171' /* Error */
+          error: '#ef4444' /* Error */,
+          'error-content': '#f87171'
         }
       }
     ]

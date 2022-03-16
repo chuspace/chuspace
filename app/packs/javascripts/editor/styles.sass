@@ -1,41 +1,8 @@
 .ProseMirror-trailingBreak
   @apply h-0
 
-.ProseMirror > .ProseMirror-yjs-cursor:first-child
-  margin-top: 16px
-
 .ProseMirror p:first-child, .ProseMirror h1:first-child, .ProseMirror h2:first-child, .ProseMirror h3:first-child, .ProseMirror h4:first-child, .ProseMirror h5:first-child, .ProseMirror h6:first-child
   margin-top: 16px
-
-/* This gives the remote user caret. The colors are automatically overwritten*/
-.ProseMirror-yjs-cursor
-  @apply font-sans
-
-  position: relative
-  margin-left: -1px
-  margin-right: -1px
-  border-left: 1px solid black
-  border-right: 1px solid black
-  border-color: orange
-  word-break: normal
-  pointer-events: none
-
-/* This renders the username above the caret */
-.ProseMirror-yjs-cursor > div
-  @apply font-sans
-  position: absolute
-  top: -1.05em
-  left: -1px
-  font-size: 13px
-  background-color: rgb(250, 129, 0)
-  font-style: normal
-  font-weight: normal
-  line-height: normal
-  user-select: none
-  color: white
-  padding-left: 2px
-  padding-right: 2px
-  white-space: nowrap
 
 .chu-editor
   @apply antialiased font-sans
@@ -130,24 +97,33 @@
   div + br
     display: none
 
-  .insertion
-    @apply bg-success text-neutral max-w-full whitespace-normal
+  .tracked
+    @apply border-t-2 border-b-2
 
-    pre
-      @apply p-4 overflow-x-auto text-base
+    &.insertion
+      @apply bg-success-content border-success text-neutral max-w-full whitespace-normal
 
-    *
-      background: inherit
-      color: inherit
+      pre
+        @apply p-4 overflow-x-auto text-base
 
-    img
-      @apply border-4 border-success
+      *
+        background: inherit
+        color: inherit
 
-  .deletion
-    @apply bg-error line-through text-neutral max-w-full whitespace-normal
-    *
-      background: inherit
-      color: inherit
+      img
+        @apply border-4 border-success
+
+    &.deletion
+      @apply bg-error-content border-error line-through text-neutral max-w-full whitespace-normal
+      *
+        background: inherit
+        color: inherit
+
+    &.format-change
+      @apply bg-info-content border-info text-neutral max-w-full whitespace-normal
+      *
+        background: inherit
+        color: inherit
 
   ul, ol
     @apply ml-8 mb-8 list-disc
@@ -186,3 +162,21 @@
 
   contribution-modal
     @apply whitespace-nowrap
+
+.blame-point,
+.blame-focused-point
+  position: relative
+
+
+.blame-point::after,
+.blame-focused-point::after
+  position: absolute
+  left: -2.5px
+  display: inline-block
+  content: ' '
+  border: 1px solid rgba(255, 0, 0)
+  transform: rotate(45deg)
+  border-top: none
+  border-left: none
+  width: 5px
+  height: 5px

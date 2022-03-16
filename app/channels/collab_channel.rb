@@ -1,10 +1,12 @@
 class CollabChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "collab"
+    publication_permalink, draft_path = params['id'].split(':', 2)
+    stream_from "collab_#{publication_permalink}:#{draft_path}"
   end
 
   def receive(params)
-    ActionCable.server.broadcast("collab", params)
+    publication_permalink, draft_path = params['id'].split(':', 2)
+    ActionCable.server.broadcast("collab_#{publication_permalink}:#{draft_path}", params)
   end
 
   def unsubscribed

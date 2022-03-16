@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
+  kredis_json   :local_changes,
+                expires_in: 1.week,
+                key: ->(draft) { "#{draft.publication.permalink}:#{draft.path}:local_changes" }
   kredis_string :local_content,
                 expires_in: 1.week,
-                key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:local_content" }
+                key: ->(draft) { "#{draft.publication.permalink}:#{draft.path}:local_content" }
 
   attribute :publication, Publication
   validates :path, :name, markdown: true

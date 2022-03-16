@@ -22,7 +22,6 @@ module ApplicationCable
     private
 
     def find_identity
-      puts cookies.encrypted[:identity_id].inspect
       Identity.find_by(id: cookies.encrypted[:identity_id]) || reject_unauthorized_connection
     end
   end

@@ -7,14 +7,22 @@ import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { LitElement, html } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
+import {
+  collab,
+  getVersion,
+  receiveTransaction,
+  sendableSteps
+} from 'prosemirror-collab'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
 import { markdownParser, markdownSerializer } from 'editor/markdowner'
 
+import ActionCableClient from 'helpers/actioncable-client'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import { Schema } from 'prosemirror-model'
 import SchemaManager from 'editor/schema'
+import { Step } from 'prosemirror-transform'
 import debounce from 'lodash.debounce'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
@@ -58,6 +66,7 @@ export default class ChuEditor extends LitElement {
     autoFocus: { type: Boolean },
     collab: { type: Boolean },
     excludeFrontmatter: { type: Boolean },
+    id: { type: String },
     imageProviderPath: { type: String },
     username: { type: String },
     editable: { type: Boolean },
@@ -78,6 +87,7 @@ export default class ChuEditor extends LitElement {
   activeMarks: {}
   activeNodes: {}
   activeMarkAttrs: {}
+  syncing: boolean = false
 
   constructor() {
     super()
@@ -123,6 +133,29 @@ export default class ChuEditor extends LitElement {
     this.setActiveNodesAndMarks()
 
     this.emit('create', this)
+
+    this.subscription = ActionCableClient.subscribe(
+      { channel: 'CollabChannel', id: this.id },
+      {
+        received: (data) => {
+          const { version, steps, user } = data
+
+          if (steps) {
+            const transaction = receiveTransaction(
+              this.state,
+              steps.map((change) => Step.fromJSON(this.schema, change.step)),
+              steps.map((change) => change.clientID)
+            )
+
+            this.dispatchTransaction(transaction)
+          } else {
+            console.log(user)
+          }
+
+          this.syncing = false
+        }
+      }
+    )
   }
 
   createRenderRoot() {
@@ -177,7 +210,9 @@ export default class ChuEditor extends LitElement {
             tabindex: 0
           }
         }
-      })
+      }),
+
+      collab({ version: 0 })
     ]
   }
 
@@ -185,7 +220,6 @@ export default class ChuEditor extends LitElement {
     EditorState.create({
       schema: this.schema,
       doc: this.doc,
-      contributions: [],
       plugins: this.plugins
     })
 
@@ -218,7 +252,8 @@ export default class ChuEditor extends LitElement {
 
   autosave = debounce(
     async () => {
-      this.status.textContent = 'Auto saving...'
+      const statusElement = document.querySelector('chu-editor-status')
+      statusElement.textContent = 'Auto saving...'
 
       const response = await post(this.autoSavePath, {
         body: JSON.stringify({
@@ -226,18 +261,48 @@ export default class ChuEditor extends LitElement {
         })
       })
     },
-    2000,
-    { maxWait: 5000 }
+    500,
+    { maxWait: 1000 }
   )
 
   dispatchTransaction(transaction: Transaction) {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
+    if (!this.syncing) this.sync()
     this.emit('transaction', this)
-    if (transaction.docChanged) this.emitUpdate()
+    this.emitUpdate()
+
+    if (transaction.docChanged) this.autosave()
 
     return true
+  }
+
+  sync = () => {
+    const sendable = sendableSteps(this.state)
+
+    let json = {
+      id: this.id,
+      version: getVersion(this.state),
+      user: {
+        id: this.username,
+        color: randomColor(this.username),
+        selection: {
+          from: this.state.selection.from,
+          to: this.state.selection.to
+        },
+        cursor: this.state.selection.$cursor?.pos || this.state.selection.from
+      },
+      steps: sendable
+        ? sendable.steps.map((step) => ({
+            step: step.toJSON(),
+            clientID: sendable.clientID
+          }))
+        : null
+    }
+
+    this.syncing = true
+    this.subscription.send(json)
   }
 
   emitUpdate() {

@@ -1,5 +1,6 @@
 export { default as AlertNotification } from './alert-notification'
 export { default as DateTimePicker } from './date-time-picker'
+export { default as ChuEditorStatus } from './chu-editor-status'
 export { default as ContributionModal } from './contribution-modal'
 export { default as DropImage } from './drop-image'
 export { default as DetailsMenuForm } from './details-menu-form'

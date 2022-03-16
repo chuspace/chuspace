@@ -2,10 +2,11 @@
 
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { Plugin, PluginKey } from 'prosemirror-state'
+import { html, render } from 'lit'
+
 import { Element } from 'editor/base'
 import { contributionToolbarPluginKey } from './toolbar'
 import { contributionWidgetKey } from './widget'
-import { html, render } from 'lit'
 
 const contributionEditorKey = 'contribution-editor'
 export const contributionEditorPluginKey = new PluginKey(contributionEditorKey)
@@ -74,6 +75,6 @@ export class ContributionEditor extends Element {
   name = contributionEditorKey
 
   get plugins() {
-    return this.editor.contribution ? [ContributionEditorPlugin] : []
+    return this.editor.contribution ? [ContributionEditorPlugin] : null
   }
 }
