@@ -36,6 +36,19 @@ Chuspace is built on the popular Ruby on Rails framework and is by design a mono
 
 ## Getting started
 
+Install Redis
+```
+brew update
+brew install redis
+brew services start redis
+```
+
+Install the Heroku CLI
+```
+brew tap heroku/brew && brew install heroku
+```
+
+Then run the following
 ```bash
 git clone git@github.com:chuspace/chuspace.git
 cd chuspace
