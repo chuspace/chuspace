@@ -11,6 +11,7 @@ module ApplicationCable
       Current.identity = current_identity
 
       logger.add_tags current_user.name
+      logger.add_tags current_identity.provider
     end
 
     def disconnect
@@ -22,7 +23,6 @@ module ApplicationCable
     private
 
     def find_identity
-      puts cookies.encrypted[:identity_id].inspect
       Identity.find_by(id: cookies.encrypted[:identity_id]) || reject_unauthorized_connection
     end
   end

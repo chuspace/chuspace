@@ -12,7 +12,7 @@ class DraftPolicy < ApplicationPolicy
   end
 
   def edit?
-    owner? || record.editors.where(user: user).exists?
+    owner? || record.memberships.where(user: user).exists?
   end
 
   def publish?

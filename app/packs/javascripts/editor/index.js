@@ -2,13 +2,13 @@
 
 import './styles.sass'
 
-import * as Y from 'yjs'
-
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { LitElement, html } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
+import { Doc as YDoc, applyUpdateV2, encodeStateAsUpdateV2 } from 'yjs'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
+import { fromBase64, toBase64 } from 'lib0/buffer'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
 import { markdownParser, markdownSerializer } from 'editor/markdowner'
@@ -22,6 +22,7 @@ import {
 } from 'y-prosemirror'
 
 import { ActionCableProvider } from 'editor/actioncable-provider'
+import { CodeBlock as CodeBlockComponent } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import { Schema } from 'prosemirror-model'
@@ -77,17 +78,19 @@ export default class ChuEditor extends LitElement {
     autoSavePath: { type: String },
     autoFocus: { type: Boolean },
     collab: { type: Boolean },
-    id: { type: String },
+    channelId: { type: String },
     excludeFrontmatter: { type: Boolean },
     imageProviderPath: { type: String },
-    username: { type: String },
+    user: { type: Object },
+    collabId: { type: Number },
     editable: { type: Boolean },
     contribution: { type: Boolean },
     contributionPath: { type: String },
     nodeName: { type: String },
     mode: { type: String },
     status: { type: String, reflect: true },
-    onChange: { type: Function }
+    onChange: { type: Function },
+    ydocTemplate: { type: String }
   }
 
   manager: SchemaManager
@@ -113,12 +116,22 @@ export default class ChuEditor extends LitElement {
     this.mode = 'default'
     this.editable = true
     this.contribution = false
+    this.user = {}
+    this.statusElement = document.getElementById('chu-editor-status')
 
     if (this.mode === 'node') this.nodeName = 'paragraph'
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback()
+
+    if (this.collab) {
+      this.ydoc = new YDoc()
+
+      applyUpdateV2(this.ydoc, fromBase64(this.ydocTemplate))
+      this.ydoc.clientID = this.collabId
+      console.log(this.ydoc, this.user, this.ydoc.clientID)
+    }
 
     this.manager = this.isNodeEditor
       ? new SchemaManager(this, [...DEFAULT_EDITOR_NODES, this.nodeName])
@@ -127,7 +140,6 @@ export default class ChuEditor extends LitElement {
     this.schema = this.manager.schema
     this.contentParser = markdownParser(this.schema)
     this.contentSerializer = markdownSerializer(this.schema)
-
     this.initialContent = this.querySelector('textarea.content').value
 
     this.state = this.createState()
@@ -150,23 +162,15 @@ export default class ChuEditor extends LitElement {
     let keymaps = {}
 
     if (this.collab) {
-      const ydoc = new Y.Doc()
-
-      this.user = {
-        color: `#${randomColor(this.username)}`,
-        name: this.username,
-        username: this.username
-      }
       this.users = []
 
       this.provider = new ActionCableProvider(
         createConsumer(),
         {
           channel: 'CollabChannel',
-          id: this.id
+          id: this.channelId
         },
-        this,
-        ydoc
+        this.ydoc
       )
 
       const render = (user) => {
@@ -186,18 +190,23 @@ export default class ChuEditor extends LitElement {
       }
 
       collaborationPlugins = [
-        ySyncPlugin(ydoc.getXmlFragment('prosemirror')),
+        ySyncPlugin(this.ydoc.getXmlFragment('prosemirror')),
         yUndoPlugin(),
         yCursorPlugin(
           (() => {
-            this.provider.awareness.setLocalStateField('user', this.user)
+            this.provider.awareness.setLocalStateField('user', {
+              color: `#${randomColor(this.name)}`,
+              ...this.user
+            })
 
             this.users = awarenessStatesToArray(this.provider.awareness.states)
 
             this.provider.awareness.on('update', () => {
-              this.users = awarenessStatesToArray(
+              const update = awarenessStatesToArray(
                 this.provider.awareness.states
               )
+
+              this.users = awarenessStatesToArray(update)
             })
 
             return this.provider.awareness
@@ -251,7 +260,7 @@ export default class ChuEditor extends LitElement {
     }
 
     if (this.mode !== 'node') {
-      keymaps = {
+      keymaps = Object.assign({}, keymaps, {
         ArrowLeft: arrowHandler('left'),
         ArrowRight: arrowHandler('right'),
         ArrowUp: arrowHandler('up'),
@@ -259,7 +268,7 @@ export default class ChuEditor extends LitElement {
         'Ctrl-s': this.handleSave,
         'Mod-s': this.handleSave,
         Escape: selectParentNode
-      }
+      })
     }
 
     return [
@@ -299,7 +308,6 @@ export default class ChuEditor extends LitElement {
   createState = () =>
     EditorState.create({
       schema: this.schema,
-
       contributions: [],
       plugins: this.plugins
     })
@@ -333,11 +341,11 @@ export default class ChuEditor extends LitElement {
 
   autosave = debounce(
     async () => {
-      this.status.textContent = 'Auto saving...'
-
       const response = await post(this.autoSavePath, {
         body: JSON.stringify({
-          draft: { content: this.content }
+          draft: {
+            ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc))
+          }
         })
       })
     },
@@ -349,7 +357,12 @@ export default class ChuEditor extends LitElement {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
-    if (transaction.docChanged) this.emitUpdate()
+    console.log(this.ydoc)
+    if (transaction.docChanged) {
+      this.statusElement.textContent = 'Auto saving...'
+      this.emitUpdate()
+      this.autosave()
+    }
 
     return true
   }

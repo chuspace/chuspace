@@ -17,7 +17,6 @@ import * as mutex from 'lib0/mutex'
 import * as syncProtocol from 'y-protocols/sync'
 
 import { fromBase64, toBase64 } from 'lib0/buffer'
-import { prosemirrorToYDoc, yDocToProsemirror } from 'y-prosemirror'
 
 import { Observable } from 'lib0/observable'
 
@@ -114,9 +113,9 @@ const readMessage = (provider, buf, emitSynced) => {
   const decoder = decoding.createDecoder(buf)
   const encoder = encoding.createEncoder()
   const messageType = decoding.readVarUint(decoder)
+
   const messageHandler = provider.messageHandlers[messageType]
 
-  console.log(provider.doc, messageType)
   if (messageHandler) {
     messageHandler(encoder, decoder, provider, emitSynced, messageType)
   } else {
@@ -136,25 +135,12 @@ const setupSubscription = (provider) => {
       provider.subscriptionParams,
       {
         received(data) {
-          if (data.initial) {
-            const doc = provider.editor.contentParser.parse(data.message)
+          const encoder = readMessage(provider, fromBase64(data.message), true)
 
-            Y.applyUpdate(
-              provider.doc,
-              Y.encodeStateAsUpdate(prosemirrorToYDoc(doc))
-            )
-          } else {
-            const encoder = readMessage(
-              provider,
-              fromBase64(data.message),
-              true
-            )
-
-            if (encoding.length(encoder) > 1) {
-              broadcastMessage(this, {
-                message: toBase64(encoding.toUint8Array(encoder))
-              })
-            }
+          if (encoding.length(encoder) > 1) {
+            broadcastMessage(this, {
+              message: toBase64(encoding.toUint8Array(encoder))
+            })
           }
         },
         disconnected() {
@@ -251,7 +237,6 @@ export class ActionCableProvider extends Observable {
   constructor(
     cable,
     subscriptionParams,
-    editor,
     doc,
     {
       connect = true,
@@ -263,7 +248,7 @@ export class ActionCableProvider extends Observable {
     super()
 
     this.cable = cable
-    this.editor = editor
+
     this.subscriptionParams = subscriptionParams
 
     this.doc = doc

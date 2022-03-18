@@ -8,14 +8,14 @@ module Publications
       def create
         authorize! @draft
 
-        @draft.local_content.value = autosave_params['content']
-        head :ok
+        @draft.collaboration_ydoc.value = autosave_params['ydoc']
+        render turbo_stream: turbo_stream.update(helpers.dom_id(@draft, :actions), partial: 'publications/drafts/actions', locals: { publication: @publication, draft: @draft })
       end
 
       private
 
       def autosave_params
-        params.require(:draft).permit(:content)
+        params.require(:draft).permit(:ydoc)
       end
     end
   end

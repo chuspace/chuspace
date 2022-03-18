@@ -3,11 +3,11 @@
 module Publications
   module Drafts
     class DiffsController < BaseController
-      layout false
+      layout 'full'
 
       def new
         authorize! @draft
-        @diff = Diffy::Diff.new("#{@draft.decoded_content}\n", "#{@draft.local_content}\n", Diffy::Diff.default_options).to_s(:text)
+        @ydoc = @draft.collaboration_ydoc
 
         respond_to do |format|
           format.html

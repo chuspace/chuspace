@@ -45,7 +45,8 @@ module.exports = function config(api) {
             decorators: './app/packs/javascripts/decorators',
             styles: './app/packs/stylesheets',
             editor: './app/packs/javascripts/editor',
-            elements: './app/packs/javascripts/elements'
+            elements: './app/packs/javascripts/elements',
+            lib: './app/packs/lib'
           }
         }
       ]

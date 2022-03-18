@@ -102,11 +102,13 @@ Rails.application.routes.draw do
       scope controller: :drafts, module: :publications do
         get '/drafts', action: :index, as: :drafts_root
         get '/drafts/*path', action: :index, as: :drafts
+
         get '/new', action: :new, as: :new_draft
         post '/create', action: :create, as: :create_draft
         get '/*path/edit', action: :edit, as: :edit_draft
         patch '/*path/update', action: :update, as: :update_draft
         delete '/*path/delete', action: :destroy, as: :delete_draft
+
 
         scope controller: :previews, module: :drafts do
           get '/*path/preview', action: :show, as: :preview_draft

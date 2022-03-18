@@ -12,6 +12,10 @@ class PublicationPolicy < ApplicationPolicy
     user == record.owner || record.memberships.admin.where(user: user).exists?
   end
 
+  def write?
+    record.memberships.where(user: user).exists?
+  end
+
   def publish?
     user == record.owner || record.publishers.where(user: user).exists?
   end

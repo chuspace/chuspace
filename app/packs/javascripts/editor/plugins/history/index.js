@@ -28,14 +28,12 @@ export default class History extends Element {
   }
 
   get plugins() {
-    return this.editor.collab
-      ? []
-      : [
-          history({
-            depth: this.options.depth,
-            newGroupDelay: this.options.newGroupDelay
-          })
-        ]
+    return [
+      history({
+        depth: this.options.depth,
+        newGroupDelay: this.options.newGroupDelay
+      })
+    ]
   }
 
   commands() {
