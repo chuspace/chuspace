@@ -1,27 +1,18 @@
 # frozen_string_literal: true
 
 class DraftPolicy < ApplicationPolicy
-  alias_rule :index?, :update?, :create?, :show?, :new?, :destroy?, to: :edit?
-
-  def autosave?
-    edit?
-  end
+  alias_rule :autosave?, :index?, :update?, :create?, :show?, :new?, :destroy?, to: :edit?
+  delegate :publication, to: :record
 
   def commit?
     edit? && record.stale?
   end
 
   def edit?
-    owner? || record.memberships.where(user: user).exists?
+    publication.memberships.writers.exists?(user: user)
   end
 
   def publish?
-    (owner? || record.publishers.where(user: user).exists?) && record.publishable?
-  end
-
-  private
-
-  def owner?
-    user == record.owner
+    publication.memberships.publishers.exists?(user: user) && record.publishable?
   end
 end

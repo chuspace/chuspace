@@ -77,20 +77,16 @@ export default class ChuEditor extends LitElement {
   static properties = {
     autoSavePath: { type: String },
     autoFocus: { type: Boolean },
-    collab: { type: Boolean },
-    channelId: { type: String },
+    collaboration: { type: Object },
     excludeFrontmatter: { type: Boolean },
     imageProviderPath: { type: String },
-    user: { type: Object },
-    collabId: { type: Number },
     editable: { type: Boolean },
     contribution: { type: Boolean },
     contributionPath: { type: String },
     nodeName: { type: String },
     mode: { type: String },
     status: { type: String, reflect: true },
-    onChange: { type: Function },
-    ydocTemplate: { type: String }
+    onChange: { type: Function }
   }
 
   manager: SchemaManager
@@ -111,12 +107,11 @@ export default class ChuEditor extends LitElement {
     }
 
     this.autoFocus = false
-    this.collab = false
+    this.collaboration = null
     this.excludeFrontmatter = false
     this.mode = 'default'
     this.editable = true
     this.contribution = false
-    this.user = {}
 
     if (this.mode === 'node') this.nodeName = 'paragraph'
   }
@@ -124,11 +119,11 @@ export default class ChuEditor extends LitElement {
   async connectedCallback() {
     super.connectedCallback()
 
-    if (this.collab) {
+    if (this.collaboration) {
       this.ydoc = new YDoc()
 
-      applyUpdateV2(this.ydoc, fromBase64(this.ydocTemplate))
-      this.ydoc.clientID = this.collabId
+      applyUpdateV2(this.ydoc, fromBase64(this.collaboration.ydoc))
+      this.ydoc.clientID = this.collaboration.user.id
     }
 
     this.manager = this.isNodeEditor
@@ -159,15 +154,12 @@ export default class ChuEditor extends LitElement {
     let collaborationPlugins = []
     let keymaps = {}
 
-    if (this.collab) {
+    if (this.collaboration) {
       this.users = []
 
       this.provider = new ActionCableProvider(
         createConsumer(),
-        {
-          channel: 'CollabChannel',
-          id: this.channelId
-        },
+        this.collaboration,
         this.ydoc
       )
 
@@ -194,7 +186,7 @@ export default class ChuEditor extends LitElement {
           (() => {
             this.provider.awareness.setLocalStateField('user', {
               color: `#${randomColor(this.name)}`,
-              ...this.user
+              ...this.collaboration.user
             })
 
             this.users = awarenessStatesToArray(this.provider.awareness.states)
@@ -360,7 +352,7 @@ export default class ChuEditor extends LitElement {
 
     if (transaction.docChanged) {
       this.emitUpdate()
-      this.autosave()
+      // this.autosave()
     }
 
     return true

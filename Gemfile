@@ -123,6 +123,7 @@ group :production do
   gem 'easymon'
 end
 
+# JS runtime
 gem 'execjs'
 gem 'mini_racer'
 

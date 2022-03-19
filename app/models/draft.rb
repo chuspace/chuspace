@@ -21,9 +21,6 @@ class Draft < Git::Blob
   validates :path, :name, markdown: true
   validates :publication, presence: true
 
-  delegate :owner, :memberships, to: :publication
-  delegate :editors, :publishers, to: :memberships
-
   def body
     parsed.content
   end

@@ -14,13 +14,8 @@ module Repoable
     [repo.assets_folder].freeze
   end
 
-  def assets(path: assets_folders)
-    path = path.is_a?(Array) ? path : [path]
-    @assets ||= repository.assets(path)
-  end
-
   def asset(path:)
-    @asset ||= repository.asset(path)
+    repository.asset(path: path)
   end
 
   def content_folders
@@ -35,29 +30,15 @@ module Repoable
     drafts_root_path.join(name).to_s
   end
 
-  def drafts(path: content_folders)
-    path = path.is_a?(Array) ? path : [path]
-
-    @drafts ||= Rails.cache.fetch([self, path.join(':')]) do
-      repository.drafts(path)
-    end
-  end
-
   def draft(path:)
-    @draft ||= Rails.cache.fetch([self, path]) do
-      repository.draft(path)
-    end
+    repository.draft(path: path)
   end
 
-  def readme
-    @readme ||= Rails.cache.fetch([self, repo.readme_path]) do
-      repository.draft(repo.readme_path)
-    end
+  def repository(ref: 'HEAD')
+    @repository ||= git_provider_adapter(ref: ref).repository&.with_publication(self)
   end
 
-  def repository
-    @repository ||= git_provider_adapter.repository&.with_publication(self)
-  end
+  delegate :drafts, :assets, :readme, to: :repository
 
   def git_provider_adapter(ref: 'HEAD')
     @git_provider_adapter ||= git_provider.adapter.apply_repository_scope(repo_fullname: repo.fullname, ref: ref)

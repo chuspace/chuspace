@@ -9,12 +9,6 @@ class MembershipPolicy < ApplicationPolicy
   end
 
   def edit?
-    owner? || publication.memberships.admins.where(user: user).exists?
-  end
-
-  private
-
-  def owner?
-    user == publication.owner
+    publication.memberships.admins.exists?(user: user)
   end
 end
