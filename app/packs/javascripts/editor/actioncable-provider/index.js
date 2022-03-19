@@ -11,6 +11,7 @@ Unlike stated in the LICENSE file, it is not necessary to include the copyright 
 import * as Y from 'yjs' // eslint-disable-line
 import * as authProtocol from 'y-protocols/auth'
 import * as awarenessProtocol from 'y-protocols/awareness'
+import * as bc from 'lib0/broadcastchannel'
 import * as decoding from 'lib0/decoding'
 import * as encoding from 'lib0/encoding'
 import * as mutex from 'lib0/mutex'
@@ -209,6 +210,12 @@ const broadcastMessage = (provider, buf) => {
       message: toBase64(buf)
     })
   }
+
+  if (provider.bcconnected) {
+    provider.mux(() => {
+      bc.publish(provider.bcChannel, buf)
+    })
+  }
 }
 
 /**
@@ -250,6 +257,7 @@ export class ActionCableProvider extends Observable {
     this.cable = cable
 
     this.subscriptionParams = subscriptionParams
+    this.bcChannel = subscriptionParams.channel + '/' + subscriptionParams.id
 
     this.doc = doc
     this.awareness = awareness
@@ -284,6 +292,18 @@ export class ActionCableProvider extends Observable {
           broadcastMessage(this, encoding.toUint8Array(encoder))
         }
       }, resyncInterval))
+    }
+
+    /**
+     * @param {ArrayBuffer} data
+     */
+    this._bcSubscriber = (data) => {
+      this.mux(() => {
+        const encoder = readMessage(this, new Uint8Array(data), false)
+        if (encoding.length(encoder) > 1) {
+          bc.publish(this.bcChannel, encoding.toUint8Array(encoder))
+        }
+      })
     }
 
     /**
@@ -362,10 +382,72 @@ export class ActionCableProvider extends Observable {
     super.destroy()
   }
 
+  connectBc() {
+    if (!this.bcconnected) {
+      bc.subscribe(this.bcChannel, this._bcSubscriber)
+      this.bcconnected = true
+    }
+    // send sync step1 to bc
+    this.mux(() => {
+      // write sync step 1
+      const encoderSync = encoding.createEncoder()
+      encoding.writeVarUint(encoderSync, messageSync)
+      syncProtocol.writeSyncStep1(encoderSync, this.doc)
+      bc.publish(this.bcChannel, encoding.toUint8Array(encoderSync))
+      // broadcast local state
+      const encoderState = encoding.createEncoder()
+      encoding.writeVarUint(encoderState, messageSync)
+      syncProtocol.writeSyncStep2(encoderState, this.doc)
+      bc.publish(this.bcChannel, encoding.toUint8Array(encoderState))
+      // write queryAwareness
+      const encoderAwarenessQuery = encoding.createEncoder()
+      encoding.writeVarUint(encoderAwarenessQuery, messageQueryAwareness)
+      bc.publish(this.bcChannel, encoding.toUint8Array(encoderAwarenessQuery))
+      // broadcast local awareness state
+      const encoderAwarenessState = encoding.createEncoder()
+      encoding.writeVarUint(encoderAwarenessState, messageAwareness)
+      encoding.writeVarUint8Array(
+        encoderAwarenessState,
+        awarenessProtocol.encodeAwarenessUpdate(this.awareness, [
+          this.doc.clientID
+        ])
+      )
+      bc.publish(this.bcChannel, encoding.toUint8Array(encoderAwarenessState))
+    })
+  }
+
+  disconnectBc() {
+    // broadcast message with local awareness state set to null (indicating disconnect)
+    const encoder = encoding.createEncoder()
+    encoding.writeVarUint(encoder, messageAwareness)
+    encoding.writeVarUint8Array(
+      encoder,
+      awarenessProtocol.encodeAwarenessUpdate(
+        this.awareness,
+        [this.doc.clientID],
+        new Map()
+      )
+    )
+    broadcastMessage(this, encoding.toUint8Array(encoder))
+    if (this.bcconnected) {
+      bc.unsubscribe(this.bcChannel, this._bcSubscriber)
+      this.bcconnected = false
+    }
+  }
+
+  disconnect() {
+    this.shouldConnect = false
+    this.disconnectBc()
+    if (this.subscription !== null) {
+      this.subscription.unsubscribe()
+    }
+  }
+
   connect() {
     this.shouldConnect = true
     if (this.subscription === null) {
       setupSubscription(this)
+      this.connectBc()
     }
   }
 }

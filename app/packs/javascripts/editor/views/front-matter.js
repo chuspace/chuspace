@@ -36,7 +36,6 @@ export default class FrontMatterView extends CodeBlockView {
             mode=${this.mode}
             readonly="false"
             wrapper="false"
-            lazy="false"
             content=${this.content}
             .onInit=${this.onInit}
             .codeMirrorKeymap=${this.codeMirrorKeymap}

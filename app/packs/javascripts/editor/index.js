@@ -117,7 +117,6 @@ export default class ChuEditor extends LitElement {
     this.editable = true
     this.contribution = false
     this.user = {}
-    this.statusElement = document.getElementById('chu-editor-status')
 
     if (this.mode === 'node') this.nodeName = 'paragraph'
   }
@@ -130,7 +129,6 @@ export default class ChuEditor extends LitElement {
 
       applyUpdateV2(this.ydoc, fromBase64(this.ydocTemplate))
       this.ydoc.clientID = this.collabId
-      console.log(this.ydoc, this.user, this.ydoc.clientID)
     }
 
     this.manager = this.isNodeEditor
@@ -340,8 +338,11 @@ export default class ChuEditor extends LitElement {
   }
 
   autosave = debounce(
-    async () => {
-      const response = await post(this.autoSavePath, {
+    () => {
+      const statusElement = document.getElementById('chu-editor-status')
+      statusElement.textContent = 'Auto saving...'
+
+      post(this.autoSavePath, {
         body: JSON.stringify({
           draft: {
             ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc))
@@ -357,9 +358,7 @@ export default class ChuEditor extends LitElement {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
-    console.log(this.ydoc)
     if (transaction.docChanged) {
-      this.statusElement.textContent = 'Auto saving...'
       this.emitUpdate()
       this.autosave()
     }
