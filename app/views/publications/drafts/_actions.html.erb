@@ -1,4 +1,4 @@
-<%= content_tag :div, draft.status, data: { target: 'chu-editor.status' }, class: 'text-xs mr-4' %>
+<%= content_tag :div, draft.status, id: 'chu-editor-status', class: 'text-xs mr-4' %>
 <%= link_to 'Commit', publication_new_commit_draft_path(publication, draft), class: 'btn btn-primary btn-xs mr-4', 'data-turbo-frame': :_top if allowed_to?(:commit?, draft) %>
 <%= link_to 'Publish', publication_new_publish_draft_path(publication, draft), class: 'btn btn-accent btn-xs mr-4', 'data-turbo-frame': :_top if allowed_to?(:publish?, draft) %>
 <%= link_to 'Preview', publication_preview_draft_path(publication, draft), class: 'btn btn-info btn-xs mr-4', 'data-turbo-frame': :_top %>

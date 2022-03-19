@@ -3,7 +3,7 @@
 module Publications
   module Drafts
     class CommitsController < BaseController
-      layout false
+      layout 'full'
 
       before_action :redirect_to_editing, unless: -> { @draft.stale? }
 

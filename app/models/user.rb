@@ -39,6 +39,13 @@ class User < ApplicationRecord
     end
   end
 
+  def collab_attributes
+    {
+      username: username,
+      name: name
+    }
+  end
+
   private
 
   def unset_slug_if_invalid

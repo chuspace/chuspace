@@ -2,13 +2,13 @@
 
 import './styles.sass'
 
-import * as Y from 'yjs'
-
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { LitElement, html } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
+import { Doc as YDoc, applyUpdateV2, encodeStateAsUpdateV2 } from 'yjs'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
+import { fromBase64, toBase64 } from 'lib0/buffer'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
 import { markdownParser, markdownSerializer } from 'editor/markdowner'
@@ -21,19 +21,31 @@ import {
   yUndoPlugin
 } from 'y-prosemirror'
 
+import { ActionCableProvider } from 'editor/actioncable-provider'
+import { CodeBlock as CodeBlockComponent } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import { Schema } from 'prosemirror-model'
 import SchemaManager from 'editor/schema'
-import { WebsocketProvider } from './websocket-provider'
+import { createConsumer } from '@rails/actioncable'
 import debounce from 'lodash.debounce'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
 import { post } from '@rails/request.js'
+import { randomColor } from 'helpers/random-color'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
 const DEFAULT_EDITOR_NODES = ['doc', 'text', 'paragraph']
+
+const awarenessStatesToArray = (states: Map<number, Record<string, any>>) => {
+  return Array.from(states.entries()).map(([key, value]) => {
+    return {
+      clientId: key,
+      ...value.user
+    }
+  })
+}
 
 function arrowHandler(dir) {
   return (state, dispatch, view) => {
@@ -66,16 +78,19 @@ export default class ChuEditor extends LitElement {
     autoSavePath: { type: String },
     autoFocus: { type: Boolean },
     collab: { type: Boolean },
+    channelId: { type: String },
     excludeFrontmatter: { type: Boolean },
     imageProviderPath: { type: String },
-    username: { type: String },
+    user: { type: Object },
+    collabId: { type: Number },
     editable: { type: Boolean },
     contribution: { type: Boolean },
     contributionPath: { type: String },
     nodeName: { type: String },
     mode: { type: String },
     status: { type: String, reflect: true },
-    onChange: { type: Function }
+    onChange: { type: Function },
+    ydocTemplate: { type: String }
   }
 
   manager: SchemaManager
@@ -101,12 +116,20 @@ export default class ChuEditor extends LitElement {
     this.mode = 'default'
     this.editable = true
     this.contribution = false
+    this.user = {}
 
     if (this.mode === 'node') this.nodeName = 'paragraph'
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback()
+
+    if (this.collab) {
+      this.ydoc = new YDoc()
+
+      applyUpdateV2(this.ydoc, fromBase64(this.ydocTemplate))
+      this.ydoc.clientID = this.collabId
+    }
 
     this.manager = this.isNodeEditor
       ? new SchemaManager(this, [...DEFAULT_EDITOR_NODES, this.nodeName])
@@ -115,9 +138,7 @@ export default class ChuEditor extends LitElement {
     this.schema = this.manager.schema
     this.contentParser = markdownParser(this.schema)
     this.contentSerializer = markdownSerializer(this.schema)
-
     this.initialContent = this.querySelector('textarea.content').value
-    this.doc = this.contentParser.parse(this.initialContent)
 
     this.state = this.createState()
     this.view = this.createView()
@@ -136,25 +157,108 @@ export default class ChuEditor extends LitElement {
 
   get plugins() {
     let collaborationPlugins = []
+    let keymaps = {}
 
     if (this.collab) {
-      const ydoc = new prosemirrorToYDoc(this.doc)
+      this.users = []
 
-      const provider = new WebsocketProvider('CollabChannel', ydoc, {
-        params: { username: this.username }
-      })
+      this.provider = new ActionCableProvider(
+        createConsumer(),
+        {
+          channel: 'CollabChannel',
+          id: this.channelId
+        },
+        this.ydoc
+      )
+
+      const render = (user) => {
+        const cursor = document.createElement('span')
+
+        cursor.classList.add('collaboration-cursor__caret')
+        cursor.setAttribute('style', `border-color: ${user.color}`)
+
+        const label = document.createElement('div')
+
+        label.classList.add('collaboration-cursor__label')
+        label.setAttribute('style', `background-color: ${user.color}`)
+        label.insertBefore(document.createTextNode(user.name), null)
+        cursor.insertBefore(label, null)
+
+        return cursor
+      }
 
       collaborationPlugins = [
-        ySyncPlugin(ydoc.getXmlFragment('prosemirror')),
-        yCursorPlugin(provider.awareness),
-        yUndoPlugin()
+        ySyncPlugin(this.ydoc.getXmlFragment('prosemirror')),
+        yUndoPlugin(),
+        yCursorPlugin(
+          (() => {
+            this.provider.awareness.setLocalStateField('user', {
+              color: `#${randomColor(this.name)}`,
+              ...this.user
+            })
+
+            this.users = awarenessStatesToArray(this.provider.awareness.states)
+
+            this.provider.awareness.on('update', () => {
+              const update = awarenessStatesToArray(
+                this.provider.awareness.states
+              )
+
+              this.users = awarenessStatesToArray(update)
+            })
+
+            return this.provider.awareness
+          })(),
+          {
+            cursorBuilder: render
+          }
+        )
       ]
+
+      const commands = {
+        undo: () => ({ tr, state, dispatch }) => {
+          tr.setMeta('preventDispatch', true)
+
+          const undoManager: UndoManager = yUndoPluginKey.getState(state)
+            .undoManager
+
+          if (undoManager.undoStack.length === 0) {
+            return false
+          }
+
+          if (!dispatch) {
+            return true
+          }
+
+          return undo(state)
+        },
+        redo: () => ({ tr, state, dispatch }) => {
+          tr.setMeta('preventDispatch', true)
+
+          const undoManager: UndoManager = yUndoPluginKey.getState(state)
+            .undoManager
+
+          if (undoManager.redoStack.length === 0) {
+            return false
+          }
+
+          if (!dispatch) {
+            return true
+          }
+
+          return redo(state)
+        }
+      }
+
+      keymaps = {
+        'Mod-z': undo,
+        'Mod-y': redo,
+        'Mod-Shift-z': redo
+      }
     }
 
-    let fullModePlugins = []
-
     if (this.mode !== 'node') {
-      fullModePlugins = {
+      keymaps = Object.assign({}, keymaps, {
         ArrowLeft: arrowHandler('left'),
         ArrowRight: arrowHandler('right'),
         ArrowUp: arrowHandler('up'),
@@ -162,7 +266,7 @@ export default class ChuEditor extends LitElement {
         'Ctrl-s': this.handleSave,
         'Mod-s': this.handleSave,
         Escape: selectParentNode
-      }
+      })
     }
 
     return [
@@ -174,11 +278,8 @@ export default class ChuEditor extends LitElement {
       ...this.manager.keymaps,
       keymap(baseKeymap),
       keymap({
-        ...fullModePlugins,
-        Backspace: undoInputRule,
-        'Mod-z': undo,
-        'Mod-y': redo,
-        'Mod-Shift-z': redo
+        ...keymaps,
+        Backspace: undoInputRule
       }),
 
       dropCursor(),
@@ -205,7 +306,6 @@ export default class ChuEditor extends LitElement {
   createState = () =>
     EditorState.create({
       schema: this.schema,
-      doc: this.doc,
       contributions: [],
       plugins: this.plugins
     })
@@ -238,12 +338,15 @@ export default class ChuEditor extends LitElement {
   }
 
   autosave = debounce(
-    async () => {
-      this.status.textContent = 'Auto saving...'
+    () => {
+      const statusElement = document.getElementById('chu-editor-status')
+      statusElement.textContent = 'Auto saving...'
 
-      const response = await post(this.autoSavePath, {
+      post(this.autoSavePath, {
         body: JSON.stringify({
-          draft: { content: this.content }
+          draft: {
+            ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc))
+          }
         })
       })
     },
@@ -255,7 +358,10 @@ export default class ChuEditor extends LitElement {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
-    if (transaction.docChanged) this.emitUpdate()
+    if (transaction.docChanged) {
+      this.emitUpdate()
+      this.autosave()
+    }
 
     return true
   }

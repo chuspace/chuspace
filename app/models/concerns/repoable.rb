@@ -27,6 +27,14 @@ module Repoable
     [repo.posts_folder, repo.drafts_folder].reject(&:blank?).freeze
   end
 
+  def drafts_root_path
+    @drafts_root_path ||= Pathname.new(repo_drafts_or_posts_folder)
+  end
+
+  def draft_path_for(name:)
+    drafts_root_path.join(name).to_s
+  end
+
   def drafts(path: content_folders)
     path = path.is_a?(Array) ? path : [path]
 

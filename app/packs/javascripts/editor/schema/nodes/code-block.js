@@ -5,7 +5,6 @@ import { Fragment, Node as PMNode, Schema } from 'prosemirror-model'
 import { Plugin, PluginKey, Selection } from 'prosemirror-state'
 import { nodeInputRule, toggleBlockType } from 'editor/commands'
 
-import { CodeBlock as CodeBlockComponent } from 'editor/components'
 import { setBlockType } from 'prosemirror-commands'
 
 const removeLastNewLine = (dom: HTMLElement): HTMLElement => {

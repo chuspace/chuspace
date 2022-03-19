@@ -2,7 +2,7 @@
 
 import { EditorState, Transaction } from 'prosemirror-state'
 
-import { Mark } from 'editor/helpers'
+import { Mark } from 'editor/base'
 
 export default function(type: Mark, attrs: {}) {
   return (state: EditorState, dispatch: Transaction) => {

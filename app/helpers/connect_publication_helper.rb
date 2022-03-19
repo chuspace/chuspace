@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ConnectPublicationHelper
   def connect_publication_tabs_items
     t('connect.publications.shared.items').each do |item|

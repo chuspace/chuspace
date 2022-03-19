@@ -1,9 +1,21 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
-  kredis_string :local_content,
+  kredis_unique_list :collaborators_ids,
+                     typed: :integer,
+                     key: ->(draft) { "#{draft.redis_key}:collaborators_ids" }
+
+  kredis_integer :collaboration_leader_id,
+                 expires_in: 1.day,
+                 key: ->(draft) { "#{draft.redis_key}:collaboration_leader_id" }
+
+  kredis_string :collaboration_ydoc,
                 expires_in: 1.week,
-                key: ->(draft) { "#{draft.publication.permalink}:draft:#{draft.path}:local_content" }
+                key: ->(draft) { "#{draft.redis_key}:collaboration_ydoc" }
+
+  kredis_string :collaboration_versions,
+                expires_in: 1.week,
+                key: ->(draft) { "#{draft.redis_key}:collaboration_versions" }
 
   attribute :publication, Publication
   validates :path, :name, markdown: true
@@ -21,12 +33,23 @@ class Draft < Git::Blob
     MarkdownRenderer.new.render(doc).html_safe
   end
 
+  def content_ydoc
+    collaboration_ydoc.value ||
+      $ydoc.compile(markdown: decoded_content, client_id: Current.user.id || collaboration_leader_id.value)
+  end
+
   def collab?
     !readme?
   end
 
+  def collab_key
+    fail ArgumentError, 'Current.user must be set' if Current.user.blank?
+
+    Turbo.signed_stream_verifier.generate("collab:#{publication.permalink}:#{path}")
+  end
+
   def preview_html
-    content_html(content: local_content.value || body)
+    content_html(content: collaboration_ydoc.value || body)
   end
 
   def date
@@ -91,6 +114,10 @@ class Draft < Git::Blob
     front_matter.dig(publication.front_matter.topics)
   end
 
+  def redis_key
+    "#{publication.permalink}:#{path}"
+  end
+
   def readme?
     publication.repo.readme_path == path
   end
@@ -106,7 +133,7 @@ class Draft < Git::Blob
   end
 
   def stale?
-    local_content.value.present? && local_content.value != decoded_content
+    collaboration_ydoc.value.present?
   end
 
   def status

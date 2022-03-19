@@ -30,15 +30,17 @@ import ClipboardJS from 'clipboard'
 import Controls from './controls'
 import { CopyClipboard } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
+import { query } from 'lit/decorators/query.js'
 import tippy from 'tippy.js'
 
 export default class CodeEditor extends LitElement {
   cm: ?CodeMirror
+  @query('.code-editor')
+  _codeEditor
 
   static properties = {
     mode: { type: String, reflect: true },
     readonly: { type: String },
-    lazy: { type: String },
     wrapper: { type: String },
     theme: { type: String },
     filename: { type: String },
@@ -57,7 +59,6 @@ export default class CodeEditor extends LitElement {
     this.theme = window.colorScheme
     this.loaded = false
     this.wrapper = true
-    this.lazy = true
     this.downloadable = true
     this.lines = 0
 
@@ -105,16 +106,18 @@ export default class CodeEditor extends LitElement {
     })
   }
 
+  get codeEditorNode() {
+    return this.renderRoot.querySelector('#code-editor')
+  }
+
   loadEditor = async () => {
     if (this.cm) return
-    const codeNode = this.querySelector('.code-editor')
+
     await loadMode(this.mode)
-    this.cm = await this.createCM(codeNode)
+    this.cm = await this.createCM(this.codeEditorNode)
     if (this.onInit) await this.onInit(this.cm)
 
     this.loaded = true
-
-    if (this.lazy) this.removeObserver()
   }
 
   async connectedCallback() {
@@ -130,18 +133,10 @@ export default class CodeEditor extends LitElement {
     } catch (e) {}
 
     try {
-      this.lazy = JSON.parse(this.lazy)
-    } catch (e) {}
-
-    try {
       this.downloadable = JSON.parse(this.downloadable)
     } catch (e) {}
 
-    if (this.lazy) {
-      this.attachObserver()
-    } else {
-      await this.loadEditor()
-    }
+    this.attachObserver()
   }
 
   createRenderRoot() {
@@ -239,7 +234,7 @@ export default class CodeEditor extends LitElement {
             `
           : null}
 
-        <div class="code-editor">
+        <div class="code-editor" id="code-editor">
           ${!this.loaded
             ? html`
                 <content-loader

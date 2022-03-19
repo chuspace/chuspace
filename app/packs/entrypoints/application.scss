@@ -33,27 +33,18 @@
     @apply font-sans font-semibold;
   }
 
-  details > summary {
+  details:not([as='tab']) > summary {
     @apply cursor-pointer;
     list-style: none;
   }
 
-  details > summary::-webkit-details-marker {
+  details:not([as='tab']) > summary::-webkit-details-marker {
     display: none;
   }
 
   details[as='tab'] {
     &[open] > summary {
       @apply border-b-0 rounded-b-none;
-      list-style-type: disclosure-open;
-    }
-
-    & > summary {
-      list-style: inside disclosure-closed;
-    }
-
-    & > summary::-webkit-details-marker {
-      display: list-item;
     }
   }
 }
