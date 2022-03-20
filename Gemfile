@@ -124,8 +124,7 @@ group :production do
 end
 
 # JS runtime
-gem 'execjs', platforms: :ruby
-gem 'mini_racer', platforms: :ruby
+gem 'execjs'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
