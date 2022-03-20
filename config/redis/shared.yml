@@ -1,9 +1,9 @@
 production: &production
-  url: <%= Rails.application.credentials.redis[:websocket] %>
+  url: <%= ENV.fetch('REDIS_URL') %>
   timeout: 1
 
 development: &development
-  url: <%= Rails.application.credentials.redis[:websocket] %>
+  url: <%= ENV.fetch('REDIS_URL') %>
   timeout: 1
 
 test:

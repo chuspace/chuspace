@@ -32,16 +32,16 @@ module Git
       blob(path: path)
     end
 
-    def assets
-      blobs(paths: publication.assets_folders)
+    def assets(path:)
+      blobs(paths: path)
     end
 
     def draft(path:)
       blob(path: path)
     end
 
-    def drafts
-      blobs(paths: publication.content_folders)
+    def drafts(path:)
+      blobs(paths: path)
     end
 
     def markdown_files

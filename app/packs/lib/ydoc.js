@@ -14,7 +14,7 @@ import { toBase64 } from 'lib0/buffer'
 
 global.Buffer = Buffer
 
-const toYDoc = (markdown, clientID) => {
+const toYDoc = (markdown) => {
   const options = {
     excludeFrontmatter: false,
     mode: 'default',
@@ -39,7 +39,7 @@ const toYDoc = (markdown, clientID) => {
   const contentParser = markdownParser(pmSchema)
   const pmDoc = contentParser.parse(markdown)
 
-  return toBase64(encodeStateAsUpdateV2(prosemirrorToYDoc(pmDoc, clientID)))
+  return toBase64(encodeStateAsUpdateV2(prosemirrorToYDoc(pmDoc)))
 }
 
 export default toYDoc

@@ -32,7 +32,7 @@ module Chuspace
 
     # Cache store
     config.cache_store = :redis_cache_store, {
-      url: Rails.application.credentials.redis[:cache].split(','),
+      url: ENV.fetch('REDIS_CACHE_URL').split(','),
       connect_timeout:    30,  # Defaults to 20 seconds
       read_timeout:       0.2, # Defaults to 1 second
       write_timeout:      0.2, # Defaults to 1 second

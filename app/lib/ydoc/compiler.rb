@@ -20,10 +20,10 @@ module Ydoc
       @context = ExecJS.compile(source)
     end
 
-    def compile(markdown:, client_id:)
+    def compile(markdown:)
       context.eval(
         <<~MD
-          toYDoc("#{ApplicationController.helpers.escape_javascript(markdown)}", #{client_id})
+          toYDoc("#{ApplicationController.helpers.escape_javascript(markdown)}")
         MD
       )
     end

@@ -123,7 +123,8 @@ export default class ChuEditor extends LitElement {
       this.ydoc = new YDoc()
 
       applyUpdateV2(this.ydoc, fromBase64(this.collaboration.ydoc))
-      this.ydoc.clientID = this.collaboration.user.id
+      // this.ydoc.clientID = this.collaboration.user.id
+      console.log(this.ydoc)
     }
 
     this.manager = this.isNodeEditor
@@ -337,7 +338,7 @@ export default class ChuEditor extends LitElement {
       post(this.autoSavePath, {
         body: JSON.stringify({
           draft: {
-            ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc))
+            current_ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc))
           }
         })
       })
@@ -352,7 +353,7 @@ export default class ChuEditor extends LitElement {
 
     if (transaction.docChanged) {
       this.emitUpdate()
-      // this.autosave()
+      this.autosave()
     }
 
     return true

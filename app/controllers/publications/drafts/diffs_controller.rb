@@ -6,8 +6,8 @@ module Publications
       layout 'full'
 
       def new
-        authorize! @draft
-        @ydoc = @draft.collaboration_ydoc
+        @collaboration_session = @publication.collaboration_sessions.active.find_by(blob_path: @draft.path)
+        authorize! @collaboration_session
 
         respond_to do |format|
           format.html

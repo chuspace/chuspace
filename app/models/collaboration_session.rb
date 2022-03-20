@@ -2,7 +2,7 @@
 
 class CollaborationSession < ApplicationRecord
   belongs_to :publication
-  has_many   :members, class_name: 'CollaborationSessionMember'
+  has_many   :members, class_name: 'CollaborationSessionMember', dependent: :delete_all
   has_one    :creator, -> { where(creator: true) }, class_name: 'CollaborationSessionMember'
 
   validates :publication_id, uniqueness: { scope: %i[blob_path number] }
