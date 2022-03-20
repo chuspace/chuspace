@@ -6,7 +6,17 @@ import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { LitElement, html } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
-import { Doc as YDoc, applyUpdateV2, encodeStateAsUpdateV2 } from 'yjs'
+import {
+  PermanentUserData,
+  Doc as YDoc,
+  applyUpdateV2,
+  decodeSnapshot,
+  emptySnapshot,
+  encodeSnapshot,
+  encodeStateAsUpdateV2,
+  equalSnapshots,
+  snapshot
+} from 'yjs'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
 import { fromBase64, toBase64 } from 'lib0/buffer'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
@@ -18,6 +28,7 @@ import {
   undo,
   yCursorPlugin,
   ySyncPlugin,
+  ySyncPluginKey,
   yUndoPlugin
 } from 'y-prosemirror'
 
@@ -121,10 +132,7 @@ export default class ChuEditor extends LitElement {
 
     if (this.collaboration) {
       this.ydoc = new YDoc()
-
       applyUpdateV2(this.ydoc, fromBase64(this.collaboration.ydoc))
-      // this.ydoc.clientID = this.collaboration.user.id
-      console.log(this.ydoc)
     }
 
     this.manager = this.isNodeEditor
@@ -164,6 +172,15 @@ export default class ChuEditor extends LitElement {
         this.ydoc
       )
 
+      this.provider.on('synced', () => {
+        this.permanentUserData = new PermanentUserData(this.ydoc)
+        this.permanentUserData.setUserMapping(
+          this.ydoc,
+          this.ydoc.clientID,
+          this.collaboration.user.username
+        )
+      })
+
       const render = (user) => {
         const cursor = document.createElement('span')
 
@@ -181,7 +198,9 @@ export default class ChuEditor extends LitElement {
       }
 
       collaborationPlugins = [
-        ySyncPlugin(this.ydoc.getXmlFragment('prosemirror')),
+        ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
+          permanentUserData: this.permanentUserData
+        }),
         yUndoPlugin(),
         yCursorPlugin(
           (() => {
@@ -346,6 +365,50 @@ export default class ChuEditor extends LitElement {
     2000,
     { maxWait: 5000 }
   )
+
+  attachVersion = () => {
+    const versions = this.ydoc.getArray('versions')
+    const lastVersion =
+      versions.length > 0
+        ? decodeSnapshot(versions.get(versions.length - 1).snapshot)
+        : emptySnapshot
+
+    this.view.dispatch(
+      this.view.state.tr.setMeta(ySyncPluginKey, {
+        snapshot: null,
+        prevSnapshot: lastVersion
+      })
+    )
+  }
+
+  addVersion = () => {
+    const versions = this.ydoc.getArray('versions')
+    const prevVersion =
+      versions.length === 0 ? null : versions.get(versions.length - 1)
+    const prevSnapshot =
+      prevVersion === null
+        ? emptySnapshot
+        : decodeSnapshot(prevVersion.snapshot)
+
+    const snapshot = snapshot(this.ydoc)
+
+    if (prevVersion != null) {
+      prevSnapshot.sv.set(
+        prevVersion.clientID,
+        prevSnapshot.sv.get(prevVersion.clientID) + 1
+      )
+    }
+
+    if (!equalSnapshots(prevSnapshot, snapshot)) {
+      versions.push([
+        {
+          date: new Date().getTime(),
+          snapshot: encodeSnapshot(snapshot),
+          clientID: this.ydoc.clientID
+        }
+      ])
+    }
+  }
 
   dispatchTransaction(transaction: Transaction) {
     this.state = this.state.apply(transaction)

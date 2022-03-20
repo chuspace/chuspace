@@ -10,7 +10,7 @@ SimpleForm.setup do |config|
     input.optional :min_max
     input.optional :readonly
     input.use :label, class: 'label mt-2'
-    input.use :input, class: 'input input-bordered', autocomplete: 'off', spellcheck: 'off'
+    input.use :input, class: 'input input-bordered input-md', autocomplete: 'off', spellcheck: 'off'
 
     input.use :error, wrap_with: { tag: 'div', class: 'input-error-message text-xs mt-2 text-error' }
     input.use :hint, wrap_with: { tag: :div, class: 'input-hint-message text-xs mt-2 text-info' }
@@ -27,7 +27,7 @@ SimpleForm.setup do |config|
 
     wrapper.wrapper :label_tag, tag: 'label', class: 'input-group' do |ba|
       ba.use :label_text, wrap_with: { tag: 'span', class: 'label-text' }
-      ba.use :input, class: 'input input-bordered', autocomplete: 'off', spellcheck: 'off'
+      ba.use :input, class: 'input input-bordered input-md', autocomplete: 'off', spellcheck: 'off'
     end
 
     wrapper.use :error, wrap_with: { tag: 'div', class: 'input-error-message text-xs mt-2 text-error' }
@@ -58,7 +58,7 @@ SimpleForm.setup do |config|
     input.optional :min_max
     input.optional :readonly
     input.use :label, class: 'label mt-2'
-    input.use :input, class: 'textarea textarea-bordered', autocomplete: 'off', spellcheck: 'off'
+    input.use :input, class: 'textarea textarea-bordered textarea-md', autocomplete: 'off', spellcheck: 'off'
 
     input.use :error, wrap_with: { tag: 'div', class: 'input-error-message text-xs mt-2 text-error' }
     input.use :hint, wrap_with: { tag: :div, class: 'input-hint-message text-xs mt-2 text-info' }
@@ -73,7 +73,7 @@ SimpleForm.setup do |config|
     input.optional :min_max
     input.optional :readonly
     input.use :label, class: 'label mt-2'
-    input.use :input, class: 'select select-bordered', autocomplete: 'off', spellcheck: 'off'
+    input.use :input, class: 'select select-bordered select-md', autocomplete: 'off', spellcheck: 'off'
 
     input.use :error, wrap_with: { tag: 'div', class: 'input-error-message text-xs mt-2 text-error' }
     input.use :hint, wrap_with: { tag: :div, class: 'input-hint-message text-xs mt-2 text-info' }
@@ -85,7 +85,7 @@ SimpleForm.setup do |config|
 
     b.wrapper :label_tag, tag: 'label', class: 'cursor-pointer label mt-2' do |ba|
       ba.use :label_text, wrap_with: { tag: 'span', class: 'label-text' }
-      ba.use :input, class: 'checkbox input-bordered ml-2'
+      ba.use :input, class: 'checkbox checkbox-bordered checkbox-md ml-2'
     end
 
     b.use :error, wrap_with: { tag: 'div', class: 'input-error-message text-xs mt-1 text-error' }

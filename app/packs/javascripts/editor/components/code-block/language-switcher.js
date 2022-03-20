@@ -78,7 +78,11 @@ export default class LanguageSwitcher extends LitElement {
 
     return html`
       <div class="code-editor-language-switcher-container mr-4">
-        <input type="text" value=${name} class="input input-sm w-full" />
+        <input
+          type="text"
+          value=${name}
+          class="input input-sm w-full max-w-xs"
+        />
       </div>
     `
   }

@@ -179,8 +179,6 @@ file-attachment {
 @layer utilities {
   .input,
   .select {
-    @apply h-10 min-h-full;
-
     &:focus {
       @apply ring-1 ring-primary outline-none;
     }

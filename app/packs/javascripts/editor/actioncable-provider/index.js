@@ -139,9 +139,7 @@ const setupSubscription = (provider) => {
           const encoder = readMessage(provider, fromBase64(data.message), true)
 
           if (encoding.length(encoder) > 1) {
-            broadcastMessage(this, {
-              message: toBase64(encoding.toUint8Array(encoder))
-            })
+            broadcastMessage(provider, encoding.toUint8Array(encoder))
           }
         },
         disconnected() {
@@ -170,9 +168,8 @@ const setupSubscription = (provider) => {
           const encoder = encoding.createEncoder()
           encoding.writeVarUint(encoder, messageSync)
           syncProtocol.writeSyncStep1(encoder, provider.doc)
-          broadcastMessage(this, {
-            message: toBase64(encoding.toUint8Array(encoder))
-          })
+          broadcastMessage(provider, encoding.toUint8Array(encoder), true)
+
           // broadcast local awareness state
           if (provider.awareness.getLocalState() !== null) {
             const encoderAwarenessState = encoding.createEncoder()
@@ -183,9 +180,11 @@ const setupSubscription = (provider) => {
                 provider.doc.clientID
               ])
             )
-            broadcastMessage(this, {
-              message: toBase64(encoding.toUint8Array(encoderAwarenessState))
-            })
+            broadcastMessage(
+              provider,
+              encoding.toUint8Array(encoderAwarenessState),
+              true
+            )
           }
         }
       }
@@ -203,10 +202,11 @@ const setupSubscription = (provider) => {
  * @param {ActionCableProvider} provider
  * @param {ArrayBuffer} buf
  */
-const broadcastMessage = (provider, buf) => {
+const broadcastMessage = (provider, buf, sync = false) => {
   if (provider.subscription) {
     provider.subscription.send({
       id: provider.subscriptionParams.id,
+      sync,
       message: toBase64(buf)
     })
   }
@@ -362,6 +362,7 @@ export class ActionCableProvider extends Observable {
   set synced(state) {
     if (this._synced !== state) {
       this._synced = state
+
       this.emit('synced', [state])
       this.emit('sync', [state])
     }
