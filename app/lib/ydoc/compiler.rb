@@ -16,7 +16,7 @@ module Ydoc
         global.clearInterval = global.clearInterval || function () {};
       JS
 
-      source += "\n\n" + Rails.root.join('public/assets/lib/ydoc.js').read
+      source += "\n\n" + Rails.root.join('app/lib/ydoc/compiler.js').read
       @context = ExecJS.compile(source)
     end
 

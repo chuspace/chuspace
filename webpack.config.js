@@ -6,8 +6,8 @@ module.exports = {
   mode: 'production',
   entry: { index: path.join(APP_SOURCE, 'ydoc.js') },
   output: {
-    path: path.join(__dirname, 'public/assets/lib'),
-    filename: 'ydoc.js',
+    path: path.join(__dirname, 'app/lib/ydoc'),
+    filename: 'compiler.js',
     libraryTarget: 'umd',
     globalObject: 'this'
   },
