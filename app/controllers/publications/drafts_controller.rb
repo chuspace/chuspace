@@ -70,6 +70,8 @@ module Publications
     def edit
       authorize! @draft
 
+      @collaboration_session = @publication.find_or_start_collaboration_session(user: Current.user, blob_path: @draft.path)
+
       add_breadcrumb(:drafts, find_publication_drafts_root_path)
       add_breadcrumb(@draft.relative_path, publication_preview_draft_path(@publication, @draft))
       add_breadcrumb('Edit')

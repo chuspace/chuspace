@@ -6,16 +6,17 @@ module Publications
       layout false
 
       def create
-        authorize! @draft
+        @collaboration_session = @publication.collaboration_sessions.active.find_by(blob_path: @draft.path)
+        authorize! @collaboration_session
 
-        @draft.collaboration_ydoc.value = autosave_params['ydoc']
+        @collaboration_session.update(autosave_params)
         render turbo_stream: turbo_stream.update(helpers.dom_id(@draft, :actions), partial: 'publications/drafts/actions', locals: { publication: @publication, draft: @draft })
       end
 
       private
 
       def autosave_params
-        params.require(:draft).permit(:ydoc)
+        params.require(:draft).permit(:current_ydoc)
       end
     end
   end

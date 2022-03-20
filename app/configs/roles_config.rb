@@ -35,6 +35,10 @@ class RolesConfig < ApplicationConfig
       %w[editor admin owner]
     end
 
+    def writers
+      %w[editor admin owner writer]
+    end
+
     def to_enum
       defaults
     end

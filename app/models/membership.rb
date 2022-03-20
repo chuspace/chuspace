@@ -20,5 +20,9 @@ class Membership < ApplicationRecord
     def publishers
       where(role: RolesConfig.publishers)
     end
+
+    def writers
+      where(role: RolesConfig.writers)
+    end
   end
 end

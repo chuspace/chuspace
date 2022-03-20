@@ -1,9 +1,26 @@
 # frozen_string_literal: true
 
 class PostPolicy < ApplicationPolicy
-  alias_rule :index?, :update?, :show?, :new?, :destroy?, to: :create?
+  alias_rule :new?, :destroy?, to: :create?
+  delegate :publication, to: :record
+
+  def index?
+    true
+  end
+
+  def show?
+    true
+  end
+
+  def update?
+    false
+  end
+
+  def destroy?
+    false
+  end
 
   def create?
-    true
+    publication.memberships.publishers.exists?(user: user)
   end
 end

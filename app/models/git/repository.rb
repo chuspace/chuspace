@@ -28,29 +28,51 @@ module Git
       adapter.blob(path: CONFIG_FILE_PATH).persisted?
     end
 
-    %w[assets drafts].each do |name|
-      define_method "#{name}" do |paths|
-        adapter.blobs(paths: paths)
-               .select { |blob| Git::Blob.valid?(name: blob.name) }
-               .map { |blob| blob.decorate(publication: publication) }
-      end
+    def asset(path:)
+      blob(path: path)
     end
 
-    %w[asset draft].each do |name|
-      define_method "#{name}" do |path|
-        fail ActiveRecord::RecordNotFound, 'not found' unless Git::Blob.valid?(name: path)
+    def assets(path:)
+      blobs(paths: path)
+    end
 
-        adapter.blob(path: path).decorate(publication: publication)
-      end
+    def draft(path:)
+      blob(path: path)
+    end
+
+    def drafts(path:)
+      blobs(paths: path)
     end
 
     def markdown_files
       repository_files.select { |path| MarkdownValidator.valid?(name_or_path: path) }
     end
 
+    def readme
+      blob(path: publication.repo.readme_path)
+    end
+
     def with_publication(publication)
       self.publication = publication
       self
+    end
+
+    private
+
+    def blobs(paths:)
+      Rails.cache.fetch([publication, paths.join(':')]) do
+        adapter.blobs(paths: paths)
+          .select { |blob| Git::Blob.valid?(name: blob.name) }
+          .map { |blob| blob.decorate(publication: publication) }
+      end
+    end
+
+    def blob(path:)
+      fail ActiveRecord::RecordNotFound, 'not found' unless Git::Blob.valid?(name: path)
+
+      Rails.cache.fetch([publication, path]) do
+        adapter.blob(path: path).decorate(publication: publication)
+      end
     end
   end
 end

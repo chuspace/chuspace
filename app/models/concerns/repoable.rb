@@ -16,11 +16,11 @@ module Repoable
 
   def assets(path: assets_folders)
     path = path.is_a?(Array) ? path : [path]
-    @assets ||= repository.assets(path)
+    repository.assets(path: path)
   end
 
   def asset(path:)
-    @asset ||= repository.asset(path)
+    repository.asset(path: path)
   end
 
   def content_folders
@@ -37,26 +37,19 @@ module Repoable
 
   def drafts(path: content_folders)
     path = path.is_a?(Array) ? path : [path]
-
-    @drafts ||= Rails.cache.fetch([self, path.join(':')]) do
-      repository.drafts(path)
-    end
+    repository.drafts(path: path)
   end
 
   def draft(path:)
-    @draft ||= Rails.cache.fetch([self, path]) do
-      repository.draft(path)
-    end
+    repository.draft(path: path)
   end
 
   def readme
-    @readme ||= Rails.cache.fetch([self, repo.readme_path]) do
-      repository.draft(repo.readme_path)
-    end
+    repository.readme
   end
 
-  def repository
-    @repository ||= git_provider_adapter.repository&.with_publication(self)
+  def repository(ref: 'HEAD')
+    @repository ||= git_provider_adapter(ref: ref).repository&.with_publication(self)
   end
 
   def git_provider_adapter(ref: 'HEAD')

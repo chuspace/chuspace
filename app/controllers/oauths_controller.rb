@@ -7,7 +7,7 @@ class OauthsController < ApplicationController
   attr_reader :identity, :user
 
   def create
-    ApplicationRecord.transaction do
+    Identity.transaction do
       identity = Identity.where(provider: auth_hash.provider, uid: auth_hash.uid).first
       user = if signed_in?
         Current.user
