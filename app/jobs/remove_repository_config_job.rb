@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class RemoveRepositoryConfigJob < ApplicationJob
-  queue_as :default
-
   def perform(publication:)
     if publication.repository.config_exists?
       publication.git_provider_adapter.delete_blob(

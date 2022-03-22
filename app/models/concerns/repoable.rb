@@ -67,6 +67,6 @@ module Repoable
   end
 
   def uninstall_repository_webhooks
-    git_provider.adapter.delete_repository_webhook(fullname: repo.fullname, id: repo.webhook_id)
+    git_provider_adapter.delete_repository_webhook(id: repo.webhook_id)
   end
 end

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class AddRepositoryConfigJob < ApplicationJob
-  queue_as :default
-
   def perform(publication:)
     unless publication.repository.config_exists?
       publication.git_provider_adapter.create_or_update_blob(

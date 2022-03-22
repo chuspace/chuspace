@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class InstallRepositoryWebhooksJob < ApplicationJob
-  queue_as :default
-
   def perform(publication:)
     Publication.transaction do
       if publication.repo.webhook_id.blank?
