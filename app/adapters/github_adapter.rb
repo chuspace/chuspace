@@ -76,7 +76,7 @@ class GithubAdapter < ApplicationAdapter
   end
 
   def orgs(options: {})
-    get('user/orgs', options)
+    user_from_response(get('user/orgs', options))
   end
 
   def repositories(username:)
@@ -117,7 +117,7 @@ class GithubAdapter < ApplicationAdapter
   end
 
   def user(options: {})
-    get('user', options)
+    user_from_response(get('user', options))
   end
 
   def users

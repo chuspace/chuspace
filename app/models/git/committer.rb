@@ -2,6 +2,8 @@
 
 module Git
   class Committer < ActiveType::Object
+    attribute :id, :integer
+    attribute :avatar_url, :string
     attribute :username, :string
     attribute :name, :string
     attribute :email, :string

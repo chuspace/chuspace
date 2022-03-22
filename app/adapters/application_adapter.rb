@@ -77,4 +77,19 @@ class ApplicationAdapter
       response
     end
   end
+
+  def user_from_response(response)
+    case response
+    when Array then response.map { |item| user_from_response(item) }
+    when Sawyer::Resource
+      Git::Committer.new(
+        id: response.id,
+        name: response.name,
+        username: response.login || response.username,
+        avatar_url: response.avatar_url
+      )
+    else
+      response
+    end
+  end
 end

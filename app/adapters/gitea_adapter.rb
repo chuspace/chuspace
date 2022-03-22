@@ -32,7 +32,8 @@ class GiteaAdapter < GithubAdapter
   end
 
   def search_repositories(query:, login:, options: { per_page: 5 })
-    options[:uid] = user.id
+    options[:uid] = users.find { |user| user.username == login }.id
+    options[:exclusive] = true
     @search_repositories ||= repository_from_response(search('repos/search', query, options).data)
   end
 end
