@@ -107,7 +107,8 @@ class GithubAdapter < ApplicationAdapter
     nil
   end
 
-  def search_repositories(query:, options: { sort: 'asc', per_page: 5 })
+  def search_repositories(query:, login:, options: { sort: 'asc', per_page: 5 })
+    query = "#{query} user:#{login}"
     repository_from_response(search('search/repositories', query, options).items)
   end
 

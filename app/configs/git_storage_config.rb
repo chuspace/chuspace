@@ -15,6 +15,12 @@ class GitStorageConfig < ApplicationConfig
       provider: :gitlab,
       endpoint: 'https://gitlab.com/api/v4',
       scopes: 'api,read_repository,write_repository'
+    },
+    gitea: {
+      label: 'Gitea.com',
+      provider: :gitea,
+      endpoint: 'https://gitea.com/api/v1',
+      scopes: 'api,read_repository,write_repository'
     }
   )
 

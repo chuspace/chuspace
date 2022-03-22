@@ -120,7 +120,7 @@ module FaradayClient
         http.headers[:user_agent] = user_agent
 
         case name
-        when 'github'
+        when 'github', 'gitea'
           http.authorization 'token', @access_token
         when 'gitlab'
           http.authorization 'Bearer', @access_token

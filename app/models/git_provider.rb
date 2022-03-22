@@ -22,7 +22,8 @@ class GitProvider < ApplicationRecord
 
   def adapter
     case name
-    when 'github', 'github_enterprise', 'gitea' then GithubAdapter.new(access_token: access_token, endpoint: endpoint)
+    when 'github', 'github_enterprise' then GithubAdapter.new(access_token: access_token, endpoint: endpoint)
+    when 'gitea' then GiteaAdapter.new(access_token: access_token, endpoint: endpoint)
     when 'gitlab', 'gitlab_foss' then GitlabAdapter.new(access_token: access_token, endpoint: endpoint)
     else fail GitAdapterNotFoundError, "#{name} adapter not found"
     end

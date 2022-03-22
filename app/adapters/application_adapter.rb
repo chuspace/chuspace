@@ -67,7 +67,7 @@ class ApplicationAdapter
         name: response.name,
         owner: response.namespace&.path || response.owner&.login,
         description: response.description,
-        visibility: response.visibility,
+        visibility: response.visibility || response.owner&.visibility,
         ssh_url: response.ssh_url_to_repo || response.ssh_url,
         html_url: response.web_url || response.html_url,
         default_branch: response.default_branch,

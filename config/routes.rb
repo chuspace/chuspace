@@ -58,16 +58,7 @@ Rails.application.routes.draw do
 
   resources :git_providers, only: :show do
     resources :repos, only: %i[index create], module: :git_providers
-  end
-
-  namespace :git_providers do
-    namespace :github do
-      resources :callbacks, only: :index, path: 'callback'
-    end
-
-    namespace :gitlab do
-      resources :callbacks, only: :index, path: 'callback'
-    end
+    resources :oauth_callbacks, only: :index, path: 'callback', module: :git_providers
   end
 
   resources :users, path: '', except: :index, param: :username, constraints: UserConstraint.new do

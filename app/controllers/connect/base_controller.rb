@@ -21,9 +21,7 @@ module Connect
     end
 
     def repos
-      login = params[:login] || @git_provider.adapter.user.login
-      query = "#{params[:query]} user:#{login}"
-      @repositories = @git_provider.adapter.search_repositories(query: query)
+      @repositories = @git_provider.adapter.search_repositories(query: params[:query], login: params[:login])
 
       render(
         turbo_stream: turbo_stream.replace(

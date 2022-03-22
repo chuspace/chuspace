@@ -38,4 +38,9 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            callback_path: '/git_providers/gitlab/callback',
            scope: 'api',
            **gitlab_options
+  provider OmniAuth::Strategies::GiteaApp,
+          Rails.application.credentials.gitea_app[:client_id],
+          Rails.application.credentials.gitea_app[:client_secret],
+          name: 'gitea_app',
+          callback_path: '/git_providers/gitea/callback'
 end
