@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 gitlab_options = {
-  scope: OmniauthConfig.new.gitlab[:scope],
   client_options: {
-    site: 'https://gitlab.YOURDOMAIN.com/api/v4'
+    site: 'https://gitlab.com/api/v4',
+    authorize_url: 'https://gitlab.com/oauth/authorize',
+    token_url: 'https://gitlab.com/oauth/token'
   }
 }
 
@@ -16,6 +17,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :gitlab,
            Rails.application.credentials.gitlab[:client_id],
            Rails.application.credentials.gitlab[:client_secret],
+           scope: OmniauthConfig.new.gitlab[:scope],
            **gitlab_options
 
   provider :bitbucket,
@@ -28,12 +30,13 @@ Rails.application.config.middleware.use OmniAuth::Builder do
           Rails.application.credentials.github_app[:client_id],
           Rails.application.credentials.github_app[:client_secret],
           name: 'github_app',
-          callback_path: '/git_providers/github_app/callback',
+          callback_path: '/git_providers/github/callback',
           scope: 'user,profile,repo'
   provider OmniAuth::Strategies::GitLab,
            Rails.application.credentials.gitlab_app[:client_id],
            Rails.application.credentials.gitlab_app[:client_secret],
            name: 'gitlab_app',
            callback_path: '/git_providers/gitlab/callback',
-           scope: 'api'
+           scope: 'api',
+           **gitlab_options
 end

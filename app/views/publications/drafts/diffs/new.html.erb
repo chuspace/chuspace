@@ -1,11 +1,24 @@
 <%= turbo_frame_tag dom_id(@draft, :diff) do %>
-  <code-editor
-    mode='markdown-diff'
-    content='<%=  @diff %>'
-    readonly="nocursor"
-    downloadable="false"
-    filename="<%= @draft.name %>"
-    lazy='false'
-  >
-  </code-editor>
+  <div class='w-full chu-editor'>
+    <chu-editor
+        collaboration='<%= @collaboration_session.editor_attrs(user: Current.user) %>'
+        mode='diff'
+        <%= @draft.front_matter? ? '' : 'excludeFrontmatter' %>
+      >
+      <%= turbo_frame_tag(@draft) do %>
+        <%= simple_form_for @draft, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>
+          <div class='mt-8' spellcheck="false" data-text='content'>
+            <%= form.input(
+                :body,
+                as: :text,
+                label: false,
+                wrapper: false,
+                input_html: { class: 'hidden content', value: @draft.decoded_content  }
+              )
+            %>
+          </div>
+        <% end %>
+      <% end %>
+    </chu-editor>
+  </div>
 <% end %>

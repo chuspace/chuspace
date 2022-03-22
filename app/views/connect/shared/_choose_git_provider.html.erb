@@ -10,7 +10,7 @@
     <% else %>
       <%= button_to(
           'Connect',
-          "/auth/#{git_provider.name}_api",
+          "/auth/#{git_provider.name}_app",
           class: 'btn btn-primary btn-sm',
           data: { turbo: false },
           title: "Click to allow api access to #{git_provider.name}",

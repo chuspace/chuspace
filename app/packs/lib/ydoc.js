@@ -5,7 +5,12 @@ import * as nodes from 'editor/schema/nodes'
 
 import { Buffer } from 'buffer'
 import { Schema } from 'prosemirror-model'
-import { encodeStateAsUpdateV2 } from 'yjs'
+import {
+  encodeStateAsUpdateV2,
+  encodeSnapshotV2,
+  snapshot,
+  PermanentUserData
+} from 'yjs'
 import { filterElementsBy } from 'editor/helpers'
 import { markdownParser } from 'editor/markdowner'
 import { prosemirrorToYDoc } from 'y-prosemirror'
@@ -14,7 +19,7 @@ import { toBase64 } from 'lib0/buffer'
 
 global.Buffer = Buffer
 
-const toYDoc = (markdown) => {
+const toYDoc = (markdown, username) => {
   const options = {
     excludeFrontmatter: false,
     mode: 'default',
@@ -38,8 +43,21 @@ const toYDoc = (markdown) => {
 
   const contentParser = markdownParser(pmSchema)
   const pmDoc = contentParser.parse(markdown)
+  const ydoc = prosemirrorToYDoc(pmDoc)
 
-  return toBase64(encodeStateAsUpdateV2(prosemirrorToYDoc(pmDoc)))
+  const permanentUserData = new PermanentUserData(ydoc)
+  permanentUserData.setUserMapping(ydoc, ydoc.clientID, username)
+  const versions = ydoc.getArray('versions')
+
+  versions.push([
+    {
+      date: new Date().getTime(),
+      snapshot: encodeSnapshotV2(snapshot(ydoc)),
+      clientID: ydoc.clientID
+    }
+  ])
+
+  return toBase64(encodeStateAsUpdateV2(ydoc))
 }
 
 export default toYDoc

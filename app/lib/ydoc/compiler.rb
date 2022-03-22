@@ -9,21 +9,24 @@ module Ydoc
     def initialize
       source = <<-JS
         var global = global || this;
+        var window = global || this;
         var self = self || this;
         var console = self || this;
-        global.clearTimeout = global.clearTimeout || function () {};
-        global.setTimeout = global.setTimeout || function () {};
-        global.clearInterval = global.clearInterval || function () {};
+        var setTimeout = function () {};
+        window.setTimeout = setTimeout
+        global.clearTimeout = global.clearTimeout || setTimeout;
+        global.setTimeout = global.setTimeout || setTimeout;
+        global.clearInterval = global.clearInterval || setTimeout;
       JS
 
       source += "\n\n" + Rails.root.join('app/lib/ydoc/compiler.js').read
       @context = ExecJS.compile(source)
     end
 
-    def compile(markdown:)
+    def compile(markdown:, username:)
       context.eval(
         <<~MD
-          toYDoc("#{ApplicationController.helpers.escape_javascript(markdown)}")
+          toYDoc("#{ApplicationController.helpers.escape_javascript(markdown)}", "#{username}")
         MD
       )
     end

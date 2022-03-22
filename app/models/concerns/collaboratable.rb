@@ -5,7 +5,7 @@ module Collaboratable
     CollaborationSession.transaction do
       collaboration_session = collaboration_sessions.find_or_initialize_by(blob_path: blob_path) do |session|
         session.members.build(user: user, creator: true)
-        session.initial_ydoc = $ydoc.compile(markdown: draft(path: blob_path).decoded_content)
+        session.initial_ydoc = $ydoc.compile(markdown: draft(path: blob_path).decoded_content, username: user.username)
         session.save!
       end
 

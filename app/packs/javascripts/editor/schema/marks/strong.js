@@ -22,7 +22,8 @@ export default class Strong extends Mark {
         },
         {
           style: 'font-weight',
-          getAttrs: (value: string) => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null
+          getAttrs: (value: string) =>
+            /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null
         }
       ],
       toDOM: () => ['strong', 0]

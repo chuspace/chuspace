@@ -10,9 +10,9 @@ import {
   PermanentUserData,
   Doc as YDoc,
   applyUpdateV2,
-  decodeSnapshot,
+  decodeSnapshotV2,
   emptySnapshot,
-  encodeSnapshot,
+  encodeSnapshotV2,
   encodeStateAsUpdateV2,
   equalSnapshots,
   snapshot
@@ -48,6 +48,23 @@ import { randomColor } from 'helpers/random-color'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
 const DEFAULT_EDITOR_NODES = ['doc', 'text', 'paragraph']
+
+class LocalRemoteUserData extends PermanentUserData {
+  /**
+   * @param {number} clientid
+   * @return {string}
+   */
+  getUserByClientId(clientid) {
+    return super.getUserByClientId(clientid) || 'remote'
+  }
+  /**
+   * @param {Y.ID} id
+   * @return {string}
+   */
+  getUserByDeletedId(id) {
+    return super.getUserByDeletedId(id) || 'remote'
+  }
+}
 
 const awarenessStatesToArray = (states: Map<number, Record<string, any>>) => {
   return Array.from(states.entries()).map(([key, value]) => {
@@ -121,7 +138,7 @@ export default class ChuEditor extends LitElement {
     this.collaboration = null
     this.excludeFrontmatter = false
     this.mode = 'default'
-    this.editable = true
+    this.editable = false
     this.contribution = false
 
     if (this.mode === 'node') this.nodeName = 'paragraph'
@@ -147,8 +164,24 @@ export default class ChuEditor extends LitElement {
     this.state = this.createState()
     this.view = this.createView()
 
-    this.view.props.commands = this.manager.commands
-    this.setActiveNodesAndMarks()
+    if (this.editable) {
+      this.view.props.commands = this.manager.commands
+      this.setActiveNodesAndMarks()
+    }
+
+    this.renderRoot
+      .querySelector('#add-version')
+      ?.addEventListener('click', (event) => {
+        event.preventDefault()
+        this.addVersion()
+        console.log('Added a new version', this.addVersion())
+      })
+
+    if (this.isDiffMode) {
+      setTimeout(() => {
+        this.attachVersion()
+      }, 100)
+    }
   }
 
   createRenderRoot() {
@@ -159,27 +192,16 @@ export default class ChuEditor extends LitElement {
     return this.mode === 'node' && !!this.nodeName
   }
 
+  get isDiffMode() {
+    return this.mode === 'diff'
+  }
+
   get plugins() {
     let collaborationPlugins = []
     let keymaps = {}
 
     if (this.collaboration) {
       this.users = []
-
-      this.provider = new ActionCableProvider(
-        createConsumer(),
-        this.collaboration,
-        this.ydoc
-      )
-
-      this.provider.on('synced', () => {
-        this.permanentUserData = new PermanentUserData(this.ydoc)
-        this.permanentUserData.setUserMapping(
-          this.ydoc,
-          this.ydoc.clientID,
-          this.collaboration.user.username
-        )
-      })
 
       const render = (user) => {
         const cursor = document.createElement('span')
@@ -197,34 +219,69 @@ export default class ChuEditor extends LitElement {
         return cursor
       }
 
-      collaborationPlugins = [
-        ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
-          permanentUserData: this.permanentUserData
-        }),
-        yUndoPlugin(),
-        yCursorPlugin(
-          (() => {
-            this.provider.awareness.setLocalStateField('user', {
-              color: `#${randomColor(this.name)}`,
-              ...this.collaboration.user
-            })
+      if (this.editable) {
+        this.provider = new ActionCableProvider(
+          createConsumer(),
+          this.collaboration,
+          this.ydoc
+        )
 
-            this.users = awarenessStatesToArray(this.provider.awareness.states)
+        this.provider.on('synced', () => {
+          this.permanentUserData = new LocalRemoteUserData(
+            this.ydoc,
+            this.ydoc.getMap('users')
+          )
+          this.permanentUserData.setUserMapping(
+            this.ydoc,
+            this.ydoc.clientID,
+            this.collaboration.user.username
+          )
+        })
 
-            this.provider.awareness.on('update', () => {
-              const update = awarenessStatesToArray(
+        collaborationPlugins.push(yUndoPlugin())
+        collaborationPlugins.push(
+          yCursorPlugin(
+            (() => {
+              this.provider.awareness.setLocalStateField('user', {
+                color: `#${randomColor(this.name)}`,
+                ...this.collaboration.user
+              })
+
+              this.users = awarenessStatesToArray(
                 this.provider.awareness.states
               )
 
-              this.users = awarenessStatesToArray(update)
-            })
+              this.provider.awareness.on('update', () => {
+                const update = awarenessStatesToArray(
+                  this.provider.awareness.states
+                )
 
-            return this.provider.awareness
-          })(),
-          {
-            cursorBuilder: render
-          }
+                this.users = awarenessStatesToArray(update)
+              })
+
+              return this.provider.awareness
+            })(),
+            {
+              cursorBuilder: render
+            }
+          )
         )
+      } else {
+        this.permanentUserData = new LocalRemoteUserData(
+          this.ydoc,
+          this.ydoc.getMap('users')
+        )
+        this.permanentUserData.setUserMapping(
+          this.ydoc,
+          this.ydoc.clientID,
+          this.collaboration.user.username
+        )
+      }
+
+      collaborationPlugins = [
+        ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
+          permanentUserData: this.permanentUserData
+        })
       ]
 
       const commands = {
@@ -300,7 +357,7 @@ export default class ChuEditor extends LitElement {
       new Plugin({
         key: new PluginKey('editable'),
         props: {
-          editable: () => !!this.editable
+          editable: () => this.editable
         }
       }),
       new Plugin({
@@ -326,7 +383,7 @@ export default class ChuEditor extends LitElement {
     const view = new EditorView(this, {
       state: this.state,
       schema: this.schema,
-      editable: () => !!this.editable,
+      editable: () => this.editable,
       imageProviderPath: this.imageProviderPath,
       contributionPath: this.contributionPath,
       dispatchTransaction: this.dispatchTransaction.bind(this),
@@ -352,7 +409,9 @@ export default class ChuEditor extends LitElement {
   autosave = debounce(
     () => {
       const statusElement = document.getElementById('chu-editor-status')
-      statusElement.textContent = 'Auto saving...'
+      if (statusElement) statusElement.textContent = 'Auto saving...'
+
+      // this.addVersion()
 
       post(this.autoSavePath, {
         body: JSON.stringify({
@@ -368,15 +427,11 @@ export default class ChuEditor extends LitElement {
 
   attachVersion = () => {
     const versions = this.ydoc.getArray('versions')
-    const lastVersion =
-      versions.length > 0
-        ? decodeSnapshot(versions.get(versions.length - 1).snapshot)
-        : emptySnapshot
 
-    this.view.dispatch(
-      this.view.state.tr.setMeta(ySyncPluginKey, {
-        snapshot: null,
-        prevSnapshot: lastVersion
+    this.dispatchTransaction(
+      this.state.tr.setMeta(ySyncPluginKey, {
+        snapshot: decodeSnapshotV2(versions.get(versions.length - 1).snapshot),
+        prevSnapshot: decodeSnapshotV2(versions.get(0).snapshot)
       })
     )
   }
@@ -385,12 +440,14 @@ export default class ChuEditor extends LitElement {
     const versions = this.ydoc.getArray('versions')
     const prevVersion =
       versions.length === 0 ? null : versions.get(versions.length - 1)
-    const prevSnapshot =
-      prevVersion === null
-        ? emptySnapshot
-        : decodeSnapshot(prevVersion.snapshot)
 
-    const snapshot = snapshot(this.ydoc)
+    console.log(prevVersion)
+    const prevSnapshot =
+      prevVersion?.snapshot !== null
+        ? emptySnapshot
+        : encodeSnapshotV2(prevVersion.snapshot)
+
+    const currentSnapshot = snapshot(this.ydoc)
 
     if (prevVersion != null) {
       prevSnapshot.sv.set(
@@ -399,22 +456,26 @@ export default class ChuEditor extends LitElement {
       )
     }
 
-    if (!equalSnapshots(prevSnapshot, snapshot)) {
+    if (!equalSnapshots(prevSnapshot, currentSnapshot)) {
       versions.push([
         {
           date: new Date().getTime(),
-          snapshot: encodeSnapshot(snapshot),
+          snapshot: encodeSnapshotV2(currentSnapshot),
           clientID: this.ydoc.clientID
         }
       ])
     }
+
+    this.autosave()
+
+    return currentSnapshot
   }
 
   dispatchTransaction(transaction: Transaction) {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
-    if (transaction.docChanged) {
+    if (transaction.docChanged && this.editable) {
       this.emitUpdate()
       this.autosave()
     }
