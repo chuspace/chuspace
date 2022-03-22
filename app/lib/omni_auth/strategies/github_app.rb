@@ -7,7 +7,7 @@ module OmniAuth
     class GithubApp < OmniAuth::Strategies::OAuth2
       option :client_options, {
         site: 'https://api.github.com',
-        authorize_url: 'https://github.com/apps/chuspace-dev/installations/new',
+        authorize_url: "https://github.com/apps/#{Rails.application.credentials.github_app[:name]}/installations/new",
         token_url: 'https://github.com/login/oauth/access_token'
       }
 
