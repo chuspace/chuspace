@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   include Redirectable
   include ActiveStorage::SetCurrent
 
-  prepend_before_action :private_beta_stop
+  prepend_before_action :private_beta_stop, if: -> { Rails.env.production? }
 
   after_action :verify_authorized
 
