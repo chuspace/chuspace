@@ -1,15 +1,16 @@
 <section class='min-h-full flex items-center justify-between'>
-  <div>
-    <h1 class='font-bold lg:font-black text-5xl xl:text-8xl lg:text-7xl md:text-6xl leading-none'>
+  <div class='text-center sm:w-2/3 mx-auto'>
+    <h1 class='font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-focus lg:font-black text-9xl'>
       <%= t('.heading') %>
     </h1>
-    <h4 class="mt-4 lg:mt-8 w-full text-2xl sm:w-3/4 font-normal text-secondary">
+    <h4 class="mt-4 lg:mt-8 o text-xl font-normal text-secondary leading-normal">
       <%= t('.intro') %>
     </h4>
 
-    <div class='mt-8 lg:mt-12'>
-      <%= link_to 'Get started', signups_path, class: 'btn btn-primary', 'data-turbo': false %>
-      <%= link_to 'Know more', '#', class: 'btn btn-outline ml-2' %>
-    </div>
+    <% unless Rails.env.production? %>
+      <div class='mt-8 lg:mt-12'>
+        <%= link_to 'Get started', signups_path, class: 'btn btn-primary', 'data-turbo': false %>
+      </div>
+    <% end %>
   </div>
 </section>

@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   include Redirectable
   include ActiveStorage::SetCurrent
 
+  prepend_before_action :private_beta_stop
+
   after_action :verify_authorized
 
   delegate :t, to: :I18n
@@ -25,5 +27,9 @@ class ApplicationController < ActionController::Base
 
   def current_user
     Current.user
+  end
+
+  def private_beta_stop
+    redirect_to root_path, notice: 'We are in private beta!'
   end
 end

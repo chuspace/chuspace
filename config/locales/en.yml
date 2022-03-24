@@ -125,7 +125,7 @@ en:
       cta: Log in with one of the following
       welcome: Welcome back to Chuspace
   shared:
-    pitch: Integrated blogging platform for developers and teams
+    pitch: Integrated blogging platform for programmers and teams
     features:
       list:
         - title: Truly own your content
@@ -184,7 +184,8 @@ en:
         app, please %{link} and enter the token below
   welcome:
     index:
-      heading: Defragging dev blogs
+      heading: Read Write Collaborate
       intro:
-        Chuspace is an indexing and collaborative blogging platform, which works
-        with any markdown powered static site blog hosted on Github, Gitlab or Gitea.
+        Chuspace is a collaborative blogging platform for programmers and teams
+        Publish straight from your git repository hosted on Github, Gitlab or Gitea
+        Works with any static site framework that supports markdown
