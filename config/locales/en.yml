@@ -187,5 +187,5 @@ en:
       heading: Read Write Collaborate
       intro:
         Chuspace is a collaborative blogging platform for programmers and teams
-        Publish straight from your git repository hosted on Github, Gitlab or Gitea
+        Publish straight from your git repository hosted on Github, Gitlab and Gitea
         Works with any static site framework that supports markdown
