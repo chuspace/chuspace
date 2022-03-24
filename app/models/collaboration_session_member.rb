@@ -19,6 +19,6 @@ class CollaborationSessionMember < ApplicationRecord
 
   def set_online
     self.online = true
-    self.last_seen_at = Time.now
+    self.last_seen_at = Time.current
   end
 end

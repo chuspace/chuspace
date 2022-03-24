@@ -30,5 +30,13 @@ module Ydoc
         MD
       )
     end
+
+    def parse(ydoc:)
+      context.eval(
+        <<~MD
+          fromYDoc("#{ydoc}")
+        MD
+      )
+    end
   end
 end

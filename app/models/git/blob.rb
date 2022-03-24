@@ -15,15 +15,14 @@ module Git
       @commits ||= adapter.commits(path: path)
     end
 
-    def commit(content:, message: nil, committer:, author:)
+    def create(content:, message: nil, committer:, author:)
       fail ArgumentError, 'Not a valid author' unless committer.is_a?(Git::Committer) || author.is_a?(Git::Committer)
       fail TypeError, 'Can not be committed' unless is_a?(Draft) || is_a?(Asset)
 
       if valid?
-        adapter.create_or_update_blob(
+        adapter.create_blob(
           path: path,
           content: Base64.encode64(content),
-          sha: id,
           message: message,
           committer: committer,
           author: author
@@ -33,8 +32,24 @@ module Git
       self
     end
 
-    alias update commit
-    alias create commit
+    def update(content:, message: nil, committer:, author:)
+      fail ArgumentError, 'Not a valid author' unless committer.is_a?(Git::Committer) || author.is_a?(Git::Committer)
+      fail TypeError, 'Can not be committed' unless is_a?(Draft) || is_a?(Asset)
+      fail ArgumentError, 'ID can not be blank' if id.blank?
+
+      if valid?
+        adapter.update_blob(
+          path: path,
+          content: Base64.encode64(content),
+          message: message,
+          sha: id,
+          committer: committer,
+          author: author
+        )
+      end
+
+      self
+    end
 
     def decorate(publication:)
       if MarkdownValidator.valid?(name_or_path: name)
@@ -57,6 +72,8 @@ module Git
         committer: committer,
         author: author
       )
+
+      self
     end
 
     def persisted?

@@ -1,5 +1,5 @@
 <%= turbo_frame_tag dom_id(@draft, :diff) do %>
-  <div class='w-full chu-editor'>
+  <div class='chu-editor'>
     <chu-editor
         collaboration='<%= @collaboration_session.editor_attrs(user: Current.user) %>'
         mode='diff'

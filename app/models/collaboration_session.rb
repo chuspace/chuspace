@@ -7,8 +7,7 @@ class CollaborationSession < ApplicationRecord
 
   validates :publication_id, uniqueness: { scope: %i[blob_path number] }
 
-  before_validation   :assign_next_number, on: :create
-  after_create_commit :deactive_previous_sessions
+  before_validation :assign_next_number, on: :create
 
   class << self
     def active
@@ -34,14 +33,5 @@ class CollaborationSession < ApplicationRecord
   def assign_next_number
     self.active = true
     self.number = (publication.collaboration_sessions.maximum(:number) || 0) + 1
-  end
-
-  def deactive_previous_sessions
-    publication
-      .collaboration_sessions
-      .active
-      .where(blob_path: blob_path)
-      .where('number < ?', number)
-      .update_all(active: false)
   end
 end

@@ -9,7 +9,7 @@ class Post < ApplicationRecord
   belongs_to :publication, touch: true
   belongs_to :author, class_name: 'User', touch: true
 
-  validates :title, :summary, :permalink, :date, :body, :body_html, :blob_sha, :commit_sha, :visibility, :topic_list, presence: true
+  validates :title, :permalink, :body, :body_html, :blob_sha, :commit_sha, :visibility, presence: true
   validates :blob_path, presence: :true, uniqueness: { scope: %i[version publication_id] }, markdown: true
   validates :version, presence: :true, uniqueness: { scope: :publication_id }
 

@@ -34,9 +34,9 @@ class GithubAdapter < ApplicationAdapter
     commit_from_response(get("repos/#{repo_fullname}/commits/#{sha}"))
   end
 
-  def create_or_update_blob(path:, content:, committer:, author:, sha: nil, message: nil)
-    message ||= sha.blank? ? "Create #{path}" : "Update #{path}"
-    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }).content)
+  def create_blob(path:, content:, committer:, author:, sha: nil, message: nil)
+    message ||= "Create #{path}"
+    update_blob(path: path, content: content, committer: committer, author: author, sha: sha, message: message)
   end
 
   def create_repository_webhook(type: nil)
@@ -114,6 +114,11 @@ class GithubAdapter < ApplicationAdapter
 
   def tree(sha: head_sha)
     get("repos/#{repo_fullname}/git/trees/#{sha}", { recursive: true }).tree
+  end
+
+  def update_blob(path:, content:, committer:, author:, sha:, message: nil)
+    message ||= "Update #{path}"
+    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }).content)
   end
 
   def user(options: {})

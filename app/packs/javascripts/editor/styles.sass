@@ -50,20 +50,6 @@
   user-select: none
   word-break: normal
 
-
-ychange[ychange_type='removed'], p[ychange_type='removed']
-  text-decoration: line-through
-
-
-*:not(ychange)[ychange_type='removed']
-  background-color: #ff5a56
-  color: inherit !important
-
-img[ychange_type='removed']
-  padding: 2px
-
-
-
 .chu-editor
   @apply antialiased font-sans
 
@@ -157,8 +143,10 @@ img[ychange_type='removed']
   div + br
     display: none
 
-  .insertion
-    @apply bg-success text-neutral max-w-full whitespace-normal
+  ychange[ychange_type="added"]
+    @apply border-t-2 border-b-2 max-w-full whitespace-normal
+    background-color: #22c55e
+    border-color: #86efac
 
     pre
       @apply p-4 overflow-x-auto text-base
@@ -170,8 +158,11 @@ img[ychange_type='removed']
     img
       @apply border-4 border-success
 
-  .deletion
-    @apply bg-error line-through text-neutral max-w-full whitespace-normal
+  ychange[ychange_type="removed"]
+    @apply border-t-2 border-b-2 line-through max-w-full whitespace-normal
+    background-color: #ef4444
+    border-color: #fca5a5
+
     *
       background: inherit
       color: inherit

@@ -4,8 +4,7 @@
   <body class="flex flex-col h-full">
     <%= render 'layouts/flash' %>
     <%= render 'publications/drafts/header', draft: @draft %>
-    <%# <%= turbo_stream_from @collaboration_session %> %>
-    <%= render 'publications/drafts/collaborators', members: @collaboration_session.members %>
+    <%= render 'publications/drafts/collaborators', members: @collaboration_session.members.order(:id) %>
     <section class="container flex-1 sm:mt-24">
       <%= yield %>
     </section>

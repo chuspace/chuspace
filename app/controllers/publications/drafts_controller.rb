@@ -40,6 +40,7 @@ module Publications
       authorize! @draft
 
       if @draft.delete(**commit_params)
+        @draft.end_collaboration_session
         redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
       else
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
@@ -50,7 +51,8 @@ module Publications
       authorize! @draft, to: :commit?
 
       if @draft.update(**commit_params)
-        @draft.auto_publish(author: Current.user) if draft_params[:auto_publish]
+        @draft.publish(author: Current.user) if draft_params[:auto_publish].present?
+        @draft.end_collaboration_session
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
       else
         respond_to do |format|
@@ -85,7 +87,7 @@ module Publications
 
     def commit_params
       {
-        content: @draft.local_content.value,
+        content: @draft.decoded_collaboration_session_content,
         message: draft_params[:commit_message],
         committer: Git::Committer.chuspace,
         author: Git::Committer.for(user: Current.user)

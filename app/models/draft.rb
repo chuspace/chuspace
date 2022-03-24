@@ -18,6 +18,10 @@ class Draft < Git::Blob
     publication.collaboration_sessions.active.find_by(blob_path: path)
   end
 
+  def end_collaboration_session
+    collaboration_session&.end_collaboration_session(blob_path: path) unless stale?
+  end
+
   def collab?
     !readme?
   end
@@ -28,6 +32,10 @@ class Draft < Git::Blob
 
   def decoded_content
     Base64.decode64(content).force_encoding('UTF-8')
+  end
+
+  def decoded_collaboration_session_content
+    $ydoc.parse(ydoc: collaboration_session.current_ydoc) if collaboration_session.current_ydoc.present?
   end
 
   def front_matter
@@ -103,8 +111,8 @@ class Draft < Git::Blob
   end
 
   def stale?
-    collaboration_session&.current_ydoc.present? &&
-      collaboration_session.initial_ydoc != collaboration_session.current_ydoc
+    decoded_collaboration_session_content &&
+      decoded_collaboration_session_content != decoded_content
   end
 
   def status
@@ -121,7 +129,7 @@ class Draft < Git::Blob
 
   def to_post_attributes
     {
-      date: date,
+      date: date || Date.today,
       title: title,
       summary: summary,
       topic_list: topics,
@@ -133,7 +141,7 @@ class Draft < Git::Blob
     }
   end
 
-  def auto_publish(author:)
+  def publish(author:)
     publication.posts.create(author: author, **to_post_attributes)
   end
 

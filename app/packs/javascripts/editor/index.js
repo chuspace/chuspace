@@ -149,6 +149,7 @@ export default class ChuEditor extends LitElement {
 
     if (this.collaboration) {
       this.ydoc = new YDoc()
+      this.ydoc.gc = false
       applyUpdateV2(this.ydoc, fromBase64(this.collaboration.ydoc))
     }
 
@@ -168,14 +169,6 @@ export default class ChuEditor extends LitElement {
       this.view.props.commands = this.manager.commands
       this.setActiveNodesAndMarks()
     }
-
-    this.renderRoot
-      .querySelector('#add-version')
-      ?.addEventListener('click', (event) => {
-        event.preventDefault()
-        this.addVersion()
-        console.log('Added a new version', this.addVersion())
-      })
 
     if (this.isDiffMode) {
       setTimeout(() => {
@@ -219,6 +212,27 @@ export default class ChuEditor extends LitElement {
         return cursor
       }
 
+      const currentUserColor = randomColor({
+        luminosity: 'light',
+        hue: 'orange',
+        seed: this.collaboration.user.username
+      })
+
+      const colors = Array.from(this.ydoc.getMap('users').keys()).map((key) => {
+        return {
+          light: randomColor({
+            seed: key,
+            hue: 'orange',
+            luminosity: 'light'
+          }),
+          dark: randomColor({
+            seed: key,
+            hue: 'orange',
+            luminosity: 'dark'
+          })
+        }
+      })
+
       if (this.editable) {
         this.provider = new ActionCableProvider(
           createConsumer(),
@@ -231,6 +245,7 @@ export default class ChuEditor extends LitElement {
             this.ydoc,
             this.ydoc.getMap('users')
           )
+
           this.permanentUserData.setUserMapping(
             this.ydoc,
             this.ydoc.clientID,
@@ -238,12 +253,15 @@ export default class ChuEditor extends LitElement {
           )
         })
 
-        collaborationPlugins.push(yUndoPlugin())
-        collaborationPlugins.push(
+        collaborationPlugins = [
+          ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
+            permanentUserData: this.permanentUserData,
+            colors
+          }),
           yCursorPlugin(
             (() => {
               this.provider.awareness.setLocalStateField('user', {
-                color: `#${randomColor(this.name)}`,
+                color: currentUserColor,
                 ...this.collaboration.user
               })
 
@@ -264,8 +282,9 @@ export default class ChuEditor extends LitElement {
             {
               cursorBuilder: render
             }
-          )
-        )
+          ),
+          yUndoPlugin()
+        ]
       } else {
         this.permanentUserData = new LocalRemoteUserData(
           this.ydoc,
@@ -276,13 +295,14 @@ export default class ChuEditor extends LitElement {
           this.ydoc.clientID,
           this.collaboration.user.username
         )
-      }
 
-      collaborationPlugins = [
-        ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
-          permanentUserData: this.permanentUserData
-        })
-      ]
+        collaborationPlugins.push(
+          ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
+            permanentUserData: this.permanentUserData,
+            colors
+          })
+        )
+      }
 
       const commands = {
         undo: () => ({ tr, state, dispatch }) => {
@@ -409,9 +429,8 @@ export default class ChuEditor extends LitElement {
   autosave = debounce(
     () => {
       const statusElement = document.getElementById('chu-editor-status')
+      this.addVersion()
       if (statusElement) statusElement.textContent = 'Auto saving...'
-
-      // this.addVersion()
 
       post(this.autoSavePath, {
         body: JSON.stringify({
@@ -438,24 +457,23 @@ export default class ChuEditor extends LitElement {
 
   addVersion = () => {
     const versions = this.ydoc.getArray('versions')
+
     const prevVersion =
       versions.length === 0 ? null : versions.get(versions.length - 1)
-
-    console.log(prevVersion)
     const prevSnapshot =
-      prevVersion?.snapshot !== null
+      prevVersion === null
         ? emptySnapshot
-        : encodeSnapshotV2(prevVersion.snapshot)
+        : decodeSnapshotV2(prevVersion.snapshot)
 
     const currentSnapshot = snapshot(this.ydoc)
 
     if (prevVersion != null) {
+      // account for the action of adding a version to ydoc
       prevSnapshot.sv.set(
         prevVersion.clientID,
-        prevSnapshot.sv.get(prevVersion.clientID) + 1
+        /** @type {number} */ (prevSnapshot.sv.get(prevVersion.clientID)) + 1
       )
     }
-
     if (!equalSnapshots(prevSnapshot, currentSnapshot)) {
       versions.push([
         {
@@ -465,8 +483,6 @@ export default class ChuEditor extends LitElement {
         }
       ])
     }
-
-    this.autosave()
 
     return currentSnapshot
   }

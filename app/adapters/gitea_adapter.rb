@@ -5,10 +5,10 @@ class GiteaAdapter < GithubAdapter
     'gitea'
   end
 
-  def commits(fullname:, path: nil)
+  def commits(path: nil)
     opts = {}
     opts[:path] = path if path
-    commits = get("repos/#{fullname}/commits", **opts)
+    commits = get("repos/#{repo_fullname}/commits", **opts)
 
     if path
       commits.select { |commit| commit.files.map(&:filename).include?(path) }

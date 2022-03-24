@@ -244,7 +244,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_19_171146) do
   create_table "posts", force: :cascade do |t|
     t.citext "permalink", null: false
     t.text "title", null: false
-    t.text "summary", null: false
+    t.text "summary"
     t.text "body", null: false
     t.text "body_html", null: false
     t.text "blob_path", null: false

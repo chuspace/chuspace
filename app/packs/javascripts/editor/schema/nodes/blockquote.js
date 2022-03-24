@@ -1,5 +1,7 @@
 // @flow
 
+import { calcYchangeDomAttrs, hoverWrapper } from 'editor/helpers'
+
 import { Node } from 'editor/base'
 import { Node as PMNode } from 'prosemirror-model'
 import { toggleWrap } from 'editor/commands'
@@ -10,12 +12,21 @@ export default class Blockquote extends Node {
 
   get schema() {
     return {
+      attrs: {
+        ychange: { default: null }
+      },
       content: 'block*',
       group: 'block',
       defining: true,
       draggable: false,
       parseDOM: [{ tag: 'blockquote' }],
-      toDOM: () => ['blockquote', 0]
+      toDOM(node) {
+        return [
+          'blockquote',
+          calcYchangeDomAttrs(node.attrs),
+          ...hoverWrapper(node.attrs.ychange, [0])
+        ]
+      }
     }
   }
 

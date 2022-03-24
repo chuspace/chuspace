@@ -1,12 +1,38 @@
 # frozen_string_literal: true
 
 class ApplicationAdapter
+  class MethodNotImplementedError < StandardError; end
+
   include FaradayClient::Connection
   attr_reader :endpoint, :access_token, :repo_fullname, :ref
+
+  REQUIRED_METHODS = %w[
+    blob
+    blobs
+    create_blob
+    create_repository_webhook
+    commit
+    commits
+    delete_repository_webhook
+    delete_blob
+    head_sha
+    orgs
+    repository
+    repositories
+    repository_folders
+    repository_files
+    search_repositories
+    tree
+    update_blob
+    users
+    user
+    webhooks
+  ]
 
   def initialize(endpoint:, access_token:)
     @endpoint = endpoint
     @access_token = access_token
+    check_method_implementation!
   end
 
   def apply_repository_scope(repo_fullname:, ref: 'HEAD')
@@ -16,7 +42,26 @@ class ApplicationAdapter
     self
   end
 
+  def name
+    fail MethodNotImplementedError, "name not implemented for #{self.class.name} adapter"
+  end
+
   private
+
+  def check_method_implementation!
+    errors = []
+
+    REQUIRED_METHODS.each do |method|
+      next if respond_to?(method)
+      errors << method
+    end
+
+    if errors.any?
+      errors << ["\n"]
+      errors << "not implemented for #{self.class.name} adapter"
+      fail MethodNotImplementedError, errors.join("\n")
+    end
+  end
 
   def blob_from_response(response)
     case response

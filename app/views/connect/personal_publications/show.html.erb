@@ -1,6 +1,6 @@
 <%= render 'layout' do %>
   <div class="grid grid-cols-3 gap-4 my-8 w-full">
-    <%= link_to connect_personal_publications_path, class: "tab tab-bordered text-success" do %>
+    <%= link_to connect_personal_publications_path, class: "tab tab-bordered hover:bg-base-200 text-success" do %>
       <%= inline_svg_tag 'icons/check.svg', class: 'w-4 h-4 fill-current' %>
       <span class='ml-2'><%= t('connect.publications.shared.tabs.provider') %></span>
     <% end %>

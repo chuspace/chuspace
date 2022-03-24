@@ -52,6 +52,10 @@ module Git
       blob(path: publication.repo.readme_path)
     end
 
+    def tree(path:)
+      adapter.tree(path: path)
+    end
+
     def with_publication(publication)
       self.publication = publication
       self

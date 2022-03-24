@@ -3,7 +3,7 @@ module Collaboratable
 
   def find_or_start_collaboration_session(user:, blob_path:)
     CollaborationSession.transaction do
-      collaboration_session = collaboration_sessions.find_or_initialize_by(blob_path: blob_path) do |session|
+      collaboration_session = collaboration_sessions.active.find_or_initialize_by(blob_path: blob_path) do |session|
         session.members.build(user: user, creator: true)
         session.initial_ydoc = $ydoc.compile(markdown: draft(path: blob_path).decoded_content, username: user.username)
         session.save!
@@ -14,7 +14,7 @@ module Collaboratable
     end
   end
 
-  def end_collaboration_session(user:, blob_path:)
-    collaboration_sessions.where(user: user, blob_path: blob_path).destroy_all
+  def end_collaboration_session(blob_path:)
+    collaboration_sessions.where(blob_path: blob_path).update_all(active: false)
   end
 end

@@ -8,7 +8,7 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.citext :permalink, null: false
 
       t.text :title, null: false
-      t.text :summary, null: false
+      t.text :summary
       t.text :body, null: false
       t.text :body_html, null: false
       t.text :blob_path, null: false
@@ -23,7 +23,6 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.jsonb :original_author, null: false, default: {}
 
       t.boolean :published, null: false, default: true
-
       t.datetime :date, null: false, index: true
 
       # Votes
