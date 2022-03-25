@@ -1,0 +1,10 @@
+<tr>
+  <td><h3 class='mb-10 salutation'><%= t('.salutation') %></h3></td>
+</tr>
+<tr>
+  <td>
+    <p class='mb-10'>
+      <%= t('.body', name: @user.name, provider: @identity.provider).html_safe %>
+    </p>
+  </td>
+</tr>
