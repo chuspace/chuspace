@@ -20,6 +20,10 @@ class PostPolicy < ApplicationPolicy
     false
   end
 
+  def contribute?
+    publication.members.exclude?(user)
+  end
+
   def create?
     publication.memberships.publishers.exists?(user: user)
   end

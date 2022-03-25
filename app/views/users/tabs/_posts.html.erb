@@ -4,18 +4,14 @@
   <% end %>
 
   <% card.actions do %>
-    <%= link_to 'New', publication_new_draft_path(@user.personal_publication), class: 'btn btn-primary btn-sm' %>
+    <%= link_to 'New', publication_new_draft_path(@user.personal_publication), class: 'btn btn-primary btn-sm' if @user.personal_publication %>
   <% end %>
 
   <% card.body do %>
-    <% if @user.publications.present? %>
-      <% if user.posts.any? %>
-        <%= render 'posts/list', posts: user.posts %>
-      <% else %>
-        <%= render 'shared/placeholder', content: 'No published posts' %>
-      <% end %>
+    <% if user.personal_publication&.posts&.any? %>
+      <%= render 'posts/list', posts: user.personal_publication.posts %>
     <% else %>
-      <%= render 'shared/connect_publication' %>
+      <%= render 'shared/placeholder', content: 'No published posts' %>
     <% end %>
   <% end %>
 <% end %>

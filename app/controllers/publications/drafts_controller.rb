@@ -87,7 +87,7 @@ module Publications
 
     def commit_params
       {
-        content: @draft.decoded_collaboration_session_content,
+        content: @draft.decoded_collaboration_session_content || '# foo',
         message: draft_params[:commit_message],
         committer: Git::Committer.chuspace,
         author: Git::Committer.for(user: Current.user)

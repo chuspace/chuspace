@@ -29,7 +29,7 @@
             <% if @publication.posts.any? %>
               <%= render 'posts/list', posts: @publication.posts %>
             <% else %>
-              <div class='text-center text-2xl py-16'>No published posts in this publication</div>
+              <%= render 'shared/placeholder', content: 'No published posts in this publication' %>
             <% end %>
           <% end %>
         <% end %>

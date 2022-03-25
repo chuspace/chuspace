@@ -3,7 +3,7 @@
     <div class='col-span-8'>
       <%= render(Card::Component.new) do |card| %>
         <% card.title do %>
-          Posts
+          Popular posts
         <% end %>
 
         <% card.body do %>
@@ -47,6 +47,21 @@
           <% end %>
         <% end %>
       <% end %>
+
+      <div class='mt-8'>
+        <%= render(Card::Component.new) do |card| %>
+          <% card.title do %>
+            Treding topics
+          <% end %>
+
+          <% card.body do %>
+            <div class='flex flex-wrap p-8'>
+              <div class='badge badge-secondary'>Rails</div>
+              <div class='badge badge-error ml-2'>Ruby</div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 </section>

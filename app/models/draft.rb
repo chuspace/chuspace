@@ -35,7 +35,7 @@ class Draft < Git::Blob
   end
 
   def decoded_collaboration_session_content
-    $ydoc.parse(ydoc: collaboration_session.current_ydoc) if collaboration_session.current_ydoc.present?
+    $ydoc.parse(ydoc: collaboration_session.current_ydoc) if collaboration_session&.current_ydoc&.present?
   end
 
   def front_matter

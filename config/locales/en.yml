@@ -54,15 +54,15 @@ en:
               or GitLab to start publishing under your own name.
             title: Connect your personal publication
           publication:
-            cta: Start publishing under a publication
+            cta: Start publishing under a org publication
             description:
-              Connect your publication Git repository from GitHub or GitLab
+              Connect your org publication Git repository from GitHub or GitLab
               to start publishing under the publication name.
-            title: Connect your publication
+            title: Connect your org publication
         heading: Start publishing
         intro:
           Connect any markdown powered static publication git repository to start
-          publishing on Chuspace. You can either write under your own name or a publication.
+          publishing on Chuspace. You can either write under your own name or a org publication.
     personal_publications:
       exists: You already have a connected personal publication
   layouts:

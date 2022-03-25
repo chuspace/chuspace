@@ -4,10 +4,10 @@ module Repoable
   extend ActiveSupport::Concern
 
   included do
-    after_destroy        :uninstall_repository_webhooks, unless: -> { git_provider.github? }
-    after_create_commit  :install_repository_webhooks, unless: -> { git_provider.github? }
-    after_create_commit  -> { AddRepositoryConfigJob.perform_later(publication: self) }
-    after_destroy_commit -> { RemoveRepositoryConfigJob.perform_later(publication: self) }
+    #after_destroy        :uninstall_repository_webhooks, unless: -> { git_provider.github? }
+    #after_create_commit  :install_repository_webhooks, unless: -> { git_provider.github? }
+    #after_create_commit  -> { AddRepositoryConfigJob.perform_later(publication: self) }
+    #after_destroy_commit -> { RemoveRepositoryConfigJob.perform_later(publication: self) }
   end
 
   def assets_folders

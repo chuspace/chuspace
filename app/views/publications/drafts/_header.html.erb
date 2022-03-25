@@ -1,4 +1,4 @@
-<flexible-header data-enabled='true'>
+<flexible-header>
   <header data-target='flexible-header.element' class='header fixed z-50 bg-base-100 h-14 w-full'>
     <nav class='container flex justify-between items-center w-full h-full'>
       <%= link_to root_path do %>
@@ -7,8 +7,8 @@
 
       <div class='flex items-center flex-1 w-1/2'>
         <div class='divider divider-vertical'></div>
-        <div class='ml-8 flex overflow-x-auto'>
-          <%= render 'shared/breadcrumbs' %>
+        <div class='ml-8 flex w-2/3 overflow-x-auto'>
+          <% render 'shared/breadcrumbs' %>
         </div>
       </div>
 
