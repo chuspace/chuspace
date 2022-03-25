@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include PrivateBeta
   include ParamsSanitizer
   include Authentication
   include SetCurrentRequestDetails
   include SetSentryContext
   include Redirectable
   include ActiveStorage::SetCurrent
-
-  prepend_before_action :private_beta_stop, if: -> { Rails.env.production? }
 
   after_action :verify_authorized
 
@@ -27,9 +26,5 @@ class ApplicationController < ActionController::Base
 
   def current_user
     Current.user
-  end
-
-  def private_beta_stop
-    redirect_to root_path, notice: 'We are in private beta!'
   end
 end

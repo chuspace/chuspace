@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: 'home#index', constraints: RootConstraint.new, as: :authenticated_root
+  if ChuspaceConfig.new.out_of_private_beta
+    root to: 'home#index', constraints: RootConstraint.new, as: :authenticated_root
+  end
+
   root to: 'welcome#index'
 
   resources :auto_checks, only: :create

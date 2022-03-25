@@ -1,16 +1,26 @@
 <section class='min-h-full flex items-center justify-between'>
-  <div class='text-center sm:w-2/3 mx-auto'>
-    <h1 class='font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-focus lg:font-black text-9xl'>
+  <div class='sm:text-center sm:w-2/3 mx-auto'>
+    <h1 class='font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-focus lg:font-black text-6xl xl:text-9xl lg:text-8xl md:text-7xl'>
       <%= t('.heading') %>
     </h1>
-    <h4 class="mt-4 lg:mt-8 o text-xl font-normal text-secondary leading-normal">
-      <%= t('.intro') %>
+    <h4 class="mt-4 lg:mt-8 lg:text-xl md:text-lg font-normal text-secondary leading-normal">
+      <%= t('.intro').html_safe %>
     </h4>
 
-    <% unless Rails.env.production? %>
+    <dialog-opener>
       <div class='mt-8'>
-        <%= link_to 'Get started', signups_path, class: 'btn btn-primary', 'data-turbo': false %>
+        <%= link_to 'Request beta invite', '#', class: 'btn btn-primary', 'data-turbo': false, 'data-action': 'click:dialog-opener#open' %>
       </div>
-    <% end %>
+      <div class="modal" data-target='dialog-opener.dialog'>
+        <div class="modal-box shadow-xl bg-base-300">
+          <h1 class='text-base font-normal mb-8'>Request beta invite</h1>
+          <%= link_to '#', class: 'absolute right-0 top-0 mt-8 mr-8', 'data-action': 'click:dialog-opener#close' do %>
+            <%= inline_svg_tag('icons/x.svg', class: 'w-4 h-4 fill-current') %>
+          <% end %>
+
+          <%= render 'shared/identities' %>
+        </div>
+      </div>
+    </dialog-opener>
   </div>
 </section>

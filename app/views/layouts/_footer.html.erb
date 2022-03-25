@@ -4,7 +4,7 @@
       <li>© <%= Time.current.year %> <strong class='text-secondary'>Chuspace</strong></li>
     </ul>
 
-    <% unless Rails.env.production? %>
+    <% if ChuspaceConfig.new.out_of_private_beta %>
       <ul class='flex items-center'>
         <li class='mr-4'>
           <strong><%= link_to 'About', 'https://chuspace.com/chuspace/hello-world', class: 'underline' %></strong>

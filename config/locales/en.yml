@@ -12,6 +12,7 @@ en:
             email:
               blank: A valid email is required
               invalid: Email is invalid or already taken
+              taken: Email is already taken
             name:
               blank: Your full name is required
             username:
@@ -126,6 +127,7 @@ en:
       welcome: Welcome back to Chuspace
   shared:
     pitch: Integrated blogging platform for programmers and teams
+    private_beta: Chuspace is in private beta. Please wait for invite!
     features:
       list:
         - title: Truly own your content
@@ -185,7 +187,7 @@ en:
   welcome:
     index:
       heading: Read Write Collaborate
-      intro:
-        Chuspace is a collaborative blogging platform for programmers and teams
-        Publish straight from your git repository hosted on Github, Gitlab and Gitea
+      intro: |
+        Chuspace is a collaborative blogging platform for programmers and teams.
+        Publish straight from your git repository hosted on Github, Gitlab and Gitea.
         Works with any static site framework that supports markdown

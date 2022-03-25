@@ -2,37 +2,47 @@
 
 class OauthsController < ApplicationController
   skip_verify_authorized
+  skip_before_action :private_beta_stop
 
   include Omniauthable
-  attr_reader :identity, :user
+  include SessionRedirect
 
   def create
     Identity.transaction do
-      identity = Identity.where(provider: auth_hash.provider, uid: auth_hash.uid).first
-      user = if signed_in?
-        Current.user
-      elsif identity.present?
+      identity = Identity.find_by(provider: auth_hash.provider, uid: auth_hash.uid)
+
+      user = if identity.present?
         identity.user
-      elsif User.where(email: auth_hash.info.email).any?
-        flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{provider} account."
-        redirect_to sessions_path
+      elsif user = User.find_by(email: auth_hash.info.email)
+        existing_provider = user.identities&.first&.provider&.titleize || provider
+
+        if ChuspaceConfig.new.out_of_private_beta
+          flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{existing_provider} account."
+        else
+          flash[:notice] = "Request already registered via #{existing_provider}"
+        end
+
+        redirect_to redirect_location_for(:user) || root_path
         return
       else
         User.create(user_atts)
       end
 
       if identity.present?
+        flash[:notice] = "Request already registered via #{provider}" unless ChuspaceConfig.new.out_of_private_beta
         identity.update(identity_attrs)
       else
+        flash[:notice] = 'Thanks for registering your interest'
         identity = user.identities.create(identity_attrs)
       end
 
-      signin(identity) unless signed_in?
+      if ChuspaceConfig.new.out_of_private_beta
+        flash[:notice] = 'Successfully logged in'
+        signin(identity) unless signed_in?
+      end
     end
 
-    flash[:notice] = "Succefully logged in via #{provider}"
-
-    redirect_to root_path
+    redirect_to redirect_location_for(:user) || root_path
   end
 
   private
