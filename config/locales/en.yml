@@ -17,55 +17,37 @@ en:
               blank: Your full name is required
             username:
               blank: A valid username is required
-              invalid: Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.
-  users:
-    settings:
-      actions:
-        profile: Profile
-        publication: Publication
-        front_matter: FrontMatter
-        permissions: Permissions
-      show:
-        publication:
-          title: Publication settings
-        front_matter:
-          title: Frontmatter settings
-        permissions:
-          title: Visibility settings
-        profile:
-          title: Profile settings
-
+              invalid: Username may only contain alphanumeric characters or single
+                hyphens, and cannot begin or end with a hyphen.
   connect:
-    publications:
-      shared:
-        provider_not_found: '%{name} Git provider not supported'
-        repo_not_found: '%{name} Repository not found'
-        tabs:
-          provider: Pick your Git Provider
-          repository: Pick your git repository
-          publication: Publication settings
     home:
       index:
         actions:
           personal:
             connected: Already connected
             cta: Start publishing as %{name}
-            description:
-              Connect your personal publication Git repository from GitHub
+            description: Connect your personal publication Git repository from GitHub
               or GitLab to start publishing under your own name.
             title: Connect your personal publication
           publication:
             cta: Start publishing under a org publication
-            description:
-              Connect your org publication Git repository from GitHub or GitLab
-              to start publishing under the publication name.
+            description: Connect your org publication Git repository from GitHub or
+              GitLab to start publishing under the publication name.
             title: Connect your org publication
         heading: Start publishing
-        intro:
-          Connect any markdown powered static publication git repository to start
-          publishing on Chuspace. You can either write under your own name or a org publication.
+        intro: Connect any markdown powered static publication git repository to start
+          publishing on Chuspace. You can either write under your own name or a org
+          publication.
     personal_publications:
       exists: You already have a connected personal publication
+    publications:
+      shared:
+        provider_not_found: "%{name} Git provider not supported"
+        repo_not_found: "%{name} Repository not found"
+        tabs:
+          provider: Pick your Git Provider
+          publication: Publication settings
+          repository: Pick your git repository
   layouts:
     mailer:
       do_not_share: Do not share this email
@@ -73,26 +55,38 @@ en:
     index:
       expired: Your magic auth token is expired
       success: Successfully signed in
+  private_beta_signup_mailer:
+    notify:
+      body: "%{name} just signed up on Chuspace for Beta access using %{provider}
+        \U0001F389"
+      salutation: Hey Chuspace,
+      subject: 'Chuspace: %{name} Signed up for Beta access'
   publications:
+    drafts:
+      edit_form:
+        locked: Document editing locked by %{name}
     invites:
+      accept:
+        not_found: Invitation not found
+        notice: Invite accepted successfully!
       create:
-        notice: Invite sent successfully!
         error: Invite failed!
+        notice: Invite sent successfully!
       destroy:
         notice: Invite deleted!
-      accept:
-        notice: Invite accepted successfully!
-        not_found: Invitation not found
     people:
       destroy:
         notice: Person removed!
       update:
-        notice: Role updated successfully!
         error: Role update failed!
-    drafts:
-      edit_form:
-        locked: Document editing locked by %{name}
+        notice: Role updated successfully!
     settings:
+      actions:
+        content: Content
+        deployment: Deployment
+        front_matter: FrontMatter
+        permissions: Permissions
+        profile: Profile
       show:
         content:
           title: Content settings
@@ -104,15 +98,8 @@ en:
           title: Visibility settings
         profile:
           title: Profile settings
-      actions:
-        content: Content
-        deployment: Deployment
-        front_matter: FrontMatter
-        permissions: Permissions
-        profile: Profile
     show:
-      personal_publication:
-        Your personal publication content is attached to your
+      personal_publication: Your personal publication content is attached to your
         profile
   sessions:
     already_signedin: Already signed in
@@ -126,25 +113,26 @@ en:
       cta: Log in with one of the following
       welcome: Welcome back to Chuspace
   shared:
-    pitch: Integrated blogging platform for programmers and teams
-    private_beta: Chuspace is in private beta. Please wait for invite!
     features:
       list:
-        - title: Truly own your content
-          description: Publish from your git repository hosted on Github . Gitlab or Gitea
-          available: true
-        - title: Any static site framework
-          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
-          available: true
-        - title: Publishing and collaboration
-          description: Collaborate with community and teams in realtime
-          available: true
-        - title: Custom domains and hosting
-          description: Integrated deployment coming soon
-          available: false
+      - title: Truly own your content
+        description: Publish from your git repository hosted on Github . Gitlab or
+          Gitea
+        available: true
+      - title: Any static site framework
+        description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
+        available: true
+      - title: Publishing and collaboration
+        description: Collaborate with community and teams in realtime
+        available: true
+      - title: Custom domains and hosting
+        description: Integrated deployment coming soon
+        available: false
     identities:
       login_with: Click to log in with %{provider}
     login_prompt: Click to go to log  in page
+    pitch: Integrated blogging platform for programmers and teams
+    private_beta: Chuspace is in private beta. Please wait for an invite!
     signup_prompt: Click to go to sign up page
   signups:
     create:
@@ -156,34 +144,44 @@ en:
     index:
       cta: Sign up with one of the following
       welcome: Welcome to Chuspace
-
   user_mailer:
     email_welcome:
-      body:
-        Thank you for signing up! Chuspace is currently in alpha and we're really
+      body: Thank you for signing up! Chuspace is currently in alpha and we're really
         happy to have you onboard. Please give it a try and help us make it better.
-      outro:
-        Hope you will have a good experience. Just send us an email if you have
+      outro: Hope you will have a good experience. Just send us an email if you have
         any questions.
       salutation: Hey %{name},
       subject: Welcome to Chuspace, %{name}
     invite:
-      body: '%{person} invited you to join %{publication}'
+      body: "%{person} invited you to join %{publication}"
       salutation: Hey %{name},
-      subject: '%{person} invited you to join %{publication}'
+      subject: "%{person} invited you to join %{publication}"
     send_magic_login:
-      body:
-        Click on the button below to sign in to your Chuspace account. This magic
+      body: Click on the button below to sign in to your Chuspace account. This magic
         link will expire in %{expires_in} minutes and can only be used once.
       compliance: If you did not make this request, you can safely ignore this email.
-      direct_url:
-        If the button above doesn’t work, paste this link into your web
+      direct_url: If the button above doesn’t work, paste this link into your web
         browser
       salutation: Hey %{name},
       subject: Log in to Chuspace, %{name}
-      token:
-        If you can't use the magic login link, for example when using our PWA
+      token: If you can't use the magic login link, for example when using our PWA
         app, please %{link} and enter the token below
+  users:
+    settings:
+      actions:
+        front_matter: FrontMatter
+        permissions: Permissions
+        profile: Profile
+        publication: Publication
+      show:
+        front_matter:
+          title: Frontmatter settings
+        permissions:
+          title: Visibility settings
+        profile:
+          title: Profile settings
+        publication:
+          title: Publication settings
   welcome:
     index:
       heading: Read Write Collaborate

@@ -29,7 +29,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, email: true
   encrypts  :email, deterministic: true, downcase: true
 
-  after_create_commit :seed_git_providers
+  after_create_commit :seed_git_providers, if: -> { ChuspaceConfig.new.out_of_private_beta }
 
   class << self
     def build_with_email_identity(email_params)
