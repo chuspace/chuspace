@@ -9,4 +9,9 @@
 <meta name="theme-color" content="#000000" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="turbo-cache-control" content="no-cache" />
- <%= display_meta_tags site: ChuspaceConfig.new.app_name %>
+<%= display_meta_tags(
+  site: ChuspaceConfig.new.app_name,
+  title: 'Blogging platform for programmers and teams',
+  description: 'Collaborative blogging platform for programmers and teams'
+)
+%>
