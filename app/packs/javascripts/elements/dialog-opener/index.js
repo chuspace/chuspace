@@ -12,7 +12,10 @@ export default class DialogOpenerElement extends HTMLElement {
     }
 
     document.onkeydown = (event) => {
-      if (event.key == 'Escape') {
+      if (
+        event.key == 'Escape' &&
+        this.dialog.classList.contains('modal-open')
+      ) {
         this.close(event)
       }
     }
