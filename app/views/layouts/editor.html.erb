@@ -2,9 +2,9 @@
 <html lang='en' class='h-full'>
   <head>
     <%= render 'layouts/meta' %>
+    <%= action_cable_meta_tag %>
     <%= render 'layouts/head' %>
   </head>
-
   <body class="flex flex-col h-full">
     <%= render 'layouts/flash' %>
     <%= render 'publications/drafts/header', draft: @draft %>
