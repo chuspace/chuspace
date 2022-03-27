@@ -10,6 +10,12 @@ export default class DialogOpenerElement extends HTMLElement {
     if (this.dialog.classList.contains('modal-open')) {
       document.body.classList.add('overflow-hidden')
     }
+
+    document.onkeydown = (event) => {
+      if (event.key == 'Escape') {
+        this.close(event)
+      }
+    }
   }
 
   open = (e: MouseEvent) => {
