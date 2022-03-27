@@ -14,6 +14,7 @@ import 'lazysizes/plugins/parent-fit/ls.parent-fit'
 import '@hotwired/turbo-rails'
 import 'dialog-polyfill/dialog-polyfill.css'
 import '@github/time-elements'
+import 'editor'
 
 import autosize from '@github/textarea-autosize'
 import lazySizes from 'lazysizes'

@@ -2,18 +2,7 @@
 <html lang='en' class='h-full'>
   <head>
     <%= render 'layouts/meta' %>
-
-    <link rel="dns-prefetch" href="//secure.gravatar.com" />
-    <link rel="preconnect" href="//secure.gravatar.com" />
-
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/chuspace-icon-192.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/chuspace-icon-192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/chuspace-icon-192.png" />
-    <link rel="apple-touch-icon" sizes="167x167" href="/chuspace-icon-192.png" />
-
-    <%= javascript_pack_tag 'editor', defer: true, 'data-turbo-track': 'reload' %>
-    <%= stylesheet_pack_tag 'editor', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= render 'layouts/head' %>
   </head>
 
   <body class="flex flex-col h-full">

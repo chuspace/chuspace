@@ -1,8 +1,9 @@
 <flexible-header>
   <header data-target='flexible-header.element' class='header fixed z-50 bg-base-100 h-14 w-full'>
     <nav class='container flex justify-between items-center w-full h-full'>
-      <%= link_to root_path do %>
-        <h1 class='font-bold text-3xl lowercase inline-block font-monospace'>Chu</h1>
+      <%= link_to root_path, class: 'pt-1 pb-2' do %>
+        <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= logo %></span>
+        <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
       <% end %>
 
       <div class='flex items-center flex-1 w-1/2'>

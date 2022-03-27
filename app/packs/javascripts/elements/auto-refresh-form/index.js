@@ -3,7 +3,7 @@
 import { controller, target, targets } from '@github/catalyst'
 
 @controller
-export default class AutoRefreshFormElement extends HTMLElement {
+export default class AutoRefreshForm extends HTMLElement {
   @target form: HTMLFormElement
   @target loader: HTMLElement
 

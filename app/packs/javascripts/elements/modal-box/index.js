@@ -1,7 +1,7 @@
 import { controller } from '@github/catalyst'
 
 @controller
-export default class ModalBoxElement extends HTMLElement {
+export default class ModalBox extends HTMLElement {
   close(event) {
     event.preventDefault()
     this.classList.remove('modal-open')
