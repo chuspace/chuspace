@@ -3,7 +3,7 @@
 import { controller, target } from '@github/catalyst'
 
 @controller
-export default class DialogOpener extends HTMLElement {
+export default class DialogOpenerElement extends HTMLElement {
   @target dialog: HTMLDialogElement
 
   connectedCallback() {

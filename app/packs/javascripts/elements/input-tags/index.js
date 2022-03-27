@@ -3,7 +3,7 @@
 import { controller, target } from '@github/catalyst'
 
 @controller
-export default class InputTags extends HTMLElement {
+export default class InputTagsElement extends HTMLElement {
   @target element: HTMLFormElement
 
   connectedCallback() {

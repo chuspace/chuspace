@@ -3,7 +3,7 @@
 import { controller } from '@github/catalyst'
 
 @controller
-export default class TurboReconnect extends HTMLElement {
+export default class TurboReconnectElement extends HTMLElement {
   connectedCallback() {
     this.autoCheckValidation()
   }

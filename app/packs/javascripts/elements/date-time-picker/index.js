@@ -7,7 +7,7 @@ import flatpickr from 'flatpickr'
 import('flatpickr/dist/themes/dark.css')
 
 @controller
-export default class DateTimePicker extends HTMLElement {
+export default class DateTimePickerElement extends HTMLElement {
   @target element: HTMLFormElement
 
   connectedCallback() {

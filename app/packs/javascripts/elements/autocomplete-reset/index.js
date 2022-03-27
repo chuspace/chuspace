@@ -3,7 +3,7 @@
 import { controller, target } from '@github/catalyst'
 
 @controller
-export default class AutocompleteReset extends HTMLElement {
+export default class AutocompleteResetElement extends HTMLElement {
   @target input: HTMLDialogElement
   @target handle: HTMLButtonElement
 

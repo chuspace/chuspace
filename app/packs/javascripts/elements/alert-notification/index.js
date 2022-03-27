@@ -3,7 +3,7 @@
 import { controller, target } from '@github/catalyst'
 
 @controller
-export default class AlertNotification extends HTMLElement {
+export default class AlertNotificationElement extends HTMLElement {
   @target element: HTMLElement
 
   connectedCallback() {

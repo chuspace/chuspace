@@ -3,7 +3,7 @@
 import { controller, target, targets } from '@github/catalyst'
 
 @controller
-export default class DetailsMenuForm extends HTMLElement {
+export default class DetailsMenuFormElement extends HTMLElement {
   @target form: HTMLFormElement
   @target input: HTMLInputElement
   @target loader: HTMLElement

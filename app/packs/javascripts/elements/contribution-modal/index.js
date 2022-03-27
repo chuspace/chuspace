@@ -1,6 +1,7 @@
 // @flow
 
 import { LitElement, html, svg } from 'lit'
+
 import Controls from 'editor/components/code-block/controls'
 
 export default class ContributionModal extends LitElement {
