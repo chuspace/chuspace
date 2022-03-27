@@ -14,6 +14,7 @@ import 'lazysizes/plugins/parent-fit/ls.parent-fit'
 import '@hotwired/turbo-rails'
 import 'dialog-polyfill/dialog-polyfill.css'
 import '@github/time-elements'
+import '@github/g-emoji-element'
 import 'editor'
 
 import autosize from '@github/textarea-autosize'
@@ -42,3 +43,13 @@ window
   })
 
 importAll(require.context('../javascripts/elements', true, /.(ts)$/))
+
+document.addEventListener('turbo:load', () => {
+  document.addEventListener('file-attachment-accepted', function(event) {
+    const pre = event.target.querySelector('pre')
+    const { attachments } = event.detail
+    pre.textContent = attachments.map((a) => a.file.name).join('\n')
+  })
+
+  document.querySelectorAll('textarea.autosize').forEach(autosize)
+})
