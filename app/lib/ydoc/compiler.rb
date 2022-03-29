@@ -23,19 +23,21 @@ module Ydoc
       @context = ExecJS.compile(source)
     end
 
-    def compile(markdown:, username:)
+    # Returns base64 encoded string from markdown
+    def compile(content:, username:)
       context.eval(
-        <<~MD
-          toYDoc("#{ApplicationController.helpers.escape_javascript(markdown)}", "#{username}")
-        MD
+        <<~STR
+          toYDoc("#{ApplicationController.helpers.escape_javascript(content)}", "#{username}")
+        STR
       )
     end
 
+    # Returns markdowns from base64 encoded string
     def parse(ydoc:)
       context.eval(
-        <<~MD
+        <<~STR
           fromYDoc("#{ydoc}")
-        MD
+        STR
       )
     end
   end

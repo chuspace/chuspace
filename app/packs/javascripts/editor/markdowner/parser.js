@@ -50,7 +50,7 @@ const parsableNodes = {
 }
 
 export default (schema: Schema) => {
-  const schemaNodes = [...Object.keys(schema.nodes), 'fence']
+  const schemaNodes = [...Object.keys(schema.nodes), 'fence', 'hr']
     .filter((node) => Object.keys(parsableNodes).includes(node) || node.name)
     .reduce(
       (nodes, name) => ({
