@@ -1,5 +1,5 @@
 <flexible-header>
-  <header data-target='flexible-header.element' class='header fixed z-50 bg-base-100 h-14 w-full'>
+  <header data-target='flexible-header.element' class='header fixed z-50 top-0 bg-base-100 h-14 w-full'>
     <nav class='container flex justify-between items-center w-full h-full'>
       <%= link_to root_path, class: 'pt-1 pb-2' do %>
         <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= logo %></span>
@@ -9,7 +9,7 @@
       <div class='flex items-center flex-1 w-1/2'>
         <div class='divider divider-vertical'></div>
         <div class='ml-8 flex w-2/3 overflow-x-auto'>
-          <% render 'shared/breadcrumbs' %>
+          <%= render 'shared/breadcrumbs' %>
         </div>
       </div>
 

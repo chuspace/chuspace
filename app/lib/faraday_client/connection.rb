@@ -13,7 +13,7 @@ module FaradayClient
       builder.use FaradayClient::Middleware::FollowRedirects
       builder.use FaradayClient::Middleware::RaiseError
       unless Rails.env.production?
-        builder.response :logger, nil, { headers: true, bodies: true }
+        builder.response :logger, nil, { headers: true, bodies: false }
       end
       builder.use FaradayClient::Middleware::FeedParser
       builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger

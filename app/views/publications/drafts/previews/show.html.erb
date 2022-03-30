@@ -1,4 +1,39 @@
-<div class='sm:w-2/3 mx-auto w-full'>
-  <%= render 'shared/breadcrumbs' %>
-  <%= render 'publications/drafts/shared/preview' %>
+<div class='grid grid-cols-3'>
+  <div class='col-span-2'>
+    <div class='mt-24 pr-8'>
+      <%= render 'publications/drafts/shared/preview' %>
+    </div>
+  </div>
+
+  <div class='col-span-1 border-l border-base-200 relative'>
+    <div class='pt-24 sticky top-0 right-0'>
+      <div class='text-center h-full'>
+        <% if  @publication.icon.attached? %>
+          <%= image_tag(@publication.icon.variant(:thumb), class: 'mask mask-circle') %>
+        <% else %>
+          <div class="avatar placeholder">
+            <div class="bg-neutral-focus text-neutral-content rounded-full w-32 h-32">
+              <span class="text-5xl"><%= @publication.name.first(2).upcase %></span>
+            </div>
+          </div>
+        <% end %>
+
+        <h2><%= @publication.name %></h2>
+        <p class='text-secondary'><%= @publication.description %></p>
+        <%= link_to 'Subscribe', '#', class: 'btn btn-primary btn-outline btn-xs mt-4' %>
+
+        <div class='relative mt-8 w-full'>
+          <div class='text-left sm:w-3/4 w-full mx-auto'>
+            <label>Reactions</label>
+            <%= render 'posts/reactions/list' %>
+          </div>
+
+          <div class='text-left mt-8 sm:w-3/4 w-full mx-auto'>
+            <label>Share this</label>
+            <%= render 'posts/sharings/list' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

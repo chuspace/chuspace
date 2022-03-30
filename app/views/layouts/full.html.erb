@@ -3,8 +3,10 @@
   <%= render 'layouts/head' %>
   <body>
     <%= render 'layouts/flash' %>
-    <section class="flex-1">
+    <%= render 'publications/drafts/header', draft: @draft %>
+
+    <main class='container'>
       <%= yield %>
-    </section>
+    </main>
   </body>
 </html>

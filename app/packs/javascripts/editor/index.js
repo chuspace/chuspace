@@ -182,7 +182,7 @@ export default class ChuEditor extends LitElement {
   }
 
   disconnectedCallback() {
-    this.provider?.destroy()
+    if (this.collaboration) this.provider?.destroy()
   }
 
   get isNodeEditor() {

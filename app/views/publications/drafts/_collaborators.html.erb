@@ -1,7 +1,9 @@
 <div class='sm:fixed sm:inset-y-1/2 sm:ml-4 sm:mt-0'>
-  <% members.each do |member| %>
-    <div class='flex items-center first:mt-0 mt-2'>
-      <%= render 'publications/drafts/collaborator', member: member %>
-    </div>
+  <%= turbo_frame_tag(:collaboration_session_members) do %>
+    <% members.each do |member| %>
+      <div class='flex items-center first:mt-0 mt-2'>
+        <%= render 'publications/drafts/collaborator', member: member %>
+      </div>
+    <% end %>
   <% end %>
 </div>
