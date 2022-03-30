@@ -181,6 +181,10 @@ export default class ChuEditor extends LitElement {
     return this
   }
 
+  disconnectedCallback() {
+    this.provider?.destroy()
+  }
+
   get isNodeEditor() {
     return this.mode === 'node' && !!this.nodeName
   }

@@ -1,14 +1,21 @@
 <div class='grid grid-cols-3 h-screen max-h-screen overflow-hidden'>
-  <div class='col-span-2 p-8 h-full overflow-scroll'>
-    <%= render 'shared/breadcrumbs' %>
-    <div class='mt-4'>
-      <%= turbo_frame_tag dom_id(@draft, :diff), src: publication_new_draft_diff_path(@publication, @draft), loading: :lazy do  %>
-         <div class="code-editor">
-          <content-loader
-              lines='28'
-              class="block whitespace-no-wrap py-4"
-            ></content-loader>
+  <div class='col-span-2 px-24 h-full overflow-scroll'>
+    <nav class='flex justify-between items-center'>
+      <%= link_to root_path do %>
+        <h1 class='font-bold text-3xl lowercase inline-block font-monospace'>Chu</h1>
+      <% end %>
+
+      <div class='flex items-center flex-1 w-1/2'>
+        <div class='divider divider-vertical'></div>
+        <div class='ml-8 flex overflow-x-auto'>
+          <%= render 'shared/breadcrumbs' %>
         </div>
+      </div>
+    </nav>
+
+    <div class='mt-12'>
+      <%= turbo_frame_tag dom_id(@draft, :diff), src: publication_new_draft_diff_path(@publication, @draft), loading: :lazy do  %>
+        <div class='flex items-center h-full justify-center'>Loading...</div>
       <% end %>
     </div>
   </div>
@@ -21,9 +28,11 @@
           <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
           <%= form.input :auto_publish, as: :boolean, label: false, input_html: { checked: @publication.content.auto_publish }, placeholder: 'Commit message' %>
           <div class='mt-8 font-mono'>
-            <label class='text-sm block'>Commit author: <%= link_to Current.user.name, user_path(Current.user), class: 'font-bold' %></label>
+            <label class='text-sm block' id='commit-authors'>
+              Commit authors: <%= link_to Current.user.name, user_path(Current.user), class: 'font-bold' %>
+            </label>
             <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>
-            <label class='text-sm block'>Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>
+            <label class='text-sm block'>Commit Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>
           </div>
         </div>
 
