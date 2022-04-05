@@ -4,32 +4,56 @@ class GitProvider < ApplicationRecord
   class GitAdapterNotFoundError < StandardError; end
 
   belongs_to :user
-  encrypts :access_token, :refresh_access_token, :endpoint
+  encrypts :access_token, :refresh_access_token, :endpoint,
+           :client_id, :client_secret, :refresh_access_token_endpoint
 
-  validates :name, :label, presence: true
+  validates :name, :label, :client_id, :client_secret, presence: true
   validates :name, uniqueness: { scope: :user_id }
-  validates :refresh_access_token, :expires_at, presence: true, if: :access_token
 
   enum name: GitStorageConfig.providers_enum
 
+  def api
+    HTTPAdapter.new(
+      access_token: access_token,
+      endpoint: api_endpoint,
+      access_token_param: access_token_param
+    )
+  end
+
   def connected?
-    access_token.present? && expires_at > Time.current
+    expiring? ? access_token_expires_at > Time.current.utc : access_token.present?
   end
 
-  def users
-    adapter.users
+  def config
+    GitStorageConfig.new.send(name)
   end
 
-  def adapter
-    case name
-    when 'github' then GithubAdapter.new(access_token: access_token, endpoint: endpoint)
-    when 'gitea' then GiteaAdapter.new(access_token: access_token, endpoint: endpoint)
-    when 'gitlab' then GitlabAdapter.new(access_token: access_token, endpoint: endpoint)
-    else fail GitAdapterNotFoundError, "#{name} adapter not found"
-    end
+  def expiring?
+    refresh_access_token.present?
+  end
+
+  def mirror_api
+    access_token = Rails.application.credentials.chuspace.git_mirror[:access_token]
+    HTTPAdapter.new(endpoint: mirror_api_endpoint, access_token: access_token, access_token_param: :token)
+  end
+
+  def mirror_api_endpoint
+    Rails.application.credentials.chuspace.git_mirror[:endpoint]
+  end
+
+  def refreshable?
+    refresh_access_token.present?
+  end
+
+  def refresh_access_token!
+    RefreshAccessTokenJob.perform_later(git_provider: self)
   end
 
   def to_param
     name
+  end
+
+  def users
+    adapter.users
   end
 end

@@ -4,7 +4,7 @@ class ApplicationAdapter
   class MethodNotImplementedError < StandardError; end
 
   include FaradayClient::Connection
-  attr_reader :endpoint, :access_token, :repo_fullname, :ref
+  attr_accessor :endpoint, :access_token, :access_token_param, :repo_fullname, :ref
 
   REQUIRED_METHODS = %w[
     blob
@@ -29,10 +29,12 @@ class ApplicationAdapter
     webhooks
   ]
 
-  def initialize(endpoint:, access_token:)
+  def initialize(endpoint:, access_token:, access_token_param: :token)
     @endpoint = endpoint
     @access_token = access_token
-    check_method_implementation!
+    @access_token_param = access_token_param
+
+    # check_method_implementation!
   end
 
   def apply_repository_scope(repo_fullname:, ref: 'HEAD')
@@ -40,6 +42,10 @@ class ApplicationAdapter
     @ref = ref
 
     self
+  end
+
+  def mirror
+    ChuspaceMirrorAdapter.as_superuser
   end
 
   def name
@@ -130,7 +136,7 @@ class ApplicationAdapter
       Git::Committer.new(
         id: response.id,
         name: response.name,
-        username: response.login || response.username,
+        username: response.login || response.username || response.full_path,
         avatar_url: response.avatar_url
       )
     else

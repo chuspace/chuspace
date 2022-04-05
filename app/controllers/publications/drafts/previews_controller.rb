@@ -3,7 +3,7 @@
 module Publications
   module Drafts
     class PreviewsController < BaseController
-      layout 'full'
+      layout 'post'
 
       def show
         authorize! @draft

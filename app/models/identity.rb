@@ -9,7 +9,7 @@ class Identity < ApplicationRecord
 
   encrypts :uid, deterministic: true, downcase: true
 
-  enum provider: OmniauthConfig.providers_enum.merge(email: 'email')
+  enum provider: OmniauthConfig.auth_providers_enum.merge(email: 'email')
 
   before_validation     :set_magic_auth_token_expires_at, if: :email?
   validates_presence_of :magic_auth_token_expires_at, if: :email?

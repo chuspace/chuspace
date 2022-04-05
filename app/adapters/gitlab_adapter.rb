@@ -5,18 +5,6 @@ class GitlabAdapter < ApplicationAdapter
     'gitlab'
   end
 
-  def commits(path: nil)
-    opts = { ref_name: ref, all: true }
-    opts[:path] = path if path
-    paginate("projects/#{CGI.escape(repo_fullname)}/repository/commits", **opts)
-  end
-
-  def create_blob(path:, content:, message: nil)
-    content = Base64.strict_encode64(content)
-    message ||= "Adding #{path}"
-    post "projects/#{CGI.escape(repo_fullname)}/repository/files/#{CGI.escape(path)}", { branch: :main, encoding: :base64, content: content, commit_message: message }
-  end
-
   def create_repository_webhook
     url = if Rails.env.production?
       Rails.application.routes.url_helpers.webhooks_github_repos_url
@@ -54,8 +42,8 @@ class GitlabAdapter < ApplicationAdapter
     paginate("projects/#{CGI.escape(repo_fullname)}/repository/commits", { per_page: 1 }).first.id
   end
 
-  def search_repositories(query:, options: { sort: 'asc', per_page: 5 })
-    repository_from_response(paginate('search', options.merge(search: query, scope: :projects)))
+  def search_repositories(query:, login:, options: { sort: 'asc', per_page: 5 })
+    repository_from_response(paginate("groups/#{CGI.escape(login)}/projects", options.merge(search: query, owned: true, membership: true, search_namespaces: false)))
   end
 
   def repository_folders
@@ -99,9 +87,26 @@ class GitlabAdapter < ApplicationAdapter
     put "projects/#{CGI.escape(repo_fullname)}/repository/files/#{CGI.escape(path)}", { branch: :main, encoding: :base64, content: content, commit_message: message }
   end
 
+  def orgs(options: {})
+    user_from_response(get('groups', { owned: true, all_available: false }))
+  end
+
+  def users
+    [user] + orgs
+  end
+
   def delete_blob(path:, id:, message: nil)
     message ||= "Deleting #{path}"
     delete "projects/#{CGI.escape(repo_fullname)}/repository/files/#{CGI.escape(path)}", { branch: :master, commit_message: message }
+  end
+
+  def repository_files
+    tree
+      .select { |item| item.type == 'blob' }
+      .map(&:path)
+      .sort
+  rescue FaradayClient::NotFound
+    nil
   end
 
   def tree(sha: head_sha)

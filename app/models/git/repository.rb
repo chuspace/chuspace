@@ -11,71 +11,35 @@ module Git
     attribute :ssh_url, :string
     attribute :html_url, :string
     attribute :default_branch, :string
-    attribute :adapter, ApplicationAdapter
-    attribute :publication, Publication
+    attribute :repository, Repository
 
-    delegate :repository_files, :repository_folders, :webhooks, to: :adapter
-
-    CONFIG_FILE_PATH = 'chuspace.yml'
-    CONNECT_MESSAGE = 'Connect chuspace'
-    DISCONNECT_MESSAGE = 'Disconnect chuspace'
-
-    def self.chuspace_yaml_config
-      PublicationConfig.new.to_h.deep_stringify_keys.to_yaml
-    end
-
-    def config_exists?
-      adapter.blob(path: CONFIG_FILE_PATH).persisted?
-    end
-
-    def asset(path:)
-      blob(path: path)
-    end
-
-    def assets(path:)
-      blobs(paths: path)
-    end
-
-    def draft(path:)
-      blob(path: path)
-    end
-
-    def drafts(path:)
-      blobs(paths: path)
-    end
-
-    def markdown_files
-      repository_files.select { |path| MarkdownValidator.valid?(name_or_path: path) }
-    end
-
-    def readme
-      blob(path: publication.repo.readme_path)
-    end
-
-    def tree(path:)
-      adapter.tree(path: path)
-    end
-
-    def with_publication(publication)
-      self.publication = publication
-      self
-    end
-
-    private
-
-    def blobs(paths:)
-      Rails.cache.fetch([publication, paths.join(':')]) do
-        adapter.blobs(paths: paths)
-          .select { |blob| Git::Blob.valid?(name: blob.name) }
-          .map { |blob| blob.decorate(publication: publication) }
+    class << self
+      def for(repository)
+        from_response(repository.api.get(repository.endpoint))
       end
-    end
 
-    def blob(path:)
-      fail ActiveRecord::RecordNotFound, 'not found' unless Git::Blob.valid?(name: path)
-
-      Rails.cache.fetch([publication, path]) do
-        adapter.blob(path: path).decorate(publication: publication)
+      def from_response(repository, response)
+        case response
+        when Array
+          response.filter_map do |item|
+            from_response(repository, item)
+          end
+        when Sawyer::Resource
+          Git::Repository.new(
+            id: response.id,
+            fullname: response.full_name&.squish || response.path_with_namespace&.squish,
+            name: response.name,
+            owner: response.namespace&.path || response.owner&.login,
+            description: response.description,
+            visibility: response.visibility || response.owner&.visibility,
+            ssh_url: response.ssh_url_to_repo || response.ssh_url,
+            html_url: response.web_url || response.html_url,
+            default_branch: response.default_branch,
+            repository: repository
+          )
+        else
+          response
+        end
       end
     end
   end

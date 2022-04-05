@@ -16,7 +16,7 @@ module Publications
       add_breadcrumb(:drafts)
 
       if turbo_frame_request?
-        @drafts = @publication.drafts(path: @draft_path)
+        @drafts = @publication.repository.drafts(path: @draft_path)
         render partial: 'list', locals: { drafts: @drafts, publication: @publication }
       end
     end
@@ -82,7 +82,7 @@ module Publications
     private
 
     def build_draft
-      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.git_provider_adapter, path: @drafts_root_path)
+      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.repository.git_provider_adapter, path: @drafts_root_path)
     end
 
     def commit_params
@@ -99,7 +99,7 @@ module Publications
     end
 
     def find_draft
-      @draft = @publication.draft(path: @draft_path)
+      @draft = @publication.repository.draft(path: @draft_path)
     end
   end
 end

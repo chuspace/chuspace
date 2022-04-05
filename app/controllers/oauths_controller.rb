@@ -9,12 +9,12 @@ class OauthsController < ApplicationController
 
   def create
     Identity.transaction do
-      identity = Identity.find_by(provider: auth_hash.provider, uid: auth_hash.uid)
+      identity = Identity.find_by(provider: provider, uid: auth_hash.uid)
 
       user = if identity.present?
         identity.user
       elsif user = User.find_by(email: auth_hash.info.email)
-        existing_provider = user.identities&.first&.provider&.titleize || provider
+        existing_provider = user.identities&.first&.provider&.titleize || provider_name
 
         if ChuspaceConfig.new.out_of_private_beta
           flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{existing_provider} account."
@@ -29,7 +29,7 @@ class OauthsController < ApplicationController
       end
 
       if identity.present?
-        flash[:notice] = "Beta invite request already registered through #{provider}. Please wait for an invite!" unless ChuspaceConfig.new.out_of_private_beta
+        flash[:notice] = "Beta invite request already registered through #{provider_name}. Please wait for an invite!" unless ChuspaceConfig.new.out_of_private_beta
         identity.update(identity_attrs)
       else
         identity = user.identities.create(identity_attrs)
@@ -53,7 +53,7 @@ class OauthsController < ApplicationController
 
   def identity_attrs
     {
-      provider: auth_hash.provider,
+      provider: provider,
       uid: auth_hash.uid
     }.freeze
   end

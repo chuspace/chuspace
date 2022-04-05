@@ -54,17 +54,6 @@ class User < ApplicationRecord
   end
 
   def seed_git_providers
-    data = GitStorageConfig.new.to_h.map do |key, hash|
-      {
-        user_id: id,
-        name: key,
-        label: hash[:label],
-        endpoint: hash[:endpoint],
-        created_at: Time.current,
-        updated_at: Time.current
-      }
-    end
-
-    GitProvider.upsert_all(data, returning: false, unique_by: :one_provider_per_user_index)
+    SeedDefaultGitProvidersJob.perform_later(user: self)
   end
 end

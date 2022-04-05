@@ -66,13 +66,13 @@ module Connect
       params.require(:publication).permit(
         :name,
         :description,
-        repo_attributes: %i[posts_folder drafts_folder assets_folder readme_path]
+        repository_attributes: %i[posts_folder drafts_folder assets_folder readme_path]
       )
     end
 
     def build_publication
       @publication = Current.user.owning_publications.build(git_provider: @git_provider)
-      @publication.build_repo(fullname: params[:repo_fullname])
+      @publication.build_repository(git_provider: @git_provider, full_name: params[:repo_fullname])
 
       fail ActiveRecord::RecordNotFound if @git_provider && params[:repo_fullname] && @publication.repository.blank?
     end

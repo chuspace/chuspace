@@ -3,7 +3,7 @@
 class Publication < ApplicationRecord
   extend FriendlyId
   include PgSearch::Model
-  include Repoable, Iconable, Collaboratable
+  include Iconable, Collaboratable
   include AttrJson::Record
   include AttrJson::Record::QueryScopes
   include AttrJson::NestedAttributes
@@ -18,6 +18,9 @@ class Publication < ApplicationRecord
   has_many :members, through: :memberships, source: :user
   has_many :collaboration_sessions, dependent: :destroy, inverse_of: :publication
   has_many :posts, dependent: :destroy, inverse_of: :publication
+  has_one  :repository, dependent: :destroy, inverse_of: :publication, required: true
+
+  delegate :readme, to: :repository
 
   belongs_to :owner, class_name: 'User'
   belongs_to :git_provider
@@ -29,8 +32,8 @@ class Publication < ApplicationRecord
   validate  :one_personal_publication_per_owner, on: :create
 
   acts_as_taggable_on :topics
+  accepts_nested_attributes_for :repository, allow_destroy: true
 
-  attr_json :repo, RepositorySetting.to_type, default: PublicationConfig.new.repo
   attr_json :front_matter, FrontMatterSetting.to_type, default: PublicationConfig.new.front_matter
   attr_json :content, PublicationContentSetting.to_type, default: PublicationConfig.new.settings
 

@@ -3,7 +3,7 @@
     <%= form.label :name, class: 'mb-2 block' %>
     <div class="form-control w-full">
       <div class="input-group input-group-xs w-full">
-        <span><%= @publication.repo_drafts_or_posts_folder %>/</span>
+        <span><%= @publication.drafts_or_posts_folder %>/</span>
         <%= form.input :name, label: false, hint: false, error: false, wrapper: false, input_html: { class: 'w-full' } %>
       </div>
     </div>

@@ -41,3 +41,4 @@ yarn-debug.log*
 
 /config/*.local.yml
 /config/credentials/local.*
+.vagrant

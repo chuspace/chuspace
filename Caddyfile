@@ -1,0 +1,11 @@
+gitea.chuspace.local {
+  reverse_proxy 192.168.50.4:3033
+}
+
+drone.chuspace.local {
+  reverse_proxy 192.168.50.5:3034
+}
+
+app.chuspace.local {
+  reverse_proxy 127.0.0.1:3000
+}

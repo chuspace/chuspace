@@ -3,7 +3,12 @@
 class Draft < Git::Blob
   attribute :publication, Publication
   validates :path, :name, markdown: true
+
   validates :publication, presence: true
+
+  def all(paths = repository.posts_folders, options = { ref: repository.default_ref })
+    super(paths, options)
+  end
 
   def body
     parsed.content
@@ -15,7 +20,7 @@ class Draft < Git::Blob
   end
 
   def collaboration_session
-    publication.collaboration_sessions.active.find_by(blob_path: path)
+    @collaboration_session ||= publication.collaboration_sessions.active.find_by(blob_path: path)
   end
 
   def end_collaboration_session
@@ -35,7 +40,7 @@ class Draft < Git::Blob
   end
 
   def decoded_collaboration_session_content
-    $ydoc.parse(ydoc: collaboration_session.current_ydoc) if collaboration_session&.current_ydoc&.present?
+    @decoded_collaboration_session_content ||= $ydoc.parse(ydoc: collaboration_session.current_ydoc) if collaboration_session&.current_ydoc&.present?
   end
 
   def front_matter
@@ -97,22 +102,21 @@ class Draft < Git::Blob
   end
 
   def readme?
-    publication.repo.readme_path == path
+    publication.repository.readme_path == path
   end
 
   def relative_path
     if readme?
       path
     else
-      base_path = Pathname.new(publication.repo.posts_folder)
+      base_path = Pathname.new(publication.repository.posts_folder)
       file_path = Pathname.new(path)
       file_path.relative_path_from(base_path).to_s
     end
   end
 
   def stale?
-    decoded_collaboration_session_content &&
-      decoded_collaboration_session_content != decoded_content
+    collaboration_session.current_ydoc.present?
   end
 
   def status

@@ -7,7 +7,11 @@ module Omniauthable
     request.env['omniauth.auth']
   end
 
+  def provider_name
+    provider.titleize
+  end
+
   def provider
-    auth_hash.provider.titleize
+    auth_hash.provider.split('_', 2).first
   end
 end

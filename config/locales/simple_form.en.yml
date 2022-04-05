@@ -21,7 +21,7 @@ en:
       draft:
         name: Filename
       publication:
-        repo:
+        repository:
           posts_folder: Posts/Drafts folder
           drafts_folder: Drafts folder (optional)
           assets_folder: Assets folder
