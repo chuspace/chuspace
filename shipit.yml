@@ -53,7 +53,7 @@ deploy:
 
   # If Shipit can't infer how to deploy your app you'll have to override the default commands.
   override:
-    - bundle exec tomo deploy
+    - ./chu deploy
   # If you want things to happen after your deploy is successful you can specify them in the `post` step.
   # post:
   #   - script/notify-deploy-complete
@@ -61,7 +61,7 @@ deploy:
 # This will make rollback buttons appear in the interface.
 rollback:
   override:
-    - bundle exec tomo deploy -s git_ref=$LAST_DEPLOYED_SHA
+    - ./chu rollback
 # Sometime you might want to trigger custom scripts on Shipit, this section allows you to define
 # arbitrary tasks that you can trigger from the interface.
 # tasks:

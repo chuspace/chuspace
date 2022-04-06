@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+bundle exec tomo deploy -s git_ref=$LAST_DEPLOYED_SHA
