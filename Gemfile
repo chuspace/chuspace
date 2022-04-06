@@ -69,9 +69,8 @@ gem 'pg_search'
 gem 'turbo-rails'
 
 # Omninauth
-gem 'omniauth-github', github: 'omniauth/omniauth-github'
-gem 'omniauth-gitlab', github: 'linchus/omniauth-gitlab'
-gem 'omniauth-atlassian-bitbucket', github: 'fnando/omniauth-atlassian-bitbucket'
+gem 'omniauth'
+gem 'omniauth-oauth2'
 gem 'omniauth-rails_csrf_protection'
 
 # Security
@@ -125,6 +124,9 @@ end
 
 # JS runtime
 gem 'execjs'
+
+# Deployment
+gem 'tomo'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

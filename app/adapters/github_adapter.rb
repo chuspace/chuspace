@@ -11,6 +11,8 @@ class GithubAdapter < ApplicationAdapter
 
     paths.each do |path|
       blobs += blob_from_response(blob(path: path)).sort_by { |blob| %w[dir file].index(blob.type) }
+    rescue FaradayClient::NotFound
+      next
     end
 
     blobs
@@ -58,6 +60,8 @@ class GithubAdapter < ApplicationAdapter
 
     payload[:type] = type if type
     post("repos/#{repo_fullname}/hooks", payload)
+  rescue FaradayClient::Conflict, FaradayClient::UnprocessableEntity
+    false
   end
 
   def delete_repository_webhook(id:)
@@ -77,10 +81,6 @@ class GithubAdapter < ApplicationAdapter
 
   def orgs(options: {})
     user_from_response(get('user/orgs', options))
-  end
-
-  def repositories(username:)
-    repository_from_response(get("users/#{username}/repos", { affiliation: 'owner,organization_member' }))
   end
 
   def repository

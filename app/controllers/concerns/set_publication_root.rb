@@ -8,12 +8,12 @@ module SetPublicationRoot
   end
 
   def set_drafts_root_path
-    @drafts_root_path = Pathname.new(@publication.repo_drafts_or_posts_folder)
+    @drafts_root_path = Pathname.new(@publication.repository.drafts_or_posts_folder)
   end
 
   def set_draft_path
     @path = params[:path] || ''
-    @draft_path ||= @path == @publication.repo.readme_path ? @path : @drafts_root_path.join(@path).to_s
+    @draft_path ||= @path == @publication.repository.readme_path ? @path : @drafts_root_path.join(@path).to_s
   end
 
   def find_publication_drafts_root_path

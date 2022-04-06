@@ -10,8 +10,11 @@
     <%= render 'publications/drafts/header', draft: @draft %>
     <%= turbo_stream_from(@collaboration_session, :collaborators) %>
     <%= render 'publications/drafts/collaborators', members: @collaboration_session.members.order(:id) if @collaboration_session %>
-    <section class="container flex-1 sm:mt-24">
-      <%= yield %>
-    </section>
+
+    <main class="container flex-1 sm:mt-24">
+      <section class='lg:w-2/3 mx-auto w-full'>
+        <%= yield %>
+      </section>
+    </main>
   </body>
 </html>

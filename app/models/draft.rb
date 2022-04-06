@@ -18,24 +18,16 @@ class Draft < Git::Blob
     publication.collaboration_sessions.active.find_by(blob_path: path)
   end
 
-  def end_collaboration_session
-    collaboration_session&.end_collaboration_session(blob_path: path) unless stale?
-  end
-
   def collab?
     !readme?
   end
 
   def date
-    parsed.front_matter.dig(publication.front_matter.date)
+    front_matter.dig(publication.front_matter.date)
   end
 
   def decoded_content
     Base64.decode64(content).force_encoding('UTF-8')
-  end
-
-  def decoded_collaboration_session_content
-    $ydoc.parse(ydoc: collaboration_session.current_ydoc) if collaboration_session&.current_ydoc&.present?
   end
 
   def front_matter
@@ -92,27 +84,22 @@ class Draft < Git::Blob
     front_matter.dig(publication.front_matter.topics)
   end
 
-  def redis_key
-    "#{publication.permalink}:#{path}"
-  end
-
   def readme?
-    publication.repo.readme_path == path
+    publication.repository.readme_path == path
   end
 
   def relative_path
     if readme?
       path
     else
-      base_path = Pathname.new(publication.repo.posts_folder)
+      base_path = Pathname.new(publication.repository.posts_folder)
       file_path = Pathname.new(path)
       file_path.relative_path_from(base_path).to_s
     end
   end
 
   def stale?
-    decoded_collaboration_session_content &&
-      decoded_collaboration_session_content != decoded_content
+    collaboration_session.current_ydoc.present?
   end
 
   def status
@@ -143,6 +130,15 @@ class Draft < Git::Blob
 
   def publish(author:)
     publication.posts.create(author: author, **to_post_attributes)
+  end
+
+  def new_template
+    <<~STR
+      ---
+      title: Untitled
+      summary:
+      ---
+    STR
   end
 
   private

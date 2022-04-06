@@ -4,8 +4,10 @@
   <body class="flex flex-col h-full">
     <%= render 'layouts/flash' %>
     <%= render 'layouts/header' %>
-    <section class="container flex-1 pt-24">
-      <%= yield %>
-    </section>
+    <main class="container flex-1 sm:mt-24">
+      <section class='lg:w-2/3 mx-auto w-full'>
+        <%= yield %>
+      </section>
+    </main>
   </body>
 </html>

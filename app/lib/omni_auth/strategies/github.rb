@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-require 'omniauth-oauth2'
-
 module OmniAuth
   module Strategies
-    class GiteaApp < OmniAuth::Strategies::OAuth2
+    class Github < OmniAuth::Strategies::OAuth2
       option :client_options, {
-        site: 'https://gitea.com/api/v1',
-        authorize_url: 'https://gitea.com/login/oauth/authorize',
-        token_url: 'https://gitea.com/login/oauth/access_token'
+        site: 'https://api.github.com',
+        authorize_url: 'https://github.com/login/oauth/authorize',
+        token_url: 'https://github.com/login/oauth/access_token'
       }
 
       def request_phase
@@ -34,7 +32,7 @@ module OmniAuth
           'name' => raw_info['name'],
           'image' => raw_info['avatar_url'],
           'urls' => {
-            'Gitea' => raw_info['html_url'],
+            'GitHub' => raw_info['html_url'],
             'Blog' => raw_info['publication'],
           },
         }
@@ -46,24 +44,34 @@ module OmniAuth
 
       def raw_info
         access_token.options[:mode] = :header
-        access_token.options[:header_format] = 'token %s'
-        puts access_token.token.inspect
         @raw_info ||= access_token.get('user').parsed
       end
 
       def email
-        primary = emails.find { |i| i['primary'] && i['verified'] }
-        primary && primary['email'] || nil
+        (email_access_allowed?) ? primary_email : raw_info['email']
       end
 
       def scope
         access_token['scope']
       end
 
+      def primary_email
+        primary = emails.find { |i| i['primary'] && i['verified'] }
+        primary && primary['email'] || nil
+      end
+
+      # The new /user/emails API - http://developer.github.com/v3/users/emails/#future-response
       def emails
+        return [] unless email_access_allowed?
         access_token.options[:mode] = :header
-        access_token.options[:header_format] = 'token %s'
-        @emails ||= access_token.get('user/emails').parsed
+        @emails ||= access_token.get('user/emails', headers: { 'Accept' => 'application/vnd.github.v3' }).parsed
+      end
+
+      def email_access_allowed?
+        return false unless options['scope']
+        email_scopes = ['user', 'user:email']
+        scopes = options['scope'].split(',')
+        (scopes & email_scopes).any?
       end
 
       def callback_url

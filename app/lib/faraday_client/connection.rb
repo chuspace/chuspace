@@ -13,7 +13,7 @@ module FaradayClient
       builder.use FaradayClient::Middleware::FollowRedirects
       builder.use FaradayClient::Middleware::RaiseError
       unless Rails.env.production?
-        builder.response :logger, nil, { headers: true, bodies: false }
+        builder.response :logger, nil, { headers: true, bodies: true }
       end
       builder.use FaradayClient::Middleware::FeedParser
       builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger
@@ -118,13 +118,7 @@ module FaradayClient
         http.headers[:accept] = default_media_type
         http.headers[:content_type] = 'application/json'
         http.headers[:user_agent] = user_agent
-
-        case name
-        when 'github', 'gitea'
-          http.authorization 'token', @access_token
-        when 'gitlab'
-          http.authorization 'Bearer', @access_token
-        end
+        http.authorization access_token_param, @access_token
       end
     end
 
@@ -200,16 +194,7 @@ module FaradayClient
       }
 
       opts[:builder] = MIDDLEWARE
-      http = Faraday.new(opts)
-
-      case name
-      when 'github'
-        http.authorization 'token', @access_token
-      when 'gitlab'
-        http.authorization 'Bearer', @access_token
-      end
-
-      http
+      Faraday.new(opts)
     end
 
     def parse_query_and_convenience_headers(options)

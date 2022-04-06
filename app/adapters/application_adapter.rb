@@ -4,7 +4,7 @@ class ApplicationAdapter
   class MethodNotImplementedError < StandardError; end
 
   include FaradayClient::Connection
-  attr_reader :endpoint, :access_token, :repo_fullname, :ref
+  attr_accessor :endpoint, :access_token, :access_token_param, :repo_fullname, :ref
 
   REQUIRED_METHODS = %w[
     blob
@@ -18,7 +18,6 @@ class ApplicationAdapter
     head_sha
     orgs
     repository
-    repositories
     repository_folders
     repository_files
     search_repositories
@@ -29,9 +28,11 @@ class ApplicationAdapter
     webhooks
   ]
 
-  def initialize(endpoint:, access_token:)
+  def initialize(endpoint:, access_token:, access_token_param:)
     @endpoint = endpoint
     @access_token = access_token
+    @access_token_param = access_token_param
+
     check_method_implementation!
   end
 
@@ -68,10 +69,10 @@ class ApplicationAdapter
     when Array then response.map { |item| blob_from_response(item) }
     when Sawyer::Resource
       Git::Blob.new(
-        id: response.sha || response.id,
-        name: response.name,
-        path: response.path,
-        type: response.type,
+        id: response.sha || response.id || response.ref,
+        name: response.name || response.file_name,
+        path: response.path || response.file_path,
+        type: %w[blob file].include?(response.type) ? 'file' : 'dir',
         content: response.content,
         adapter: self
       )
@@ -84,19 +85,7 @@ class ApplicationAdapter
     case response
     when Array then response.map { |item| commit_from_response(item) }
     when Sawyer::Resource
-      commit = response.commit
-      author_hash = commit.author.to_h.merge(username: response.author.login || response.author.username)
-      committer_hash = commit.committer.to_h.merge(username: response.author.login || response.author.username)
-
-      Git::Commit.new(
-        id: response.id || response.sha,
-        message: commit.message,
-        author: Git::Committer.from(author_hash),
-        committed_at: commit.committer.date,
-        patch: response.files&.first&.patch,
-        committer: Git::Committer.from(committer_hash),
-        adapter: self
-      )
+      response
     else
       response
     end
@@ -130,7 +119,7 @@ class ApplicationAdapter
       Git::Committer.new(
         id: response.id,
         name: response.name,
-        username: response.login || response.username,
+        username: response.login || response.username || response.full_path,
         avatar_url: response.avatar_url
       )
     else

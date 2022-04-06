@@ -6,7 +6,7 @@ module Publications
 
     prepend_before_action :authenticate!
     before_action :build_draft, only: %i[index new create]
-    before_action :find_draft, only: %w[update ydoc edit destroy]
+    before_action :find_draft, only: %w[update edit destroy]
 
     layout 'editor', only: %i[new edit]
 
@@ -16,7 +16,7 @@ module Publications
       add_breadcrumb(:drafts)
 
       if turbo_frame_request?
-        @drafts = @publication.drafts(path: @draft_path)
+        @drafts = @publication.repository.drafts(path: @draft_path)
         render partial: 'list', locals: { drafts: @drafts, publication: @publication }
       end
     end
@@ -40,7 +40,7 @@ module Publications
       authorize! @draft
 
       if @draft.delete(**commit_params)
-        @draft.end_collaboration_session
+        @draft.collaboration_session.end
         redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
       else
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
@@ -52,7 +52,7 @@ module Publications
 
       if @draft.update(**commit_params)
         @draft.publish(author: Current.user) if draft_params[:auto_publish].present?
-        @draft.end_collaboration_session
+        @draft.collaboration_session.end
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
       else
         respond_to do |format|
@@ -82,12 +82,12 @@ module Publications
     private
 
     def build_draft
-      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.git_provider_adapter, path: @drafts_root_path)
+      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.repository.git_provider_adapter, path: @drafts_root_path)
     end
 
     def commit_params
       {
-        content: @draft.decoded_collaboration_session_content || '# foo',
+        content: @draft.persisted? ? @draft.collaboration_session&.decoded_content : @draft.new_template,
         message: draft_params[:commit_message],
         committer: Git::Committer.chuspace,
         author: Git::Committer.for(user: Current.user)
@@ -99,7 +99,7 @@ module Publications
     end
 
     def find_draft
-      @draft = @publication.draft(path: @draft_path)
+      @draft = @publication.repository.draft(path: @draft_path)
     end
   end
 end

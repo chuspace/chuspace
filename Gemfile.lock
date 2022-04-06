@@ -1,19 +1,4 @@
 GIT
-  remote: https://github.com/fnando/omniauth-atlassian-bitbucket.git
-  revision: d12090f727427e1ee91a0294a957e6ebeb715fe4
-  specs:
-    omniauth-atlassian-bitbucket (0.1.0)
-      omniauth-oauth2
-
-GIT
-  remote: https://github.com/linchus/omniauth-gitlab.git
-  revision: d2c576fa4ef2f20603c709c5aa820b656b91e61f
-  specs:
-    omniauth-gitlab (3.0.0)
-      omniauth (~> 2.0)
-      omniauth-oauth2 (~> 1.7.1)
-
-GIT
   remote: https://github.com/lostisland/sawyer.git
   revision: b3ae36be627c2d8e1972eb7849e6296f67ac1006
   specs:
@@ -27,14 +12,6 @@ GIT
   specs:
     acts-as-taggable-on (9.0.1)
       activerecord (>= 6.0, < 7.1)
-
-GIT
-  remote: https://github.com/omniauth/omniauth-github.git
-  revision: 1f772263c6cc00e84dabbc02beb755ba4c95f7d1
-  specs:
-    omniauth-github (2.0.0)
-      omniauth (~> 2.0)
-      omniauth-oauth2 (~> 1.7.1)
 
 GEM
   remote: https://rubygems.org/
@@ -519,6 +496,7 @@ GEM
     timeout (0.2.0)
     tins (1.31.0)
       sync
+    tomo (1.11.0)
     turbo-rails (1.0.1)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
@@ -611,9 +589,8 @@ DEPENDENCIES
   minitest
   name_of_person
   oj
-  omniauth-atlassian-bitbucket!
-  omniauth-github!
-  omniauth-gitlab!
+  omniauth
+  omniauth-oauth2
   omniauth-rails_csrf_protection
   pg (>= 1.x)
   pg_search
@@ -638,6 +615,7 @@ DEPENDENCIES
   sitemap_generator
   sprockets-rails
   strong_migrations
+  tomo
   turbo-rails
   typhoeus
   view_component

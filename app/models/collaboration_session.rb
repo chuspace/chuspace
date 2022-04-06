@@ -15,6 +15,10 @@ class CollaborationSession < ApplicationRecord
     end
   end
 
+  def decoded_content
+    $ydoc.parse(ydoc: current_ydoc) if current_ydoc&.present?
+  end
+
   def editor_attrs(user:)
     {
       channel: 'CollaborationSessionChannel',
@@ -26,6 +30,10 @@ class CollaborationSession < ApplicationRecord
       },
       ydoc: current_ydoc || initial_ydoc
     }.to_json
+  end
+
+  def end
+    update(active: false)
   end
 
   private

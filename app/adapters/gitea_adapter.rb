@@ -6,9 +6,7 @@ class GiteaAdapter < GithubAdapter
   end
 
   def commits(path: nil)
-    opts = {}
-    opts[:path] = path if path
-    commits = get("repos/#{repo_fullname}/commits", **opts)
+    commits = super(path: path)
 
     if path
       commits.select { |commit| commit.files.map(&:filename).include?(path) }
@@ -17,14 +15,10 @@ class GiteaAdapter < GithubAdapter
     end
   end
 
-  def create_or_update_blob(path:, content:, committer:, author:, sha: nil, message: nil)
+  def create_blob(path:, content:, committer:, author:, sha: nil, message: nil)
     options = { content: content, committer: committer, author: author }
 
-    if sha.blank?
-      blob_from_response(post("repos/#{repo_fullname}/contents/#{path}", { message: "Create #{path}", **options }).content)
-    else
-      blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { message: "Update #{path}", **options }).content)
-    end
+    blob_from_response(post("repos/#{repo_fullname}/contents/#{path}", { message: "Create #{path}", **options }).content)
   end
 
   def create_repository_webhook(type: nil)
@@ -34,6 +28,7 @@ class GiteaAdapter < GithubAdapter
   def search_repositories(query:, login:, options: { per_page: 5 })
     options[:uid] = users.find { |user| user.username == login }.id
     options[:exclusive] = true
+
     @search_repositories ||= repository_from_response(search('repos/search', query, options).data)
   end
 end

@@ -1,6 +1,9 @@
-<% OmniauthConfig.new.to_h.each_key do |provider| %>
-  <% config = OmniauthConfig.new.send(provider) %>
-  <%= button_or_link_to(config[:url], class: "text-left w-full btn border-0 #{login_button_colors_classes[provider].join(' ')}", method: config[:method], title: t('.login_with', provider: config[:label]), data: { turbo: false }, form: { class: 'w-full mt-2 first:mt-0' }) do %>
-    <%= inline_svg_tag "icons/#{provider}.svg", class: 'fill-current w-6 h-6' %><span class='ml-2'><%= config[:label] %></span>
+<% Identity.providers.each_key do |provider| %>
+  <% config = OmniauthConfig.new.auth.dig(provider) %>
+
+  <% if config %>
+    <%= button_or_link_to(config[:url], class: "text-left w-full btn border-0 #{login_button_colors_classes[config[:id]].join(' ')}", method: config[:method], title: t('.login_with', provider: config[:label]), data: { turbo: false }, form: { class: 'w-full mt-2 first:mt-0' }) do %>
+      <%= inline_svg_tag "icons/#{config[:id]}.svg", class: 'fill-current w-6 h-6' %><span class='ml-2'><%= config[:label] %></span>
+    <% end %>
   <% end %>
 <% end %>

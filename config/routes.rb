@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   end
 
   delete '/sessions/:id', to: 'sessions#destroy', as: :logout
+  match '/auth/:provider/setup', to: 'git_providers#setup', via: %i[get post]
   get '/auth/:provider/callback', to: 'oauths#create'
 
   namespace :webhooks do

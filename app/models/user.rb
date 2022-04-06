@@ -54,14 +54,12 @@ class User < ApplicationRecord
   end
 
   def seed_git_providers
-    data = GitStorageConfig.new.to_h.map do |key, hash|
+    data = GitStorageConfig.new.to_h.map do |key, config|
       {
         user_id: id,
-        name: key,
-        label: hash[:label],
-        endpoint: hash[:endpoint],
         created_at: Time.current,
-        updated_at: Time.current
+        updated_at: Time.current,
+        **config
       }
     end
 
