@@ -31,7 +31,7 @@ set env_vars: {
   DATABASE_URL: :prompt,
   REDIS_URL: :prompt,
   EXECJS_RUNTIME: 'Node',
-  OUT_OF_PRIVATE_BETA: false,
+  OUT_OF_PRIVATE_BETA: true,
   REDIS_CACHE_URL: :prompt,
   SECRET_KEY_BASE: :prompt
 }
