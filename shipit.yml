@@ -59,10 +59,9 @@ deploy:
   #   - script/notify-deploy-complete
 # If your deploys have a fast rollback procedure you can define it here.
 # This will make rollback buttons appear in the interface.
-# rollback:
-#   override:
-#     - script/rollback
-
+rollback:
+  override:
+    - bundle exec tomo deploy -s git_ref=$LAST_DEPLOYED_SHA
 # Sometime you might want to trigger custom scripts on Shipit, this section allows you to define
 # arbitrary tasks that you can trigger from the interface.
 # tasks:
