@@ -18,8 +18,7 @@
           partial: 'connect/shared/choose_git_provider',
           collection: @git_providers,
           as: :git_provider,
-          locals: { publication: @publication },
-          cache: true
+          locals: { publication: @publication }
         )
       %>
     </ul>

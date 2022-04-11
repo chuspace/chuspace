@@ -92,18 +92,14 @@ class Repository < ApplicationRecord
   private
 
   def blobs(paths:)
-    Rails.cache.fetch([self, paths.join(':')]) do
-      git_provider_adapter.blobs(paths: paths)
-        .select { |blob| Git::Blob.valid?(name: blob.name) }
-        .map { |blob| blob.decorate(publication: publication) }
-    end
+    git_provider_adapter.blobs(paths: paths)
+      .select { |blob| Git::Blob.valid?(name: blob.name) }
+      .map { |blob| blob.decorate(publication: publication) }
   end
 
   def blob(path:)
     fail ActiveRecord::RecordNotFound, 'not found' unless Git::Blob.valid?(name: path)
 
-    Rails.cache.fetch([self, path]) do
-      git_provider_adapter.blob(path: path).decorate(publication: publication)
-    end
+    git_provider_adapter.blob(path: path).decorate(publication: publication)
   end
 end

@@ -16,7 +16,6 @@ module FaradayClient
         builder.response :logger, nil, { headers: true, bodies: true }
       end
       builder.use FaradayClient::Middleware::FeedParser
-      builder.use Faraday::HttpCache, serializer: Marshal, shared_cache: false, store: Rails.cache, logger: Rails.logger
       builder.adapter :typhoeus, http_version: :httpv2_0
     end
 

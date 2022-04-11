@@ -237,8 +237,6 @@ GEM
     faraday-em_http (1.0.0)
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
-    faraday-http-cache (2.2.0)
-      faraday (>= 0.8)
     faraday-httpclient (1.0.1)
     faraday-multipart (1.0.3)
       multipart-post (>= 1.2, < 3)
@@ -573,7 +571,6 @@ DEPENDENCIES
   factory_bot_rails
   faker
   faraday (~> 1.x)
-  faraday-http-cache
   friendly_id
   front_matter_parser
   good_job

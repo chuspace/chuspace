@@ -1,22 +1,20 @@
-<% cache publication do %>
-  <div class='border-base-200 border-b last:border-b-0 p-4 px-8'>
-    <%= turbo_frame_tag(publication, class: 'flex') do %>
-      <div class='flex-1'>
-        <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
-          <%= tag.h5 class: 'link link-primary link-hover' do %>
-            <%= publication.name %>
-            <%= content_tag :span, publication.visibility, class: 'badge badge-outline badge-secondary ml-2' %>
-          <% end %>
-
-          <%= tag.div publication.description, class: 'text-secondary mt-1 w-full sm:w-3/4' %>
-
-          <div class='mt-4 text-sm text-secondary'>
-            <%= publication.topic_list %>
-            updated <%= time_ago_in_words(publication.updated_at) %> ago
-            <%= content_tag :span, publication.git_provider.name, class: 'badge badge-primary mr-2' %>
-          </div>
+<div class='border-base-200 border-b last:border-b-0 p-4 px-8'>
+  <%= turbo_frame_tag(publication, class: 'flex') do %>
+    <div class='flex-1'>
+      <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
+        <%= tag.h5 class: 'link link-primary link-hover' do %>
+          <%= publication.name %>
+          <%= content_tag :span, publication.visibility, class: 'badge badge-outline badge-secondary ml-2' %>
         <% end %>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+
+        <%= tag.div publication.description, class: 'text-secondary mt-1 w-full sm:w-3/4' %>
+
+        <div class='mt-4 text-sm text-secondary'>
+          <%= publication.topic_list %>
+          updated <%= time_ago_in_words(publication.updated_at) %> ago
+          <%= content_tag :span, publication.git_provider.name, class: 'badge badge-primary mr-2' %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

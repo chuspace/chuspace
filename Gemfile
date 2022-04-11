@@ -25,7 +25,7 @@ gem 'kredis'
 gem 'active_type'
 gem 'attr_json'
 
-# Cache
+# Redis WS
 gem 'hiredis'
 gem 'oj'
 gem 'redis'
@@ -85,7 +85,6 @@ gem 'down'
 gem 'http'
 gem 'faraday', '~> 1.x'
 gem 'sawyer', github: 'lostisland/sawyer'
-gem 'faraday-http-cache'
 gem 'typhoeus'
 
 # Image

@@ -19,7 +19,7 @@
 
         <% card.body do %>
           <% if @invites.any? %>
-            <%= render partial: 'invite', collection: @invites, as: :invite, cached: true %>
+            <%= render partial: 'invite', collection: @invites, as: :invite %>
           <% else %>
             <%= render 'shared/placeholder', content: 'No pending invites' %>
           <% end %>

@@ -19,7 +19,7 @@
 
         <% card.body do %>
           <% if @memberships.any? %>
-            <%= render partial: 'person', collection: @memberships, as: :membership, cached: true %>
+            <%= render partial: 'person', collection: @memberships, as: :membership %>
           <% else %>
             <%= render 'shared/placeholder', content: 'No members' %>
           <% end %>

@@ -5,11 +5,8 @@ module Publications
     include ActiveStorage::Streaming
 
     def show
-      @blob = @publication.asset(path: CGI.unescape(params[:path]))
-
-      http_cache_forever(public: true) do
-        send_data Base64.decode64(@blob.content), disposition: params[:disposition], filename: @blob.name
-      end
+      @blob = @publication.repository.asset(path: CGI.unescape(params[:path]))
+      send_data Base64.decode64(@blob.content), disposition: params[:disposition], filename: @blob.name
     end
 
     def create
