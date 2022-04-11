@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 module OmniAuth
   module Strategies
     class Bitbucket < OmniAuth::Strategies::OAuth2
-      EMAIL = "email"
-      ACCOUNT = "account"
+      EMAIL = 'email'
+      ACCOUNT = 'account'
 
       option :client_options,
-             site: "https://bitbucket.org",
-             authorize_url: "/site/oauth2/authorize",
-             token_url: "/site/oauth2/access_token"
+             site: 'https://bitbucket.org',
+             authorize_url: '/site/oauth2/authorize',
+             token_url: '/site/oauth2/access_token'
 
       def authorize_params
         super.tap do |params|
           scope = params[:scope].to_s.split(/\s+/)
           scope << EMAIL unless scope.include?(EMAIL)
           scope << ACCOUNT unless scope.include?(ACCOUNT)
-          params[:scope] = scope.join(" ")
+          params[:scope] = scope.join(' ')
         end
       end
 
@@ -46,17 +48,17 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= deep_symbolize(access_token.get("/api/2.0/user").parsed)
+        @raw_info ||= deep_symbolize(access_token.get('/api/2.0/user').parsed)
       end
 
       def emails
         @emails ||= deep_symbolize(
-          access_token.get("/api/2.0/user/emails").parsed
+          access_token.get('/api/2.0/user/emails').parsed
         ).fetch(:values)
       end
 
       def primary_email
-        (emails.find {|info| info["is_primary"] } || {})["email"]
+        (emails.find { |info| info['is_primary'] } || {})['email']
       end
     end
   end
