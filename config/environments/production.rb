@@ -65,7 +65,7 @@ Rails.application.configure do
     port: 587,
     enable_starttls_auto: true,
     user_name: 'SMTP_Injection',
-    password: ENV['SPARKPOST_API_KEY'],
+    password: Rails.application.credentials.sparkpost[:api_key],
     authentication: 'login'
   }
 
