@@ -4,13 +4,26 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
-  <<: *default
-  database: chuspace_development
+  primary:
+    <<: *default
+    database: chuspace_development
+  primary_replica:
+    <<: *default
+    database: chuspace_development
 
 test:
-  <<: *default
-  database: chuspace_test
+  primary:
+    <<: *default
+    database: chuspace_test
+  primary_replica:
+    <<: *default
+    database: chuspace_test
 
 production:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  primary:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
+  primary_replica:
+    <<: *default
+    url: <%= ENV['DATABASE_REPLICA_URL'] %>
+    replica: true
