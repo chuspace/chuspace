@@ -5,7 +5,7 @@ module Publications
     class CommitsController < BaseController
       layout 'editor'
 
-      before_action :redirect_to_editing, unless: -> { @draft.stale? }
+      before_action :redirect_to_editing, unless: -> { @draft.collaboration_session&.doc_changed? }
 
       def new
         authorize! @draft, to: :commit?

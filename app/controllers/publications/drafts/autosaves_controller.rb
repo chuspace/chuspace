@@ -16,7 +16,7 @@ module Publications
       private
 
       def autosave_params
-        params.require(:draft).permit(:current_ydoc)
+        params.require(:draft).permit(:current_ydoc, :doc_changed)
       end
     end
   end

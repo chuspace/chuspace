@@ -4,6 +4,7 @@ import './styles.sass'
 
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
+import { Fragment, Schema } from 'prosemirror-model'
 import { LitElement, html } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
 import {
@@ -27,6 +28,7 @@ import {
   redo,
   undo,
   yCursorPlugin,
+  yDocToProsemirror,
   ySyncPlugin,
   ySyncPluginKey,
   yUndoPlugin
@@ -36,7 +38,6 @@ import { ActionCableProvider } from 'editor/actioncable-provider'
 import { CodeBlock as CodeBlockComponent } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
-import { Schema } from 'prosemirror-model'
 import SchemaManager from 'editor/schema'
 import { createConsumer } from '@rails/actioncable'
 import debounce from 'lodash.debounce'
@@ -126,6 +127,7 @@ export default class ChuEditor extends LitElement {
   activeMarks: {}
   activeNodes: {}
   activeMarkAttrs: {}
+  dirty: boolean = false
 
   constructor() {
     super()
@@ -151,6 +153,13 @@ export default class ChuEditor extends LitElement {
       this.ydoc = new YDoc()
       this.ydoc.gc = false
       applyUpdateV2(this.ydoc, fromBase64(this.collaboration.ydoc))
+
+      this.startingYDoc = new YDoc()
+      this.startingYDoc.gc = false
+      applyUpdateV2(
+        this.startingYDoc,
+        fromBase64(this.collaboration.original_ydoc)
+      )
     }
 
     this.manager = this.isNodeEditor
@@ -175,6 +184,8 @@ export default class ChuEditor extends LitElement {
         this.attachVersion()
       }, 100)
     }
+
+    this.checkDirty()
   }
 
   createRenderRoot() {
@@ -431,18 +442,32 @@ export default class ChuEditor extends LitElement {
   }
 
   autosave = debounce(
-    () => {
+    async () => {
       const statusElement = document.getElementById('chu-editor-status')
       this.addVersion()
       if (statusElement) statusElement.textContent = 'Auto saving...'
 
-      post(this.autoSavePath, {
+      const startingProsemirrorDoc = yDocToProsemirror(
+        this.schema,
+        this.startingYDoc
+      )
+
+      const startingFragment = Fragment.from(startingProsemirrorDoc)
+      const currentFragment = Fragment.from(this.state.doc)
+      const stale = startingFragment.findDiffStart(currentFragment)
+
+      const response = await post(this.autoSavePath, {
         body: JSON.stringify({
           draft: {
-            current_ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc))
+            current_ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc)),
+            doc_changed: !!stale
           }
         })
       })
+
+      if (response.ok) {
+        this.dirty = false
+      }
     },
     2000,
     { maxWait: 5000 }
@@ -496,6 +521,7 @@ export default class ChuEditor extends LitElement {
     this.view.updateState(this.state)
 
     if (transaction.docChanged && this.editable) {
+      this.dirty = true
       this.emitUpdate()
       this.autosave()
     }
@@ -562,6 +588,21 @@ export default class ChuEditor extends LitElement {
 
   get content() {
     return this.contentSerializer.serialize(this.state.doc)
+  }
+
+  checkDirty() {
+    window.onload = () => {
+      window.addEventListener('beforeunload', (e) => {
+        if (this.dirty) {
+          const event = e || window.event
+          event.returnValue =
+            'It looks like you have been editing something. ' +
+            'If you leave before saving, your changes will be lost.'
+        } else {
+          return undefined
+        }
+      })
+    }
   }
 
   destroy() {

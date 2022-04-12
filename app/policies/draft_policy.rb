@@ -5,7 +5,7 @@ class DraftPolicy < ApplicationPolicy
   delegate :publication, to: :record
 
   def commit?
-    edit? && record.stale?
+    edit? && record.collaboration_session&.doc_changed?
   end
 
   def edit?

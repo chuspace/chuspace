@@ -10,6 +10,8 @@ class CreateCollaborationSessions < ActiveRecord::Migration[7.0]
       t.string :current_ydoc
 
       t.boolean :active, default: true
+      t.boolean :doc_changed, default: false
+      t.boolean :stale, default: false
 
       t.bigint :number, default: 1, null: false
 

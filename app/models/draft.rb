@@ -98,12 +98,8 @@ class Draft < Git::Blob
     end
   end
 
-  def stale?
-    collaboration_session.current_ydoc.present?
-  end
-
   def status
-    if stale?
+    if collaboration_session&.doc_changed?
       'Uncommitted changes'
     else
       'Everything up to date'
