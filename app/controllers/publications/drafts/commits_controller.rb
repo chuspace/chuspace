@@ -3,12 +3,13 @@
 module Publications
   module Drafts
     class CommitsController < BaseController
-      layout 'full'
+      layout 'editor'
 
       before_action :redirect_to_editing, unless: -> { @draft.stale? }
 
       def new
         authorize! @draft, to: :commit?
+        @collaboration_session = @publication.collaboration_sessions.find_by(blob_path: @draft.path)
         add_breadcrumb('Commit')
       end
 

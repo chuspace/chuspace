@@ -6,10 +6,10 @@ class CreateCollaborationSessionMembers < ActiveRecord::Migration[7.0]
       t.references :collaboration_session, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
 
-      t.boolean :online, default: false, null: false
-      t.boolean :creator, default: false, null: false
+      t.boolean :online, default: false, null: false, index: true
+      t.boolean :creator, default: false, null: false, index: true
 
-      t.datetime :last_seen_at, null: false
+      t.datetime :last_seen_at, null: false, index: true
 
       t.timestamps
     end

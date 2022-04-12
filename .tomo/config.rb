@@ -7,8 +7,10 @@ plugin 'rails'
 plugin 'nodenv'
 plugin 'puma'
 plugin 'rbenv'
+plugin 'good_job'
 plugin './plugins/yarn.rb'
 
+# Primary region - Ireland
 host 'deployer@63.35.200.43'
 
 set application: 'chuspace'
@@ -24,6 +26,7 @@ set git_exclusions: %w[
   test/
 ]
 set env_vars: {
+  REGION: 'Ireland',
   RACK_ENV: 'production',
   RAILS_ENV: 'production',
   RAILS_LOG_TO_STDOUT: '1',
@@ -32,7 +35,7 @@ set env_vars: {
   DATABASE_URL: :prompt,
   REDIS_URL: :prompt,
   EXECJS_RUNTIME: 'Node',
-  OUT_OF_PRIVATE_BETA: true,
+  OUT_OF_PRIVATE_BETA: :prompt,
   RAILS_MASTER_KEY: :prompt
 }
 set linked_dirs: %w[
@@ -63,6 +66,7 @@ setup do
   run 'rails:db_create'
   run 'rails:db_schema_load'
   run 'rails:db_seed'
+  run 'good_job:setup_systemd'
   run 'puma:setup_systemd'
 end
 
@@ -77,6 +81,7 @@ deploy do
   run 'rails:db_seed'
   run 'rails:assets_precompile'
   run 'core:symlink_current'
+  run 'good_job:restart'
   run 'puma:restart'
   run 'puma:check_active'
   run 'core:clean_releases'

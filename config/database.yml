@@ -9,7 +9,7 @@ development:
     database: chuspace_development
   primary_replica:
     <<: *default
-    database: chuspace_development
+    database: chuspace_development_replica
 
 test:
   primary:
@@ -17,7 +17,7 @@ test:
     database: chuspace_test
   primary_replica:
     <<: *default
-    database: chuspace_test
+    database: chuspace_test_replica
 
 production:
   primary:
