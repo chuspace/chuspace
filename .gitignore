@@ -43,3 +43,5 @@ yarn-debug.log*
 /config/credentials/local.*
 .vagrant
 .ssh
+infra/
+.tomo/

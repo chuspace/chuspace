@@ -2,4 +2,4 @@
 
 export { ContributionWidget } from './widget'
 export { ContributionToolbar } from './toolbar'
-export { ContributionEditor } from './editor'
+// export { ContributionEditor } from './editor'

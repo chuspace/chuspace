@@ -1,0 +1,7 @@
+<%= turbo_frame_tag dom_id(publication, :assets) do %>
+  <% if assets.any? %>
+    <%= render partial: 'publications/assets/item', collection: assets, locals: { publication: publication }, as: :asset %>
+  <% else %>
+    <div class='text-center text-2xl py-16'>No assets in this publication</div>
+  <% end %>
+<% end %>

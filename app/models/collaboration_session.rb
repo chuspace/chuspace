@@ -5,15 +5,11 @@ class CollaborationSession < ApplicationRecord
   has_many   :members, class_name: 'CollaborationSessionMember', dependent: :delete_all
   has_one    :creator, -> { where(creator: true) }, class_name: 'CollaborationSessionMember'
 
+  enum state: ChuspaceConfig.new.collaboration_session[:states]
+
   validates :publication_id, uniqueness: { scope: %i[blob_path number] }
 
   before_validation :assign_next_number, on: :create
-
-  class << self
-    def active
-      where(active: true)
-    end
-  end
 
   def decoded_content
     $ydoc.parse(ydoc: current_ydoc) if current_ydoc&.present?
@@ -34,13 +30,12 @@ class CollaborationSession < ApplicationRecord
   end
 
   def end
-    update(active: false)
+    update(state: :closed)
   end
 
   private
 
   def assign_next_number
-    self.active = true
     self.number = (publication.collaboration_sessions.maximum(:number) || 0) + 1
   end
 end

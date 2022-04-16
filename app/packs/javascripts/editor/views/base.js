@@ -28,7 +28,9 @@ export default class BaseView {
     this.node = props.node
     this.options = props.options
     this.isSelected = false
-    this.containerNode = props.node.type.spec.inline ? document.createElement('span') : document.createElement('div')
+    this.containerNode = props.node.type.spec.inline
+      ? document.createElement('span')
+      : document.createElement('div')
 
     if (render) this.renderElement()
   }

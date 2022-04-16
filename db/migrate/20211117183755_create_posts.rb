@@ -20,6 +20,7 @@ class CreatePosts < ActiveRecord::Migration[7.0]
 
       t.references :publication, null: false, foreign_key: true
       t.references :author, foreign_key: { to_table: :users }, null: false
+
       t.jsonb :original_author, null: false, default: {}
 
       t.boolean :published, null: false, default: true

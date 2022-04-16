@@ -3,7 +3,7 @@
 class CollaborationSessionChannel < ApplicationCable::Channel
   def subscribed
     if stream_name = verified_stream_name
-      collaboration_session = CollaborationSession.active.find(stream_name)
+      collaboration_session = CollaborationSession.open.find(stream_name)
       authorize! collaboration_session, to: :update?
       member = collaboration_session.members.find_by(user: current_user)
       member.update(online: true, last_seen_at: Time.current)
@@ -20,7 +20,7 @@ class CollaborationSessionChannel < ApplicationCable::Channel
 
   def unsubscribed
     stop_all_streams
-    collaboration_session = CollaborationSession.active.find(verified_stream_name)
+    collaboration_session = CollaborationSession.open.find(verified_stream_name)
     authorize! collaboration_session, to: :update?
     member = collaboration_session.members.find_by(user: current_user)
     member.update(online: false, last_seen_at: Time.current)

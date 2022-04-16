@@ -24,6 +24,8 @@ class Post < ApplicationRecord
 
   friendly_id :slug_candidates, use: %i[slugged history], slug_column: :permalink
 
+  has_many :revisions, dependent: :delete_all, inverse_of: :post
+
   has_one_attached :preview_image do |attachable|
     attachable.variant :post, resize_to_limit: [800, 300]
     attachable.variant :list, resize_to_limit: [250, 150]
@@ -31,12 +33,14 @@ class Post < ApplicationRecord
     attachable.variant :social, resize_to_limit: [600, 315]
   end
 
+  delegate :repository, to: :publication
+
   def self.default_scope
     where(published: true).order(date: :desc)
   end
 
   def draft
-    @draft ||= publication.draft(path: blob_path)
+    repository.draft_at(path: blob_path, ref: commit_sha)
   end
 
   def short_commit_sha
@@ -44,12 +48,12 @@ class Post < ApplicationRecord
   end
 
   def stale?
-    commit_sha != draft.sha
+    blob_sha != repository.draft(path: blob_path).sha
   end
 
   def to_meta_tags
     {
-      site: ChuspaceConfig.new.app_name,
+      site: ChuspaceConfig.new.app[:name],
       title: title,
       image_src: preview_image.variant(:list),
       description: summary,
@@ -70,7 +74,7 @@ class Post < ApplicationRecord
         title: :title,
         card: :summary,
         description: :description,
-        site: ChuspaceConfig.new.twitter,
+        site: ChuspaceConfig.new.app[:twitter],
         url: Rails.application.routes.url_helpers.publication_post_url(publication, self),
         image: preview_image.variant(:list)
       },

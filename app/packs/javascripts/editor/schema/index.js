@@ -82,27 +82,31 @@ export default class SchemaManager {
 
   get nodeViews(): {} {
     return {
-      front_matter: (node, view, getPos) =>
+      front_matter: (node, view, getPos, decorations) =>
         new FrontMatterView({
           node,
           view,
           getPos,
-          editable: this.editor.editable
+          decorations,
+          editor: this.editor
         }),
-      code_block: (node, view, getPos) =>
+      code_block: (node, view, getPos, decorations) =>
         new CodeBlockView({
           node,
           view,
           getPos,
-          editable: this.editor.editable
+          decorations,
+          editor: this.editor
         }),
 
-      image: (node, view, getPos) =>
+      image: (node, view, getPos, decorations) =>
         new ImageView({
           node,
           view,
           getPos,
-          editable: this.editor.editable
+          decorations,
+          editor: this.editor,
+          imageLoadPath: this.editor.imageLoadPath
         })
     }
   }

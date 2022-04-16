@@ -6,8 +6,9 @@ class Repository < ApplicationRecord
   belongs_to :publication
   belongs_to :git_provider
 
-  validates :full_name, :default_ref, :posts_folder, :assets_folder, presence: true
+  validates :full_name, :default_ref, :posts_folder, :assets_folder, :readme_path, presence: true
   validates :full_name, uniqueness: true
+  validates :readme_path, :name, markdown: true
 
   delegate :name, :description, :html_url, :owner, :default_branch, to: :git
 
@@ -27,42 +28,83 @@ class Repository < ApplicationRecord
     [assets_folder].freeze
   end
 
+  def raw(path:)
+    pathname = Pathname.new(path)
+    path = (pathname.absolute? ? pathname.relative_path_from('/') : pathname).to_s
+    content = case git_provider.name.to_sym
+              when :github
+                blob = assets.find { |asset| asset.path == path }
+                git_provider_adapter.asset(sha: blob.sha).content
+              else
+                asset(path: path).content
+    end
+
+    Base64.decode64(content)
+  end
+
   def asset(path:)
-    blob(path: path)
+    fail ActiveRecord::RecordNotFound, 'not found' unless ImageValidator.valid?(name_or_path: path)
+    git_provider_adapter.blob(path: path).decorate(publication: publication)
   end
 
   def assets(path: assets_folders)
-    path = path.is_a?(Array) ? path : [path]
-    blobs(paths: path)
+    paths = path.is_a?(Array) ? path : [path]
+
+    git_provider_adapter.blobs(paths: paths)
+      .select { |blob| ImageValidator.valid?(name_or_path: blob.name) }
+      .map { |blob| blob.decorate(publication: publication) }
   end
 
   def content_folders
-    [posts_folder, drafts_folder].reject(&:blank?).freeze
+    [posts_folder, drafts_folder, assets_folder, readme_path].reject(&:blank?).freeze
+  end
+
+  def contents
+    git_provider_adapter.blobs(paths: content_folders)
+      .select { |blob| Git::Blob.valid?(name: blob.name) }
+      .map { |blob| blob.decorate(publication: publication) }
   end
 
   def draft(path:)
-    blob(path: path)
+    fail ActiveRecord::RecordNotFound, 'not found' unless MarkdownValidator.valid?(name_or_path: path)
+    git_provider_adapter.blob(path: path).decorate(publication: publication)
   end
 
-  def drafts(path: content_folders)
-    path = path.is_a?(Array) ? path : [path]
-    blobs(paths: path)
+  def draft_at(path:, ref:)
+    fail ActiveRecord::RecordNotFound, 'not found' unless MarkdownValidator.valid?(name_or_path: path)
+    git_provider_adapter(ref: ref).blob(path: path).decorate(publication: publication)
+  end
+
+  def drafts(path: drafts_folders)
+    paths = path.is_a?(Array) ? path : [path]
+
+    git_provider_adapter.blobs(paths: paths)
+      .select { |blob| MarkdownValidator.valid?(name_or_path: blob.name) }
+      .map { |blob| blob.decorate(publication: publication) }
+  end
+
+  def drafts_folders
+    [drafts_folder.presence, posts_folder.presence].compact
   end
 
   def drafts_or_posts_folder
     drafts_folder.presence || posts_folder.presence
   end
 
+  def blob_exists?(path:)
+    contents.find { |content| content.path == path }&.id&.present?
+  end
+
   def friendly_full_name
     full_name.tr('/', '-').to_slug.normalize.to_s
   end
 
-  def files
-    git_provider_adapter.repository_files
+  def files(ref: default_ref)
+    git_provider_adapter(ref: ref).repository_files
   end
 
-  def folders
-    git_provider_adapter.repository_folders
+  def folders(ref: default_ref)
+    git_provider_adapter(ref: ref).repository_folders
   end
 
   def git
@@ -70,36 +112,22 @@ class Repository < ApplicationRecord
   end
 
   def git_provider_adapter(ref: default_ref)
-    @git_provider_adapter ||= git_provider.adapter.apply_repository_scope(repo_fullname: full_name, ref: ref)
+    git_provider.adapter.apply_repository_scope(repo_fullname: full_name, ref: ref)
   end
 
   def markdown_files
     files.select { |path| MarkdownValidator.valid?(name_or_path: path) }
   end
 
-  def readme
-    blob(path: readme_path)
+  def readme(ref: default_ref)
+    git_provider_adapter(ref: ref).blob(path: readme_path).decorate(publication: publication)
   end
 
-  def tree(path:)
-    git_provider_adapter.tree(path: path)
+  def tree(path:, ref: default_ref)
+    git_provider_adapter(ref: ref).tree(path: path)
   end
 
   def webhooks
     git_provider_adapter.webhooks
-  end
-
-  private
-
-  def blobs(paths:)
-    git_provider_adapter.blobs(paths: paths)
-      .select { |blob| Git::Blob.valid?(name: blob.name) }
-      .map { |blob| blob.decorate(publication: publication) }
-  end
-
-  def blob(path:)
-    fail ActiveRecord::RecordNotFound, 'not found' unless Git::Blob.valid?(name: path)
-
-    git_provider_adapter.blob(path: path).decorate(publication: publication)
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  if ChuspaceConfig.new.out_of_private_beta
+  if ChuspaceConfig.new.app[:out_of_private_beta]
     root to: 'home#index', constraints: RootConstraint.new, as: :authenticated_root
   end
 
@@ -72,7 +72,7 @@ Rails.application.routes.draw do
 
   resources :publications, only: :index
 
-  resources :publications, path: '', only: :show, param: :permalink, constraints: PublicationConstraint.new do
+  resources :publications, path: '', only: :show, param: :permalink, constraints: { permalink: /[a-z0-9_\-]+/ } do
     resources :settings, only: %i[index show update], module: :publications
 
     resources :people, path: 'people', module: :publications do
@@ -85,16 +85,16 @@ Rails.application.routes.draw do
       member { patch :resend }
     end
 
-    scope constraints: { path: /[^\0]+/ }, format: false do
-      scope controller: :assets, module: :publications do
-        get '/asset/*path', action: :show, as: :asset
-        post '/assets', action: :create, as: :assets
-        delete '/delete/*path', action: :destroy, as: :delete_asset
+    scope constraints: { publication_permalink: /[a-z0-9_\-]+/, path: /[^\0]+/ } do
+      scope controller: :assets, module: :publications, format: false do
+        get '/assets', action: :index, as: :assets_root
+        get '/assets/*path', action: :index, as: :assets
+        get '/asset', action: :show, as: :asset, constraints: AssetConstraint.new
+        post '/assets', action: :create, as: :create_assets
+        delete '/*path', action: :destroy, as: :delete_asset, constraints: AssetConstraint.new
       end
-    end
 
-    scope constraints: { path: /[^\0]+/ } do
-      scope controller: :drafts, module: :publications do
+      scope controller: :drafts, module: :publications, format: false do
         get '/drafts', action: :index, as: :drafts_root
         get '/drafts/*path', action: :index, as: :drafts
 
@@ -103,7 +103,6 @@ Rails.application.routes.draw do
         get '/*path/edit', action: :edit, as: :edit_draft
         patch '/*path/update', action: :update, as: :update_draft
         delete '/*path/delete', action: :destroy, as: :delete_draft
-
 
         scope controller: :previews, module: :drafts do
           get '/*path/preview', action: :show, as: :preview_draft
@@ -123,21 +122,18 @@ Rails.application.routes.draw do
           get '/*path/diff', action: :new, as: :new_draft_diff
         end
 
-        scope controller: :autosaves, module: :drafts do
-          post '/*path/autosave', action: :create, as: :autosave_draft
-        end
-
-        scope controller: :contributions, module: :drafts do
-          get '/*path/contribute', action: :index, as: :draft_contributions
-          get '/*path/contribute/new', action: :new, as: :new_draft_contribution
-          post '/*path/contribute', action: :create, as: :draft_contribution
+        scope controller: :collaboration_sessions, module: :drafts do
+          patch '/*path/autosave', action: :update, as: :autosave_draft
         end
       end
-    end
 
-    resources :posts, path: '', except: :index, param: :permalink do
-      resources :settings, only: %i[index show]
-      resources :reactions, only: %i[index create destroy], module: :posts
+      scope constraints: { publication_permalink: /[a-z0-9_\-]+/, permalink: /[a-z0-9_\-]+/ } do
+        resources :posts, path: '', except: :index, param: :permalink do
+          resources :settings, only: %i[index show]
+          resources :reactions, only: %i[index create destroy], module: :posts
+          resources :revisions, module: :posts, path: 'revise'
+        end
+      end
     end
   end
 end

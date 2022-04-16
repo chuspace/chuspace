@@ -49,9 +49,13 @@ const parsableNodes = {
   hardbreak: { node: 'hard_break' }
 }
 
-export default (schema: Schema) => {
-  const schemaNodes = [...Object.keys(schema.nodes), 'fence', 'hr']
-    .filter((node) => Object.keys(parsableNodes).includes(node) || node.name)
+export default (schema: Schema, isNodeEditor: boolean = false) => {
+  let schemaNodes = isNodeEditor
+    ? Object.keys(schema.nodes)
+    : [...Object.keys(schema.nodes), 'fence', 'hr']
+
+  schemaNodes = schemaNodes
+    .filter((name) => Object.keys(parsableNodes).includes(name))
     .reduce(
       (nodes, name) => ({
         ...nodes,

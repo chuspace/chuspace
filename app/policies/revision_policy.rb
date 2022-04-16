@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+class RevisionPolicy < ApplicationPolicy
+  alias_rule :new?, to: :create?
+  alias_rule :update?, :destroy?, to: :edit?
+
+  delegate :publication, to: :record
+
+  def index?
+    true
+  end
+
+  def create?
+    publication.members.exclude?(user)
+  end
+
+  def edit?
+    record.author == user
+  end
+end

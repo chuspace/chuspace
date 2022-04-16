@@ -61,13 +61,20 @@ export default class Link extends Mark {
   }
 
   inputRules({ type }: PMMark) {
-    const markdownInputRule = new InputRule(LINK_INPUT_REGEX, (state, match, start, end) => {
-      const { schema } = state
-      const [, prefix, linkText, linkUrl] = match
-      const markType = schema.mark('link', { href: linkUrl })
+    const markdownInputRule = new InputRule(
+      LINK_INPUT_REGEX,
+      (state, match, start, end) => {
+        const { schema } = state
+        const [, prefix, linkText, linkUrl] = match
+        const markType = schema.mark('link', { href: linkUrl })
 
-      return state.tr.replaceWith(start + prefix.length, end, schema.text(linkText, [markType]))
-    })
+        return state.tr.replaceWith(
+          start + prefix.length,
+          end,
+          schema.text(linkText, [markType])
+        )
+      }
+    )
 
     return [markdownInputRule]
   }

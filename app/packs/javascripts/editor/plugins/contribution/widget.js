@@ -3,8 +3,8 @@
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 
-import { Element } from 'editor/base'
 import ContributionItem from './item'
+import { Element } from 'editor/base'
 import cssClasses from './constants'
 
 export const contributionWidgetName = 'contribution-widget'

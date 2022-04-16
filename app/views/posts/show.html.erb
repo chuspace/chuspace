@@ -1,7 +1,7 @@
 <% set_meta_tags @post %>
 
 <% content_for(:header_actions) do %>
-  <%= link_to 'Contribute', publication_draft_contributions_path(@publication, @post.draft), class: 'btn btn-info btn-xs mr-4', 'data-turbo-frame': :_top if allowed_to?(:contribute?, @post) %>
+  <%= link_to 'Revision request', publication_post_revisions_path(@publication, @post), class: 'btn btn-info btn-xs mr-4', 'data-turbo-frame': :_top if allowed_to?(:revise?, @post) %>
 <% end %>
 
 <div class='sm:w-2/3 mx-auto w-full'>

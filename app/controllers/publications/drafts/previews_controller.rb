@@ -7,7 +7,6 @@ module Publications
 
       def show
         authorize! @draft
-        add_breadcrumb('Preview')
       end
     end
   end

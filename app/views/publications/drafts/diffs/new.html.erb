@@ -3,6 +3,7 @@
     <chu-editor
         collaboration='<%= @collaboration_session.editor_attrs(user: Current.user) %>'
         mode='diff'
+        imageLoadPath='<%= publication_asset_path(@publication) %>'
         <%= @draft.front_matter? ? '' : 'excludeFrontmatter' %>
       >
       <%= turbo_frame_tag(@draft) do %>

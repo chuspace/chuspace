@@ -5,13 +5,12 @@ module Publications
     class PublishingsController < BaseController
       before_action :redirect_to_editing, unless: -> { @draft.publishable? }
 
-      layout 'full'
+      layout 'editor'
 
       def new
         authorize! @draft, to: :publish?
         @post = @publication.posts.build
         @post.assign_attributes(@draft.to_post_attributes)
-        add_breadcrumb('Publish')
       end
 
       def create
@@ -32,6 +31,10 @@ module Publications
       end
 
       private
+
+      def redirect_to_editing
+        redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Nothing to publish!'
+      end
 
       def publish_params
         params.require(:post).permit(:visibility, :date, :topic_list)

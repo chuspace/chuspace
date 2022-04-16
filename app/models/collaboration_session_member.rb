@@ -15,7 +15,7 @@ class CollaborationSessionMember < ApplicationRecord
   delegate :publication, to: :collaboration_session
 
   def self.default_scope
-    order(last_seen_at: :desc)
+    order(:id)
   end
 
   private

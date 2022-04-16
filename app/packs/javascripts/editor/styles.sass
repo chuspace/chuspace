@@ -128,8 +128,14 @@
   strong
     @apply mb-8 font-bold
 
-  code-editor, lazy-image, p
+  code-editor, p
     @apply mb-8 block
+
+  lazy-image
+    @apply inline-block w-full
+
+  lazy-image, content-loader, contribution-modal
+    @apply whitespace-nowrap
 
   figure, p > div
     @apply whitespace-nowrap
@@ -201,6 +207,3 @@
       @apply text-base font-medium
     h6
       @apply text-base font-medium
-
-  contribution-modal
-    @apply whitespace-nowrap

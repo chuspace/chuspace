@@ -2,10 +2,11 @@
 
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { Plugin, PluginKey } from 'prosemirror-state'
+import { html, render } from 'lit'
+
 import { Element } from 'editor/base'
 import { contributionToolbarPluginKey } from './toolbar'
 import { contributionWidgetKey } from './widget'
-import { html, render } from 'lit'
 
 const contributionEditorKey = 'contribution-editor'
 export const contributionEditorPluginKey = new PluginKey(contributionEditorKey)
@@ -20,7 +21,7 @@ const ContributionEditorPlugin = new Plugin({
       const contributionMeta = tr.getMeta(contributionToolbarPluginKey)
 
       if (contributionMeta) {
-        const { fromPos, toPos, nodeName, view, content } = contributionMeta
+        const { fromPos, toPos, view, node, content } = contributionMeta
 
         const onSubmit = (newContent) => {
           delete window[contributionToolbarPluginKey]
@@ -35,15 +36,15 @@ const ContributionEditorPlugin = new Plugin({
 
         const onStateChange = (state) => {
           window[contributionToolbarPluginKey] = state
-          console.log(state)
         }
 
         const widget = document.createElement('div')
-
+        widget.textContent = 'foo'
         render(
           html`
             <contribution-modal
-              nodeName=${nodeName}
+              nodeName=${node.type.name}
+              editable
               content=${content}
               .onSubmit=${onSubmit}
               .onStateChange=${onStateChange}
@@ -52,12 +53,24 @@ const ContributionEditorPlugin = new Plugin({
           widget
         )
 
-        return DecorationSet.create(tr.doc, [
-          Decoration.widget(toPos - 1, widget.children[0]),
-          Decoration.node(fromPos, toPos, {
-            class: 'relative revision-node'
-          })
-        ])
+        let nodeDecos
+
+        console.log(fromPos, tr.doc.resolve(fromPos))
+
+        if (node.type.name === 'code_block') {
+          nodeDecos = [
+            Decoration.node(fromPos, toPos, {}, { widget: widget.children[0] })
+          ]
+        } else {
+          nodeDecos = [
+            Decoration.widget(fromPos + 1, widget.children[0]),
+            Decoration.node(fromPos, toPos, {
+              class: 'relative revision-node'
+            })
+          ]
+        }
+
+        return DecorationSet.create(tr.doc, nodeDecos)
       } else {
         return value ? value.map(tr.mapping, tr.doc) : DecorationSet.empty
       }
@@ -65,7 +78,7 @@ const ContributionEditorPlugin = new Plugin({
   },
   props: {
     decorations(state) {
-      return ContributionEditorPlugin.getState(state)
+      return this.getState(state)
     }
   }
 })

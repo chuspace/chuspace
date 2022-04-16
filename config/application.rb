@@ -28,7 +28,7 @@ module Chuspace
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_record.encryption.extend_queries = true
-    StrongMigrations.start_after = 20220303151152
+    StrongMigrations.start_after = 20220413144339
 
     # Active Job
     config.active_job.queue_adapter = :good_job

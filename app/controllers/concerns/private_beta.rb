@@ -4,7 +4,7 @@ module PrivateBeta
   extend ActiveSupport::Concern
 
   included do
-    before_action :private_beta_stop, unless: -> { ChuspaceConfig.new.out_of_private_beta }
+    before_action :private_beta_stop, unless: -> { ChuspaceConfig.new.app[:out_of_private_beta] }
   end
 
   private

@@ -11,11 +11,11 @@ class Draft < Git::Blob
 
   def content_html(content: body)
     doc = CommonMarker.render_doc(content)
-    MarkdownRenderer.new.render(doc).html_safe
+    MarkdownRenderer.new(publication: publication).render(doc).html_safe
   end
 
   def collaboration_session
-    publication.collaboration_sessions.active.find_by(blob_path: path)
+    publication.collaboration_sessions.open.find_by(blob_path: path)
   end
 
   def collab?
@@ -134,6 +134,7 @@ class Draft < Git::Blob
       title: Untitled
       summary:
       ---
+
     STR
   end
 

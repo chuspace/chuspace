@@ -56,7 +56,7 @@ export default class ContributionModal extends LitElement {
   }
 
   render() {
-    const icon = svg`<svg xmlns="http://www.w3.org/2000/svg" @click=${this.handleOpen} viewBox="0 0 24 24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>`
+    const icon = svg`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M11.75 4.5a.75.75 0 01.75.75V11h5.75a.75.75 0 010 1.5H12.5v5.75a.75.75 0 01-1.5 0V12.5H5.25a.75.75 0 010-1.5H11V5.25a.75.75 0 01.75-.75z"></path></svg>`
 
     return this.isOpen
       ? html`
@@ -72,6 +72,7 @@ export default class ContributionModal extends LitElement {
               <chu-editor
                 class="chu-editor"
                 mode="node"
+                editable
                 nodeName=${this.nodeName}
                 .onChange=${this.setValue}
               >
@@ -97,7 +98,8 @@ export default class ContributionModal extends LitElement {
         `
       : html`
           <span
-            class="fill-current w-6 h-6 absolute -left-12 inset-y-1/2 mr-12 -translate-y-1/2 bg-success flex items-center justify-center rounded"
+            @click=${this.handleOpen}
+            class="fill-current w-6 h-6 absolute -left-12 inset-y-1/2 mr-12 -translate-y-1/2 bg-success text-neutral flex items-center justify-center rounded"
           >
             ${icon}
           </span>
