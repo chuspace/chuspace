@@ -100,7 +100,7 @@ function arrowHandler(dir) {
   }
 }
 
-export default class ChuEditor extends LitElement {
+export default class CollaborationEditor extends LitElement {
   static properties = {
     autoSavePath: { type: String },
     autoFocus: { type: Boolean },
@@ -110,8 +110,6 @@ export default class ChuEditor extends LitElement {
     imageLoadPath: { type: String },
     editable: { type: Boolean },
     contribution: { type: Boolean },
-    contributionPath: { type: String },
-    nodeName: { type: String },
     mode: { type: String },
     status: { type: String, reflect: true },
     onChange: { type: Function }
@@ -131,28 +129,16 @@ export default class ChuEditor extends LitElement {
   constructor() {
     super()
 
-    if (this.contribution && !this.contributionPath) {
-      throw 'Contribution path must be set'
-    }
-
     this.autoFocus = false
-    this.collaboration = null
-    this.excludeFrontmatter = false
     this.mode = 'default'
     this.editable = false
     this.contribution = false
-
-    if (this.mode === 'node') this.nodeName = 'paragraph'
   }
 
   async connectedCallback() {
     super.connectedCallback()
 
-    if (this.collaboration) {
-      this.ydoc = new YDoc()
-      this.ydoc.gc = false
-      applyUpdateV2(this.ydoc, fromBase64(this.collaboration.ydoc))
-
+    if (this.collaboration.original_ydoc) {
       this.startingYDoc = new YDoc()
       this.startingYDoc.gc = false
       applyUpdateV2(
@@ -161,34 +147,29 @@ export default class ChuEditor extends LitElement {
       )
     }
 
-    this.manager = this.isNodeEditor
-      ? new SchemaManager(this, [...DEFAULT_EDITOR_NODES, this.nodeName])
-      : new SchemaManager(this)
+    this.ydoc = new YDoc()
+    this.ydoc.gc = false
+    applyUpdateV2(this.ydoc, fromBase64(this.collaboration.ydoc))
+    this.setupPermanentUserData()
+    this.setupCollaboration()
 
+    this.manager = new SchemaManager(this)
     this.schema = this.manager.schema
-    this.contentParser = markdownParser(this.schema, this.isNodeEditor)
-    this.contentSerializer = markdownSerializer(this.schema, this.isNodeEditor)
-
-    if (this.isNodeEditor || this.contribution) {
-      this.initialContent = this.querySelector('textarea.content').value
-      this.doc = this.contentParser.parse(this.initialContent)
-    }
+    this.contentParser = markdownParser(this.schema, false)
+    this.contentSerializer = markdownSerializer(this.schema, false)
 
     this.state = this.createState()
     this.view = this.createView()
 
-    if (this.editable) {
-      this.view.props.commands = this.manager.commands
-      this.setActiveNodesAndMarks()
-    }
+    this.setupCommands()
+    this.setActiveNodesAndMarks()
+    this.checkDirty()
 
     if (this.isDiffMode) {
       setTimeout(() => {
         this.attachVersion()
       }, 100)
     }
-
-    this.checkDirty()
   }
 
   createRenderRoot() {
@@ -199,183 +180,11 @@ export default class ChuEditor extends LitElement {
     if (this.collaboration) this.provider?.destroy()
   }
 
-  get isNodeEditor() {
-    return this.mode === 'node' && !!this.nodeName
-  }
-
   get isDiffMode() {
     return this.mode === 'diff'
   }
 
   get plugins() {
-    let collaborationPlugins = []
-    let keymaps = {}
-
-    if (this.collaboration) {
-      this.users = []
-
-      const render = (user) => {
-        const cursor = document.createElement('span')
-
-        cursor.classList.add('collaboration-cursor__caret')
-        cursor.setAttribute('style', `border-color: ${user.color}`)
-
-        const label = document.createElement('div')
-
-        label.classList.add('collaboration-cursor__label')
-        label.setAttribute('style', `background-color: ${user.color}`)
-        label.insertBefore(document.createTextNode(user.name), null)
-        cursor.insertBefore(label, null)
-
-        return cursor
-      }
-
-      const currentUserColor = randomColor({
-        luminosity: 'light',
-        hue: 'orange',
-        seed: this.collaboration.user.username
-      })
-
-      const colors = Array.from(this.ydoc.getMap('users').keys()).map((key) => {
-        return {
-          light: randomColor({
-            seed: key,
-            hue: 'orange',
-            luminosity: 'light'
-          }),
-          dark: randomColor({
-            seed: key,
-            hue: 'orange',
-            luminosity: 'dark'
-          })
-        }
-      })
-
-      if (this.editable && this.collaboration.channel) {
-        this.provider = new ActionCableProvider(
-          createConsumer(),
-          this.collaboration,
-          this.ydoc
-        )
-
-        this.provider.on('synced', () => {
-          this.permanentUserData = new LocalRemoteUserData(
-            this.ydoc,
-            this.ydoc.getMap('users')
-          )
-
-          this.permanentUserData.setUserMapping(
-            this.ydoc,
-            this.ydoc.clientID,
-            this.collaboration.user.username
-          )
-        })
-
-        collaborationPlugins = [
-          ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
-            permanentUserData: this.permanentUserData,
-            colors
-          }),
-          yCursorPlugin(
-            (() => {
-              this.provider.awareness.setLocalStateField('user', {
-                color: currentUserColor,
-                ...this.collaboration.user
-              })
-
-              this.users = awarenessStatesToArray(
-                this.provider.awareness.states
-              )
-
-              this.provider.awareness.on('update', () => {
-                const update = awarenessStatesToArray(
-                  this.provider.awareness.states
-                )
-
-                this.users = awarenessStatesToArray(update)
-              })
-
-              return this.provider.awareness
-            })(),
-            {
-              cursorBuilder: render
-            }
-          ),
-          yUndoPlugin()
-        ]
-      } else {
-        this.permanentUserData = new LocalRemoteUserData(
-          this.ydoc,
-          this.ydoc.getMap('users')
-        )
-        this.permanentUserData.setUserMapping(
-          this.ydoc,
-          this.ydoc.clientID,
-          this.collaboration.user.username
-        )
-
-        collaborationPlugins.push(
-          ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
-            permanentUserData: this.permanentUserData,
-            colors
-          })
-        )
-      }
-
-      const commands = {
-        undo: () => ({ tr, state, dispatch }) => {
-          tr.setMeta('preventDispatch', true)
-
-          const undoManager: UndoManager = yUndoPluginKey.getState(state)
-            .undoManager
-
-          if (undoManager.undoStack.length === 0) {
-            return false
-          }
-
-          if (!dispatch) {
-            return true
-          }
-
-          return undo(state)
-        },
-        redo: () => ({ tr, state, dispatch }) => {
-          tr.setMeta('preventDispatch', true)
-
-          const undoManager: UndoManager = yUndoPluginKey.getState(state)
-            .undoManager
-
-          if (undoManager.redoStack.length === 0) {
-            return false
-          }
-
-          if (!dispatch) {
-            return true
-          }
-
-          return redo(state)
-        }
-      }
-
-      keymaps = {
-        'Mod-z': undo,
-        'Mod-y': redo,
-        'Mod-Shift-z': redo
-      }
-    }
-
-    if (this.mode !== 'node') {
-      keymaps = Object.assign({}, keymaps, {
-        ArrowLeft: arrowHandler('left'),
-        ArrowRight: arrowHandler('right'),
-        ArrowUp: arrowHandler('up'),
-        ArrowDown: arrowHandler('down'),
-        'Ctrl-s': this.handleSave,
-        'Mod-s': this.handleSave,
-        Escape: selectParentNode
-      })
-    }
-
     return [
       ...this.manager.plugins,
       inputRules({
@@ -385,7 +194,16 @@ export default class ChuEditor extends LitElement {
       ...this.manager.keymaps,
       keymap(baseKeymap),
       keymap({
-        ...keymaps,
+        'Mod-z': undo,
+        'Mod-y': redo,
+        'Mod-Shift-z': redo,
+        ArrowLeft: arrowHandler('left'),
+        ArrowRight: arrowHandler('right'),
+        ArrowUp: arrowHandler('up'),
+        ArrowDown: arrowHandler('down'),
+        'Ctrl-s': this.handleSave,
+        'Mod-s': this.handleSave,
+        Escape: selectParentNode,
         Backspace: undoInputRule
       }),
 
@@ -406,32 +224,53 @@ export default class ChuEditor extends LitElement {
           }
         }
       }),
-      ...collaborationPlugins
-    ]
+      ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
+        permanentUserData: this.permanentUserData,
+        colors: this.colors
+      }),
+      this.collaboration.channel &&
+        yCursorPlugin(
+          (() => {
+            this.provider.awareness.setLocalStateField('user', {
+              color: this.currentUserColor,
+              ...this.collaboration.user
+            })
+
+            this.users = awarenessStatesToArray(this.provider.awareness.states)
+
+            this.provider.awareness.on('update', () => {
+              const update = awarenessStatesToArray(
+                this.provider.awareness.states
+              )
+
+              this.users = awarenessStatesToArray(update)
+            })
+
+            return this.provider.awareness
+          })(),
+          {
+            cursorBuilder: this.cursorBuilder
+          }
+        ),
+      yUndoPlugin()
+    ].filter(Boolean)
   }
 
-  createState = () => {
-    let options = {
+  createState = () =>
+    EditorState.create({
       schema: this.schema,
       contributions: [],
       plugins: this.plugins
-    }
-
-    if (this.contribution || this.isNodeEditor) {
-      options['doc'] = this.doc
-    }
-
-    return EditorState.create(options)
-  }
+    })
 
   createView() {
     const view = new EditorView(this, {
       state: this.state,
       schema: this.schema,
       editable: () => this.editable,
+      contribution: this.contribution,
       imageLoadPath: this.imageLoadPath,
       imageUploadPath: this.imageUploadPath,
-      contributionPath: this.contributionPath,
       dispatchTransaction: this.dispatchTransaction.bind(this),
       nodeViews: this.manager.nodeViews
     })
@@ -554,6 +393,109 @@ export default class ChuEditor extends LitElement {
     this.view.dom.blur()
   }
 
+  cursorBuilder = (user) => {
+    const cursor = document.createElement('span')
+
+    cursor.classList.add('collaboration-cursor__caret')
+    cursor.setAttribute('style', `border-color: ${user.color}`)
+
+    const label = document.createElement('div')
+
+    label.classList.add('collaboration-cursor__label')
+    label.setAttribute('style', `background-color: ${user.color}`)
+    label.insertBefore(document.createTextNode(user.name), null)
+    cursor.insertBefore(label, null)
+
+    return cursor
+  }
+
+  setupCommands = () => {
+    this.view.props.commands = Object.assign({}, this.manager.commands, {
+      undo: () => ({ tr, state, dispatch }) => {
+        tr.setMeta('preventDispatch', true)
+
+        const undoManager: UndoManager = yUndoPluginKey.getState(state)
+          .undoManager
+
+        if (undoManager.undoStack.length === 0) {
+          return false
+        }
+
+        if (!dispatch) {
+          return true
+        }
+
+        return undo(state)
+      },
+      redo: () => ({ tr, state, dispatch }) => {
+        tr.setMeta('preventDispatch', true)
+
+        const undoManager: UndoManager = yUndoPluginKey.getState(state)
+          .undoManager
+
+        if (undoManager.redoStack.length === 0) {
+          return false
+        }
+
+        if (!dispatch) {
+          return true
+        }
+
+        return redo(state)
+      }
+    })
+  }
+
+  setupPermanentUserData = () => {
+    this.permanentUserData = new LocalRemoteUserData(
+      this.ydoc,
+      this.ydoc.getMap('users')
+    )
+
+    this.permanentUserData.setUserMapping(
+      this.ydoc,
+      this.ydoc.clientID,
+      this.collaboration.user.username
+    )
+
+    return this.permanentUserData
+  }
+
+  setupCollaboration = () => {
+    this.users = []
+
+    this.currentUserColor = randomColor({
+      luminosity: 'light',
+      hue: 'orange',
+      seed: this.collaboration.user.username
+    })
+
+    this.colors = Array.from(this.ydoc.getMap('users').keys()).map((key) => {
+      return {
+        light: randomColor({
+          seed: key,
+          hue: 'orange',
+          luminosity: 'light'
+        }),
+        dark: randomColor({
+          seed: key,
+          hue: 'orange',
+          luminosity: 'dark'
+        })
+      }
+    })
+
+    if (this.collaboration.channel) {
+      this.provider = new ActionCableProvider(
+        createConsumer(),
+        this.collaboration,
+        this.ydoc
+      )
+
+      this.provider.on('synced', () => this.setupPermanentUserData)
+    }
+  }
+
   setActiveNodesAndMarks() {
     this.activeMarks = Object.entries(this.schema.marks).reduce(
       (marks, [name, mark]) => ({
@@ -626,7 +568,7 @@ export default class ChuEditor extends LitElement {
 }
 
 document.addEventListener('turbo:load', () => {
-  if (!window.customElements.get('chu-editor')) {
-    customElements.define('chu-editor', ChuEditor)
+  if (!window.customElements.get('collaboration-editor')) {
+    customElements.define('collaboration-editor', CollaborationEditor)
   }
 })

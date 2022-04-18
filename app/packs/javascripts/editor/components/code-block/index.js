@@ -45,6 +45,7 @@ export default class CodeEditor extends LitElement {
     theme: { type: String },
     filename: { type: String },
     downloadable: { type: String },
+    onChange: { type: Function },
     loaded: { type: Boolean },
     content: { type: String, reflect: true },
     onInit: { type: Function },
@@ -60,6 +61,7 @@ export default class CodeEditor extends LitElement {
     this.loaded = false
     this.wrapper = true
     this.downloadable = true
+    this.contribution = false
     this.lines = 0
 
     this.options = {
@@ -116,6 +118,10 @@ export default class CodeEditor extends LitElement {
     await loadMode(this.mode)
     this.cm = await this.createCM(this.codeEditorNode)
     if (this.onInit) await this.onInit(this.cm)
+
+    this.cm.on('change', (editor) => {
+      if (this.onChange) this.onChange(editor.doc.getValue())
+    })
 
     this.loaded = true
   }

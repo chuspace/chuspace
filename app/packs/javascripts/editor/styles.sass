@@ -1,3 +1,8 @@
+@import '~prosemirror-view/style/prosemirror.css'
+
+.ProseMirror
+  @apply outline-none relative
+
 .ProseMirror-trailingBreak
   @apply h-0
 
@@ -66,10 +71,7 @@
     @apply mt-2 text-secondary opacity-80 text-xl
 
   .front-matter
-    @apply mb-6
-
-    &[open]
-      @apply mb-0
+    @apply mb-6 border border-base-300 rounded-md
 
   &.editable
     .title-empty, .summary-empty, .body-empty
@@ -130,6 +132,12 @@
 
   code-editor, p
     @apply mb-8 block
+
+  details code-editor
+    @apply mb-0
+
+  code-editor.with-contribution-widget
+    @apply mb-0
 
   lazy-image
     @apply inline-block w-full

@@ -118,14 +118,16 @@ class Draft < Git::Blob
       topic_list: topics,
       blob_path: path,
       blob_sha: id,
-      body: body,
-      body_html: content_html,
       commit_sha: commits.first&.id || commits.first&.sha
     }
   end
 
-  def publish(author:)
-    publication.posts.create(author: author, **to_post_attributes)
+  def publish(author:, other_attributes: {})
+    post = publication.posts.build(author: author)
+    post.assign_attributes(to_post_attributes)
+    post.assign_attributes(other_attributes)
+    post.ydoc = $ydoc.compile(content: decoded_content, username: author.username)
+    post.save
   end
 
   def new_template

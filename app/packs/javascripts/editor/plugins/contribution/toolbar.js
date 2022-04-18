@@ -2,10 +2,14 @@
 
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey } from 'prosemirror-state'
-import { html, render } from 'lit'
+import { html, render, svg } from 'lit'
 
 import { Element } from 'editor/base'
+import { contributionWidgetKey } from './widget'
+import { customAlphabet } from 'nanoid'
 import { markdownSerializer } from 'editor/markdowner'
+
+const nanoid = customAlphabet('1234567890abcdef', 10)
 
 type Options = {
   nodes: Array<string>
@@ -16,129 +20,162 @@ export const contributionToolbarPluginKey = new PluginKey(
   contributionToolbarKey
 )
 
+const isMark = (node) => node && node.mark?.type
+
+const findViewNode = (view, event) => {
+  const pos = view.posAtCoords({
+    left: event.clientX,
+    top: event.clientY
+  })
+
+  if (pos) {
+    const dom = view.domAtPos(pos.pos)
+    let node = dom.node.pmViewDesc.node
+
+    switch (node.type.name) {
+      case 'paragraph':
+        node = node.content.content.find((node) => node.type.name === 'image')
+        break
+      default:
+        break
+    }
+
+    return { fromPos: pos.pos, toPos: pos.pos + node.content.size, node }
+  } else {
+    return null
+  }
+}
+
+export const renderContributionModal = (contribution) => {
+  const widget = document.createElement('div')
+
+  render(
+    html`
+      <contribution-modal .contribution=${contribution}></contribution-modal>
+    `,
+    widget
+  )
+
+  document.body.appendChild(widget)
+}
+
 export class ContributionToolbar extends Element {
   name = contributionToolbarKey
 
   options: Options = {
-    allowedNodes: ['paragraph']
+    allowedNodes: ['paragraph', 'code_block']
   }
 
   get plugins() {
+    const editor = this.editor
     const options = this.options
 
-    return this.editor.contribution
+    return editor.contribution
       ? [
           new Plugin({
             key: contributionToolbarPluginKey,
-            state: {
-              init() {
-                return DecorationSet.empty
-              },
-              apply(tr, value) {
-                const contributionMeta = tr.getMeta(
-                  contributionToolbarPluginKey
-                )
+            props: {
+              handleDOMEvents: {
+                click(view, event) {
+                  const pmView = event?.srcElement?.pmViewDesc
+                  let node
+                  let fromPos
+                  let toPos
 
-                if (contributionMeta) {
-                  const {
-                    fromPos,
-                    toPos,
-                    view,
-                    node,
-                    content
-                  } = contributionMeta
+                  if (pmView) {
+                    if (isMark(pmView)) {
+                      node = pmView.parent.node
+                      if (node.type.name === 'doc') return event
+                      fromPos = pmView.parent.posBefore
+                      toPos = pmView.parent.posAfter
+                    } else {
+                      node = pmView.node
 
-                  const onSubmit = (newContent) => {
-                    delete window[contributionToolbarPluginKey]
+                      if (node.type.name === 'doc') return event
+                      fromPos = pmView.posBefore
+                      toPos = pmView.posAfter
+                    }
+                  } else {
+                    const viewNode = findViewNode(view, event)
+                    if (!viewNode) return event
+                    if (viewNode.node.type.name === 'doc') return event
 
-                    const transaction = view.state.tr.setMeta(
-                      contributionWidgetKey,
-                      Object.assign({}, contributionMeta, { newContent })
-                    )
-
-                    view.dispatch(transaction)
+                    fromPos = viewNode.fromPos
+                    toPos = viewNode.toPos
+                    node = viewNode.node
                   }
 
-                  const onStateChange = (state) => {
-                    window[contributionToolbarPluginKey] = state
-                  }
+                  const widgetPos = toPos - 1
 
-                  const widget = document.createElement('div')
-                  widget.textContent = 'foo'
-                  render(
-                    html`
-                      <contribution-modal
-                        nodeName=${node.type.name}
-                        editable
-                        content=${content}
-                        .onSubmit=${onSubmit}
-                        .onStateChange=${onStateChange}
-                      ></contribution-modal>
-                    `,
-                    widget
+                  const contributionPlugin = view.state.plugins.find(
+                    (plugin) => plugin.key === contributionWidgetKey.key
                   )
 
-                  return DecorationSet.create(tr.doc, [
-                    Decoration.widget(fromPos + 1, widget.children[0]),
-                    Decoration.node(fromPos, toPos, {
-                      class: 'relative revision-node'
-                    })
-                  ])
-                } else {
-                  return value
-                    ? value.map(tr.mapping, tr.doc)
-                    : DecorationSet.empty
-                }
-              }
-            },
+                  const widget = contributionPlugin.props.findContribution(
+                    view.state,
+                    widgetPos
+                  )?.[0]
 
-            props: {
-              decorations(state) {
-                return this.getState(state)
-              },
-              handleDOMEvents: {
-                mouseover(view, event) {
-                  if (window[contributionToolbarPluginKey]) return
+                  if (widget) {
+                    event.preventDefault()
+                    event.stopPropagation()
 
-                  const pos = view.posAtCoords({
-                    left: event.clientX,
-                    top: event.clientY
-                  })
-
-                  const domAtPos = view.domAtPos(pos.pos)
-                  const nodeAtPos = domAtPos?.node?.pmViewDesc?.node
-                  const toElementView = event?.toElement?.pmViewDesc
-                  const node = toElementView?.node || nodeAtPos
-                  const inlineNode =
-                    node.type.name === 'paragraph' &&
-                    node.content.content.some(
-                      (node) => node.type.name !== 'text'
-                    )
-
-                  if (inlineNode) {
-                    return event
+                    return renderContributionModal(widget.type.spec)
                   }
 
                   if (node && options.allowedNodes.includes(node.type.name)) {
-                    let fromPos = toElementView?.posBefore
-                    let toPos = toElementView?.posAfter
+                    event.preventDefault()
+                    event.stopPropagation()
 
-                    const content = markdownSerializer(
+                    let content = markdownSerializer(
                       view.props.schema
                     ).serialize(node.content)
 
-                    const transaction = view.state.tr.setMeta(
-                      contributionToolbarPluginKey,
-                      {
-                        node,
-                        content,
-                        view: view,
-                        fromPos,
-                        toPos
-                      }
-                    )
+                    const meta = {
+                      content,
+                      id: nanoid(),
+                      type: 'contribution',
+                      node: {
+                        type: node.type.name,
+                        meta: {
+                          lang: node.attrs.language
+                        }
+                      },
+                      author: editor.collaboration.user,
+                      widgetPos,
+                      start: fromPos,
+                      end: toPos
+                    }
 
-                    view.dispatch(transaction)
+                    const contribution = {
+                      ...meta,
+                      handleAdd: (event, contribution) => {
+                        event.preventDefault()
+
+                        const transaction = view.state.tr.setMeta(
+                          contributionWidgetKey,
+                          { ...contribution, add: true }
+                        )
+
+                        view.dispatch(transaction)
+                      },
+
+                      handleRemove: (event) => {
+                        event.preventDefault()
+
+                        const transaction = view.state.tr.setMeta(
+                          contributionWidgetKey,
+                          {
+                            remove: true,
+                            ...meta
+                          }
+                        )
+
+                        view.dispatch(transaction)
+                      }
+                    }
+
+                    renderContributionModal(contribution)
                   }
 
                   return event

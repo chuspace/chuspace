@@ -15,12 +15,9 @@ module Publications
 
       def create
         authorize! @draft, to: :publish?
+        @post = @draft.publish(author: Current.user, other_attributes: publish_params)
 
-        @post = @publication.posts.build(author: Current.user)
-        @post.assign_attributes(@draft.to_post_attributes)
-        @post.assign_attributes(publish_params)
-
-        if @post.save!
+        if @post
           redirect_to publication_post_path(@publication, @post)
         else
           respond_to do |format|

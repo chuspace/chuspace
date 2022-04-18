@@ -14,13 +14,10 @@ import queryString from 'query-string'
 export default class ImageView extends BaseView {
   editable: boolean = false
 
-  constructor(
-    props: BaseViewPropType & { editable: boolean, imageLoadPath: string }
-  ) {
+  constructor(props: BaseViewPropType & { imageLoadPath: string }) {
     super(props, false)
 
     this.imageLoadPath = props.imageLoadPath
-    this.editable = props.editable
     this.containerNode = document.createElement('div')
     this.renderElement()
   }

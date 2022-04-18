@@ -1,5 +1,12 @@
 <div class='chu-editor'>
   <%= content_tag :h1, @draft.title, class: 'title' %>
   <%= content_tag :h2, @draft.summary, class: 'summary' %>
-  <%= content_tag :article, @draft.content_html.html_safe %>
+  <collaboration-editor
+      imageUploadPath='<%= publication_create_assets_path(@publication) %>'
+      imageLoadPath='<%= publication_asset_path(@publication) %>'
+      autoSavePath='<%= publication_autosave_draft_path(@publication, @draft) %>'
+      collaboration='<%= @collaboration_session.editor_attrs(user: Current.user) %>'
+      excludeFrontmatter
+    >
+  </collaboration-editor>
 </div>

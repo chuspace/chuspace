@@ -24,11 +24,14 @@ export default class Dialog {
     if (!this.dialog.open) return
     this.dialog.close()
     document.body.classList.remove('dialog-open')
+    document.body.scroll = 'yes'
   }
 
   show() {
     if (this.dialog.open) return
-    this.dialog.showModal()
+
+    document.body.scroll = 'no'
     document.body.classList.add('dialog-open')
+    this.dialog.showModal()
   }
 }

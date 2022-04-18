@@ -2,20 +2,47 @@
 
 import { Decoration, DecorationSet, EditorView } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
+import { html, render } from 'lit'
 
 import ContributionItem from './item'
 import { Element } from 'editor/base'
 import cssClasses from './constants'
+import { renderContributionModal } from './toolbar'
 
 export const contributionWidgetName = 'contribution-widget'
 export const contributionWidgetKey = new PluginKey(contributionWidgetName)
 
-function createContributionWidget({ fromPos, toPos, oldContent, newContent }) {
+function createContributionWidget(contribution) {
   const widget = document.createElement('div')
-  widget.className = 'badge absolute left-0 -ml-12'
-  widget.textContent = '1'
+  widget.className = 'absolute left-0 top-0 -ml-12'
+  const template = contribution.author.avatar_url
+    ? html`
+        <div class="avatar">
+          <div class="w-8 rounded-full">
+            <img src="${contribution.author.avatar_url}" />
+          </div>
+        </div>
+      `
+    : html`
+        <div class="avatar placeholder">
+          <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
+            <span class="text-xs">AA</span>
+          </div>
+        </div>
+      `
 
-  return Decoration.widget(fromPos + 1, widget)
+  render(template, widget)
+
+  widget.addEventListener('click', (event) =>
+    renderContributionModal(contribution)
+  )
+
+  return [
+    Decoration.widget(contribution.widgetPos, widget, contribution),
+    Decoration.node(contribution.start, contribution.end, {
+      class: 'relative'
+    })
+  ]
 }
 
 class ContributionState {
@@ -25,26 +52,26 @@ class ContributionState {
     this.decorations = decos
   }
 
-  contributionsAt(pos: number) {
-    return this.decorations.find(pos, pos)
-  }
+  contributionsAt = (pos: number) =>
+    this.decorations.find(pos, pos, (spec) => spec.type === 'contribution')
 
   apply(tr: Transaction) {
     const contribution = tr.getMeta(contributionWidgetKey)
-    if (!contribution) return this
+    let set = this.decorations
+    set = set.map(tr.mapping, tr.doc)
 
-    console.log(contribution)
-    let decos = this.decorations
-    decos = decos.map(tr.mapping, tr.doc)
+    if (contribution) {
+      if (contribution.add) {
+        const widget = this.contributionsAt(contribution.widgetPos)?.[0]
+        if (!widget) {
+          set = set.add(tr.doc, createContributionWidget(contribution))
+        }
+      } else if (contribution.remove) {
+        set = set.remove(this.contributionsAt(contribution.widgetPos))
+      }
+    }
 
-    decos = decos.add(tr.doc, [
-      createContributionWidget(contribution),
-      Decoration.node(contribution.fromPos, contribution.toPos, {
-        class: 'relative revision-node'
-      })
-    ])
-
-    return new ContributionState(decos)
+    return new ContributionState(set)
   }
 
   static init(state: EditorState) {
@@ -67,6 +94,10 @@ const contributionWidget = new Plugin({
   props: {
     decorations(state) {
       return this.getState(state).decorations
+    },
+
+    findContribution(state: EditorState, pos: number) {
+      return this.getState(state).contributionsAt(pos)
     }
   }
 })

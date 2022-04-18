@@ -31,7 +31,7 @@ module Publications
         :name,
         :description,
         :icon,
-        repo_attributes: %i[posts_folder drafts_folder assets_folder readme_path]
+        repository_attributes: %i[posts_folder drafts_folder assets_folder readme_path id]
       )
     end
   end

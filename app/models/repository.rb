@@ -8,7 +8,7 @@ class Repository < ApplicationRecord
 
   validates :full_name, :default_ref, :posts_folder, :assets_folder, :readme_path, presence: true
   validates :full_name, uniqueness: true
-  validates :readme_path, :name, markdown: true
+  validates :readme_path, markdown: true
 
   delegate :name, :description, :html_url, :owner, :default_branch, to: :git
 

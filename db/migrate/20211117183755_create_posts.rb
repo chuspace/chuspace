@@ -9,8 +9,7 @@ class CreatePosts < ActiveRecord::Migration[7.0]
 
       t.text :title, null: false
       t.text :summary
-      t.text :body, null: false
-      t.text :body_html, null: false
+      t.text :ydoc, null: false
       t.text :blob_path, null: false
       t.text :blob_sha, null: false
       t.text :commit_sha, null: false

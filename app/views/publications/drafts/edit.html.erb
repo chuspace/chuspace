@@ -1,5 +1,5 @@
 <section class='lg:w-2/3 py-24 mx-auto w-full chu-editor editable'>
-  <chu-editor
+  <collaboration-editor
       imageUploadPath='<%= publication_create_assets_path(@publication) %>'
       imageLoadPath='<%= publication_asset_path(@publication) %>'
       autoSavePath='<%= publication_autosave_draft_path(@publication, @draft) %>'
@@ -21,5 +21,5 @@
         </div>
       <% end %>
     <% end %>
-  </chu-editor>
+  </collaboration-editor>
 </div>

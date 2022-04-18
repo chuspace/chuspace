@@ -9,7 +9,7 @@ class Post < ApplicationRecord
   belongs_to :publication, touch: true
   belongs_to :author, class_name: 'User', touch: true
 
-  validates :title, :permalink, :body, :body_html, :blob_sha, :commit_sha, :visibility, presence: true
+  validates :title, :permalink, :ydoc, :blob_sha, :commit_sha, :visibility, presence: true
   validates :blob_path, presence: :true, uniqueness: { scope: %i[version publication_id] }, markdown: true
   validates :version, presence: :true, uniqueness: { scope: :publication_id }
 
@@ -41,6 +41,17 @@ class Post < ApplicationRecord
 
   def draft
     repository.draft_at(path: blob_path, ref: commit_sha)
+  end
+
+  def editor_attrs(user:)
+    {
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name
+      },
+      ydoc: ydoc
+    }.to_json
   end
 
   def short_commit_sha

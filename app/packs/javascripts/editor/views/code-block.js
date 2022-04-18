@@ -2,7 +2,7 @@
 
 import { Node as ProsemirrorNode, Schema } from 'prosemirror-model'
 import { Selection, TextSelection } from 'prosemirror-state'
-import { html, render } from 'lit'
+import { html, render, svg } from 'lit'
 import { redo, undo } from 'prosemirror-history'
 
 import BaseView from './base'
@@ -24,7 +24,7 @@ export default class CodeBlockView extends BaseView {
   getCMInstance: () => CodeMirror
   onLanguageChange: (mode: string) => void
 
-  constructor(props: BaseViewPropType & { editable: boolean }) {
+  constructor(props: BaseViewPropType) {
     // Call super but don't render the view
     super(props, false)
     const { mode } = LANGUAGE_MODE_HASH[this.node.attrs.language] || {
@@ -35,7 +35,7 @@ export default class CodeBlockView extends BaseView {
     this.mode = mode
     this.node.attrs.language = mode
     this.content = this.node.textContent
-    this.readOnly = props.editable ? false : 'nocursor'
+    this.readOnly = this.editable ? false : 'nocursor'
     this.lines = this.content.split(/\r\n|\r|\n/).length
 
     this.renderElement()
@@ -224,7 +224,8 @@ export default class CodeBlockView extends BaseView {
    * and if present, propagate then from the outer to inner editor.
    * @param node
    */
-  update = (node: ProsemirrorNode<Schema>) => {
+  update = (node: ProsemirrorNode<Schema>, decorations) => {
+    console.log(decorations)
     if (node.type !== this.node.type) return false
     if (!this.cm) return false
 

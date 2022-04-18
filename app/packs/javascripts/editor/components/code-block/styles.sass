@@ -13,7 +13,7 @@ code-editor
     border-radius: 0.5rem
 
     &.no-wrapper
-      @apply border-t-0 rounded-none
+      @apply rounded-none border-0
 
     .CodeMirror
       @apply rounded-b max-w-full pt-4 font-normal overflow-y-auto pb-4
@@ -52,3 +52,6 @@ code-editor
 
       &:last-child
         @apply border-b-0
+
+.card .code-editor-container
+  @apply shadow-none

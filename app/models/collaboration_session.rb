@@ -22,7 +22,8 @@ class CollaborationSession < ApplicationRecord
       user: {
         id: user.id,
         username: user.username,
-        name: user.name
+        name: user.name,
+        avatar_url: user.avatar_url
       },
       ydoc: current_ydoc || initial_ydoc,
       original_ydoc: initial_ydoc
