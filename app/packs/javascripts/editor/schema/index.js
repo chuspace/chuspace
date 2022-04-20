@@ -98,7 +98,6 @@ export default class SchemaManager {
           decorations,
           editor: this.editor
         }),
-
       image: (node, view, getPos, decorations) =>
         new ImageView({
           node,

@@ -2,6 +2,10 @@
 
 import { Node as ProsemirrorNode, Schema } from 'prosemirror-model'
 import { Selection, TextSelection } from 'prosemirror-state'
+import {
+  contributionWidgetKey,
+  renderNode
+} from 'editor/plugins/contribution/widget'
 import { html, render, svg } from 'lit'
 import { redo, undo } from 'prosemirror-history'
 
@@ -9,6 +13,7 @@ import BaseView from './base'
 import type { BaseViewPropType } from './base'
 import CodeMirror from 'codemirror'
 import { DEFAULT_MODE } from 'editor/modes'
+import { Decoration } from 'prosemirror-view'
 import { EditorView } from 'prosemirror-view'
 import { LANGUAGE_MODE_HASH } from 'editor/modes'
 import { exitCode } from 'prosemirror-commands'
@@ -218,14 +223,27 @@ export default class CodeBlockView extends BaseView {
     this.outerView.focus()
   }
 
+  renderDecorations = (decorations: [Decoration]) => {
+    if (this.contributionWidget) {
+      this.containerNode.removeChild(this.contributionWidget)
+    }
+
+    if (decorations.length > 0) {
+      this.contributionWidget = this.containerNode.appendChild(
+        renderNode(decorations[0].type.spec)
+      )
+    }
+  }
+
   /**
    * when an update comes in from the editor, for example because of an undo action,
    * we kind of have to do the inverse of what valueChanged did--check for text changes
    * and if present, propagate then from the outer to inner editor.
    * @param node
    */
-  update = (node: ProsemirrorNode<Schema>, decorations) => {
-    console.log(decorations)
+  update = (node: ProsemirrorNode<Schema>, decorations: [Decoration]) => {
+    this.renderDecorations(decorations)
+
     if (node.type !== this.node.type) return false
     if (!this.cm) return false
 

@@ -44,6 +44,7 @@ export default class CodeEditor extends LitElement {
     wrapper: { type: String },
     theme: { type: String },
     filename: { type: String },
+    contribution: { type: Boolean },
     downloadable: { type: String },
     onChange: { type: Function },
     loaded: { type: Boolean },
@@ -201,7 +202,8 @@ export default class CodeEditor extends LitElement {
       <div
         class="code-editor-container ${this.wrapper
           ? 'has-wrapper'
-          : 'no-wrapper'} font-sans code-editor-container--${this.theme}"
+          : 'no-wrapper'} font-sans code-editor-container--${this.theme}
+          ${this.contribution ? 'contribution-modal' : 'editor'}"
         contenteditable="false"
       >
         ${this.wrapper

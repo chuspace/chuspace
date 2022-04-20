@@ -1,15 +1,11 @@
 // @flow
 
 import { Decoration, DecorationSet } from 'prosemirror-view'
-import { EditorState, Plugin, PluginKey } from 'prosemirror-state'
+import { Plugin, PluginKey } from 'prosemirror-state'
 import { html, render, svg } from 'lit'
 
 import { Element } from 'editor/base'
 import { contributionWidgetKey } from './widget'
-import { customAlphabet } from 'nanoid'
-import { markdownSerializer } from 'editor/markdowner'
-
-const nanoid = customAlphabet('1234567890abcdef', 10)
 
 type Options = {
   nodes: Array<string>
@@ -28,7 +24,7 @@ const findViewNode = (view, event) => {
     top: event.clientY
   })
 
-  if (pos) {
+  if (pos && pos.inside > -1) {
     const dom = view.domAtPos(pos.pos)
     let node = dom.node.pmViewDesc.node
 
@@ -40,7 +36,7 @@ const findViewNode = (view, event) => {
         break
     }
 
-    return { fromPos: pos.pos, toPos: pos.pos + node.content.size, node }
+    return { fromPos: pos.inside, toPos: pos.inside + node.nodeSize, node }
   } else {
     return null
   }
@@ -111,7 +107,7 @@ export class ContributionToolbar extends Element {
                     (plugin) => plugin.key === contributionWidgetKey.key
                   )
 
-                  const widget = contributionPlugin.props.findContribution(
+                  const widget = contributionPlugin.props.findContributionWidget(
                     view.state,
                     widgetPos
                   )?.[0]
@@ -127,16 +123,21 @@ export class ContributionToolbar extends Element {
                     event.preventDefault()
                     event.stopPropagation()
 
-                    let content = markdownSerializer(
-                      view.props.schema
-                    ).serialize(node.content)
+                    // Pass raw content for code blocks
+                    let content =
+                      node.type.name === 'code_block'
+                        ? node.textContent
+                        : editor.contentSerializer.serialize(
+                            view.state.doc.slice(fromPos, toPos).content
+                          )
 
                     const meta = {
                       content,
-                      id: nanoid(),
                       type: 'contribution',
+                      yDocBase64: null,
                       node: {
                         type: node.type.name,
+                        content,
                         meta: {
                           lang: node.attrs.language
                         }
@@ -149,12 +150,12 @@ export class ContributionToolbar extends Element {
 
                     const contribution = {
                       ...meta,
-                      handleAdd: (event, contribution) => {
+                      handleAdd: (event, payload) => {
                         event.preventDefault()
 
                         const transaction = view.state.tr.setMeta(
                           contributionWidgetKey,
-                          { ...contribution, add: true }
+                          { ...payload, add: true }
                         )
 
                         view.dispatch(transaction)

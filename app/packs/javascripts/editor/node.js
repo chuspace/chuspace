@@ -1,31 +1,58 @@
 // @flow
 
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
+import { Fragment, Schema } from 'prosemirror-model'
 import { LitElement, html } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
+import {
+  PermanentUserData,
+  Doc as YDoc,
+  applyUpdateV2,
+  decodeSnapshotV2,
+  emptySnapshot,
+  encodeSnapshotV2,
+  encodeStateAsUpdateV2,
+  equalSnapshots,
+  snapshot
+} from 'yjs'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
+import { fromBase64, toBase64 } from 'lib0/buffer'
 import { markdownParser, markdownSerializer } from 'editor/markdowner'
+import {
+  prosemirrorToYDoc,
+  redo,
+  undo,
+  yCursorPlugin,
+  yDocToProsemirror,
+  ySyncPlugin,
+  ySyncPluginKey,
+  yUndoPlugin
+} from 'y-prosemirror'
 
 import { CodeBlock as CodeBlockComponent } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
 import { History } from 'editor/plugins'
 import { MarkdownParser } from 'prosemirror-markdown'
-import { Schema } from 'prosemirror-model'
 import SchemaManager from 'editor/schema'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { inputRules } from 'prosemirror-inputrules'
 import { keymap } from 'prosemirror-keymap'
 import { patch } from '@rails/request.js'
+import { randomColor } from 'helpers/random-color'
 
 const DEFAULT_EDITOR_NODES = ['doc', 'text', 'paragraph']
 
 export default class NodeEditor extends LitElement {
   static properties = {
+    author: { type: Object },
     autoFocus: { type: Boolean },
+    diff: { type: Boolean },
     editable: { type: Boolean },
     nodeName: { type: String },
-    onChange: { type: Function }
+    onChange: { type: Function },
+    onEditorInit: { type: Function },
+    yDocBase64: { type: String }
   }
 
   manager: SchemaManager
@@ -42,11 +69,10 @@ export default class NodeEditor extends LitElement {
   constructor() {
     super()
 
-    this.autoFocus = false
-    this.editable = false
     this.excludeFrontmatter = true
     this.nodeName = 'paragraph'
     this.mode = 'node'
+    this.commits = []
   }
 
   async connectedCallback() {
@@ -61,14 +87,27 @@ export default class NodeEditor extends LitElement {
     this.contentParser = markdownParser(this.schema, true)
     this.contentSerializer = markdownSerializer(this.schema, true)
 
-    this.initialContent = this.querySelector('textarea.content').value
-    this.doc = this.contentParser.parse(this.initialContent)
+    if (this.yDocBase64) {
+      this.ydoc = new Doc()
+      applyUpdateV2(this.ydoc, fromBase64(this.yDocBase64))
+    } else {
+      this.initialContent = this.querySelector('textarea.content').value
+      this.doc = this.contentParser.parse(this.initialContent)
+      this.ydoc = prosemirrorToYDoc(this.doc)
+    }
+
+    this.ydoc.gc = false
+    this.setupYDocUser()
+    this.setupYDocUserColor()
+    this.setupYDocVersions()
 
     this.state = this.createState()
     this.view = this.createView()
 
     if (this.autoFocus) this.focus()
     // this.checkDirty()
+
+    this.onEditorInit(this)
   }
 
   createRenderRoot() {
@@ -76,7 +115,20 @@ export default class NodeEditor extends LitElement {
   }
 
   disconnectedCallback() {
+    super.disconnectedCallback()
     if (this.collaboration) this.provider?.destroy()
+  }
+
+  attributeChangedCallback(name, oldVal, newVal) {
+    super.attributeChangedCallback(name, oldVal, newVal)
+
+    if (this.state) {
+      if (name === 'diff' && this.diff) {
+        this.attachVersion()
+      } else {
+        this.detachVersion()
+      }
+    }
   }
 
   get plugins() {
@@ -86,7 +138,12 @@ export default class NodeEditor extends LitElement {
       }),
       ...this.manager.pasteRules,
       ...this.manager.keymaps,
-      keymap(baseKeymap),
+      keymap({
+        'Mod-z': undo,
+        'Mod-y': redo,
+        'Mod-Shift-z': redo,
+        ...baseKeymap
+      }),
 
       dropCursor(),
       gapCursor(),
@@ -105,15 +162,19 @@ export default class NodeEditor extends LitElement {
             tabindex: 0
           }
         }
-      })
+      }),
+      ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
+        permanentUserData: this.permanentUserData,
+        colors: this.colors
+      }),
+      yUndoPlugin()
     ]
   }
 
   createState = () =>
     EditorState.create({
-      doc: this.doc,
       schema: this.schema,
-      contributions: [],
+      commits: this.commits,
       plugins: this.plugins
     })
 
@@ -145,11 +206,105 @@ export default class NodeEditor extends LitElement {
     return true
   }
 
+  attachVersion = () => {
+    const versions = this.ydoc.getArray('versions')
+
+    this.dispatchTransaction(
+      this.state.tr.setMeta(ySyncPluginKey, {
+        snapshot: decodeSnapshotV2(versions.get(versions.length - 1).snapshot),
+        prevSnapshot: decodeSnapshotV2(versions.get(0).snapshot)
+      })
+    )
+  }
+
+  detachVersion = () => {
+    const binding = ySyncPluginKey.getState(this.state).binding
+    if (binding != null) {
+      binding.unrenderSnapshot()
+    }
+  }
+
+  addVersion = () => {
+    const versions = this.ydoc.getArray('versions')
+
+    const prevVersion =
+      versions.length === 0 ? null : versions.get(versions.length - 1)
+    const prevSnapshot =
+      prevVersion === null
+        ? emptySnapshot
+        : decodeSnapshotV2(prevVersion.snapshot)
+
+    const currentSnapshot = snapshot(this.ydoc)
+
+    if (prevVersion != null) {
+      // account for the action of adding a version to ydoc
+      prevSnapshot.sv.set(
+        prevVersion.clientID,
+        /** @type {number} */ (prevSnapshot.sv.get(prevVersion.clientID)) + 1
+      )
+    }
+    if (!equalSnapshots(prevSnapshot, currentSnapshot)) {
+      versions.push([
+        {
+          date: new Date().getTime(),
+          snapshot: encodeSnapshotV2(currentSnapshot),
+          clientID: this.ydoc.clientID
+        }
+      ])
+    }
+
+    return currentSnapshot
+  }
+
+  setupYDocUser = (): void => {
+    this.permanentUserData = new PermanentUserData(this.ydoc)
+    this.permanentUserData.setUserMapping(
+      this.ydoc,
+      this.ydoc.clientID,
+      this.author.username
+    )
+  }
+
+  setupYDocUserColor = (): void => {
+    this.currentUserColor = randomColor({
+      luminosity: 'light',
+      hue: 'orange',
+      seed: this.author.username
+    })
+
+    this.colors = Array.from(this.ydoc.getMap('users').keys()).map((key) => {
+      return {
+        light: randomColor({
+          seed: key,
+          hue: 'orange',
+          luminosity: 'light'
+        }),
+        dark: randomColor({
+          seed: key,
+          hue: 'orange',
+          luminosity: 'dark'
+        })
+      }
+    })
+  }
+
+  setupYDocVersions = (): void => {
+    this.versions = this.ydoc.getArray('versions')
+    this.versions.push([
+      {
+        date: new Date().getTime(),
+        snapshot: encodeSnapshotV2(snapshot(this.ydoc)),
+        clientID: this.ydoc.clientID
+      }
+    ])
+  }
+
   dispatchTransaction(transaction: Transaction) {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
     if (transaction.docChanged && this.editable) {
+      this.addVersion()
       this.emitUpdate()
     }
 
@@ -157,7 +312,7 @@ export default class NodeEditor extends LitElement {
   }
 
   emitUpdate() {
-    this.editable ? this.onChange && this.onChange(this.content) : false
+    this.editable ? this.onChange && this.onChange() : false
   }
 
   focus() {
@@ -172,6 +327,10 @@ export default class NodeEditor extends LitElement {
 
   get content() {
     return this.contentSerializer.serialize(this.state.doc)
+  }
+
+  get toYDocBase64() {
+    return toBase64(encodeStateAsUpdateV2(this.ydoc))
   }
 
   checkDirty() {

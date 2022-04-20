@@ -3,7 +3,7 @@
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { Fragment, Schema } from 'prosemirror-model'
-import { LitElement, html } from 'lit'
+import { LitElement, html, render } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
 import {
   PermanentUserData,
@@ -37,6 +37,7 @@ import { CodeBlock as CodeBlockComponent } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import SchemaManager from 'editor/schema'
+import { contributionWidgetKey } from 'editor/plugins/contribution/widget'
 import { createConsumer } from '@rails/actioncable'
 import debounce from 'lodash.debounce'
 import { dropCursor } from 'prosemirror-dropcursor'
@@ -100,6 +101,13 @@ function arrowHandler(dir) {
   }
 }
 
+export type CollaborationUser = {
+  name: string,
+  id: number,
+  username: string,
+  avatar_url: string
+}
+
 export default class CollaborationEditor extends LitElement {
   static properties = {
     autoSavePath: { type: String },
@@ -117,6 +125,7 @@ export default class CollaborationEditor extends LitElement {
 
   manager: SchemaManager
   schema: Schema
+  collaboration: CollaborationUser = {}
   contentParser: MarkdownParser
   contentSerializer: contentSerializer
   state: EditorState
@@ -249,7 +258,7 @@ export default class CollaborationEditor extends LitElement {
             return this.provider.awareness
           })(),
           {
-            cursorBuilder: this.cursorBuilder
+            renderCursor: this.renderCursor
           }
         ),
       yUndoPlugin()
@@ -370,6 +379,8 @@ export default class CollaborationEditor extends LitElement {
     this.state = this.state.apply(transaction)
     this.view.updateState(this.state)
 
+    if (this.contribution) this.renderContributionsToolbar()
+
     if (transaction.docChanged && this.editable) {
       this.dirty = true
       this.emitUpdate()
@@ -393,7 +404,7 @@ export default class CollaborationEditor extends LitElement {
     this.view.dom.blur()
   }
 
-  cursorBuilder = (user) => {
+  renderCursor = (user) => {
     const cursor = document.createElement('span')
 
     cursor.classList.add('collaboration-cursor__caret')
@@ -407,6 +418,34 @@ export default class CollaborationEditor extends LitElement {
     cursor.insertBefore(label, null)
 
     return cursor
+  }
+
+  renderContributionsToolbar = () => {
+    const decorations = contributionWidgetKey.getState(this.state).decorations
+      .local
+    console.log(decorations)
+    const div = this.querySelector('#contributions')
+
+    if (decorations.length > 0) {
+      div.className =
+        'py-2 bg-base-200 z-10 fixed bottom-0 w-full left-0 right-0'
+      const template = html`
+        <div class="container flex justify-end">
+          ${decorations.length} changes
+          ${decorations.map((decoration) => {
+            return html`
+              <div>${decoration.type.spec.id}</div>
+            `
+          })}
+          <button class="btn btn-primary">Commit</button>
+        </div>
+      `
+
+      render(template, div)
+    } else {
+      div.className = null
+      render(null, div)
+    }
   }
 
   setupCommands = () => {

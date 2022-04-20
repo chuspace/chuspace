@@ -157,7 +157,7 @@
   div + br
     display: none
 
-  ychange[ychange_type="added"]
+  ychange[ychange_type="added"], .insertion
     @apply border-t-2 border-b-2 max-w-full whitespace-normal
     background-color: #22c55e
     border-color: #86efac
@@ -172,7 +172,7 @@
     img
       @apply border-4 border-success
 
-  ychange[ychange_type="removed"]
+  ychange[ychange_type="removed"], .deletion
     @apply border-t-2 border-b-2 line-through max-w-full whitespace-normal
     background-color: #ef4444
     border-color: #fca5a5
