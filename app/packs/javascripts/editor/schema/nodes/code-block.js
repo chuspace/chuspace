@@ -3,6 +3,7 @@
 import { Element, Node } from 'editor/base'
 import { Fragment, Node as PMNode, Schema } from 'prosemirror-model'
 import { Plugin, PluginKey, Selection } from 'prosemirror-state'
+import { calcYchangeDomAttrs, hoverWrapper } from 'editor/helpers'
 import { nodeInputRule, toggleBlockType } from 'editor/commands'
 
 import { setBlockType } from 'prosemirror-commands'
@@ -21,7 +22,7 @@ export default class CodeBlock extends Node {
   get schema(): PMNode {
     return {
       content: 'text*',
-      attrs: { language: { default: 'auto' } },
+      attrs: { language: { default: 'auto' }, ychange: { default: null } },
       marks: '',
       group: 'block',
       code: true,
@@ -90,8 +91,12 @@ export default class CodeBlock extends Node {
           }
         }
       ],
-      toDOM(node: PMNode) {
-        return ['pre', ['code', { 'data-language': node.attrs.language }, 0]]
+      toDOM(node) {
+        return [
+          'pre',
+          calcYchangeDomAttrs(node.attrs),
+          ...hoverWrapper(node.attrs.ychange, [['code', 0]])
+        ]
       }
     }
   }

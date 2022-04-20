@@ -52,7 +52,9 @@ const parsableNodes = {
 export default (schema: Schema, isNodeEditor: boolean = false) => {
   let schemaNodes = isNodeEditor
     ? Object.keys(schema.nodes)
-    : [...Object.keys(schema.nodes), 'fence', 'hr']
+    : [...Object.keys(schema.nodes)]
+
+  if (schemaNodes.includes('code_block')) schemaNodes.push('fence')
 
   schemaNodes = schemaNodes
     .filter((name) => Object.keys(parsableNodes).includes(name))

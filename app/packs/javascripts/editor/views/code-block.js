@@ -53,6 +53,8 @@ export default class CodeBlockView extends BaseView {
           mode=${this.mode}
           readonly=${this.readOnly}
           content=${this.content}
+          ?wrapper=${!this.editor.isNodeEditor}
+          ?contribution=${this.editor.isNodeEditor}
           .onInit=${this.onInit}
           .codeMirrorKeymap=${this.codeMirrorKeymap}
           .onLanguageChange=${this.onLanguageChange}
@@ -226,6 +228,7 @@ export default class CodeBlockView extends BaseView {
   renderDecorations = (decorations: [Decoration]) => {
     if (this.contributionWidget) {
       this.containerNode.removeChild(this.contributionWidget)
+      this.contributionWidget = null
     }
 
     if (decorations.length > 0) {

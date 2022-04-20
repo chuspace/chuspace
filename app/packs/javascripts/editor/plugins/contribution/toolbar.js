@@ -124,12 +124,9 @@ export class ContributionToolbar extends Element {
                     event.stopPropagation()
 
                     // Pass raw content for code blocks
-                    let content =
-                      node.type.name === 'code_block'
-                        ? node.textContent
-                        : editor.contentSerializer.serialize(
-                            view.state.doc.slice(fromPos, toPos).content
-                          )
+                    let content = editor.contentSerializer.serialize(
+                      view.state.doc.slice(fromPos, toPos).content
+                    )
 
                     const meta = {
                       content,

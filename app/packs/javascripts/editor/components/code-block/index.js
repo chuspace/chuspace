@@ -41,7 +41,7 @@ export default class CodeEditor extends LitElement {
   static properties = {
     mode: { type: String, reflect: true },
     readonly: { type: String },
-    wrapper: { type: String },
+    wrapper: { type: Boolean },
     theme: { type: String },
     filename: { type: String },
     contribution: { type: Boolean },
@@ -60,9 +60,7 @@ export default class CodeEditor extends LitElement {
 
     this.theme = window.colorScheme
     this.loaded = false
-    this.wrapper = true
     this.downloadable = true
-    this.contribution = false
     this.lines = 0
 
     this.options = {
@@ -133,10 +131,6 @@ export default class CodeEditor extends LitElement {
 
     try {
       this.readonly = JSON.parse(this.readonly)
-    } catch (e) {}
-
-    try {
-      this.wrapper = JSON.parse(this.wrapper)
     } catch (e) {}
 
     try {

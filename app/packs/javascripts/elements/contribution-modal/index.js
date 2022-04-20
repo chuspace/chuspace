@@ -26,6 +26,7 @@ export default class ContributionModal extends LitElement {
 
   firstUpdated() {
     this.dialog = new Dialog(this.querySelector('dialog'))
+    this.dialog.show()
     this.commitMessageInput = this.inputRef.value
   }
 
@@ -77,28 +78,17 @@ export default class ContributionModal extends LitElement {
     }
   }
 
-  renderNode = () =>
-    this.contribution.node.type === 'code_block'
-      ? this.renderCodeEditor()
-      : this.renderNodeEditor()
+  get isCodeBlock() {
+    return this.contribution.node.type === 'code_block'
+  }
 
-  renderCodeEditor = () =>
+  renderEditor = () =>
     html`
-      <code-editor
-        class="chu-editor"
-        contribution
-        ?diff=${this.diffMode}
-        mode=${this.contribution.node.meta.lang}
-        wrapper="false"
-        content=${this.contribution.content}
-        .onChange=${this.onChange}
-        .onEditorInit=${this.onEditorInit}
-      ></code-editor>
-    `
-
-  renderNodeEditor = () =>
-    html`
-      <div class="card-body overflow-y-scroll">
+      <div
+        class="card-body overflow-y-scroll${this.isCodeBlock
+          ? ' px-0 py-0'
+          : ''}"
+      >
         <node-editor
           ?autoFocus=${!this.diffMode}
           ?editable=${!this.diffMode}
@@ -107,7 +97,7 @@ export default class ContributionModal extends LitElement {
           .author=${this.contribution.author}
           .onChange=${this.onChange}
           .onEditorInit=${this.onEditorInit}
-          .commits=${this.contribution.commits}
+          .yDocBase64=${this.contribution.yDocBase64}
         >
           <textarea
             class="hidden content"
@@ -120,7 +110,6 @@ export default class ContributionModal extends LitElement {
   render() {
     return html`
       <dialog
-        open
         class="p-0 fixed top-1/2 transform -translate-y-1/2 border-0 bg-transparent sm:w-1/2 w-full sm:mx-auto z-50"
       >
         <div class="card border border-base-300 bg-base-200 h-96">
@@ -129,27 +118,23 @@ export default class ContributionModal extends LitElement {
           >
             <span>${`Edit ${this.contribution.node.type}`}</span>
             <span class="badge badge-warning">Suggestion</span>
-            ${this.isStale
-              ? this.diffMode
-                ? html`
-                    <a @click=${this.toggleDiff}>Hide Diff</a>
-                  `
-                : html`
-                    <a @click=${this.toggleDiff}>Show Diff</a>
-                  `
-              : null}
+
             ${svg`<svg @click=${this.handleClose} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill-rule="evenodd" d="M5.72 5.72a.75.75 0 011.06 0L12 10.94l5.22-5.22a.75.75 0 111.06 1.06L13.06 12l5.22 5.22a.75.75 0 11-1.06 1.06L12 13.06l-5.22 5.22a.75.75 0 01-1.06-1.06L10.94 12 5.72 6.78a.75.75 0 010-1.06z"></path></svg>`}
           </div>
-          ${this.renderNode()}
+          ${this.renderEditor()}
           <div
             class="card-actions bg-base-200 absolute bottom-0 w-full border-t border-base-300 px-4 py-2 flex justify-end"
           >
-            <input
-              ${ref(this.inputRef)}
-              class="input input-bordered input-sm"
-              placeholder="Commit message"
-              ?disabled=${!this.isStale}
-            />
+            ${this.diffMode
+              ? null
+              : html`
+                  <input
+                    ${ref(this.inputRef)}
+                    class="input input-bordered input-sm"
+                    placeholder="Commit message"
+                    ?disabled=${!this.isStale}
+                  />
+                `}
             ${this.contribution.id
               ? html`
                   <button
@@ -160,14 +145,32 @@ export default class ContributionModal extends LitElement {
                   </button>
                 `
               : null}
-
-            <button
-              @click=${this.handleSave}
-              class="btn btn-primary btn-sm"
-              ?disabled=${!this.isStale}
-            >
-              ${this.contribution.id ? 'Update' : 'Add'}
-            </button>
+            ${this.isStale
+              ? this.diffMode
+                ? html`
+                    <a @click=${this.toggleDiff} class="btn btn-primary btn-sm"
+                      >Edit</a
+                    >
+                  `
+                : html`
+                    <a
+                      @click=${this.toggleDiff}
+                      class="btn btn-secondary btn-sm"
+                      >Diff</a
+                    >
+                  `
+              : null}
+            ${this.diffMode
+              ? null
+              : html`
+                  <button
+                    @click=${this.handleSave}
+                    class="btn btn-primary btn-sm"
+                    ?disabled=${!this.isStale}
+                  >
+                    ${this.contribution.id ? 'Update' : 'Add'}
+                  </button>
+                `}
           </div>
         </div>
       </dialog>

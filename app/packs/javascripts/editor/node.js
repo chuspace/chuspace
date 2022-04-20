@@ -88,18 +88,20 @@ export default class NodeEditor extends LitElement {
     this.contentSerializer = markdownSerializer(this.schema, true)
 
     if (this.yDocBase64) {
-      this.ydoc = new Doc()
+      this.ydoc = new YDoc()
       applyUpdateV2(this.ydoc, fromBase64(this.yDocBase64))
+      this.versions = this.ydoc.getArray('versions')
     } else {
       this.initialContent = this.querySelector('textarea.content').value
       this.doc = this.contentParser.parse(this.initialContent)
       this.ydoc = prosemirrorToYDoc(this.doc)
+      this.versions = this.ydoc.getArray('versions')
+      this.setupYDocVersions()
     }
 
     this.ydoc.gc = false
     this.setupYDocUser()
     this.setupYDocUserColor()
-    this.setupYDocVersions()
 
     this.state = this.createState()
     this.view = this.createView()
@@ -114,6 +116,10 @@ export default class NodeEditor extends LitElement {
     return this
   }
 
+  get isNodeEditor() {
+    return true
+  }
+
   disconnectedCallback() {
     super.disconnectedCallback()
     if (this.collaboration) this.provider?.destroy()
@@ -124,6 +130,7 @@ export default class NodeEditor extends LitElement {
 
     if (this.state) {
       if (name === 'diff' && this.diff) {
+        this.addVersion()
         this.attachVersion()
       } else {
         this.detachVersion()
@@ -207,28 +214,29 @@ export default class NodeEditor extends LitElement {
   }
 
   attachVersion = () => {
-    const versions = this.ydoc.getArray('versions')
-
     this.dispatchTransaction(
       this.state.tr.setMeta(ySyncPluginKey, {
-        snapshot: decodeSnapshotV2(versions.get(versions.length - 1).snapshot),
-        prevSnapshot: decodeSnapshotV2(versions.get(0).snapshot)
+        snapshot: decodeSnapshotV2(
+          this.versions.get(this.versions.length - 1).snapshot
+        ),
+        prevSnapshot: decodeSnapshotV2(this.versions.get(0).snapshot)
       })
     )
   }
 
   detachVersion = () => {
     const binding = ySyncPluginKey.getState(this.state).binding
+
     if (binding != null) {
       binding.unrenderSnapshot()
     }
   }
 
   addVersion = () => {
-    const versions = this.ydoc.getArray('versions')
-
     const prevVersion =
-      versions.length === 0 ? null : versions.get(versions.length - 1)
+      this.versions.length === 0
+        ? null
+        : this.versions.get(this.versions.length - 1)
     const prevSnapshot =
       prevVersion === null
         ? emptySnapshot
@@ -244,7 +252,7 @@ export default class NodeEditor extends LitElement {
       )
     }
     if (!equalSnapshots(prevSnapshot, currentSnapshot)) {
-      versions.push([
+      this.versions.push([
         {
           date: new Date().getTime(),
           snapshot: encodeSnapshotV2(currentSnapshot),
@@ -289,7 +297,6 @@ export default class NodeEditor extends LitElement {
   }
 
   setupYDocVersions = (): void => {
-    this.versions = this.ydoc.getArray('versions')
     this.versions.push([
       {
         date: new Date().getTime(),
@@ -304,7 +311,6 @@ export default class NodeEditor extends LitElement {
     this.view.updateState(this.state)
 
     if (transaction.docChanged && this.editable) {
-      this.addVersion()
       this.emitUpdate()
     }
 
