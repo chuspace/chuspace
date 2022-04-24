@@ -29,7 +29,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, email: true
   encrypts  :email, deterministic: true, downcase: true
 
-  after_create_commit :seed_git_providers, if: -> { ChuspaceConfig.new.app[:out_of_private_beta] }
+  after_create_commit -> { SeedGitProvidersJob.perform_later(user: self) }
 
   class << self
     def build_with_email_identity(email_params)
@@ -59,18 +59,5 @@ class User < ApplicationRecord
 
   def resolve_friendly_id_conflict(candidates)
     self.username = username
-  end
-
-  def seed_git_providers
-    data = GitStorageConfig.new.to_h.map do |key, config|
-      {
-        user_id: id,
-        created_at: Time.current,
-        updated_at: Time.current,
-        **config
-      }
-    end
-
-    GitProvider.upsert_all(data, returning: false, unique_by: :one_provider_per_user_index)
   end
 end

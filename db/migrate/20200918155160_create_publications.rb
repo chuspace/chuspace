@@ -7,7 +7,9 @@ class CreatePublications < ActiveRecord::Migration[6.1]
     create_table :publications do |t|
       t.string :name, null: false
       t.citext :permalink, null: false
+
       t.text :description
+      t.text :canonical_url
 
       t.references :owner, null: false, foreign_key: { to_table: :users }
       t.references :git_provider, null: false, foreign_key: true

@@ -1,26 +1,4 @@
 <div class='sm:w-2/3 mx-auto w-full chu-editor read-only'>
-  <chu-editor
-    username='<%= Current.user.username %>'
-    imageUploadPath='<%= publication_create_assets_path(@publication) %>'
-    imageLoadPath='<%= publication_asset_path(@publication) %>'
-    contribution
-    contributionPath='<%= publication_post_revisions_path(@publication) %>'
-  >
-    <section class="container flex-1">
-      <%= turbo_frame_tag(@post.draft) do %>
-        <%= simple_form_for @post.draft, url: '#', html: { 'data-turbo-frame': '_top' } do |form| %>
-          <div class='mt-8' spellcheck="false" data-text='content'>
-            <%= form.input(
-                :body,
-                as: :text,
-                label: false,
-                wrapper: false,
-                input_html: { class: 'hidden content', value: @post.draft.decoded_content  }
-              )
-            %>
-          </div>
-        <% end %>
-      <% end %>
-    </section>
-  </chu-editor>
+  <% @revisions.each do |revision| %>
+  <% end %>
 </div>

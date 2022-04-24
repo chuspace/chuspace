@@ -46,6 +46,36 @@ class Publication < ApplicationRecord
     super ? ActiveSupport::StringInquirer.new(super) : nil
   end
 
+  def to_meta_tags
+    {
+      site: ChuspaceConfig.new.app[:name],
+      title: name,
+      image_src: icon.variant(:profile),
+      description: description,
+      keywords: topic_list,
+      index: true,
+      follow: true,
+      author: owner.name,
+      canonical: canonical_url || Rails.application.routes.url_helpers.publication_url(self),
+      og: {
+        title: :title,
+        type: :article,
+        description: :description,
+        site_name: :site,
+        image: icon.variant(:profile),
+        url: Rails.application.routes.url_helpers.publication_url(self)
+      },
+      twitter: {
+        title: :title,
+        card: :summary,
+        description: :description,
+        site: ChuspaceConfig.new.app[:twitter],
+        image: icon.variant(:profile),
+        url: Rails.application.routes.url_helpers.publication_url(self),
+      }
+    }
+  end
+
   private
 
   def should_generate_new_friendly_id?

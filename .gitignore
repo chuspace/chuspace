@@ -43,3 +43,6 @@ yarn-debug.log*
 /config/credentials/local.*
 .vagrant
 app/lib/ydoc/compiler.js
+
+/config/credentials/test.key
+coverage/

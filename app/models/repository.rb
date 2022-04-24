@@ -51,7 +51,7 @@ class Repository < ApplicationRecord
     paths = path.is_a?(Array) ? path : [path]
 
     git_provider_adapter.blobs(paths: paths)
-      .select { |blob| ImageValidator.valid?(name_or_path: blob.name) }
+      .select { |blob|  blob.type == 'dir' || ImageValidator.valid?(name_or_path: blob.name) }
       .map { |blob| blob.decorate(publication: publication) }
   end
 
@@ -79,7 +79,7 @@ class Repository < ApplicationRecord
     paths = path.is_a?(Array) ? path : [path]
 
     git_provider_adapter.blobs(paths: paths)
-      .select { |blob| MarkdownValidator.valid?(name_or_path: blob.name) }
+      .select { |blob| blob.type == 'dir' || MarkdownValidator.valid?(name_or_path: blob.name) }
       .map { |blob| blob.decorate(publication: publication) }
   end
 
