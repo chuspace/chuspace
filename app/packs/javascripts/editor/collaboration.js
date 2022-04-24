@@ -153,19 +153,11 @@ export default class CollaborationEditor extends LitElement {
     this.autoFocus = false
     this.mode = 'default'
     this.editable = false
+    this.excludeFrontmatter = false
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback()
-
-    if (this.collaboration.original_ydoc) {
-      this.startingYDoc = new YDoc()
-      this.startingYDoc.gc = false
-      applyUpdateV2(
-        this.startingYDoc,
-        fromBase64(this.collaboration.original_ydoc)
-      )
-    }
 
     this.ydoc = new YDoc()
     this.ydoc.gc = false
@@ -175,6 +167,7 @@ export default class CollaborationEditor extends LitElement {
 
     this.manager = new SchemaManager(this)
     this.schema = this.manager.schema
+
     this.contentParser = markdownParser(this.schema, false)
     this.contentSerializer = markdownSerializer(this.schema, false)
 
@@ -317,20 +310,11 @@ export default class CollaborationEditor extends LitElement {
       if (statusElement) statusElement.textContent = 'Auto saving...'
       this.addVersion()
 
-      const startingProsemirrorDoc = yDocToProsemirror(
-        this.schema,
-        this.startingYDoc
-      )
-
-      const startingFragment = Fragment.from(startingProsemirrorDoc)
-      const currentFragment = Fragment.from(this.state.doc)
-      const stale = startingFragment.findDiffStart(currentFragment)
-
       const response = await patch(this.autoSavePath, {
         body: JSON.stringify({
           draft: {
             current_ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc)),
-            doc_changed: !!stale
+            doc_changed: true
           }
         })
       })

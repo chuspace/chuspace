@@ -25,8 +25,7 @@ class CollaborationSession < ApplicationRecord
         name: user.name,
         avatar_url: user.avatar_url
       },
-      ydoc: current_ydoc || initial_ydoc,
-      original_ydoc: initial_ydoc
+      ydoc: current_ydoc || initial_ydoc
     }.to_json
   end
 
