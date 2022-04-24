@@ -11,7 +11,7 @@ class RevisionPolicy < ApplicationPolicy
   end
 
   def create?
-    publication.members.exclude?(user)
+    true
   end
 
   def edit?

@@ -22,7 +22,7 @@ class Post < ApplicationRecord
   acts_as_votable
   acts_as_taggable_on :topics
 
-  friendly_id :slug_candidates, use: %i[slugged history], slug_column: :permalink
+  friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
 
   has_many :revisions, dependent: :delete_all, inverse_of: :post
 
@@ -96,7 +96,7 @@ class Post < ApplicationRecord
   private
 
   def slug_candidates
-    [[:title, :short_commit_sha, :version]]
+    [[:title, :short_commit_sha]]
   end
 
   def set_visibility

@@ -94,6 +94,7 @@ GEM
       activesupport (>= 5.2)
       device_detector
       safely_block (>= 0.2.1)
+    alba (1.6.0)
     ancestry (4.1.0)
       activerecord (>= 5.2.6)
     anyway_config (2.3.0)
@@ -545,6 +546,7 @@ DEPENDENCIES
   acts-as-taggable-on!
   acts_as_votable
   ahoy_matey
+  alba
   ancestry
   anyway_config
   attr_json

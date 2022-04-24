@@ -127,7 +127,7 @@ class Draft < Git::Blob
     post.assign_attributes(to_post_attributes)
     post.assign_attributes(other_attributes)
     post.ydoc = $ydoc.compile(content: decoded_content, username: author.username)
-    post.save
+    post.save ? post : false
   end
 
   def new_template

@@ -21,14 +21,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "collaboration_session_state_enum_type", ["open", "closed", "stale"]
+  create_enum "collaboration_session_status_enum_type", ["open", "closed", "stale"]
   create_enum "git_provider_enum_type", ["github", "gitlab", "gitea"]
   create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "admin", "owner", "member"]
   create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
   create_enum "publication_visibility_enum_type", ["private", "public", "member"]
-  create_enum "revision_state_enum_type", ["draft", "open", "closed", "merged", "rejected"]
+  create_enum "revision_status_enum_type", ["open", "closed", "merged"]
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -135,7 +135,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
     t.bigint "number", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.enum "state", default: "open", null: false, enum_type: "collaboration_session_state_enum_type"
+    t.enum "status", default: "open", null: false, enum_type: "collaboration_session_status_enum_type"
     t.index ["blob_path"], name: "index_collaboration_sessions_on_blob_path"
     t.index ["publication_id", "blob_path", "number"], name: "one_active_collaboration_session_per_draft", unique: true
     t.index ["publication_id"], name: "index_collaboration_sessions_on_publication_id"
@@ -321,19 +321,24 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
   end
 
   create_table "revisions", force: :cascade do |t|
+    t.citext "permalink", null: false
     t.bigint "publication_id", null: false
     t.bigint "post_id", null: false
     t.bigint "author_id", null: false
-    t.text "fragment_before", null: false
-    t.text "fragment_after", null: false
+    t.text "content_before", null: false
+    t.text "content_after", null: false
     t.integer "pos_from", null: false
     t.integer "pos_to", null: false
+    t.integer "widget_pos", null: false
+    t.text "ydoc_base64", null: false
+    t.jsonb "node", default: {}, null: false
     t.bigint "number", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.enum "state", default: "draft", null: false, enum_type: "revision_state_enum_type"
+    t.enum "status", default: "open", null: false, enum_type: "revision_status_enum_type"
     t.index ["author_id"], name: "index_revisions_on_author_id"
     t.index ["post_id"], name: "index_revisions_on_post_id"
+    t.index ["publication_id", "post_id", "permalink"], name: "index_revisions_on_publication_id_and_post_id_and_permalink", unique: true
     t.index ["publication_id"], name: "index_revisions_on_publication_id"
   end
 

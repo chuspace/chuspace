@@ -44,6 +44,7 @@ export default class CodeBlockView extends BaseView {
     this.lines = this.content.split(/\r\n|\r|\n/).length
 
     this.renderElement()
+    this.renderDecorations(this.decorations)
   }
 
   renderElement = () => {
@@ -233,10 +234,15 @@ export default class CodeBlockView extends BaseView {
 
     if (decorations.length > 0) {
       this.contributionWidget = this.containerNode.appendChild(
-        renderNode(decorations[0].type.spec)
+        renderNode(this.outerView.state, decorations[0].type.spec)
       )
     }
   }
+
+  // isYChange = (textNode) =>
+  //   textNode.marks.find((mark) => mark.type.name === 'ychange')
+
+  // getYChangePos = (textNode) => this.outerView.state.doc.resolve(textNode)
 
   /**
    * when an update comes in from the editor, for example because of an undo action,
@@ -245,6 +251,25 @@ export default class CodeBlockView extends BaseView {
    * @param node
    */
   update = (node: ProsemirrorNode<Schema>, decorations: [Decoration]) => {
+    // const ychanges = node.content.content.filter(this.isYChange)
+
+    // if (this.cm) {
+    //   this.cm.doc.eachLine((line) => {
+
+    //   })
+    // }
+
+    // const yChangesPos = ychanges.map((ychange) => {
+    //   let pos = {}
+    //   this.cm.doc.eachLine((line) => line.text.includes(ychange.textContent))
+
+    //   return {
+    //     text: ychange.change,
+    //     pos: this.getYChangePos(ychange),
+    //     attrs: ychange.marks[0].attrs
+    //   }
+    // })
+
     this.renderDecorations(decorations)
 
     if (node.type !== this.node.type) return false

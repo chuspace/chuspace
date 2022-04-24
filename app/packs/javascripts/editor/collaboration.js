@@ -101,11 +101,20 @@ function arrowHandler(dir) {
   }
 }
 
-export type CollaborationUser = {
+export type User = {
   name: string,
   id: number,
   username: string,
   avatar_url: string
+}
+
+export type Contribution = {
+  content: string,
+  type: string,
+  node: PMNode,
+  author: User,
+  posFrom: number,
+  posTo: number
 }
 
 export default class CollaborationEditor extends LitElement {
@@ -118,6 +127,7 @@ export default class CollaborationEditor extends LitElement {
     imageLoadPath: { type: String },
     editable: { type: Boolean },
     contribution: { type: Boolean },
+    contributions: { type: Array },
     mode: { type: String },
     status: { type: String, reflect: true },
     onChange: { type: Function }
@@ -128,6 +138,8 @@ export default class CollaborationEditor extends LitElement {
   collaboration: CollaborationUser = {}
   contentParser: MarkdownParser
   contentSerializer: contentSerializer
+  contribution: boolean = false
+  contributions: ?[Contribution] = []
   state: EditorState
   view: EditorView
   activeMarks: {}
@@ -141,7 +153,6 @@ export default class CollaborationEditor extends LitElement {
     this.autoFocus = false
     this.mode = 'default'
     this.editable = false
-    this.contribution = false
   }
 
   async connectedCallback() {
@@ -268,7 +279,7 @@ export default class CollaborationEditor extends LitElement {
   createState = () =>
     EditorState.create({
       schema: this.schema,
-      contributions: [],
+      contributions: this.contributions,
       plugins: this.plugins
     })
 
@@ -421,18 +432,19 @@ export default class CollaborationEditor extends LitElement {
   }
 
   renderContributionsToolbar = () => {
-    const decorations = contributionWidgetKey.getState(this.state).decorations
-      .local
-    console.log(decorations)
+    this.contributions = contributionWidgetKey.getState(
+      this.state
+    ).decorations.local
+
     const div = this.querySelector('#contributions')
 
-    if (decorations.length > 0) {
+    if (this.contributions.length > 0) {
       div.className =
         'py-2 bg-base-200 z-10 fixed bottom-0 w-full left-0 right-0'
       const template = html`
         <div class="container flex justify-end">
-          ${decorations.length} changes
-          ${decorations.map((decoration) => {
+          ${this.contributions.length} changes
+          ${this.contributions.map((decoration) => {
             return html`
               <div>${decoration.type.spec.id}</div>
             `

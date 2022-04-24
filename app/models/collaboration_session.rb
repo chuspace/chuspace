@@ -5,7 +5,7 @@ class CollaborationSession < ApplicationRecord
   has_many   :members, class_name: 'CollaborationSessionMember', dependent: :delete_all
   has_one    :creator, -> { where(creator: true) }, class_name: 'CollaborationSessionMember'
 
-  enum state: ChuspaceConfig.new.collaboration_session[:states]
+  enum status: ChuspaceConfig.new.collaboration_session[:statuses]
 
   validates :publication_id, uniqueness: { scope: %i[blob_path number] }
 
@@ -31,12 +31,13 @@ class CollaborationSession < ApplicationRecord
   end
 
   def end
-    update(state: :closed)
+    update(status: :closed)
   end
 
   private
 
   def assign_next_number
     self.number = (publication.collaboration_sessions.maximum(:number) || 0) + 1
+    self.status = ChuspaceConfig.new.collaboration_session[:default_status]
   end
 end

@@ -6,6 +6,7 @@ import { Plugin, PluginKey, Selection } from 'prosemirror-state'
 import { calcYchangeDomAttrs, hoverWrapper } from 'editor/helpers'
 import { nodeInputRule, toggleBlockType } from 'editor/commands'
 
+import pick from 'lodash.pick'
 import { setBlockType } from 'prosemirror-commands'
 
 const removeLastNewLine = (dom: HTMLElement): HTMLElement => {
@@ -22,8 +23,12 @@ export default class CodeBlock extends Node {
   get schema(): PMNode {
     return {
       content: 'text*',
-      attrs: { language: { default: 'auto' }, ychange: { default: null } },
-      marks: '',
+      attrs: {
+        language: { default: 'auto' },
+        ychange: { default: null },
+        class: { default: 'CodeMirror' }
+      },
+      marks: 'ychange',
       group: 'block',
       code: true,
       defining: true,
@@ -94,7 +99,10 @@ export default class CodeBlock extends Node {
       toDOM(node) {
         return [
           'pre',
-          calcYchangeDomAttrs(node.attrs),
+          calcYchangeDomAttrs(
+            pick(node.attrs, ['ychange']),
+            pick(node.attrs, ['language', 'class'])
+          ),
           ...hoverWrapper(node.attrs.ychange, [['code', 0]])
         ]
       }

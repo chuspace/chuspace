@@ -10,34 +10,48 @@ module Posts
 
     def index
       authorize! @post
+      @revisions = @post.revisions
     end
 
     def create
       authorize! @post.revisions.build(author: Current.user, publication: @publication)
-      @revision = @post.revisions.open.find_or_create_by(author: Current.user, publication: @publication)
+      revisions = @post.revisions.open.create(create_params)
 
-      if @revision.persisted?
-        redirect_to edit_publication_post_revision_path(@publication, @post, @revision)
+      if revisions
+        render json: { revisions: RevisionResource.new(revisions).serialize }
       else
-        redirect_to publication_post_path(@publication, @post), notice: 'Something went wrong!'
+        render json: { revisions: [] }
       end
     end
 
     def update
       authorize! @revision
-      @revision.update(revision_params)
 
-      # render turbo_stream: turbo_stream.update(helpers.dom_id(@draft, :revisions), partial: 'publications/revision/actions', locals: { publication: @publication, revision: @revision })
+      if @revision.update(update_params)
+        render json: { revision: RevisionResource.new(@revision).serialize }
+      else
+        render json: { revision: false }
+      end
     end
 
     private
 
-    def revision_params
-      params.require(:draft).permit(:title)
+    def create_params
+      params[:revisions].map do |revision_param|
+        revision_param[:publication_id] = @publication.id
+        revision_param[:post_id] = @post.id
+        revision_param[:author_id] = Current.user.id
+        attributes = ActionController::Parameters.new(revision: revision_param.deep_transform_keys(&:downcase))
+        attributes.require(:revision).permit(:publication_id, :post_id, :author_id, :pos_from, :pos_to, :content_before, :content_after, :widget_pos, :ydoc_base64, node: {})
+      end
+    end
+
+    def update_params
+      params.require(:revision).permit(:status)
     end
 
     def find_revision
-      @revision = @post.find_or_start_revision(user: Current.user, blob_path: @post.blob_path)
+      @revision = @post.revisions.friendly.find(params[:id])
     end
 
     def find_post

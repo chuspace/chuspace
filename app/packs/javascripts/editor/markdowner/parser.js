@@ -55,6 +55,7 @@ export default (schema: Schema, isNodeEditor: boolean = false) => {
     : [...Object.keys(schema.nodes)]
 
   if (schemaNodes.includes('code_block')) schemaNodes.push('fence')
+  if (schemaNodes.includes('horizontal_rule')) schemaNodes.push('hr')
 
   schemaNodes = schemaNodes
     .filter((name) => Object.keys(parsableNodes).includes(name))

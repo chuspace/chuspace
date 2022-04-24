@@ -7,25 +7,27 @@ export default class FrontMatter extends Node {
   name = 'front_matter'
 
   get schema(): PMNode {
-    return {
-      content: 'text*',
-      attrs: { language: { default: 'yaml' } },
-      marks: '',
-      group: 'block',
-      code: true,
-      defining: true,
-      isolating: true,
-      draggable: false,
-      parseDOM: [
-        {
-          tag: 'pre',
-          preserveWhitespace: 'full',
-          priority: 60
+    return this.editor.excludeFrontmatter
+      ? {}
+      : {
+          content: 'text*',
+          attrs: { language: { default: 'yaml' } },
+          marks: '',
+          group: 'block',
+          code: true,
+          defining: true,
+          isolating: true,
+          draggable: false,
+          parseDOM: [
+            {
+              tag: 'pre',
+              preserveWhitespace: 'full',
+              priority: 60
+            }
+          ],
+          toDOM(node: PMNode) {
+            return ['pre', ['code', { 'data-language': 'yaml' }, 0]]
+          }
         }
-      ],
-      toDOM(node: PMNode) {
-        return ['pre', ['code', { 'data-language': 'yaml' }, 0]]
-      }
-    }
   }
 }

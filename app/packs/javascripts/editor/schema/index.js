@@ -76,7 +76,13 @@ export default class SchemaManager {
 
   get plugins(): Array<any> {
     return this.elements
-      .filter((element) => element.plugins)
+      .filter((element) => element.plugins && !element.contribution)
+      .reduce((allPlugins, { plugins }) => [...allPlugins, ...plugins], [])
+  }
+
+  get contributionPlugins(): Array<any> {
+    return this.elements
+      .filter((element) => element.contribution)
       .reduce((allPlugins, { plugins }) => [...allPlugins, ...plugins], [])
   }
 

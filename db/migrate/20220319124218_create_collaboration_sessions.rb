@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class CreateCollaborationSessions < ActiveRecord::Migration[7.0]
+  disable_ddl_transaction!
+
   def change
-    create_enum :collaboration_session_state_enum_type, ChuspaceConfig.new.collaboration_session[:states].keys
+    create_enum :collaboration_session_status_enum_type, ChuspaceConfig.new.collaboration_session[:statuses].keys
 
     create_table :collaboration_sessions do |t|
       t.references :publication, null: false, foreign_key: true
@@ -18,7 +20,7 @@ class CreateCollaborationSessions < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :collaboration_sessions, :state, :collaboration_session_state_enum_type, null: false, default: :open
-    add_index :collaboration_sessions, %i[publication_id blob_path number], unique: true, name: :one_active_collaboration_session_per_draft
+    add_column :collaboration_sessions, :status, :collaboration_session_status_enum_type, null: false, default: ChuspaceConfig.new.collaboration_session[:default_status], index: true
+    add_index :collaboration_sessions, %i[publication_id blob_path number], unique: true, name: :one_active_collaboration_session_per_draft, algorithm: :concurrently
   end
 end

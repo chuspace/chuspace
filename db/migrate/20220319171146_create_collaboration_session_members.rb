@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CreateCollaborationSessionMembers < ActiveRecord::Migration[7.0]
+  disable_ddl_transaction!
+
   def change
     create_table :collaboration_session_members do |t|
       t.references :collaboration_session, null: false, foreign_key: true
@@ -14,6 +16,6 @@ class CreateCollaborationSessionMembers < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :collaboration_session_members, %i[collaboration_session_id user_id], unique: true, name: :one_presence_per_collaboration_session
+    add_index :collaboration_session_members, %i[collaboration_session_id user_id], unique: true, name: :one_presence_per_collaboration_session, algorithm: :concurrently
   end
 end

@@ -4,8 +4,12 @@ import { Decoration, DecorationSet } from 'prosemirror-view'
 import { Plugin, PluginKey } from 'prosemirror-state'
 import { html, render, svg } from 'lit'
 
+import { type Contribution } from 'editor/collaboration'
 import { Element } from 'editor/base'
 import { contributionWidgetKey } from './widget'
+import { customAlphabet } from 'nanoid'
+
+const nanoid = customAlphabet('1234567890abcdef', 10)
 
 type Options = {
   nodes: Array<string>
@@ -42,12 +46,18 @@ const findViewNode = (view, event) => {
   }
 }
 
-export const renderContributionModal = (contribution) => {
+export const renderContributionModal = (
+  editor: Editor,
+  contribution: Contribution
+) => {
   const widget = document.createElement('div')
 
   render(
     html`
-      <contribution-modal .contribution=${contribution}></contribution-modal>
+      <contribution-node-editor
+        .contribution=${contribution}
+        .parentEditor=${editor}
+      ></contribution-node-editor>
     `,
     widget
   )
@@ -57,7 +67,7 @@ export const renderContributionModal = (contribution) => {
 
 export class ContributionToolbar extends Element {
   name = contributionToolbarKey
-
+  contribution: boolean = true
   options: Options = {
     allowedNodes: ['paragraph', 'code_block']
   }
@@ -72,7 +82,7 @@ export class ContributionToolbar extends Element {
             key: contributionToolbarPluginKey,
             props: {
               handleDOMEvents: {
-                click(view, event) {
+                dblclick(view, event) {
                   const pmView = event?.srcElement?.pmViewDesc
                   let node
                   let fromPos
@@ -116,64 +126,31 @@ export class ContributionToolbar extends Element {
                     event.preventDefault()
                     event.stopPropagation()
 
-                    return renderContributionModal(widget.type.spec)
+                    return renderContributionModal(editor, widget.type.spec)
                   }
 
                   if (node && options.allowedNodes.includes(node.type.name)) {
                     event.preventDefault()
                     event.stopPropagation()
 
-                    // Pass raw content for code blocks
                     let content = editor.contentSerializer.serialize(
                       view.state.doc.slice(fromPos, toPos).content
                     )
 
-                    const meta = {
-                      content,
+                    const contribution: Contribution = {
+                      contentBefore: content,
                       type: 'contribution',
-                      yDocBase64: null,
-                      node: {
-                        type: node.type.name,
-                        content,
-                        meta: {
-                          lang: node.attrs.language
-                        }
-                      },
-                      author: editor.collaboration.user,
+                      ydocBase64: null,
+                      status: 'editing',
+                      id: nanoid(),
+                      node: node.toJSON(),
+                      author: editor.user,
                       widgetPos,
-                      start: fromPos,
-                      end: toPos
+                      posFrom: fromPos,
+                      posTo: toPos
                     }
 
-                    const contribution = {
-                      ...meta,
-                      handleAdd: (event, payload) => {
-                        event.preventDefault()
-
-                        const transaction = view.state.tr.setMeta(
-                          contributionWidgetKey,
-                          { ...payload, add: true }
-                        )
-
-                        view.dispatch(transaction)
-                      },
-
-                      handleRemove: (event) => {
-                        event.preventDefault()
-
-                        const transaction = view.state.tr.setMeta(
-                          contributionWidgetKey,
-                          {
-                            remove: true,
-                            ...meta
-                          }
-                        )
-
-                        view.dispatch(transaction)
-                      }
-                    }
-
-                    renderContributionModal(contribution)
+                    renderContributionModal(editor, contribution)
                   }
 
                   return event
