@@ -7,14 +7,10 @@
         <% end %>
 
         <% card.body do %>
-          <% if @user.publications.any? %>
-            <% if @posts.any? %>
-              <%= render 'posts/list', posts: @posts %>
-            <% else %>
-              <%= render 'shared/placeholder', content: 'No published posts' %>
-            <% end %>
+          <% if @posts.any? %>
+            <%= render 'posts/list', posts: @posts %>
           <% else %>
-            <%= render 'shared/connect_publication' %>
+            <%= render 'shared/placeholder', content: 'No published posts' %>
           <% end %>
         <% end %>
       <% end %>

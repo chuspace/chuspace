@@ -19,12 +19,9 @@ export default class Doc extends Node {
     }
 
     switch (this.editor.mode) {
-      case 'node':
-        let node = this.editor.nodeName || 'paragraph'
-        content = `${this.editor.nodeName}`
-        break
-      case 'comment':
-        content = 'block+'
+      case 'contribution':
+        let node = this.editor.contribution.node.type || 'paragraph'
+        content = `${this.editor.contribution.node.type}+`
         break
       case 'plain':
         content = 'text+'

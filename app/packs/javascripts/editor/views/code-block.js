@@ -2,13 +2,18 @@
 
 import { Node as ProsemirrorNode, Schema } from 'prosemirror-model'
 import { Selection, TextSelection } from 'prosemirror-state'
-import { html, render } from 'lit'
+import {
+  contributionWidgetKey,
+  renderNode
+} from 'editor/plugins/contribution/widget'
+import { html, render, svg } from 'lit'
 import { redo, undo } from 'prosemirror-history'
 
 import BaseView from './base'
 import type { BaseViewPropType } from './base'
 import CodeMirror from 'codemirror'
 import { DEFAULT_MODE } from 'editor/modes'
+import { Decoration } from 'prosemirror-view'
 import { EditorView } from 'prosemirror-view'
 import { LANGUAGE_MODE_HASH } from 'editor/modes'
 import { exitCode } from 'prosemirror-commands'
@@ -24,7 +29,7 @@ export default class CodeBlockView extends BaseView {
   getCMInstance: () => CodeMirror
   onLanguageChange: (mode: string) => void
 
-  constructor(props: BaseViewPropType & { editable: boolean }) {
+  constructor(props: BaseViewPropType) {
     // Call super but don't render the view
     super(props, false)
     const { mode } = LANGUAGE_MODE_HASH[this.node.attrs.language] || {
@@ -35,10 +40,11 @@ export default class CodeBlockView extends BaseView {
     this.mode = mode
     this.node.attrs.language = mode
     this.content = this.node.textContent
-    this.readOnly = props.editable ? false : 'nocursor'
+    this.readOnly = this.editable ? false : 'nocursor'
     this.lines = this.content.split(/\r\n|\r|\n/).length
 
     this.renderElement()
+    this.renderDecorations(this.decorations)
   }
 
   renderElement = () => {
@@ -48,6 +54,8 @@ export default class CodeBlockView extends BaseView {
           mode=${this.mode}
           readonly=${this.readOnly}
           content=${this.content}
+          ?wrapper=${!this.editor.isNodeEditor}
+          ?contribution=${this.editor.isNodeEditor}
           .onInit=${this.onInit}
           .codeMirrorKeymap=${this.codeMirrorKeymap}
           .onLanguageChange=${this.onLanguageChange}
@@ -218,13 +226,52 @@ export default class CodeBlockView extends BaseView {
     this.outerView.focus()
   }
 
+  renderDecorations = (decorations: [Decoration]) => {
+    if (this.contributionWidget) {
+      this.containerNode.removeChild(this.contributionWidget)
+      this.contributionWidget = null
+    }
+
+    if (decorations.length > 0) {
+      this.contributionWidget = this.containerNode.appendChild(
+        renderNode(this.outerView.state, decorations[0].type.spec)
+      )
+    }
+  }
+
+  // isYChange = (textNode) =>
+  //   textNode.marks.find((mark) => mark.type.name === 'ychange')
+
+  // getYChangePos = (textNode) => this.outerView.state.doc.resolve(textNode)
+
   /**
    * when an update comes in from the editor, for example because of an undo action,
    * we kind of have to do the inverse of what valueChanged did--check for text changes
    * and if present, propagate then from the outer to inner editor.
    * @param node
    */
-  update = (node: ProsemirrorNode<Schema>) => {
+  update = (node: ProsemirrorNode<Schema>, decorations: [Decoration]) => {
+    // const ychanges = node.content.content.filter(this.isYChange)
+
+    // if (this.cm) {
+    //   this.cm.doc.eachLine((line) => {
+
+    //   })
+    // }
+
+    // const yChangesPos = ychanges.map((ychange) => {
+    //   let pos = {}
+    //   this.cm.doc.eachLine((line) => line.text.includes(ychange.textContent))
+
+    //   return {
+    //     text: ychange.change,
+    //     pos: this.getYChangePos(ychange),
+    //     attrs: ychange.marks[0].attrs
+    //   }
+    // })
+
+    this.renderDecorations(decorations)
+
     if (node.type !== this.node.type) return false
     if (!this.cm) return false
 

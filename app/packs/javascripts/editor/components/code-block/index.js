@@ -41,10 +41,12 @@ export default class CodeEditor extends LitElement {
   static properties = {
     mode: { type: String, reflect: true },
     readonly: { type: String },
-    wrapper: { type: String },
+    wrapper: { type: Boolean },
     theme: { type: String },
     filename: { type: String },
+    contribution: { type: Boolean },
     downloadable: { type: String },
+    onChange: { type: Function },
     loaded: { type: Boolean },
     content: { type: String, reflect: true },
     onInit: { type: Function },
@@ -58,7 +60,6 @@ export default class CodeEditor extends LitElement {
 
     this.theme = window.colorScheme
     this.loaded = false
-    this.wrapper = true
     this.downloadable = true
     this.lines = 0
 
@@ -117,6 +118,10 @@ export default class CodeEditor extends LitElement {
     this.cm = await this.createCM(this.codeEditorNode)
     if (this.onInit) await this.onInit(this.cm)
 
+    this.cm.on('change', (editor) => {
+      if (this.onChange) this.onChange(editor.doc.getValue())
+    })
+
     this.loaded = true
   }
 
@@ -126,10 +131,6 @@ export default class CodeEditor extends LitElement {
 
     try {
       this.readonly = JSON.parse(this.readonly)
-    } catch (e) {}
-
-    try {
-      this.wrapper = JSON.parse(this.wrapper)
     } catch (e) {}
 
     try {
@@ -195,7 +196,8 @@ export default class CodeEditor extends LitElement {
       <div
         class="code-editor-container ${this.wrapper
           ? 'has-wrapper'
-          : 'no-wrapper'} font-sans code-editor-container--${this.theme}"
+          : 'no-wrapper'} font-sans code-editor-container--${this.theme}
+          ${this.contribution ? 'contribution-modal' : 'editor'}"
         contenteditable="false"
       >
         ${this.wrapper

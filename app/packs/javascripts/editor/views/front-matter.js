@@ -9,7 +9,7 @@ import type { BaseViewPropType } from './base'
 import CodeMirror from 'codemirror'
 
 export default class FrontMatterView extends CodeBlockView {
-  constructor(props: BaseViewPropType & { editable: boolean }) {
+  constructor(props: BaseViewPropType) {
     // Call super but don't render the view
     super(props, false)
 
@@ -17,7 +17,7 @@ export default class FrontMatterView extends CodeBlockView {
     this.mode = 'yaml'
     this.node.attrs.language = 'yaml'
     this.content = this.node.textContent
-    this.readOnly = props.editable ? false : 'nocursor'
+    this.readOnly = this.editable ? false : 'nocursor'
 
     this.renderElement()
   }
@@ -28,14 +28,12 @@ export default class FrontMatterView extends CodeBlockView {
     render(
       html`
         <details class="whitespace-nowrap front-matter" as="tab">
-          <summary
-            class="border font-mono text-base border-base-300 rounded-md p-2 px-4"
+          <summary class="font-mono text-base p-2 px-4"
             ><span>FrontMatter</span></summary
           >
           <code-editor
             mode=${this.mode}
-            readonly="false"
-            wrapper="false"
+            readonly=${this.readOnly}
             content=${this.content}
             .onInit=${this.onInit}
             .codeMirrorKeymap=${this.codeMirrorKeymap}

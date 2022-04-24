@@ -9,7 +9,7 @@ class Post < ApplicationRecord
   belongs_to :publication, touch: true
   belongs_to :author, class_name: 'User', touch: true
 
-  validates :title, :permalink, :body, :body_html, :blob_sha, :commit_sha, :visibility, presence: true
+  validates :title, :permalink, :ydoc, :blob_sha, :commit_sha, :visibility, presence: true
   validates :blob_path, presence: :true, uniqueness: { scope: %i[version publication_id] }, markdown: true
   validates :version, presence: :true, uniqueness: { scope: :publication_id }
 
@@ -22,7 +22,9 @@ class Post < ApplicationRecord
   acts_as_votable
   acts_as_taggable_on :topics
 
-  friendly_id :slug_candidates, use: %i[slugged history], slug_column: :permalink
+  friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
+
+  has_many :revisions, dependent: :delete_all, inverse_of: :post
 
   has_one_attached :preview_image do |attachable|
     attachable.variant :post, resize_to_limit: [800, 300]
@@ -31,12 +33,25 @@ class Post < ApplicationRecord
     attachable.variant :social, resize_to_limit: [600, 315]
   end
 
+  delegate :repository, to: :publication
+
   def self.default_scope
     where(published: true).order(date: :desc)
   end
 
   def draft
-    @draft ||= publication.draft(path: blob_path)
+    repository.draft_at(path: blob_path, ref: commit_sha)
+  end
+
+  def editor_attrs(user:)
+    {
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name
+      },
+      ydoc: ydoc
+    }.to_json
   end
 
   def short_commit_sha
@@ -44,12 +59,12 @@ class Post < ApplicationRecord
   end
 
   def stale?
-    commit_sha != draft.sha
+    blob_sha != repository.draft(path: blob_path).sha
   end
 
   def to_meta_tags
     {
-      site: ChuspaceConfig.new.app_name,
+      site: ChuspaceConfig.new.app[:name],
       title: title,
       image_src: preview_image.variant(:list),
       description: summary,
@@ -70,7 +85,7 @@ class Post < ApplicationRecord
         title: :title,
         card: :summary,
         description: :description,
-        site: ChuspaceConfig.new.twitter,
+        site: ChuspaceConfig.new.app[:twitter],
         url: Rails.application.routes.url_helpers.publication_post_url(publication, self),
         image: preview_image.variant(:list)
       },
@@ -81,7 +96,7 @@ class Post < ApplicationRecord
   private
 
   def slug_candidates
-    [[:title, :short_commit_sha, :version]]
+    [[:title, :short_commit_sha]]
   end
 
   def set_visibility

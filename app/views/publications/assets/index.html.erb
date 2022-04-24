@@ -1,0 +1,26 @@
+<%= render 'publications/layout' do %>
+  <div class='grid grid-cols-12 gap-4 mt-8'>
+    <aside class='col-span-3'>
+      <ul class='card bordered side-menu'>
+        <li class="border-b last:border-b-0 border-base-200">
+          <%= tab_link_to 'All', publication_assets_root_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
+        </li>
+      </ul>
+    </aside>
+
+    <main class='col-span-9'>
+      <%= render(Card::Component.new) do |card| %>
+        <% card.title do %>
+          <%= render 'shared/breadcrumbs' %>
+        <% end %>
+
+        <% card.body do %>
+          <% path = @path.blank? ? publication_assets_root_path(@publication) : publication_assets_path(@publication, path: @path) %>
+          <%= turbo_frame_tag dom_id(@publication, :assets), src: path, lazy: true do %>
+            <%= render 'shared/card_loader', count: 10 %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </main>
+  </div>
+<% end %>

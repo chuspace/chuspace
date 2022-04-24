@@ -7,6 +7,7 @@ module Git
     attribute :name, :string
     attribute :type, :string, default: proc { :blob }
     attribute :content, :string, default: proc { '' }
+    attribute :download_url, :string
     attribute :adapter, ApplicationAdapter
 
     validates :path, :name, :adapter, presence: true

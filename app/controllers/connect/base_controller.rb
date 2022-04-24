@@ -39,7 +39,7 @@ module Connect
     def create
       @publication.assign_attributes(publication_params)
 
-      if @publication.save!
+      if @publication.save
         redirect_to @publication.personal? ? user_path(@publication.owner) : publication_path(@publication)
       else
         respond_to do |format|
@@ -48,7 +48,7 @@ module Connect
             render(
               turbo_stream: turbo_stream.replace(
                 @publication,
-                partial: 'publications/form',
+                partial: partial_name,
                 locals: {
                   publication: @publication,
                   url: create_publication_path

@@ -11,11 +11,11 @@ class Draft < Git::Blob
 
   def content_html(content: body)
     doc = CommonMarker.render_doc(content)
-    MarkdownRenderer.new.render(doc).html_safe
+    MarkdownRenderer.new(publication: publication).render(doc).html_safe
   end
 
   def collaboration_session
-    publication.collaboration_sessions.active.find_by(blob_path: path)
+    publication.collaboration_sessions.open.find_by(blob_path: path)
   end
 
   def collab?
@@ -118,14 +118,16 @@ class Draft < Git::Blob
       topic_list: topics,
       blob_path: path,
       blob_sha: id,
-      body: body,
-      body_html: content_html,
       commit_sha: commits.first&.id || commits.first&.sha
     }
   end
 
-  def publish(author:)
-    publication.posts.create(author: author, **to_post_attributes)
+  def publish(author:, other_attributes: {})
+    post = publication.posts.build(author: author)
+    post.assign_attributes(to_post_attributes)
+    post.assign_attributes(other_attributes)
+    post.ydoc = $ydoc.compile(content: decoded_content, username: author.username)
+    post.save ? post : false
   end
 
   def new_template
@@ -134,6 +136,7 @@ class Draft < Git::Blob
       title: Untitled
       summary:
       ---
+
     STR
   end
 

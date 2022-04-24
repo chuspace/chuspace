@@ -16,7 +16,7 @@ class OauthsController < ApplicationController
       elsif user = User.find_by(email: auth_hash.info.email)
         existing_provider = user.identities&.first&.provider&.titleize || provider_name
 
-        if ChuspaceConfig.new.out_of_private_beta
+        if ChuspaceConfig.new.app[:out_of_private_beta]
           flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{existing_provider} account."
         else
           flash[:notice] = "Beta invite request already registered through #{existing_provider}. Please wait for an invite!"
@@ -29,18 +29,18 @@ class OauthsController < ApplicationController
       end
 
       if identity.present?
-        flash[:notice] = "Beta invite request already registered through #{provider_name}. Please wait for an invite!" unless ChuspaceConfig.new.out_of_private_beta
+        flash[:notice] = "Beta invite request already registered through #{provider_name}. Please wait for an invite!" unless ChuspaceConfig.new.app[:out_of_private_beta]
         identity.update(identity_attrs)
       else
         identity = user.identities.create(identity_attrs)
 
-        unless ChuspaceConfig.new.out_of_private_beta
+        unless ChuspaceConfig.new.app[:out_of_private_beta]
           flash[:notice] = 'Thanks for registering your interest for private beta access 🎉'
           PrivateBetaSignupMailer.with(identity: identity).notify.deliver_later
         end
       end
 
-      if ChuspaceConfig.new.out_of_private_beta
+      if ChuspaceConfig.new.app[:out_of_private_beta]
         flash[:notice] = 'Successfully logged in'
         signin(identity) unless signed_in?
       end

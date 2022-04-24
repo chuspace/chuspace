@@ -12,12 +12,13 @@ export const calcYChangeStyle = (ychange) => {
 }
 
 export const calcYchangeDomAttrs = (attrs, domAttrs = {}) => {
-  domAttrs = Object.assign({}, domAttrs)
+  domAttrs = Object.assign({}, attrs)
   if (attrs.ychange !== null) {
     domAttrs.ychange_user = attrs.ychange.user
     domAttrs.ychange_type = attrs.ychange.type
     domAttrs.ychange_color = attrs.ychange.color.light
   }
+
   return domAttrs
 }
 

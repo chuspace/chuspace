@@ -10,7 +10,6 @@ module Publications
       def new
         authorize! @draft, to: :commit?
         @collaboration_session = @publication.collaboration_sessions.find_by(blob_path: @draft.path)
-        add_breadcrumb('Commit')
       end
 
       private

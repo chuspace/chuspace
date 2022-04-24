@@ -20,7 +20,7 @@ class PostPolicy < ApplicationPolicy
     false
   end
 
-  def contribute?
+  def revise?
     publication.members.exclude?(user)
   end
 

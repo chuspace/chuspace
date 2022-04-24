@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[7.0]
+  disable_ddl_transaction!
+
   def change
     create_table :ahoy_visits do |t|
       t.string :visit_token
@@ -46,7 +48,7 @@ class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[7.0]
       t.datetime :started_at
     end
 
-    add_index :ahoy_visits, :visit_token, unique: true
+    add_index :ahoy_visits, :visit_token, unique: true, algorithm: :concurrently
 
     create_table :ahoy_events do |t|
       t.references :visit
@@ -57,7 +59,7 @@ class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[7.0]
       t.datetime :time
     end
 
-    add_index :ahoy_events, [:name, :time]
-    add_index :ahoy_events, :properties, using: :gin, opclass: :jsonb_path_ops
+    add_index :ahoy_events, [:name, :time], algorithm: :concurrently
+    add_index :ahoy_events, :properties, using: :gin, opclass: :jsonb_path_ops, algorithm: :concurrently
   end
 end

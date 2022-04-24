@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class MarkdownRenderer < CommonMarker::HtmlRenderer
-  def initialize
-    super
+  attr_reader :publication
+
+  def initialize(publication:)
+    super()
     @count = 0
+    @publication = publication
   end
 
   def header(node)
@@ -31,8 +34,9 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
   end
 
   def image(node)
+    url = URI.parse(node.url).absolute? ? node.url :  Rails.application.routes.url_helpers.publication_asset_path(publication, path: node.url)
     out('<lazy-image')
-    out(' src="', escape_href(node.url), '"')
+    out(' src="', escape_href(url), '"')
     out(' filename="', escape_href(File.basename(node.url)), '"')
     plain { out(' alt="', :children, '"') }
     out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?

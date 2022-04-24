@@ -1,6 +1,7 @@
-<section class='lg:w-2/3 mx-auto w-full chu-editor editable'>
-  <chu-editor
-      imageProviderPath='<%= publication_assets_path(@publication) %>'
+<section class='lg:w-2/3 py-24 mx-auto w-full chu-editor editable'>
+  <collaboration-editor
+      imageUploadPath='<%= publication_create_assets_path(@publication) %>'
+      imageLoadPath='<%= publication_asset_path(@publication) %>'
       autoSavePath='<%= publication_autosave_draft_path(@publication, @draft) %>'
       collaboration='<%= @collaboration_session.editor_attrs(user: Current.user) %>'
       editable
@@ -20,5 +21,5 @@
         </div>
       <% end %>
     <% end %>
-  </chu-editor>
+  </collaboration-editor>
 </div>

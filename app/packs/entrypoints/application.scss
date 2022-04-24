@@ -1,5 +1,3 @@
-@import '~prosemirror-view/style/prosemirror.css';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -41,12 +39,6 @@
   details:not([as='tab']) > summary::-webkit-details-marker {
     display: none;
   }
-
-  details[as='tab'] {
-    &[open] > summary {
-      @apply border-b-0 rounded-b-none;
-    }
-  }
 }
 
 @layer components {
@@ -55,7 +47,7 @@
   }
 
   .btn {
-    @apply normal-case font-medium;
+    @apply normal-case font-medium rounded-md;
   }
 
   .card {
@@ -103,10 +95,6 @@
       @apply font-bold underline;
     }
   }
-}
-
-.ProseMirror {
-  @apply outline-none relative;
 }
 
 :root {
@@ -183,4 +171,15 @@ file-attachment {
       @apply ring-1 ring-primary outline-none;
     }
   }
+}
+
+.dialog-open {
+  @apply overflow-hidden h-screen;
+}
+
+dialog {
+  color: inherit;
+}
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }

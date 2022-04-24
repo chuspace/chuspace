@@ -5,17 +5,25 @@ class GithubAdapter < ApplicationAdapter
     'github'
   end
 
+  def asset(sha:)
+    opts = { ref: ref }
+    get("repos/#{repo_fullname}/git/blobs/#{sha}", **opts)
+  rescue FaradayClient::NotFound
+    Git::Blob.new
+  end
+
   def blobs(paths: [])
     opts = { ref: ref }
     blobs = []
 
     paths.each do |path|
-      blobs += blob_from_response(blob(path: path)).sort_by { |blob| %w[dir file].index(blob.type) }
+      response = blob(path: path)
+      blobs += response.is_a?(Array) ? response : [response]
     rescue FaradayClient::NotFound
       next
     end
 
-    blobs
+    blob_from_response(blobs).sort_by { |blob| %w[dir file].index(blob.type) }
   end
 
   def blob(path:)

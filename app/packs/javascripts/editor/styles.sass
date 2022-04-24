@@ -1,3 +1,8 @@
+@import '~prosemirror-view/style/prosemirror.css'
+
+.ProseMirror
+  @apply outline-none relative
+
 .ProseMirror-trailingBreak
   @apply h-0
 
@@ -66,10 +71,7 @@
     @apply mt-2 text-secondary opacity-80 text-xl
 
   .front-matter
-    @apply mb-6
-
-    &[open]
-      @apply mb-0
+    @apply mb-6 border border-base-300 rounded-md
 
   &.editable
     .title-empty, .summary-empty, .body-empty
@@ -128,8 +130,20 @@
   strong
     @apply mb-8 font-bold
 
-  code-editor, lazy-image, p
+  code-editor, p
     @apply mb-8 block
+
+  details code-editor
+    @apply mb-0
+
+  code-editor.with-contribution-widget
+    @apply mb-0
+
+  lazy-image
+    @apply inline-block w-full
+
+  lazy-image, content-loader, contribution-modal
+    @apply whitespace-nowrap
 
   figure, p > div
     @apply whitespace-nowrap
@@ -137,13 +151,16 @@
   pre
     @apply whitespace-pre-wrap
 
+    code
+      @apply bg-transparent p-0 rounded-none
+
   code
     @apply bg-secondary px-1 text-secondary-content rounded-sm whitespace-pre-wrap text-base font-normal
 
   div + br
     display: none
 
-  ychange[ychange_type="added"]
+  ychange[ychange_type="added"], .insertion
     @apply border-t-2 border-b-2 max-w-full whitespace-normal
     background-color: #22c55e
     border-color: #86efac
@@ -158,7 +175,7 @@
     img
       @apply border-4 border-success
 
-  ychange[ychange_type="removed"]
+  ychange[ychange_type="removed"], .deletion
     @apply border-t-2 border-b-2 line-through max-w-full whitespace-normal
     background-color: #ef4444
     border-color: #fca5a5
@@ -201,6 +218,3 @@
       @apply text-base font-medium
     h6
       @apply text-base font-medium
-
-  contribution-modal
-    @apply whitespace-nowrap

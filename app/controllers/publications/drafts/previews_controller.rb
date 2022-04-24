@@ -3,11 +3,10 @@
 module Publications
   module Drafts
     class PreviewsController < BaseController
-      layout 'post'
+      layout 'editor'
 
       def show
         authorize! @draft
-        add_breadcrumb('Preview')
       end
     end
   end

@@ -8,26 +8,35 @@ import { html, render } from 'lit'
 import BaseView from './base'
 import type { BaseViewPropType } from './base'
 import { EditorView } from 'prosemirror-view'
+import isUrl from 'is-url'
+import queryString from 'query-string'
 
 export default class ImageView extends BaseView {
   editable: boolean = false
 
-  constructor(props: BaseViewPropType & { editable: boolean }) {
+  constructor(props: BaseViewPropType & { imageLoadPath: string }) {
     super(props, false)
 
-    this.editable = props.editable
+    this.imageLoadPath = props.imageLoadPath
     this.containerNode = document.createElement('div')
     this.renderElement()
   }
 
   renderElement = () => {
+    const fileName = this.node.attrs.src.split('/').pop()
+    const src = isUrl(this.node.attrs.src)
+      ? this.node.attrs.src
+      : `${this.imageLoadPath}?${queryString.stringify({
+          path: this.node.attrs.src
+        })}`
+
     render(
       html`
         <lazy-image
-          src=${this.node.attrs.src || ''}
-          alt=${this.node.attrs.alt || ''}
-          title=${this.node.attrs.title || this.node.attrs.alt || ''}
-          filename=${this.node.attrs.src.split('/').pop() || ''}
+          src=${src}
+          alt=${this.node.attrs.alt || fileName}
+          title=${this.node.attrs.title || this.node.attrs.alt || fileName}
+          filename=${fileName}
           .handleChange=${this.editable ? this.handleChange : null}
           .handleDelete=${this.handleDelete}
         ></lazy-image>
@@ -35,12 +44,12 @@ export default class ImageView extends BaseView {
       this.containerNode
     )
 
-    this.dom = this.containerNode
+    this.dom = this.containerNode.children[0]
+    this.containerNode = this.dom
   }
 
   handleChange = (attrs: ?{ align: String, alt: string } = {}) => {
     this.node.attrs = Object.assign({}, this.node.attrs, attrs)
-    this.renderElement()
     this.outerView.dispatch(
       this.outerView.state.tr.setNodeMarkup(
         this.getPos(),

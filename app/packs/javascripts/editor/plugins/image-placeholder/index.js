@@ -5,13 +5,15 @@ import { EditorState, Plugin, PluginKey } from 'prosemirror-state'
 
 import { Element } from 'editor/base'
 
+export const imagePlaceholderName = 'image-placeholder'
+export const imagePlaceholderKey = new PluginKey(imagePlaceholderName)
 export default class ImagePlaceholder extends Element {
-  name = 'image-placeholder'
+  name = imagePlaceholderName
 
   get plugins() {
     return [
       new Plugin({
-        key: new PluginKey('image-placeholder'),
+        key: imagePlaceholderKey,
         state: {
           init() {
             return DecorationSet.empty
@@ -24,10 +26,14 @@ export default class ImagePlaceholder extends Element {
             if (action && action.add) {
               let widget = document.createElement('content-loader')
               widget.setAttribute('type', 'image')
-              let deco = Decoration.widget(action.add.pos, widget, { id: action.add.id })
+              let deco = Decoration.widget(action.add.pos, widget, {
+                id: action.add.id
+              })
               set = set.add(tr.doc, [deco])
             } else if (action && action.remove) {
-              set = set.remove(set.find(null, null, (spec) => spec.id == action.remove.id))
+              set = set.remove(
+                set.find(null, null, (spec) => spec.id == action.remove.id)
+              )
             }
 
             return set

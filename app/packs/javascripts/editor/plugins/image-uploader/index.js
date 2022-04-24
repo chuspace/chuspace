@@ -9,6 +9,7 @@ import { EditorState, Plugin, PluginKey } from 'prosemirror-state'
 
 import { Element } from 'editor/base'
 import { customAlphabet } from 'nanoid'
+import { imagePlaceholderKey } from '../image-placeholder'
 
 const nanoid = customAlphabet('1234567890abcdef', 10)
 const IMAGE_INPUT_REGEX = /!\[(.+|:?)\]\((\S+)(?:(?:\s+)["'](\S+)["'])?\)/
@@ -41,34 +42,33 @@ export default class ImageUploader extends Element {
               }
 
               const placeholderPlugin = view.state.plugins.find(
-                (plugin) => plugin.key === 'image-placeholder$1'
+                (plugin) => plugin.key === imagePlaceholderKey.key
               )
-              const findPlaceholder = placeholderPlugin.props.findPlaceholder
+
               let id = nanoid()
               let tr = view.state.tr
               if (!tr.selection.empty) tr.deleteSelection()
 
               tr.setMeta(placeholderPlugin, {
-                add: { id, pos: tr.selection.from }
+                add: { id, pos: tr.selection.anchor }
               })
-              view.dispatch(tr)
 
+              view.dispatch(tr)
               event.preventDefault()
 
               const { schema } = view.state
-              const coordinates = view.posAtCoords({
-                left: event.clientX,
-                top: event.clientY
-              })
 
               images.forEach((image) => {
                 const formData = new FormData()
                 formData.append('image', image)
-                let pos = findPlaceholder(view.state, id)
+                let pos = placeholderPlugin.props.findPlaceholder(
+                  view.state,
+                  id
+                )
 
                 Rails.ajax({
                   type: 'POST',
-                  url: view.props.imageProviderPath,
+                  url: view.props.imageUploadPath,
                   data: formData,
                   success: (data) => {
                     const node = schema.nodes.image.create({
@@ -78,7 +78,7 @@ export default class ImageUploader extends Element {
                     if (pos == null) return
 
                     const transaction = view.state.tr
-                      .replaceWith(pos, pos, node)
+                      .insert(pos, node)
                       .setMeta(placeholderPlugin, { remove: { id } })
                     view.dispatch(transaction)
                   },

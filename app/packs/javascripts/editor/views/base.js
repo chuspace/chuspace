@@ -16,9 +16,12 @@ export default class BaseView {
   dom: Element
   outerView: EditorView
   schema: Schema
+  editor: any
+  editable: boolean
   isSelected: boolean
   getPos: () => number
   node: ProsemirrorNode
+  decorations: []
   containerNode: HTMLElement
 
   constructor(props: BaseViewPropType, render: boolean = true) {
@@ -28,7 +31,12 @@ export default class BaseView {
     this.node = props.node
     this.options = props.options
     this.isSelected = false
-    this.containerNode = props.node.type.spec.inline ? document.createElement('span') : document.createElement('div')
+    this.editor = props.editor
+    this.decorations = props.decorations || []
+    this.editable = props.editor.editable
+    this.containerNode = props.node.type.spec.inline
+      ? document.createElement('span')
+      : document.createElement('div')
 
     if (render) this.renderElement()
   }

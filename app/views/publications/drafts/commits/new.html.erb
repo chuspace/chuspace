@@ -1,5 +1,5 @@
 <div class='grid grid-cols-3 h-screen max-h-screen overflow-hidden'>
-  <div class='col-span-2 pr-8 h-full overflow-scroll'>
+  <div class='col-span-2 pr-8 py-24 h-full overflow-scroll'>
     <div class='h-full'>
       <%= turbo_frame_tag dom_id(@draft, :diff), src: publication_new_draft_diff_path(@publication, @draft), loading: :lazy do  %>
         <div class='flex items-center h-full justify-center'>Loading...</div>
@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <div class='col-span-1 pl-8 border-l border-base-200'>
+  <div class='col-span-1 pl-8 mt-24 border-l border-base-200'>
     <%= turbo_frame_tag(dom_id(@draft, :new_commit)) do %>
       <%= simple_form_for @draft, method: :patch, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>
         <h3>Commit changes</h3>
@@ -17,11 +17,17 @@
           <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
           <%= form.input :auto_publish, as: :boolean, label: false, input_html: { checked: @publication.content.auto_publish }, placeholder: 'Commit message' %>
           <div class='mt-8 font-mono'>
-            <label class='text-sm block' id='commit-authors'>
+            <label class='text-sm flex items-center' id='commit-authors'>
               Commit authors:
-              <% @collaboration_session.members.find_each do |member| %>
-                <%= link_to member.user.name, user_path(member.user), class: 'font-bold link link-primary' %>
-              <% end %>
+              <div class="avatar-group -space-x-3">
+                <% @collaboration_session.members.find_each do |member| %>
+                  <div class="avatar">
+                    <%= link_to user_path(member.user), class: 'font-bold link link-primary w-6', title: member.user.name do %>
+                      <%= image_tag(member.user.avatar_url, title: member.user.name) %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
             </label>
             <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>
             <label class='text-sm block'>Commit Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>

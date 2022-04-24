@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ActsAsVotableMigration < ActiveRecord::Migration[7.0]
+  disable_ddl_transaction!
+
   def self.up
     create_table :votes do |t|
 
@@ -14,8 +16,8 @@ class ActsAsVotableMigration < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :votes, [:voter_id, :voter_type, :vote_scope]
-    add_index :votes, [:votable_id, :votable_type, :vote_scope]
+    add_index :votes, [:voter_id, :voter_type, :vote_scope], algorithm: :concurrently
+    add_index :votes, [:votable_id, :votable_type, :vote_scope], algorithm: :concurrently
   end
 
   def self.down

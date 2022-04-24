@@ -1,7 +1,5 @@
 // @flow
 
-import './styles.sass'
-
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { Fragment, Schema } from 'prosemirror-model'
@@ -44,7 +42,7 @@ import debounce from 'lodash.debounce'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
-import { post } from '@rails/request.js'
+import { patch } from '@rails/request.js'
 import { randomColor } from 'helpers/random-color'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
@@ -108,7 +106,8 @@ export default class ChuEditor extends LitElement {
     autoFocus: { type: Boolean },
     collaboration: { type: Object },
     excludeFrontmatter: { type: Boolean },
-    imageProviderPath: { type: String },
+    imageUploadPath: { type: String },
+    imageLoadPath: { type: String },
     editable: { type: Boolean },
     contribution: { type: Boolean },
     contributionPath: { type: String },
@@ -167,9 +166,13 @@ export default class ChuEditor extends LitElement {
       : new SchemaManager(this)
 
     this.schema = this.manager.schema
-    this.contentParser = markdownParser(this.schema)
-    this.contentSerializer = markdownSerializer(this.schema)
-    this.initialContent = this.querySelector('textarea.content').value
+    this.contentParser = markdownParser(this.schema, this.isNodeEditor)
+    this.contentSerializer = markdownSerializer(this.schema, this.isNodeEditor)
+
+    if (this.isNodeEditor || this.contribution) {
+      this.initialContent = this.querySelector('textarea.content').value
+      this.doc = this.contentParser.parse(this.initialContent)
+    }
 
     this.state = this.createState()
     this.view = this.createView()
@@ -248,7 +251,7 @@ export default class ChuEditor extends LitElement {
         }
       })
 
-      if (this.editable) {
+      if (this.editable && this.collaboration.channel) {
         this.provider = new ActionCableProvider(
           createConsumer(),
           this.collaboration,
@@ -407,19 +410,27 @@ export default class ChuEditor extends LitElement {
     ]
   }
 
-  createState = () =>
-    EditorState.create({
+  createState = () => {
+    let options = {
       schema: this.schema,
       contributions: [],
       plugins: this.plugins
-    })
+    }
+
+    if (this.contribution || this.isNodeEditor) {
+      options['doc'] = this.doc
+    }
+
+    return EditorState.create(options)
+  }
 
   createView() {
     const view = new EditorView(this, {
       state: this.state,
       schema: this.schema,
       editable: () => this.editable,
-      imageProviderPath: this.imageProviderPath,
+      imageLoadPath: this.imageLoadPath,
+      imageUploadPath: this.imageUploadPath,
       contributionPath: this.contributionPath,
       dispatchTransaction: this.dispatchTransaction.bind(this),
       nodeViews: this.manager.nodeViews
@@ -444,8 +455,8 @@ export default class ChuEditor extends LitElement {
   autosave = debounce(
     async () => {
       const statusElement = document.getElementById('chu-editor-status')
-      this.addVersion()
       if (statusElement) statusElement.textContent = 'Auto saving...'
+      this.addVersion()
 
       const startingProsemirrorDoc = yDocToProsemirror(
         this.schema,
@@ -456,7 +467,7 @@ export default class ChuEditor extends LitElement {
       const currentFragment = Fragment.from(this.state.doc)
       const stale = startingFragment.findDiffStart(currentFragment)
 
-      const response = await post(this.autoSavePath, {
+      const response = await patch(this.autoSavePath, {
         body: JSON.stringify({
           draft: {
             current_ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc)),

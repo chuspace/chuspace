@@ -6,7 +6,7 @@ module Publications
       layout 'full'
 
       def new
-        @collaboration_session = @publication.collaboration_sessions.active.find_by(blob_path: @draft.path)
+        @collaboration_session = @publication.collaboration_sessions.open.find_by(blob_path: @draft.path)
         authorize! @collaboration_session
 
         respond_to do |format|

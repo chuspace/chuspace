@@ -3,8 +3,10 @@
 import { Element, Node } from 'editor/base'
 import { Fragment, Node as PMNode, Schema } from 'prosemirror-model'
 import { Plugin, PluginKey, Selection } from 'prosemirror-state'
+import { calcYchangeDomAttrs, hoverWrapper } from 'editor/helpers'
 import { nodeInputRule, toggleBlockType } from 'editor/commands'
 
+import pick from 'lodash.pick'
 import { setBlockType } from 'prosemirror-commands'
 
 const removeLastNewLine = (dom: HTMLElement): HTMLElement => {
@@ -21,8 +23,12 @@ export default class CodeBlock extends Node {
   get schema(): PMNode {
     return {
       content: 'text*',
-      attrs: { language: { default: 'auto' } },
-      marks: '',
+      attrs: {
+        language: { default: 'auto' },
+        ychange: { default: null },
+        class: { default: 'CodeMirror' }
+      },
+      marks: 'ychange',
       group: 'block',
       code: true,
       defining: true,
@@ -90,8 +96,15 @@ export default class CodeBlock extends Node {
           }
         }
       ],
-      toDOM(node: PMNode) {
-        return ['pre', ['code', { 'data-language': node.attrs.language }, 0]]
+      toDOM(node) {
+        return [
+          'pre',
+          calcYchangeDomAttrs(
+            pick(node.attrs, ['ychange']),
+            pick(node.attrs, ['language', 'class'])
+          ),
+          ...hoverWrapper(node.attrs.ychange, [['code', 0]])
+        ]
       }
     }
   }

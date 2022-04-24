@@ -13,7 +13,7 @@ code-editor
     border-radius: 0.5rem
 
     &.no-wrapper
-      @apply border-t-0 rounded-none
+      @apply rounded-none border-0
 
     .CodeMirror
       @apply rounded-b max-w-full pt-4 font-normal overflow-y-auto pb-4
@@ -21,6 +21,14 @@ code-editor
 
       .CodeMirror-scroll
         max-height: 600px
+
+    &.contribution-modal
+      .CodeMirror
+        height: 300px
+
+      .CodeMirror-scroll
+        max-height: 300px
+
 
   .code-editor-toolbar
     @apply flex items-center p-4 w-full relative rounded-t border-b border-base-300 text-base text-sm bg-base-200
@@ -52,3 +60,6 @@ code-editor
 
       &:last-child
         @apply border-b-0
+
+.card .code-editor-container
+  @apply shadow-none
