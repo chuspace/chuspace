@@ -17,6 +17,4 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   # Git storage oauth
   provider OmniAuth::Strategies::Github, **OmniauthConfig.new.storage[:github][:options]
-  provider OmniAuth::Strategies::Gitlab, **OmniauthConfig.new.storage[:gitlab][:options]
-  provider OmniAuth::Strategies::Gitea, **OmniauthConfig.new.storage[:gitea][:options]
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -21,14 +21,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "collaboration_session_status_enum_type", ["open", "closed", "stale"]
-  create_enum "git_provider_enum_type", ["github", "gitlab", "gitea"]
+  create_enum "git_provider_enum_type", ["github"]
   create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "admin", "owner", "member"]
   create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
   create_enum "publication_visibility_enum_type", ["private", "public", "member"]
-  create_enum "revision_status_enum_type", ["open", "closed", "merged"]
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -108,39 +106,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
     t.datetime "started_at"
     t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
-  end
-
-  create_table "collaboration_session_members", force: :cascade do |t|
-    t.bigint "collaboration_session_id", null: false
-    t.bigint "user_id", null: false
-    t.boolean "online", default: false, null: false
-    t.boolean "creator", default: false, null: false
-    t.datetime "last_seen_at", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["collaboration_session_id", "user_id"], name: "one_presence_per_collaboration_session", unique: true
-    t.index ["collaboration_session_id"], name: "index_collaboration_session_members_on_collaboration_session_id"
-    t.index ["creator"], name: "index_collaboration_session_members_on_creator"
-    t.index ["last_seen_at"], name: "index_collaboration_session_members_on_last_seen_at"
-    t.index ["online"], name: "index_collaboration_session_members_on_online"
-    t.index ["user_id"], name: "index_collaboration_session_members_on_user_id"
-  end
-
-  create_table "collaboration_sessions", force: :cascade do |t|
-    t.bigint "publication_id", null: false
-    t.text "blob_sha", null: false
-    t.text "commit_sha"
-    t.text "blob_path", null: false
-    t.text "initial_ydoc", null: false
-    t.text "current_ydoc"
-    t.boolean "doc_changed", default: false
-    t.bigint "number", default: 1, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.enum "status", default: "open", null: false, enum_type: "collaboration_session_status_enum_type"
-    t.index ["blob_path"], name: "index_collaboration_sessions_on_blob_path"
-    t.index ["publication_id", "blob_path", "number"], name: "one_active_collaboration_session_per_draft", unique: true
-    t.index ["publication_id"], name: "index_collaboration_sessions_on_publication_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -323,28 +288,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
     t.index ["publication_id"], name: "index_repositories_on_publication_id"
   end
 
-  create_table "revisions", force: :cascade do |t|
-    t.citext "permalink", null: false
-    t.bigint "publication_id", null: false
-    t.bigint "post_id", null: false
-    t.bigint "author_id", null: false
-    t.text "content_before", null: false
-    t.text "content_after", null: false
-    t.integer "pos_from", null: false
-    t.integer "pos_to", null: false
-    t.integer "widget_pos", null: false
-    t.text "ydoc_base64", null: false
-    t.jsonb "node", default: {}, null: false
-    t.bigint "number", default: 1, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.enum "status", default: "open", null: false, enum_type: "revision_status_enum_type"
-    t.index ["author_id"], name: "index_revisions_on_author_id"
-    t.index ["post_id"], name: "index_revisions_on_post_id"
-    t.index ["publication_id", "post_id", "permalink"], name: "index_revisions_on_publication_id_and_post_id_and_permalink", unique: true
-    t.index ["publication_id"], name: "index_revisions_on_publication_id"
-  end
-
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"
     t.string "taggable_type"
@@ -407,9 +350,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "collaboration_session_members", "collaboration_sessions"
-  add_foreign_key "collaboration_session_members", "users"
-  add_foreign_key "collaboration_sessions", "publications"
   add_foreign_key "git_providers", "users"
   add_foreign_key "identities", "users"
   add_foreign_key "invites", "publications"
@@ -422,7 +362,4 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_144339) do
   add_foreign_key "publications", "users", column: "owner_id"
   add_foreign_key "repositories", "git_providers"
   add_foreign_key "repositories", "publications"
-  add_foreign_key "revisions", "posts"
-  add_foreign_key "revisions", "publications"
-  add_foreign_key "revisions", "users", column: "author_id"
 end

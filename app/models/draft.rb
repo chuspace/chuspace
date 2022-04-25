@@ -14,10 +14,6 @@ class Draft < Git::Blob
     MarkdownRenderer.new(publication: publication).render(doc).html_safe
   end
 
-  def collaboration_session
-    publication.collaboration_sessions.open.find_by(blob_path: path)
-  end
-
   def collab?
     !readme?
   end
@@ -95,14 +91,6 @@ class Draft < Git::Blob
       base_path = Pathname.new(publication.repository.posts_folder)
       file_path = Pathname.new(path)
       file_path.relative_path_from(base_path).to_s
-    end
-  end
-
-  def status
-    if collaboration_session&.doc_changed?
-      'Uncommitted changes'
-    else
-      'Everything up to date'
     end
   end
 

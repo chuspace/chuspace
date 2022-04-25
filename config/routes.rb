@@ -104,10 +104,6 @@ Rails.application.routes.draw do
         patch '/*path/update', action: :update, as: :update_draft
         delete '/*path/delete', action: :destroy, as: :delete_draft
 
-        scope controller: :previews, module: :drafts do
-          get '/*path/preview', action: :show, as: :preview_draft
-        end
-
         scope controller: :publishings, module: :drafts do
           get '/*path/publish', action: :new, as: :new_publish_draft
           post '/*path/publish', action: :create, as: :publish_draft
@@ -117,21 +113,11 @@ Rails.application.routes.draw do
           get '/*path/commit', action: :new, as: :new_commit_draft
           post '/*path/commit', action: :create, as: :commit_draft
         end
-
-        scope controller: :diffs, module: :drafts do
-          get '/*path/diff', action: :new, as: :new_draft_diff
-        end
-
-        scope controller: :collaboration_sessions, module: :drafts do
-          patch '/*path/autosave', action: :update, as: :autosave_draft
-        end
       end
 
       scope constraints: { publication_permalink: /[a-z0-9_\-]+/, permalink: /[a-z0-9_\-]+/ } do
         resources :posts, path: '', except: :index, param: :permalink do
           resources :settings, only: %i[index show]
-          resources :reactions, only: %i[index create destroy], module: :posts
-          resources :revisions, module: :posts
         end
       end
     end

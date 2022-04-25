@@ -49,29 +49,6 @@ class OmniauthConfig < ApplicationConfig
           callback_path: '/git_providers/github/callback',
           scope: 'user,profile,repo,admin:repo_hook'
         }
-      },
-      gitlab: {
-        label: 'Gitlab storage',
-        method: :post,
-        id: :gitlab,
-        url: '/auth/gitlab_storage',
-        options: {
-          name: 'gitlab_storage',
-          setup: true,
-          callback_path: '/git_providers/gitlab/callback',
-          scope: 'api'
-        }
-      },
-      gitea: {
-        label: 'Gitea storage',
-        method: :post,
-        id: :gitea,
-        url: '/auth/gitea_storage',
-        options: {
-          name: 'gitea_storage',
-          setup: true,
-          callback_path: '/git_providers/gitea/callback'
-        }
       }
     }
   )

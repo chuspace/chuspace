@@ -1,9 +1,0 @@
-<%= turbo_frame_tag(member) do %>
-  <%= link_to user_path(member.user), title: member.user.name do %>
-    <div class='avatar <%= member.online ? 'online' : 'offline' %>'>
-      <div class="w-8 rounded-full">
-        <%= image_tag member.user.avatar_url, class: "cursor-pointer", title: member.user.name %>
-      </div>
-    </div>
-  <% end %>
-<% end %>

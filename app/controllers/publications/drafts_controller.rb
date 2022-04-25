@@ -40,7 +40,6 @@ module Publications
       authorize! @draft
 
       if @draft.delete(**commit_params)
-        @draft.collaboration_session.end
         redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
       else
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
@@ -52,7 +51,6 @@ module Publications
 
       if @draft.update(**commit_params)
         @draft.publish(author: Current.user) if draft_params[:auto_publish].present?
-        @draft.collaboration_session.end
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
       else
         respond_to do |format|
@@ -70,8 +68,6 @@ module Publications
 
     def edit
       authorize! @draft
-
-      @collaboration_session = @publication.find_or_start_collaboration_session(user: Current.user, blob_path: @draft.path)
       add_breadcrumb(:drafts, find_publication_drafts_root_path)
     end
 
@@ -83,7 +79,7 @@ module Publications
 
     def commit_params
       {
-        content: @draft.persisted? ? @draft.collaboration_session&.decoded_content : @draft.new_template,
+        content: @draft.persisted? ? draft_params[:content] : @draft.new_template,
         message: draft_params[:commit_message],
         committer: Git::Committer.chuspace,
         author: Git::Committer.for(user: Current.user)
@@ -91,7 +87,7 @@ module Publications
     end
 
     def draft_params
-      params.require(:draft).permit(:name, :commit_message, :auto_publish)
+      params.require(:draft).permit(:name, :content, :commit_message, :auto_publish)
     end
 
     def find_draft

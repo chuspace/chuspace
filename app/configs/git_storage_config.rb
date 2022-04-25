@@ -15,26 +15,6 @@ class GitStorageConfig < ApplicationConfig
       scopes: 'user,profile,repo,admin:repo_hook',
       client_id: Rails.application.credentials.github_storage[:client_id],
       client_secret: Rails.application.credentials.github_storage[:client_secret]
-    },
-    gitlab: {
-      label: 'GitLab.com',
-      name: :gitlab,
-      refresh_access_token_endpoint: 'https://gitlab.com/oauth/token',
-      api_endpoint: 'https://gitlab.com/api/v4',
-      access_token_param: 'Bearer',
-      scopes: 'api',
-      client_id: Rails.application.credentials.gitlab_storage[:client_id],
-      client_secret: Rails.application.credentials.gitlab_storage[:client_secret]
-    },
-    gitea: {
-      label: 'Gitea.com',
-      name: :gitea,
-      refresh_access_token_endpoint: 'https://gitea.com/login/oauth/access_token',
-      api_endpoint: 'https://gitea.com/api/v1',
-      access_token_param: :token,
-      scopes: '*',
-      client_id: Rails.application.credentials.gitea_storage[:client_id],
-      client_secret: Rails.application.credentials.gitea_storage[:client_secret]
     }
   )
 

@@ -24,8 +24,6 @@ class Post < ApplicationRecord
 
   friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
 
-  has_many :revisions, dependent: :delete_all, inverse_of: :post
-
   has_one_attached :preview_image do |attachable|
     attachable.variant :post, resize_to_limit: [800, 300]
     attachable.variant :list, resize_to_limit: [250, 150]
@@ -41,17 +39,6 @@ class Post < ApplicationRecord
 
   def draft
     repository.draft_at(path: blob_path, ref: commit_sha)
-  end
-
-  def editor_attrs(user:)
-    {
-      user: {
-        id: user.id,
-        username: user.username,
-        name: user.name
-      },
-      ydoc: ydoc
-    }.to_json
   end
 
   def short_commit_sha

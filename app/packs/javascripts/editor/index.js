@@ -5,74 +5,22 @@ import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { Fragment, Schema } from 'prosemirror-model'
 import { LitElement, html } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
-import {
-  PermanentUserData,
-  Doc as YDoc,
-  applyUpdateV2,
-  decodeSnapshotV2,
-  emptySnapshot,
-  encodeSnapshotV2,
-  encodeStateAsUpdateV2,
-  equalSnapshots,
-  snapshot
-} from 'yjs'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
-import { fromBase64, toBase64 } from 'lib0/buffer'
 import { getMarkAttrs, isMarkActive, isNodeActive } from 'editor/helpers'
 import { inputRules, undoInputRule } from 'prosemirror-inputrules'
 import { markdownParser, markdownSerializer } from 'editor/markdowner'
-import {
-  prosemirrorToYDoc,
-  redo,
-  undo,
-  yCursorPlugin,
-  yDocToProsemirror,
-  ySyncPlugin,
-  ySyncPluginKey,
-  yUndoPlugin
-} from 'y-prosemirror'
 
-import { ActionCableProvider } from 'editor/actioncable-provider'
 import { CodeBlock as CodeBlockComponent } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
 import { MarkdownParser } from 'prosemirror-markdown'
 import SchemaManager from 'editor/schema'
-import { createConsumer } from '@rails/actioncable'
 import debounce from 'lodash.debounce'
 import { dropCursor } from 'prosemirror-dropcursor'
 import { gapCursor } from 'prosemirror-gapcursor'
 import { keymap } from 'prosemirror-keymap'
 import { patch } from '@rails/request.js'
-import { randomColor } from 'helpers/random-color'
 
 const CUSTOM_ARROW_HANDLERS = ['code_block', 'front_matter']
-const DEFAULT_EDITOR_NODES = ['doc', 'text', 'paragraph']
-
-class LocalRemoteUserData extends PermanentUserData {
-  /**
-   * @param {number} clientid
-   * @return {string}
-   */
-  getUserByClientId(clientid) {
-    return super.getUserByClientId(clientid) || 'remote'
-  }
-  /**
-   * @param {Y.ID} id
-   * @return {string}
-   */
-  getUserByDeletedId(id) {
-    return super.getUserByDeletedId(id) || 'remote'
-  }
-}
-
-const awarenessStatesToArray = (states: Map<number, Record<string, any>>) => {
-  return Array.from(states.entries()).map(([key, value]) => {
-    return {
-      clientId: key,
-      ...value.user
-    }
-  })
-}
 
 function arrowHandler(dir) {
   return (state, dispatch, view) => {
@@ -104,14 +52,10 @@ export default class ChuEditor extends LitElement {
   static properties = {
     autoSavePath: { type: String },
     autoFocus: { type: Boolean },
-    collaboration: { type: Object },
     excludeFrontmatter: { type: Boolean },
     imageUploadPath: { type: String },
     imageLoadPath: { type: String },
     editable: { type: Boolean },
-    contribution: { type: Boolean },
-    contributionPath: { type: String },
-    nodeName: { type: String },
     mode: { type: String },
     status: { type: String, reflect: true },
     onChange: { type: Function }
@@ -131,48 +75,24 @@ export default class ChuEditor extends LitElement {
   constructor() {
     super()
 
-    if (this.contribution && !this.contributionPath) {
-      throw 'Contribution path must be set'
-    }
-
     this.autoFocus = false
-    this.collaboration = null
+
     this.excludeFrontmatter = false
     this.mode = 'default'
     this.editable = false
-    this.contribution = false
-
-    if (this.mode === 'node') this.nodeName = 'paragraph'
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback()
 
-    if (this.collaboration) {
-      this.ydoc = new YDoc()
-      this.ydoc.gc = false
-      applyUpdateV2(this.ydoc, fromBase64(this.collaboration.ydoc))
-
-      this.startingYDoc = new YDoc()
-      this.startingYDoc.gc = false
-      applyUpdateV2(
-        this.startingYDoc,
-        fromBase64(this.collaboration.original_ydoc)
-      )
-    }
-
-    this.manager = this.isNodeEditor
-      ? new SchemaManager(this, [...DEFAULT_EDITOR_NODES, this.nodeName])
-      : new SchemaManager(this)
+    this.manager = new SchemaManager(this)
 
     this.schema = this.manager.schema
     this.contentParser = markdownParser(this.schema, this.isNodeEditor)
     this.contentSerializer = markdownSerializer(this.schema, this.isNodeEditor)
 
-    if (this.isNodeEditor || this.contribution) {
-      this.initialContent = this.querySelector('textarea.content').value
-      this.doc = this.contentParser.parse(this.initialContent)
-    }
+    this.initialContent = this.querySelector('textarea.content').value
+    this.doc = this.contentParser.parse(this.initialContent)
 
     this.state = this.createState()
     this.view = this.createView()
@@ -180,12 +100,6 @@ export default class ChuEditor extends LitElement {
     if (this.editable) {
       this.view.props.commands = this.manager.commands
       this.setActiveNodesAndMarks()
-    }
-
-    if (this.isDiffMode) {
-      setTimeout(() => {
-        this.attachVersion()
-      }, 100)
     }
 
     this.checkDirty()
@@ -196,7 +110,8 @@ export default class ChuEditor extends LitElement {
   }
 
   disconnectedCallback() {
-    if (this.collaboration) this.provider?.destroy()
+    super.disconnectedCallback()
+    this.destroy()
   }
 
   get isNodeEditor() {
@@ -208,174 +123,6 @@ export default class ChuEditor extends LitElement {
   }
 
   get plugins() {
-    let collaborationPlugins = []
-    let keymaps = {}
-
-    if (this.collaboration) {
-      this.users = []
-
-      const render = (user) => {
-        const cursor = document.createElement('span')
-
-        cursor.classList.add('collaboration-cursor__caret')
-        cursor.setAttribute('style', `border-color: ${user.color}`)
-
-        const label = document.createElement('div')
-
-        label.classList.add('collaboration-cursor__label')
-        label.setAttribute('style', `background-color: ${user.color}`)
-        label.insertBefore(document.createTextNode(user.name), null)
-        cursor.insertBefore(label, null)
-
-        return cursor
-      }
-
-      const currentUserColor = randomColor({
-        luminosity: 'light',
-        hue: 'orange',
-        seed: this.collaboration.user.username
-      })
-
-      const colors = Array.from(this.ydoc.getMap('users').keys()).map((key) => {
-        return {
-          light: randomColor({
-            seed: key,
-            hue: 'orange',
-            luminosity: 'light'
-          }),
-          dark: randomColor({
-            seed: key,
-            hue: 'orange',
-            luminosity: 'dark'
-          })
-        }
-      })
-
-      if (this.editable && this.collaboration.channel) {
-        this.provider = new ActionCableProvider(
-          createConsumer(),
-          this.collaboration,
-          this.ydoc
-        )
-
-        this.provider.on('synced', () => {
-          this.permanentUserData = new LocalRemoteUserData(
-            this.ydoc,
-            this.ydoc.getMap('users')
-          )
-
-          this.permanentUserData.setUserMapping(
-            this.ydoc,
-            this.ydoc.clientID,
-            this.collaboration.user.username
-          )
-        })
-
-        collaborationPlugins = [
-          ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
-            permanentUserData: this.permanentUserData,
-            colors
-          }),
-          yCursorPlugin(
-            (() => {
-              this.provider.awareness.setLocalStateField('user', {
-                color: currentUserColor,
-                ...this.collaboration.user
-              })
-
-              this.users = awarenessStatesToArray(
-                this.provider.awareness.states
-              )
-
-              this.provider.awareness.on('update', () => {
-                const update = awarenessStatesToArray(
-                  this.provider.awareness.states
-                )
-
-                this.users = awarenessStatesToArray(update)
-              })
-
-              return this.provider.awareness
-            })(),
-            {
-              cursorBuilder: render
-            }
-          ),
-          yUndoPlugin()
-        ]
-      } else {
-        this.permanentUserData = new LocalRemoteUserData(
-          this.ydoc,
-          this.ydoc.getMap('users')
-        )
-        this.permanentUserData.setUserMapping(
-          this.ydoc,
-          this.ydoc.clientID,
-          this.collaboration.user.username
-        )
-
-        collaborationPlugins.push(
-          ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
-            permanentUserData: this.permanentUserData,
-            colors
-          })
-        )
-      }
-
-      const commands = {
-        undo: () => ({ tr, state, dispatch }) => {
-          tr.setMeta('preventDispatch', true)
-
-          const undoManager: UndoManager = yUndoPluginKey.getState(state)
-            .undoManager
-
-          if (undoManager.undoStack.length === 0) {
-            return false
-          }
-
-          if (!dispatch) {
-            return true
-          }
-
-          return undo(state)
-        },
-        redo: () => ({ tr, state, dispatch }) => {
-          tr.setMeta('preventDispatch', true)
-
-          const undoManager: UndoManager = yUndoPluginKey.getState(state)
-            .undoManager
-
-          if (undoManager.redoStack.length === 0) {
-            return false
-          }
-
-          if (!dispatch) {
-            return true
-          }
-
-          return redo(state)
-        }
-      }
-
-      keymaps = {
-        'Mod-z': undo,
-        'Mod-y': redo,
-        'Mod-Shift-z': redo
-      }
-    }
-
-    if (this.mode !== 'node') {
-      keymaps = Object.assign({}, keymaps, {
-        ArrowLeft: arrowHandler('left'),
-        ArrowRight: arrowHandler('right'),
-        ArrowUp: arrowHandler('up'),
-        ArrowDown: arrowHandler('down'),
-        'Ctrl-s': this.handleSave,
-        'Mod-s': this.handleSave,
-        Escape: selectParentNode
-      })
-    }
-
     return [
       ...this.manager.plugins,
       inputRules({
@@ -386,6 +133,13 @@ export default class ChuEditor extends LitElement {
       keymap(baseKeymap),
       keymap({
         ...keymaps,
+        ArrowLeft: arrowHandler('left'),
+        ArrowRight: arrowHandler('right'),
+        ArrowUp: arrowHandler('up'),
+        ArrowDown: arrowHandler('down'),
+        'Ctrl-s': this.handleSave,
+        'Mod-s': this.handleSave,
+        Escape: selectParentNode,
         Backspace: undoInputRule
       }),
 
@@ -405,20 +159,15 @@ export default class ChuEditor extends LitElement {
             tabindex: 0
           }
         }
-      }),
-      ...collaborationPlugins
+      })
     ]
   }
 
   createState = () => {
     let options = {
+      doc: this.doc,
       schema: this.schema,
-      contributions: [],
       plugins: this.plugins
-    }
-
-    if (this.contribution || this.isNodeEditor) {
-      options['doc'] = this.doc
     }
 
     return EditorState.create(options)
@@ -431,7 +180,6 @@ export default class ChuEditor extends LitElement {
       editable: () => this.editable,
       imageLoadPath: this.imageLoadPath,
       imageUploadPath: this.imageUploadPath,
-      contributionPath: this.contributionPath,
       dispatchTransaction: this.dispatchTransaction.bind(this),
       nodeViews: this.manager.nodeViews
     })
@@ -452,79 +200,14 @@ export default class ChuEditor extends LitElement {
     return true
   }
 
-  autosave = debounce(
-    async () => {
-      const statusElement = document.getElementById('chu-editor-status')
-      if (statusElement) statusElement.textContent = 'Auto saving...'
-      this.addVersion()
+  autosave = () => {
+    const statusElement = document.getElementById('chu-editor-status')
+    if (statusElement) statusElement.textContent = 'Auto saving...'
 
-      const startingProsemirrorDoc = yDocToProsemirror(
-        this.schema,
-        this.startingYDoc
-      )
-
-      const startingFragment = Fragment.from(startingProsemirrorDoc)
-      const currentFragment = Fragment.from(this.state.doc)
-      const stale = startingFragment.findDiffStart(currentFragment)
-
-      const response = await patch(this.autoSavePath, {
-        body: JSON.stringify({
-          draft: {
-            current_ydoc: toBase64(encodeStateAsUpdateV2(this.ydoc)),
-            doc_changed: !!stale
-          }
-        })
-      })
-
-      if (response.ok) {
-        this.dirty = false
-      }
-    },
-    2000,
-    { maxWait: 5000 }
-  )
-
-  attachVersion = () => {
-    const versions = this.ydoc.getArray('versions')
-
-    this.dispatchTransaction(
-      this.state.tr.setMeta(ySyncPluginKey, {
-        snapshot: decodeSnapshotV2(versions.get(versions.length - 1).snapshot),
-        prevSnapshot: decodeSnapshotV2(versions.get(0).snapshot)
-      })
-    )
-  }
-
-  addVersion = () => {
-    const versions = this.ydoc.getArray('versions')
-
-    const prevVersion =
-      versions.length === 0 ? null : versions.get(versions.length - 1)
-    const prevSnapshot =
-      prevVersion === null
-        ? emptySnapshot
-        : decodeSnapshotV2(prevVersion.snapshot)
-
-    const currentSnapshot = snapshot(this.ydoc)
-
-    if (prevVersion != null) {
-      // account for the action of adding a version to ydoc
-      prevSnapshot.sv.set(
-        prevVersion.clientID,
-        /** @type {number} */ (prevSnapshot.sv.get(prevVersion.clientID)) + 1
-      )
+    // Save to local storage
+    if (response.ok) {
+      this.dirty = false
     }
-    if (!equalSnapshots(prevSnapshot, currentSnapshot)) {
-      versions.push([
-        {
-          date: new Date().getTime(),
-          snapshot: encodeSnapshotV2(currentSnapshot),
-          clientID: this.ydoc.clientID
-        }
-      ])
-    }
-
-    return currentSnapshot
   }
 
   dispatchTransaction(transaction: Transaction) {
@@ -552,49 +235,6 @@ export default class ChuEditor extends LitElement {
 
   blur() {
     this.view.dom.blur()
-  }
-
-  setActiveNodesAndMarks() {
-    this.activeMarks = Object.entries(this.schema.marks).reduce(
-      (marks, [name, mark]) => ({
-        ...marks,
-        [name]: (attrs = {}) => isMarkActive(this.state, mark, attrs)
-      }),
-      {}
-    )
-
-    this.activeMarkAttrs = Object.entries(this.schema.marks).reduce(
-      (marks, [name, mark]) => ({
-        ...marks,
-        [name]: getMarkAttrs(this.state, mark)
-      }),
-      {}
-    )
-
-    this.activeNodes = Object.entries(this.schema.nodes).reduce(
-      (nodes, [name, node]) => ({
-        ...nodes,
-        [name]: (attrs = {}) => isNodeActive(this.state, node, attrs)
-      }),
-      {}
-    )
-  }
-
-  getMarkAttrs(type: string) {
-    return this.activeMarkAttrs[type]
-  }
-
-  get isActive() {
-    return Object.entries({
-      ...this.activeMarks,
-      ...this.activeNodes
-    }).reduce(
-      (types, [name, value]: [{ type: String }, Function]) => ({
-        ...types,
-        [name]: (attrs = {}) => value(attrs)
-      }),
-      {}
-    )
   }
 
   get content() {
