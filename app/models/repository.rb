@@ -33,7 +33,7 @@ class Repository < ApplicationRecord
     path = (pathname.absolute? ? pathname.relative_path_from('/') : pathname).to_s
     content = case git_provider.name.to_sym
               when :github
-                blob = assets.find { |asset| asset.path == path }
+                blob = tree(path: path).find { |asset| asset.path == path }
                 git_provider_adapter.asset(sha: blob.sha).content
               else
                 asset(path: path).content

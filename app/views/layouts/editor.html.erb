@@ -11,7 +11,7 @@
     <%= turbo_stream_from(@collaboration_session, :collaborators) %>
     <%= render 'publications/drafts/collaborators', members: @collaboration_session.members.order(:id) if @collaboration_session %>
 
-    <main class="container flex-1">
+    <main class="container flex-1 pt-24">
       <%= yield %>
     </main>
   </body>

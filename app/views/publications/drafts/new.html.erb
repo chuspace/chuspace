@@ -4,17 +4,6 @@
     The new draft will be persisted into the connected Git repository.
   </p>
 
-  <div class="text-sm breadcrumbs">
-    <ul>
-      <li>
-        <%= link_to @publication.permalink, user_path(@publication), class: 'link link-primary' %>
-      </li>
-      <li>
-        <%= link_to @publication.repository.full_name, publication_path(@publication), class: 'link link-primary' %>
-      </li>
-    </ul>
-  </div>
-
   <div class='mt-8'>
     <%= render 'form', draft: @draft, publication: @publication %>
   </div>
