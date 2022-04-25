@@ -4,8 +4,7 @@ class ChuspaceConfig < ApplicationConfig
   attr_config(
     app: {
       name: 'Chuspace',
-      twitter: '@chuspace_com',
-      out_of_private_beta: ENV['OUT_OF_PRIVATE_BETA'] || true
+      twitter: '@chuspace_com'
     }
   )
 end
