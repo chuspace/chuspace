@@ -7,12 +7,12 @@ module Connect
     private
 
     def create_publication_path
-      create_connect_personal_publication_path(@git_provider, repo_fullname: @publication.repo.fullname)
+      create_connect_personal_publication_path(@git_provider, repo_fullname: @publication.repository.full_name)
     end
 
     def publication_params
       params.require(:publication).permit(
-        repo_attributes: %i[posts_folder drafts_folder assets_folder readme_path]
+        repository_attributes: %i[posts_folder drafts_folder assets_folder readme_path]
       )
     end
 

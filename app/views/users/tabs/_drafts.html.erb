@@ -9,7 +9,7 @@
 
   <% card.body do %>
     <% if @user.personal_publication.present? %>
-      <%= render partial: 'publications/drafts/item', collection: @user.personal_publication.drafts, locals: { publication: @user.personal_publication }, as: :draft %>
+      <%= render partial: 'publications/drafts/item', collection: @user.personal_publication.repository.drafts, locals: { publication: @user.personal_publication }, as: :draft %>
     <% else %>
       <%= render 'shared/placeholder', content: 'No personal published connected' %>
     <% end %>

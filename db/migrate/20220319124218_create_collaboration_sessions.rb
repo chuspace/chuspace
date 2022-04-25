@@ -9,6 +9,8 @@ class CreateCollaborationSessions < ActiveRecord::Migration[7.0]
     create_table :collaboration_sessions do |t|
       t.references :publication, null: false, foreign_key: true
 
+      t.text :blob_sha
+      t.text :commit_sha
       t.text :blob_path, null: false, index: true
       t.text :initial_ydoc, null: false
       t.text :current_ydoc

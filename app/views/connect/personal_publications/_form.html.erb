@@ -1,4 +1,4 @@
-<%= simple_form_for(publication, url: create_connect_personal_publication_path(publication.git_provider, repo_fullname: publication.repository.full_name), html: { class: 'relative', data: { target: "turbo-frame": '_top' } }) do |form| %>
+<%= simple_form_for(publication, url: create_connect_personal_publication_path(publication.git_provider, repo_fullname: publication.repository.full_name), html: { class: 'relative', data: { "turbo-frame": '_top' } }) do |form| %>
   <%= form.simple_fields_for :repository do |repo_form| %>
     <%= repo_form.input :posts_folder, as: :select, collection: publication.repository.folders, include_blank: 'Choose' %>
     <%= repo_form.input :drafts_folder, as: :select, collection: publication.repository.folders, include_blank: 'Choose' %>
@@ -11,5 +11,6 @@
       )
     %>
   <% end %>
+
   <%= form.button :submit, 'Connect', class: "mt-12 btn btn-primary" %>
 <% end %>
