@@ -21,9 +21,6 @@ gem 'mini_mime'
 gem 'wicked'
 gem 'kredis'
 
-# API serializer
-gem 'alba'
-
 # JSONB attributes
 gem 'active_type'
 gem 'attr_json'
