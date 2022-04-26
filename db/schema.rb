@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "git_provider_enum_type", ["github"]
+  create_enum "git_provider_enum_type", ["github", "github_enterprise", "gitlab", "gitlab_foss", "gitea"]
   create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "admin", "owner", "member"]
@@ -123,12 +123,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
     t.string "label", null: false
     t.text "access_token"
     t.text "refresh_access_token"
-    t.text "client_id", null: false
-    t.text "client_secret", null: false
-    t.text "api_endpoint", null: false
-    t.text "refresh_access_token_endpoint", null: false
+    t.text "client_id"
+    t.text "client_secret"
+    t.text "api_endpoint"
+    t.text "refresh_access_token_endpoint"
     t.string "access_token_param", null: false
     t.string "scopes", null: false
+    t.boolean "enabled", default: true, null: false
     t.bigint "user_id", null: false
     t.datetime "access_token_expires_at"
     t.datetime "created_at", null: false

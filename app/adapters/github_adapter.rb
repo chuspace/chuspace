@@ -49,33 +49,6 @@ class GithubAdapter < ApplicationAdapter
     update_blob(path: path, content: content, committer: committer, author: author, sha: sha, message: message)
   end
 
-  def create_repository_webhook(type: nil)
-    url = if Rails.env.production?
-      Rails.application.routes.url_helpers.webhooks_github_repos_url
-    else
-      Rails.application.routes.url_helpers.webhooks_github_repos_url(host: Rails.application.credentials.webhooks[:dev_host])
-    end
-
-    payload = {
-      events: %w[push repository],
-      active: true,
-      config: {
-        url: url,
-        content_type: 'json',
-        secret: Rails.application.credentials.webhooks[:secret]
-      }
-    }
-
-    payload[:type] = type if type
-    post("repos/#{repo_fullname}/hooks", payload)
-  rescue FaradayClient::Conflict, FaradayClient::UnprocessableEntity
-    false
-  end
-
-  def delete_repository_webhook(id:)
-    boolean_from_response(:delete, "repos/#{repo_fullname}/hooks/#{id}")
-  end
-
   def delete_blob(path:, id:, message: nil, committer:, author:)
     message ||= "Delete #{path}"
     blob_from_response(delete("repos/#{repo_fullname}/contents/#{path}", { sha: id, message: message }).content)

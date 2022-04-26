@@ -10,10 +10,8 @@ class ApplicationAdapter
     blob
     blobs
     create_blob
-    create_repository_webhook
     commit
     commits
-    delete_repository_webhook
     delete_blob
     head_sha
     orgs

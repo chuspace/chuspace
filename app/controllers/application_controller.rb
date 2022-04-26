@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  include PrivateBeta
   include ParamsSanitizer
   include Authentication
   include SetCurrentRequestDetails

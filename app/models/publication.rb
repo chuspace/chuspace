@@ -3,7 +3,7 @@
 class Publication < ApplicationRecord
   extend FriendlyId
   include PgSearch::Model
-  include Iconable, Collaboratable
+  include Iconable
   include AttrJson::Record
   include AttrJson::Record::QueryScopes
   include AttrJson::NestedAttributes

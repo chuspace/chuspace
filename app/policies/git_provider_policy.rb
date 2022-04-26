@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
 class GitProviderPolicy < ApplicationPolicy
-  alias_rule :new?, :create?, :setup?, to: :index?
+  alias_rule :new?, :create?, to: :index?
   alias_rule :update?, :destroy?, :show?, to: :edit?
 
   def index?
     true
+  end
+
+  def setup?
+    record.enabled? && edit?
   end
 
   def edit?

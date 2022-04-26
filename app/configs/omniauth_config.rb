@@ -49,6 +49,53 @@ class OmniauthConfig < ApplicationConfig
           callback_path: '/git_providers/github/callback',
           scope: 'user,profile,repo,admin:repo_hook'
         }
+      },
+      github_enterprise: {
+        label: 'Github Enterprise storage',
+        method: :post,
+        id: :github_enterprise,
+        url: '/auth/github_enterprise_storage',
+        options: {
+          name: 'github_enterprise_storage',
+          setup: true,
+          callback_path: '/git_providers/github_enterprise/callback',
+          scope: 'user,profile,repo,admin:repo_hook'
+        }
+      },
+      gitlab: {
+        label: 'Gitlab storage',
+        method: :post,
+        id: :gitlab,
+        url: '/auth/gitlab_storage',
+        options: {
+          name: 'gitlab_storage',
+          setup: true,
+          callback_path: '/git_providers/gitlab/callback',
+          scope: 'api'
+        }
+      },
+      gitlab_foss: {
+        label: 'Gitlab FOSS storage',
+        method: :post,
+        id: :gitlab_foss,
+        url: '/auth/gitlab_foss_storage',
+        options: {
+          name: 'gitlab_foss_storage',
+          setup: true,
+          callback_path: '/git_providers/gitlab_foss/callback',
+          scope: 'api'
+        }
+      },
+      gitea: {
+        label: 'Gitea storage',
+        method: :post,
+        id: :gitea,
+        url: '/auth/gitea_storage',
+        options: {
+          name: 'gitea_storage',
+          setup: true,
+          callback_path: '/git_providers/gitea/callback'
+        }
       }
     }
   )

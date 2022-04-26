@@ -18,4 +18,9 @@
   </div>
 
   <%= render('connect/shared/choose_repository', git_provider_user: @git_provider_user, git_provider: @git_provider, publication: @publication) %>
+
+  <div class='mt-8 flex items-center'>
+    <span>Can't see your repo here?</span>
+    <%= button_to 'Configure repository', '/auth/github_storage', class: 'link link-primary ml-2', data: { turbo: false } %>
+  </div>
 <% end %>

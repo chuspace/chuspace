@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Repository < ApplicationRecord
-  include Repoable
-
   belongs_to :publication
   belongs_to :git_provider
 
@@ -11,18 +9,6 @@ class Repository < ApplicationRecord
   validates :readme_path, markdown: true
 
   delegate :name, :description, :html_url, :owner, :default_branch, to: :git
-
-  CONFIG_FILE_PATH = 'chuspace.yml'
-  CONNECT_MESSAGE = 'Connect chuspace'
-  DISCONNECT_MESSAGE = 'Disconnect chuspace'
-
-  def self.chuspace_yaml_config
-    PublicationConfig.new.to_h.deep_stringify_keys.to_yaml
-  end
-
-  def config_exists?
-    git_provider_adapter.blob(path: CONFIG_FILE_PATH).persisted?
-  end
 
   def assets_folders
     [assets_folder].freeze

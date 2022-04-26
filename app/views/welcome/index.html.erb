@@ -7,27 +7,9 @@
       <%= t('.intro').html_safe %>
     </h4>
 
-    <% if ChuspaceConfig.new.app[:out_of_private_beta] %>
-      <div class='mt-8 flex items-center justify-center'>
-        <%= link_to 'Get started', signups_path, class: 'btn btn-primary', 'data-turbo': false %>
-        <%= link_to 'Our story', '#', class: 'btn btn-secondary btn-outline ml-2', 'data-turbo': false %>
-      </div>
-    <% else %>
-      <dialog-opener>
-        <div class='mt-8'>
-          <%= link_to 'Request beta invite', '#', class: 'btn btn-primary', 'data-turbo': false, 'data-action': 'click:dialog-opener#open' %>
-        </div>
-        <div class="modal" data-target='dialog-opener.dialog'>
-          <div class="modal-box shadow-xl bg-base-300">
-            <h1 class='text-base font-normal mb-8'>Request beta invite</h1>
-            <%= link_to '#', class: 'absolute right-0 top-0 mt-8 mr-8', 'data-action': 'click:dialog-opener#close' do %>
-              <%= inline_svg_tag('icons/x.svg', class: 'w-4 h-4 fill-current') %>
-            <% end %>
-
-            <%= render 'shared/identities' %>
-          </div>
-        </div>
-      </dialog-opener>
-    <% end %>
+    <div class='mt-8 flex items-center justify-center'>
+      <%= link_to 'Get started', signups_path, class: 'btn btn-primary', 'data-turbo': false %>
+      <%= link_to 'Our story', '#', class: 'btn btn-secondary btn-outline ml-2', 'data-turbo': false %>
+    </div>
   </div>
 </section>
