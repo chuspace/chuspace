@@ -19,7 +19,7 @@ class Repository < ApplicationRecord
     path = (pathname.absolute? ? pathname.relative_path_from('/') : pathname).to_s
     content = case git_provider.name.to_sym
               when :github
-                blob = tree(path: path).find { |asset| asset.path == path }
+                blob = tree.find { |asset| asset.path == path }
                 git_provider_adapter.asset(sha: blob.sha).content
               else
                 asset(path: path).content
@@ -109,8 +109,8 @@ class Repository < ApplicationRecord
     git_provider_adapter(ref: ref).blob(path: readme_path).decorate(publication: publication)
   end
 
-  def tree(path:, ref: default_ref)
-    git_provider_adapter(ref: ref).tree(path: path)
+  def tree(ref: default_ref)
+    git_provider_adapter(ref: ref).tree
   end
 
   def webhooks
