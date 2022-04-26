@@ -12,8 +12,10 @@ module GitProviders
       gitlab_provider.update!(
         access_token: auth_hash.credentials.token,
         refresh_access_token: auth_hash.credentials.refresh_token,
+        app_installation_id: params[:installation_id],
         access_token_expires_at: auth_hash.credentials.expires ? Time.at(auth_hash.credentials.expires_at) : nil
       )
+
       redirect_to request.env['omniauth.origin']
     end
   end

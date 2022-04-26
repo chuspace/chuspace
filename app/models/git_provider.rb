@@ -10,6 +10,8 @@ class GitProvider < ApplicationRecord
   validates :name, :label, :api_endpoint, :client_id, :client_secret, presence: true
   validates :name, uniqueness: { scope: :user_id }
 
+  store_accessor :client_options, :site, :authorize_url, :token_url
+
   enum name: GitStorageConfig.providers_enum
 
   def connected?
@@ -21,18 +23,12 @@ class GitProvider < ApplicationRecord
   end
 
   def expiring?
-    refresh_access_token.present?
+    access_token_expires_at.present?
   end
 
   def adapter
-    options = { access_token: access_token, endpoint: api_endpoint, access_token_param: access_token_param }
-
-    case name
-    when 'github' then GithubAdapter.new(**options)
-    when 'gitea' then GiteaAdapter.new(**options)
-    when 'gitlab' then GitlabAdapter.new(**options)
-    else fail GitAdapterNotFoundError, "#{name} adapter not found"
-    end
+    # Implement adapters here
+    GithubAdapter.new(git_provider: self)
   end
 
   def to_param

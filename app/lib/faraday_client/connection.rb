@@ -113,11 +113,16 @@ module FaradayClient
     # Hypermedia agent for the API
     # @return [Sawyer::Agent]
     def agent
-      @agent ||= Sawyer::Agent.new(endpoint, sawyer_options) do |http|
+      @agent ||= Sawyer::Agent.new(git_provider.api_endpoint, sawyer_options) do |http|
         http.headers[:accept] = default_media_type
         http.headers[:content_type] = 'application/json'
         http.headers[:user_agent] = user_agent
-        http.authorization access_token_param, @access_token
+
+        if @access_token
+          http.authorization 'Bearer', @access_token
+        else
+          http.authorization git_provider.access_token_param, git_provider.access_token
+        end
       end
     end
 
@@ -188,7 +193,7 @@ module FaradayClient
           user_agent: user_agent,
           content_type: 'application/json'
         },
-        url: endpoint,
+        url: git_provider.api_endpoint,
         ssl: { verify: false }
       }
 

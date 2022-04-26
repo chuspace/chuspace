@@ -579,6 +579,7 @@ DEPENDENCIES
   http
   image_processing
   inline_svg
+  jwt
   kredis
   maxminddb
   meta-tags

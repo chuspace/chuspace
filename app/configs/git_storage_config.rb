@@ -15,7 +15,12 @@ class GitStorageConfig < ApplicationConfig
       enabled: true,
       scopes: 'user,profile,repo,admin:repo_hook',
       client_id: Rails.application.credentials.github_storage[:client_id],
-      client_secret: Rails.application.credentials.github_storage[:client_secret]
+      client_secret: Rails.application.credentials.github_storage[:client_secret],
+      client_options: {
+        site: 'https://api.github.com',
+        authorize_url: "https://github.com/apps/#{Rails.application.credentials.github_storage[:app_name]}/installations/new",
+        token_url: 'https://github.com/login/oauth/access_token'
+      }
     },
     github_enterprise: {
       label: 'GitHub Enterprise',
@@ -26,7 +31,8 @@ class GitStorageConfig < ApplicationConfig
       enabled: false,
       scopes: 'user,profile,repo,admin:repo_hook',
       client_id: '',
-      client_secret: ''
+      client_secret: '',
+      client_options: {}
     },
     gitlab: {
       label: 'GitLab.com',
@@ -37,7 +43,12 @@ class GitStorageConfig < ApplicationConfig
       access_token_param: 'Bearer',
       scopes: 'api',
       client_id: '',
-      client_secret: ''
+      client_secret: '',
+      client_options: {
+        site: 'https://gitlab.com/api/v4',
+        authorize_url: "https://gitlab.com/oauth/authorize",
+        token_url: 'https://gitlab.com/oauth/token'
+      }
     },
     gitlab_foss: {
       label: 'GitLab FOSS',
@@ -48,7 +59,8 @@ class GitStorageConfig < ApplicationConfig
       access_token_param: 'Bearer',
       scopes: 'api',
       client_id: '',
-      client_secret: ''
+      client_secret: '',
+      client_options: {}
     },
     gitea: {
       label: 'Gitea.com',
@@ -59,7 +71,12 @@ class GitStorageConfig < ApplicationConfig
       access_token_param: :token,
       scopes: '*',
       client_id: '',
-      client_secret: ''
+      client_secret: '',
+      client_options: {
+        site: 'https://gitea.com/api/v1',
+        authorize_url: "https://gitea.com/login/oauth/authorize",
+        token_url: 'https://gitea.com/login/oauth/access_token'
+      }
     }
   )
 

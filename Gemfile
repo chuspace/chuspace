@@ -21,6 +21,9 @@ gem 'mini_mime'
 gem 'wicked'
 gem 'kredis'
 
+# Sign web tokens
+gem 'jwt'
+
 # JSONB attributes
 gem 'active_type'
 gem 'attr_json'

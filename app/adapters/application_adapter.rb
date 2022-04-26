@@ -4,7 +4,7 @@ class ApplicationAdapter
   class MethodNotImplementedError < StandardError; end
 
   include FaradayClient::Connection
-  attr_accessor :endpoint, :access_token, :access_token_param, :repo_fullname, :ref
+  attr_accessor :git_provider, :repo_fullname, :ref
 
   REQUIRED_METHODS = %w[
     blob
@@ -26,10 +26,9 @@ class ApplicationAdapter
     webhooks
   ]
 
-  def initialize(endpoint:, access_token:, access_token_param:)
-    @endpoint = endpoint
-    @access_token = access_token
-    @access_token_param = access_token_param
+  def initialize(git_provider:)
+    @git_provider = git_provider
+    @git_provider.refresh_access_token unless @git_provider.connected?
 
     check_method_implementation!
   end

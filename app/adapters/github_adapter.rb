@@ -5,6 +5,12 @@ class GithubAdapter < ApplicationAdapter
     'github'
   end
 
+  def refresh_app_installation_token
+    @access_token = authentication_payload
+    response = post "app/installations/#{git_provider.app_installation_id}/access_tokens"
+    update(access_token: response.token, access_token_expires_at: response.expires_at)
+  end
+
   def asset(sha:)
     opts = { ref: ref }
     get("repos/#{repo_fullname}/git/blobs/#{sha}", **opts)
@@ -115,6 +121,16 @@ class GithubAdapter < ApplicationAdapter
   end
 
   private
+
+  def authentication_payload
+    payload = {
+      iat: Time.now.to_i,
+      exp: 10.minutes.from_now.to_i,
+      iss: Rails.application.credentials.github_storage[:app_id],
+    }
+    key = OpenSSL::PKey::RSA.new(Rails.application.credentials.github_storage[:private_key])
+    JWT.encode(payload, key, 'RS256')
+  end
 
   def search(path, query, options = {})
     opts = options.merge(q: query)

@@ -11,6 +11,7 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
       t.text :refresh_access_token
       t.text :client_id
       t.text :client_secret
+      t.text :app_installation_id
       t.text :api_endpoint
       t.text :refresh_access_token_endpoint
 
@@ -18,8 +19,11 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
       t.string :scopes, null: false
 
       t.boolean :enabled, null: false, default: true
+      t.boolean :self_managed, null: false, default: false
 
       t.references :user, null: false, foreign_key: true
+
+      t.jsonb :client_options, default: {}, null: false
 
       t.datetime :access_token_expires_at
 

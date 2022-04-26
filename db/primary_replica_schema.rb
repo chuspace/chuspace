@@ -125,12 +125,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
     t.text "refresh_access_token"
     t.text "client_id"
     t.text "client_secret"
+    t.text "app_installation_id"
     t.text "api_endpoint"
     t.text "refresh_access_token_endpoint"
     t.string "access_token_param", null: false
     t.string "scopes", null: false
     t.boolean "enabled", default: true, null: false
+    t.boolean "self_managed", default: false, null: false
     t.bigint "user_id", null: false
+    t.jsonb "client_options", default: {}, null: false
     t.datetime "access_token_expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
