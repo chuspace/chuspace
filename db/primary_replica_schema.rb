@@ -121,20 +121,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
 
   create_table "git_providers", force: :cascade do |t|
     t.string "label", null: false
-    t.text "access_token"
-    t.text "refresh_access_token"
+    t.text "machine_access_token"
+    t.text "user_access_token"
     t.text "client_id"
     t.text "client_secret"
     t.text "app_installation_id"
     t.text "api_endpoint"
-    t.text "refresh_access_token_endpoint"
-    t.string "access_token_param", null: false
+    t.string "user_access_token_param", null: false
     t.string "scopes", null: false
     t.boolean "enabled", default: true, null: false
     t.boolean "self_managed", default: false, null: false
     t.bigint "user_id", null: false
     t.jsonb "client_options", default: {}, null: false
-    t.datetime "access_token_expires_at"
+    t.datetime "user_access_token_expires_at"
+    t.datetime "machine_access_token_expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.enum "name", null: false, enum_type: "git_provider_enum_type"
@@ -227,7 +227,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
     t.citext "permalink", null: false
     t.text "title", null: false
     t.text "summary"
-    t.text "ydoc", null: false
+    t.text "body", null: false
+    t.text "body_html", null: false
     t.text "blob_path", null: false
     t.text "blob_sha", null: false
     t.text "commit_sha", null: false

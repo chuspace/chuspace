@@ -2,6 +2,7 @@
   <chu-editor
       imageUploadPath='<%= publication_create_assets_path(@publication) %>'
       imageLoadPath='<%= publication_asset_path(@publication) %>'
+      autoSavePath='<%= publication_autosave_draft_path(@publication, @draft) %>'
       editable
       <%= @draft.front_matter? ? '' : 'excludeFrontmatter' %>
     >
@@ -13,7 +14,7 @@
               as: :text,
               label: false,
               wrapper: false,
-              input_html: { class: 'hidden content', value: @draft.decoded_content  }
+              input_html: { class: 'hidden content', value: @draft.local_or_remote_content  }
             )
           %>
         </div>

@@ -9,9 +9,8 @@ class GitStorageConfig < ApplicationConfig
     github: {
       label: 'GitHub.com',
       name: :github,
-      refresh_access_token_endpoint: 'https://github.com/login/oauth/access_token',
       api_endpoint: 'https://api.github.com',
-      access_token_param: :token,
+      user_access_token_param: :token,
       enabled: true,
       scopes: 'user,profile,repo,admin:repo_hook',
       client_id: Rails.application.credentials.github_storage[:client_id],
@@ -25,9 +24,8 @@ class GitStorageConfig < ApplicationConfig
     github_enterprise: {
       label: 'GitHub Enterprise',
       name: :github_enterprise,
-      refresh_access_token_endpoint: '',
       api_endpoint: '',
-      access_token_param: :token,
+      user_access_token_param: :token,
       enabled: false,
       scopes: 'user,profile,repo,admin:repo_hook',
       client_id: '',
@@ -38,15 +36,14 @@ class GitStorageConfig < ApplicationConfig
       label: 'GitLab.com',
       name: :gitlab,
       enabled: false,
-      refresh_access_token_endpoint: 'https://gitlab.com/oauth/token',
       api_endpoint: 'https://gitlab.com/api/v4',
-      access_token_param: 'Bearer',
+      user_access_token_param: 'Bearer',
       scopes: 'api',
       client_id: '',
       client_secret: '',
       client_options: {
         site: 'https://gitlab.com/api/v4',
-        authorize_url: "https://gitlab.com/oauth/authorize",
+        authorize_url: 'https://gitlab.com/oauth/authorize',
         token_url: 'https://gitlab.com/oauth/token'
       }
     },
@@ -54,9 +51,8 @@ class GitStorageConfig < ApplicationConfig
       label: 'GitLab FOSS',
       name: :gitlab_foss,
       enabled: false,
-      refresh_access_token_endpoint: '',
       api_endpoint: '',
-      access_token_param: 'Bearer',
+      user_access_token_param: 'Bearer',
       scopes: 'api',
       client_id: '',
       client_secret: '',
@@ -66,15 +62,14 @@ class GitStorageConfig < ApplicationConfig
       label: 'Gitea.com',
       name: :gitea,
       enabled: false,
-      refresh_access_token_endpoint: 'https://gitea.com/login/oauth/access_token',
       api_endpoint: 'https://gitea.com/api/v1',
-      access_token_param: :token,
+      user_access_token_param: :token,
       scopes: '*',
       client_id: '',
       client_secret: '',
       client_options: {
         site: 'https://gitea.com/api/v1',
-        authorize_url: "https://gitea.com/login/oauth/authorize",
+        authorize_url: 'https://gitea.com/login/oauth/authorize',
         token_url: 'https://gitea.com/login/oauth/access_token'
       }
     }

@@ -5,6 +5,8 @@ class Draft < Git::Blob
   validates :path, :name, markdown: true
   validates :publication, presence: true
 
+  kredis_string :local_content, expires_in: 1.day, key: ->(draft) { "#{draft.publication.permalink}:#{draft.path}:local_content" }
+
   def body
     parsed.content
   end
@@ -37,6 +39,10 @@ class Draft < Git::Blob
   def front_matter_str
     str = front_matter.to_yaml
     str += "---\n"
+  end
+
+  def local_or_remote_content
+    local_content.value.presence || decoded_content
   end
 
   def markdown_doc
@@ -106,6 +112,8 @@ class Draft < Git::Blob
       topic_list: topics,
       blob_path: path,
       blob_sha: id,
+      body: body,
+      body_html: content_html,
       commit_sha: commits.first&.id || commits.first&.sha
     }
   end
@@ -114,8 +122,19 @@ class Draft < Git::Blob
     post = publication.posts.build(author: author)
     post.assign_attributes(to_post_attributes)
     post.assign_attributes(other_attributes)
-    post.ydoc = $ydoc.compile(content: decoded_content, username: author.username)
     post.save ? post : false
+  end
+
+  def stale?
+    local_content.value.present? && local_content.value != decoded_content
+  end
+
+  def status
+    if stale?
+      'Uncommitted changes'
+    else
+      'Everything up to date'
+    end
   end
 
   def new_template

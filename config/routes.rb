@@ -110,6 +110,10 @@ Rails.application.routes.draw do
           get '/*path/commit', action: :new, as: :new_commit_draft
           post '/*path/commit', action: :create, as: :commit_draft
         end
+
+        scope controller: :autosaves, module: :drafts do
+          patch '/*path/autosave', action: :update, as: :autosave_draft
+        end
       end
 
       scope constraints: { publication_permalink: /[a-z0-9_\-]+/, permalink: /[a-z0-9_\-]+/ } do

@@ -27,6 +27,7 @@ module Publications
       @draft.assign_attributes(name: draft_params[:name], path: @drafts_root_path.join(draft_params[:name]).to_s)
 
       if @draft.valid? && @draft.create(**commit_params)
+        @draft.local_content.value = nil
         redirect_to publication_edit_draft_path(@publication, @draft)
       else
         respond_to do |format|
@@ -40,6 +41,7 @@ module Publications
       authorize! @draft
 
       if @draft.delete(**commit_params)
+        @draft.local_content.value = nil
         redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
       else
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
@@ -51,6 +53,7 @@ module Publications
 
       if @draft.update(**commit_params)
         @draft.publish(author: Current.user) if draft_params[:auto_publish].present?
+        @draft.local_content.value = nil
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
       else
         respond_to do |format|
@@ -79,7 +82,7 @@ module Publications
 
     def commit_params
       {
-        content: @draft.persisted? ? draft_params[:content] : @draft.new_template,
+        content: @draft.persisted? ? @draft.local_or_remote_content : @draft.new_template,
         message: draft_params[:commit_message],
         committer: Git::Committer.chuspace,
         author: Git::Committer.for(user: Current.user)

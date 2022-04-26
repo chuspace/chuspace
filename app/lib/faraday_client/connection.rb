@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 require 'typhoeus'
-require 'typhoeus/adapters/faraday'
 require_relative 'middleware/follow_redirects'
 require_relative 'middleware/raise_error'
 require_relative 'middleware/feed_parser'
 
 module FaradayClient
   module Connection
-    MIDDLEWARE = Faraday::RackBuilder.new do |builder|
-      builder.use Faraday::Request::Retry, exceptions: [FaradayClient::ServerError]
-      builder.use FaradayClient::Middleware::FollowRedirects
-      builder.use FaradayClient::Middleware::RaiseError
-      unless Rails.env.production?
-        builder.response :logger, nil, { headers: true, bodies: true }
+    module NullSerializer
+      extend self
+
+      def load(object)
+        object
       end
-      builder.use FaradayClient::Middleware::FeedParser
-      builder.adapter :typhoeus, http_version: :httpv2_0
+
+      def dump(object)
+        object
+      end
     end
 
     # Header keys that can be passed in options hash to {#get},{#head}
@@ -117,12 +117,6 @@ module FaradayClient
         http.headers[:accept] = default_media_type
         http.headers[:content_type] = 'application/json'
         http.headers[:user_agent] = user_agent
-
-        if @access_token
-          http.authorization 'Bearer', @access_token
-        else
-          http.authorization git_provider.access_token_param, git_provider.access_token
-        end
       end
     end
 
@@ -197,8 +191,29 @@ module FaradayClient
         ssl: { verify: false }
       }
 
-      opts[:builder] = MIDDLEWARE
-      Faraday.new(opts)
+      opts[:builder] = Faraday.new do |builder|
+        builder.use FaradayClient::Middleware::FollowRedirects
+        builder.use FaradayClient::Middleware::RaiseError
+        builder.use(
+          Faraday::HttpCache,
+          shared_cache: false,
+          store: Rails.cache,
+          logger: Rails.logger,
+          serializer: NullSerializer,
+        )
+
+        builder.use FaradayClient::Middleware::HTTPCacheMiddleware
+        builder.use FaradayClient::Middleware::FeedParser
+
+        builder.request :authorization, access_token_param, access_token
+        builder.request :retry, exceptions: [FaradayClient::ServerError]
+
+        unless Rails.env.production?
+          builder.response :logger, nil, { headers: true, bodies: false }
+        end
+
+        builder.adapter :typhoeus, http_version: :httpv2_0
+      end
     end
 
     def parse_query_and_convenience_headers(options)

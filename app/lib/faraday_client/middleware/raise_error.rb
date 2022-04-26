@@ -4,7 +4,7 @@ require_relative '../error.rb'
 
 module FaradayClient
   module Middleware
-    class RaiseError < Faraday::Response::Middleware
+    class RaiseError < Faraday::Middleware
       def on_complete(response)
         if error = FaradayClient::Error.from_response(response)
           raise error

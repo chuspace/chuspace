@@ -4,7 +4,7 @@ require 'faraday'
 
 module FaradayClient
   module Middleware
-    class FeedParser < Faraday::Response::Middleware
+    class FeedParser < Faraday::Middleware
       def on_complete(env)
         if env[:response_headers]['content-type'] =~ /(\batom|\brss)/
           require 'rss'

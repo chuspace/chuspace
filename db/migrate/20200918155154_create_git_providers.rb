@@ -7,15 +7,14 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
     create_table :git_providers do |t|
       t.string :label, null: false
 
-      t.text :access_token
-      t.text :refresh_access_token
+      t.text :machine_access_token
+      t.text :user_access_token
       t.text :client_id
       t.text :client_secret
       t.text :app_installation_id
       t.text :api_endpoint
-      t.text :refresh_access_token_endpoint
 
-      t.string :access_token_param, null: false
+      t.string :user_access_token_param, null: false
       t.string :scopes, null: false
 
       t.boolean :enabled, null: false, default: true
@@ -25,7 +24,8 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
 
       t.jsonb :client_options, default: {}, null: false
 
-      t.datetime :access_token_expires_at
+      t.datetime :user_access_token_expires_at
+      t.datetime :machine_access_token_expires_at
 
       t.timestamps
     end

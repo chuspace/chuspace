@@ -14,9 +14,7 @@
       </div>
 
       <div class='flex items-center'>
-        <%= turbo_frame_tag dom_id(@draft, :actions), class: 'flex items-center' do %>
-          <%= render 'publications/drafts/actions', draft: @draft, publication: @publication if @draft.persisted? %>
-        <% end %>
+        <%= render 'publications/drafts/actions', draft: @draft, publication: @publication if @draft.persisted? %>
         <%= render 'layouts/user' %>
       </div>
     </nav>

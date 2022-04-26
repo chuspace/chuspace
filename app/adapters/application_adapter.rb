@@ -23,7 +23,6 @@ class ApplicationAdapter
     update_blob
     users
     user
-    webhooks
   ]
 
   def initialize(git_provider:)

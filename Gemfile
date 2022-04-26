@@ -86,7 +86,10 @@ gem 'front_matter_parser'
 # Clients
 gem 'down'
 gem 'http'
-gem 'faraday', '~> 1.x'
+gem 'faraday'
+gem 'faraday-retry'
+gem 'faraday-typhoeus'
+gem 'faraday-http-cache'
 gem 'sawyer', github: 'lostisland/sawyer'
 gem 'typhoeus'
 

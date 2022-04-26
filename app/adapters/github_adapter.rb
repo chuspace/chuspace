@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 
 class GithubAdapter < ApplicationAdapter
+  attr_accessor :requestor
+
   def name
     'github'
-  end
-
-  def refresh_app_installation_token
-    @access_token = authentication_payload
-    response = post "app/installations/#{git_provider.app_installation_id}/access_tokens"
-    update(access_token: response.token, access_token_expires_at: response.expires_at)
   end
 
   def asset(sha:)
@@ -66,10 +62,6 @@ class GithubAdapter < ApplicationAdapter
     nil
   end
 
-  def orgs(options: {})
-    user_from_response(get('user/orgs', options))
-  end
-
   def repository
     repository_from_response(get("repos/#{repo_fullname}"))
   rescue FaradayClient::NotFound
@@ -108,16 +100,46 @@ class GithubAdapter < ApplicationAdapter
     blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }).content)
   end
 
-  def user(options: {})
-    user_from_response(get('user', options))
+  # Github app endpoints
+  def refresh_app_installation_token
+    execute_as(:app) do
+      response = post "app/installations/#{git_provider.app_installation_id}/access_tokens"
+      git_provider.update(machine_access_token: response.token, machine_access_token_expires_at: response.expires_at)
+    end
+  end
+
+  # User to server endpoints
+  def orgs
+    execute_as(:user) do
+      user_from_response(get('user/orgs'))
+    end
+  end
+
+  def user
+    execute_as(:user) do
+      user_from_response(get('user'))
+    end
   end
 
   def users
-    [user] + orgs
+    execute_as(:user) do
+      [user] + orgs
+    end
   end
 
-  def webhooks(options: { per_page: 30 })
-    get("repos/#{repo_fullname}/hooks", options)
+  def access_token
+    case requestor
+    when :user then git_provider.user_access_token
+    when :app then authentication_payload
+    else refresh_or_fetch_new_machine_token
+    end
+  end
+
+  def access_token_param
+    case requestor
+    when :app then 'Bearer'
+    else git_provider.user_access_token_param
+    end
   end
 
   private
@@ -130,6 +152,23 @@ class GithubAdapter < ApplicationAdapter
     }
     key = OpenSSL::PKey::RSA.new(Rails.application.credentials.github_storage[:private_key])
     JWT.encode(payload, key, 'RS256')
+  end
+
+  def refresh_or_fetch_new_machine_token
+    if git_provider.machine_access_token.present? && git_provider.machine_access_token_expires_at > Time.current.utc
+      git_provider.machine_access_token
+    else
+      refresh_app_installation_token
+    end
+
+    git_provider.machine_access_token
+  end
+
+  def execute_as(requestor)
+    self.requestor = requestor
+    response = yield
+    self.requestor = :server
+    response
   end
 
   def search(path, query, options = {})

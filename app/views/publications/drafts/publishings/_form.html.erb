@@ -1,7 +1,4 @@
-<%= simple_form_for post, url: publication_publish_draft_path(publication, draft), html: { form: 'h-full', 'data-turbo-frame': :_top } do |form| %>
-  <h3>Publish</h3>
-  <p class='text-sm text-secondary'>Publish your post on Chuspace</p>
-
+<%= simple_form_for post, url: publication_publish_draft_path(publication, draft), html: { class: 'h-full mt-4', 'data-turbo-frame': :_top } do |form| %>
   <%= form.input :visibility, as: :select, collection: Post.visibilities, input_html: { class: 'bg-transparent' } %>
   <date-time-picker>
     <%= form.input :date, as: :string, input_html: { 'data-target': 'date-time-picker.element', class: 'bg-transparent' } %>

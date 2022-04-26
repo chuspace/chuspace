@@ -4,9 +4,8 @@ class GitProvider < ApplicationRecord
   class GitAdapterNotFoundError < StandardError; end
 
   belongs_to :user
-  encrypts :access_token, :refresh_access_token, :api_endpoint,
-           :client_id, :client_secret, :refresh_access_token_endpoint
 
+  encrypts :user_access_token, :api_endpoint, :client_id, :client_secret
   validates :name, :label, :api_endpoint, :client_id, :client_secret, presence: true
   validates :name, uniqueness: { scope: :user_id }
 
@@ -15,7 +14,7 @@ class GitProvider < ApplicationRecord
   enum name: GitStorageConfig.providers_enum
 
   def connected?
-    expiring? ? access_token_expires_at > Time.current.utc : access_token.present?
+    expiring? ? user_access_token_expires_at > Time.current.utc : user_access_token.present?
   end
 
   def config
@@ -23,7 +22,7 @@ class GitProvider < ApplicationRecord
   end
 
   def expiring?
-    access_token_expires_at.present?
+    user_access_token_expires_at.present?
   end
 
   def adapter

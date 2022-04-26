@@ -97,10 +97,7 @@ export default class ChuEditor extends LitElement {
     this.state = this.createState()
     this.view = this.createView()
 
-    if (this.editable) {
-      this.view.props.commands = this.manager.commands
-      this.setActiveNodesAndMarks()
-    }
+    this.view.props.commands = this.manager.commands
 
     this.checkDirty()
   }
@@ -132,7 +129,6 @@ export default class ChuEditor extends LitElement {
       ...this.manager.keymaps,
       keymap(baseKeymap),
       keymap({
-        ...keymaps,
         ArrowLeft: arrowHandler('left'),
         ArrowRight: arrowHandler('right'),
         ArrowUp: arrowHandler('up'),
@@ -200,15 +196,26 @@ export default class ChuEditor extends LitElement {
     return true
   }
 
-  autosave = () => {
-    const statusElement = document.getElementById('chu-editor-status')
-    if (statusElement) statusElement.textContent = 'Auto saving...'
+  autosave = debounce(
+    async () => {
+      const statusElement = document.getElementById('chu-editor-status')
+      if (statusElement) statusElement.textContent = 'Auto saving...'
 
-    // Save to local storage
-    if (response.ok) {
-      this.dirty = false
-    }
-  }
+      const response = await patch(this.autoSavePath, {
+        body: JSON.stringify({
+          draft: {
+            content: this.content
+          }
+        })
+      })
+
+      if (response.ok) {
+        this.dirty = false
+      }
+    },
+    500,
+    { maxWait: 2000 }
+  )
 
   dispatchTransaction(transaction: Transaction) {
     this.state = this.state.apply(transaction)

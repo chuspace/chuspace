@@ -3,7 +3,7 @@
 module Publications
   module Drafts
     class CommitsController < BaseController
-      layout 'editor'
+      layout false
 
       def new
         authorize! @draft, to: :commit?

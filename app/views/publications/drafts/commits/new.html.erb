@@ -1,41 +1,34 @@
-<div class='grid grid-cols-3 h-screen max-h-screen overflow-hidden'>
-  <div class='col-span-2 pr-8 py-24 h-full overflow-scroll'>
-    <div class='h-full'>
-      <%= turbo_frame_tag dom_id(@draft, :diff), src: publication_new_draft_diff_path(@publication, @draft), loading: :lazy do  %>
-        <div class='flex items-center h-full justify-center'>Loading...</div>
-      <% end %>
-    </div>
-  </div>
+<%= turbo_frame_tag(dom_id(@draft, :new_commit)) do %>
+  <dialog-opener>
+    <div class="modal modal-open bg-base-200 h-screen sm:w-1/3 w-full right-0 left-auto" data-target='dialog-opener.dialog'>
+      <div class="modal-box h-full w-full max-h-full pt-24 rounded-none bg-base-200">
+        <%= simple_form_for @draft, method: :patch, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top', class: 'w-full' } do |form| %>
+          <h3>Commit changes</h3>
+          <p class='text-secondary text-sm'>Commit changes to connected git repository</p>
 
-  <div class='col-span-1 pl-8 mt-24 border-l border-base-200'>
-    <%= turbo_frame_tag(dom_id(@draft, :new_commit)) do %>
-      <%= simple_form_for @draft, method: :patch, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>
-        <h3>Commit changes</h3>
-        <p class='text-secondary text-sm'>Commit changes to connected git repository</p>
-
-        <div class="form-control mt-8">
-          <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
-          <%= form.input :auto_publish, as: :boolean, label: false, input_html: { checked: @publication.content.auto_publish }, placeholder: 'Commit message' %>
-          <div class='mt-8 font-mono'>
-            <label class='text-sm flex items-center' id='commit-authors'>
-              Commit authors:
+          <div class="form-control mt-8">
+            <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
+            <%= form.input :auto_publish, as: :boolean, label: false, input_html: { checked: @publication.content.auto_publish }, placeholder: 'Commit message' %>
+            <div class='mt-8 font-mono'>
+              <label class='text-sm flex items-center' id='commit-authors'>
+                Commit authors:
                 <div class="avatar">
-                  <%= link_to user_path(Current.user), class: 'font-bold link link-primary w-6', title: Current.user.name do %>
-                    <%= image_tag(Current.user.avatar_url, title: Current.user.name) %>
+                  <%= link_to user_path(Current.user), class: 'w-6 font-bold link link-primary w-6', title: Current.user.name do %>
+                    <%= image_tag(Current.user.avatar_url, title: Current.user.name,  class: 'rounded-full') %>
                   <% end %>
                 </div>
-              </div>
-            </label>
-            <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>
-            <label class='text-sm block'>Commit Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>
+              </label>
+              <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>
+              <label class='text-sm block'>Commit Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>
+            </div>
           </div>
-        </div>
 
-        <div class="modal-action">
-          <%= form.submit 'Commit', class: 'btn btn-primary btn-sm' %>
-          <%= link_to 'Cancel', publication_edit_draft_path(@publication, @draft), class: "btn btn-error btn-sm", data: { 'turbo-frame': :_top } %>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
-</div>
+          <div class="modal-action">
+            <%= form.submit 'Commit', class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'Cancel', publication_edit_draft_path(@publication, @draft), class: "btn btn-error btn-sm", data: { 'turbo-frame': :_top } %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </dialog-opener>
+<% end %>

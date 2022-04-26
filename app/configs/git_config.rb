@@ -3,7 +3,7 @@
 class GitConfig < ApplicationConfig
   attr_config(committer: {
     name: 'chuspace-dev[bot]',
-    email: '160985+chuspace-dev[bot]@users.noreply.github.com',
+    email: '104423298+chuspace-dev[bot]@users.noreply.github.com',
     date: Date.today
   })
 end
