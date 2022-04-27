@@ -20,7 +20,6 @@ gem 'good_job'
 gem 'mini_mime'
 gem 'wicked'
 gem 'kredis'
-gem 'onebox'
 
 # Sign web tokens
 gem 'alba'
