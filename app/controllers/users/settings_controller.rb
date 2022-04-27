@@ -2,6 +2,8 @@
 
 module Users
   class SettingsController < BaseController
+    layout 'application'
+
     def index
       authorize! @user, to: :edit?
 
@@ -19,7 +21,9 @@ module Users
 
     def update
       authorize! @user, to: :edit?
+      puts user_params.inspect
       @user.update(user_params)
+      @user.avatar.attach(user_params[:avatar])
 
       redirect_to user_setting_path(@user, id: params[:id])
     end
@@ -27,12 +31,7 @@ module Users
     private
 
     def user_params
-      params.require(:user).permit(
-        :name,
-        :description,
-        :icon,
-        repo_attributes: %i[posts_folder drafts_folder assets_folder readme_path]
-      )
+      params.require(:user).permit(:name, :email, :avatar)
     end
   end
 end

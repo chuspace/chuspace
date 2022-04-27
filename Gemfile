@@ -128,9 +128,6 @@ group :production do
   gem 'easymon'
 end
 
-# JS runtime
-gem 'execjs'
-
 # Deployment
 gem 'tomo'
 gem 'tomo-plugin-good_job'

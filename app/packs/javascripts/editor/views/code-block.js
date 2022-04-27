@@ -239,11 +239,6 @@ export default class CodeBlockView extends BaseView {
     }
   }
 
-  // isYChange = (textNode) =>
-  //   textNode.marks.find((mark) => mark.type.name === 'ychange')
-
-  // getYChangePos = (textNode) => this.outerView.state.doc.resolve(textNode)
-
   /**
    * when an update comes in from the editor, for example because of an undo action,
    * we kind of have to do the inverse of what valueChanged did--check for text changes
@@ -251,25 +246,6 @@ export default class CodeBlockView extends BaseView {
    * @param node
    */
   update = (node: ProsemirrorNode<Schema>, decorations: [Decoration]) => {
-    // const ychanges = node.content.content.filter(this.isYChange)
-
-    // if (this.cm) {
-    //   this.cm.doc.eachLine((line) => {
-
-    //   })
-    // }
-
-    // const yChangesPos = ychanges.map((ychange) => {
-    //   let pos = {}
-    //   this.cm.doc.eachLine((line) => line.text.includes(ychange.textContent))
-
-    //   return {
-    //     text: ychange.change,
-    //     pos: this.getYChangePos(ychange),
-    //     attrs: ychange.marks[0].attrs
-    //   }
-    // })
-
     this.renderDecorations(decorations)
 
     if (node.type !== this.node.type) return false

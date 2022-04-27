@@ -7,6 +7,15 @@ class GithubAdapter < ApplicationAdapter
     'github'
   end
 
+  def app_installed?(id:)
+    execute_as(:app) do
+      get "app/installations/#{id}"
+    end
+
+  rescue FaradayClient::NotFound
+    false
+  end
+
   def asset(sha:)
     opts = { ref: ref }
     get("repos/#{repo_fullname}/git/blobs/#{sha}", **opts)

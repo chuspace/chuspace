@@ -3,6 +3,8 @@
 class UsersController < ApplicationController
   include Breadcrumbable
 
+  layout 'user'
+
   before_action :find_user
   before_action :set_content_partial, only: :show
   skip_verify_authorized only: :show

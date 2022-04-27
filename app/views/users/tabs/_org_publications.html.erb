@@ -4,7 +4,7 @@
   <% end %>
 
   <% card.actions do %>
-    <%= link_to 'Connect', connect_root_path, class: 'btn btn-primary btn-sm' %>
+    <%= link_to 'Connect', connect_other_publications_path, class: 'btn btn-primary btn-sm' %>
   <% end %>
 
   <% card.body do %>
@@ -13,11 +13,7 @@
     <% else %>
       <div class='text-center py-8'>
         <div class='text-secondary w-2/3 mx-auto'>
-          <p>You do not have any publications</p>
-          <p>Connect to get started.</p>
-          <div class='mt-8'>
-            <%= link_to 'Connect publication', connect_root_path, class: 'btn btn-primary btn-sm ml-2' %>
-          </div>
+          <p>Org publications not connected</p>
         </div>
       </div>
     <% end %>

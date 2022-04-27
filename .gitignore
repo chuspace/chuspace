@@ -42,7 +42,6 @@ yarn-debug.log*
 /config/*.local.yml
 /config/credentials/local.*
 .vagrant
-app/lib/ydoc/compiler.js
 
 /config/credentials/test.key
 coverage/

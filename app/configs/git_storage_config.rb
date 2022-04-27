@@ -17,7 +17,8 @@ class GitStorageConfig < ApplicationConfig
       client_secret: Rails.application.credentials.github_storage[:client_secret],
       client_options: {
         site: 'https://api.github.com',
-        authorize_url: "https://github.com/apps/#{Rails.application.credentials.github_storage[:app_name]}/installations/new",
+        installation_url: "https://github.com/apps/#{Rails.application.credentials.github_storage[:app_name]}/installations/new",
+        authorize_url: 'https://github.com/login/oauth/authorize',
         token_url: 'https://github.com/login/oauth/access_token'
       }
     },

@@ -11,9 +11,6 @@ export default class Code extends Mark {
 
   get schema() {
     return {
-      attrs: {
-        ychange: { default: null }
-      },
       parseDOM: [{ tag: 'code' }],
       toDOM: () => ['code', 0]
     }

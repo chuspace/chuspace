@@ -1,5 +1,9 @@
-<%= simple_form_for(user) do |form| %>
-  <%= form.input :avatar %>
+<%= simple_form_for(user, url: user_setting_path(user, id: :profile)) do |form| %>
+
+  <file-attachment input="user_avatar">
+    <%= form.input :avatar, input_html: { multiple: true } %>
+    <pre></pre>
+  </file-attachment>
   <%= form.input :name %>
   <%= form.input :username %>
   <%= form.input :email %>

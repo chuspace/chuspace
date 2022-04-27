@@ -1,41 +1,29 @@
-<div class='h-full'>
-  <div class='h-full'>
-    <div class='grid grid-cols-9 gap-8 mt-8'>
-      <aside class='col-span-2'>
-        <%= render 'sidebar', user: @user %>
-      </aside>
+<%= render(Card::Component.new) do |card| %>
+  <% card.title do %>
+    About
+  <% end %>
 
-      <div class='col-span-7'>
-        <%= render(Card::Component.new) do |card| %>
-          <% card.title do %>
-            About
-          <% end %>
+  <% card.actions do %>
+    <%= link_to 'Update', publication_edit_draft_path(@user.personal_publication, path: @user.personal_publication.readme), class: 'btn btn-primary btn-sm' if @user.personal_publication %>
+  <% end %>
 
-          <% card.actions do %>
-            <%= link_to 'Update', publication_edit_draft_path(@user.personal_publication, path: @user.personal_publication.readme), class: 'btn btn-primary btn-sm' if @user.personal_publication %>
-          <% end %>
-
-          <% card.body do %>
-            <% if @user.personal_publication.present? %>
-              <%= content_tag :article, @user.personal_publication.readme.content_html, class: 'chu-editor chu-editor-sm px-8' %>
-            <% else %>
-              <div class='text-center py-8'>
-                <p class='text-secondary w-3/4 mt-4 mx-auto'>
-                  Your profile about section is sourced from Readme.md file in your personal publication
-                  repository. Connect your personal publication to get started.
-                </p>
-                <div class='mt-8'>
-                  <%= link_to 'Connect personal publication', connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2' %>
-                </div>
-              </div>
-            <% end %>
-          <% end %>
-        <% end %>
-
+  <% card.body do %>
+    <% if @user.personal_publication.present? %>
+      <%= content_tag :article, @user.personal_publication.readme.content_html, class: 'chu-editor chu-editor-sm px-8' %>
+    <% else %>
+      <div class='text-center py-8'>
+        <p class='text-secondary w-3/4 mt-4 mx-auto'>
+          Your profile about section is sourced from Readme.md file in your personal publication
+          repository. Connect your personal publication to get started.
+        </p>
         <div class='mt-8'>
-          <%= render 'users/tabs/posts', user: @user, title: 'Posts' %>
+          <%= link_to 'Connect personal publication', connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2' %>
         </div>
       </div>
-    </div>
-  </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<div class='mt-8'>
+  <%= render 'users/tabs/posts', user: @user, card_title: 'Posts' %>
 </div>

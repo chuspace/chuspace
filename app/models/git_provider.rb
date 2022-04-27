@@ -8,14 +8,17 @@ class GitProvider < ApplicationRecord
   encrypts :user_access_token, :api_endpoint, :client_id, :client_secret
   validates :name, :label, :api_endpoint, :client_id, :client_secret, presence: true
   validates :name, uniqueness: { scope: :user_id }
+  validates :name, uniqueness: { scope: :app_installation_id }
 
   store_accessor :client_options, :site, :authorize_url, :token_url
 
   enum name: GitStorageConfig.providers_enum
 
   def adapter
-    # Implement adapters here
-    GithubAdapter.new(git_provider: self)
+    case name.to_sym
+    when :github then GithubAdapter.new(git_provider: self)
+    else fail GitAdapterNotFoundError, 'Adapter not implemented'
+    end
   end
 
   def connected?
@@ -31,7 +34,7 @@ class GitProvider < ApplicationRecord
   end
 
   def revoke!
-    update(user_access_token: nil, machine_access_token: nil, user_access_token_expires_at: nil)
+    update(app_installation_id: nil, user_access_token: nil, machine_access_token: nil, user_access_token_expires_at: nil)
   end
 
   def to_param

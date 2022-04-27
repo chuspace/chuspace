@@ -12,20 +12,13 @@ export default class Blockquote extends Node {
 
   get schema() {
     return {
-      attrs: {
-        ychange: { default: null }
-      },
       content: 'block*',
       group: 'block',
       defining: true,
       draggable: false,
       parseDOM: [{ tag: 'blockquote' }],
       toDOM(node) {
-        return [
-          'blockquote',
-          calcYchangeDomAttrs(node.attrs),
-          ...hoverWrapper(node.attrs.ychange, [0])
-        ]
+        return ['blockquote', 0]
       }
     }
   }

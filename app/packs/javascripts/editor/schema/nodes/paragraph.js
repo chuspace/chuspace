@@ -2,7 +2,6 @@
 
 import { Decoration, DecorationSet } from 'prosemirror-view'
 import { Plugin, PluginKey } from 'prosemirror-state'
-import { calcYchangeDomAttrs, hoverWrapper } from 'editor/helpers'
 
 import { Node } from 'editor/base'
 import { Node as PMNode } from 'prosemirror-model'
@@ -13,9 +12,6 @@ export default class Paragraph extends Node {
 
   get schema() {
     return {
-      attrs: {
-        ychange: { default: null }
-      },
       content: 'inline*',
       group: 'block',
       draggable: false,
@@ -25,19 +21,7 @@ export default class Paragraph extends Node {
         }
       ],
       toDOM(node) {
-        // only render changes if no child nodes
-        const renderChanges = node.content.size === 0
-
-        const attrs = renderChanges
-          ? calcYchangeDomAttrs(node.attrs)
-          : node.attrs
-
-        const defChildren = [0]
-        const children = renderChanges
-          ? hoverWrapper(node.attrs.ychange, defChildren)
-          : defChildren
-
-        return ['p', attrs, ...children]
+        return ['p', 0]
       }
     }
   }

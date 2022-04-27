@@ -6,54 +6,8 @@
 .ProseMirror-trailingBreak
   @apply h-0
 
-.ProseMirror > .ProseMirror-yjs-cursor:first-child
-  margin-top: 16px
-
 .ProseMirror p:first-child, .ProseMirror h1:first-child, .ProseMirror h2:first-child, .ProseMirror h3:first-child, .ProseMirror h4:first-child, .ProseMirror h5:first-child, .ProseMirror h6:first-child
   margin-top: 16px
-
-.collaboration-cursor__caret
-  border-left: 1px solid #0d0d0d
-  border-right: 1px solid #0d0d0d
-  margin-left: -1px
-  margin-right: -1px
-  pointer-events: none
-  position: relative
-  word-break: normal
-
-
-/* Render the username above the caret */
-.collaboration-cursor__label
-  border-radius: 3px 3px 3px 0
-  color: #0d0d0d
-  font-size: 12px
-  font-style: normal
-  font-weight: 600
-  left: -1px
-  line-height: normal
-  padding: 0.1rem 0.3rem
-  position: absolute
-  top: -1.4em
-  user-select: none
-  white-space: nowrap
-
-[ychange_type]
-  position: relative
-
-.ychange-hover
-  display: none
-
-*:hover > .ychange-hover
-  display: inline
-  position: absolute
-  top: -14px
-  left: 0
-  font-size: 12px
-  padding: 0 2px
-  border-radius: 3px 3px 0 0
-  color: #fdfdfe
-  user-select: none
-  word-break: normal
 
 .chu-editor
   @apply antialiased font-sans
@@ -160,7 +114,7 @@
   div + br
     display: none
 
-  ychange[ychange_type="added"], .insertion
+  .insertion
     @apply border-t-2 border-b-2 max-w-full whitespace-normal
     background-color: #22c55e
     border-color: #86efac
@@ -175,7 +129,7 @@
     img
       @apply border-4 border-success
 
-  ychange[ychange_type="removed"], .deletion
+  .deletion
     @apply border-t-2 border-b-2 line-through max-w-full whitespace-normal
     background-color: #ef4444
     border-color: #fca5a5

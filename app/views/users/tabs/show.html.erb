@@ -1,13 +1,1 @@
-<div class='h-full'>
-  <div class='h-full'>
-    <div class='grid grid-cols-9 gap-8 mt-8'>
-      <aside class='col-span-2'>
-        <%= render 'users/sidebar', user: @user %>
-      </aside>
-
-      <div class='col-span-7'>
-        <%= render @partial, user: @user, title: params[:id].humanize %>
-      </div>
-    </div>
-  </div>
-</div>
+<%= render @partial, user: @user %>

@@ -140,7 +140,6 @@ export class ContributionToolbar extends Element {
                     const contribution: Contribution = {
                       contentBefore: content,
                       type: 'contribution',
-                      ydocBase64: null,
                       status: 'editing',
                       id: nanoid(),
                       node: node.toJSON(),

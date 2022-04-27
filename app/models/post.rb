@@ -59,7 +59,6 @@ class Post < ApplicationRecord
       keywords: topic_list,
       index: true,
       follow: true,
-      author: author.name,
       canonical: canonical_url || Rails.application.routes.url_helpers.publication_post_url(publication, self),
       og: {
         title: :title,

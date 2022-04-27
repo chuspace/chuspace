@@ -54,7 +54,6 @@ class Publication < ApplicationRecord
       keywords: topic_list,
       index: true,
       follow: true,
-      author: owner.name,
       canonical: canonical_url || Rails.application.routes.url_helpers.publication_url(self),
       og: {
         title: :title,
