@@ -1,20 +1,23 @@
-<%= simple_form_for(publication, url: create_connect_other_publication_path(publication.git_provider, repo_fullname: publication.repository.full_name), html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
-  <h5 class='mt-8 mb-4'>Basics</h5>
-  <%= form.input :name, input_html: { value: publication.repository.friendly_full_name } %>
-  <%= form.input :description, input_html: { value: publication.repository.description } %>
+<%= turbo_frame_tag(publication) do %>
+  <%= simple_form_for(publication, url: create_connect_other_publication_path(publication.git_provider, repo_fullname: publication.repository.full_name), html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+    <h5 class='mt-8 mb-4'>Basics</h5>
+    <%= form.input :name, input_html: { value: publication.repository.friendly_full_name } %>
+    <%= form.input :description, input_html: { value: publication.repository.description } %>
 
-  <h5 class='mt-8 mb-4'>Content</h5>
-  <%= form.simple_fields_for :repository do |repo_form| %>
-    <%= repo_form.input :posts_folder, as: :select, collection: publication.repository.folders, include_blank: 'Choose' %>
-    <%= repo_form.input :drafts_folder, as: :select, collection: publication.repository.folders, include_blank: 'Choose' %>
-    <%= repo_form.input :assets_folder, as: :select, collection: publication.repository.folders, include_blank: 'Choose' %>
-    <%= repo_form.input(
-        :readme_path,
-        as: :select,
-        collection: publication.repository.markdown_files,
-        include_blank: 'Choose'
-      )
-    %>
+    <h5 class='mt-8 mb-4'>Content</h5>
+    <%= form.simple_fields_for :repository do |repo_form| %>
+      <%= repo_form.error :full_name %>
+      <%= repo_form.input :posts_folder, as: :select, collection: folders, include_blank: 'Choose' %>
+      <%= repo_form.input :drafts_folder, as: :select, collection: folders, include_blank: 'Choose' %>
+      <%= repo_form.input :assets_folder, as: :select, collection: folders, include_blank: 'Choose' %>
+      <%= repo_form.input(
+          :readme_path,
+          as: :select,
+          collection: markdown_files,
+          include_blank: 'Choose'
+        )
+      %>
+    <% end %>
+    <%= form.button :submit, 'Connect', class: "mt-12 btn btn-primary" %>
   <% end %>
-  <%= form.button :submit, 'Connect', class: "mt-12 btn btn-primary" %>
 <% end %>

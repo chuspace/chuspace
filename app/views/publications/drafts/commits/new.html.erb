@@ -18,7 +18,7 @@
                   <% end %>
                 </div>
               </label>
-              <label class='text-sm block'>Committer: <%= content_tag :span, GitConfig.new.committer[:name], class: 'font-bold' %></label>
+              <label class='text-sm block'>Author: <%= content_tag :span, Current.user.name, class: 'font-bold' %></label>
               <label class='text-sm block'>Commit Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>
             </div>
           </div>

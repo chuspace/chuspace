@@ -16,8 +16,8 @@ module Git
       @commits ||= adapter.commits(path: path)
     end
 
-    def create(content:, message: nil, committer:, author:)
-      fail ArgumentError, 'Not a valid author' unless committer.is_a?(Git::Committer) || author.is_a?(Git::Committer)
+    def create(content:, message: nil, author:)
+      fail ArgumentError, 'Not a valid author' unless author.is_a?(Git::Committer)
       fail TypeError, 'Can not be committed' unless is_a?(Draft) || is_a?(Asset)
 
       if valid?
@@ -25,7 +25,6 @@ module Git
           path: path,
           content: Base64.encode64(content),
           message: message,
-          committer: committer,
           author: author
         )
       end
@@ -33,8 +32,8 @@ module Git
       self
     end
 
-    def update(content:, message: nil, committer:, author:)
-      fail ArgumentError, 'Not a valid author' unless committer.is_a?(Git::Committer) || author.is_a?(Git::Committer)
+    def update(content:, message: nil, author:)
+      fail ArgumentError, 'Not a valid author' unless author.is_a?(Git::Committer)
       fail TypeError, 'Can not be committed' unless is_a?(Draft) || is_a?(Asset)
       fail ArgumentError, 'ID can not be blank' if id.blank?
 
@@ -44,7 +43,6 @@ module Git
           content: Base64.encode64(content),
           message: message,
           sha: id,
-          committer: committer,
           author: author
         )
       end
@@ -62,15 +60,14 @@ module Git
       end
     end
 
-    def delete(message: nil, committer:, author:)
-      fail ArgumentError, 'Not a valid author' unless committer.is_a?(Git::Committer) || author.is_a?(Git::Committer)
+    def delete(message: nil, author:)
+      fail ArgumentError, 'Not a valid author' unless author.is_a?(Git::Committer)
       fail TypeError, 'Can not be deleted' unless is_a?(Draft) || is_a?(Asset)
 
       adapter.delete_blob(
         path: path,
         id: sha,
         message: message,
-        committer: committer,
         author: author
       )
 

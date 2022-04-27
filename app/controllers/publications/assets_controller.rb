@@ -34,7 +34,7 @@ module Publications
         )
 
         authorize! @publication, to: :write?
-        @asset.create(**commit_params.merge(content: params[:image].read))
+        @asset.create(content: params[:image].read, author: Git::Committer.for(user: Current.user))
       end
 
       render json: { url: File.join('/', path) }
@@ -47,13 +47,6 @@ module Publications
     end
 
     private
-
-    def commit_params
-      {
-        committer: Git::Committer.chuspace,
-        author: Git::Committer.for(user: Current.user)
-      }.freeze
-    end
 
     def set_assets_root_path
       @assets_root_path = Pathname.new(@publication.repository.assets_folder)

@@ -2,6 +2,6 @@
 
 class UserTabConstraint
   def matches?(request)
-    UserTab::PAGES.include?(request.params[:id])
+    request.params[:user_username].present? && UserTab::PAGES.include?(request.params[:id])
   end
 end

@@ -86,11 +86,11 @@ class Repository < ApplicationRecord
   end
 
   def files(ref: default_ref)
-    git_provider_adapter(ref: ref).repository_files
+    @files ||= git_provider_adapter(ref: ref).repository_files
   end
 
   def folders(ref: default_ref)
-    git_provider_adapter(ref: ref).repository_folders
+    @folders ||= git_provider_adapter(ref: ref).repository_folders
   end
 
   def git

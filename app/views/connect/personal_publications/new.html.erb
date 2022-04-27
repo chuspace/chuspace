@@ -19,8 +19,10 @@
   </div>
 
   <div class='mt-8'>
-    <%= turbo_frame_tag(@publication) do %>
-      <%= render 'connect/personal_publications/form', publication: @publication %>
+    <%= turbo_frame_tag @publication, src: new_connect_personal_publication_path(@git_provider, repo_fullname: params[:repo_fullname]) do %>
+      <div class='text-center my-16'>
+        <span class='btn btn-lg btn-ghost btn-circle loading'></span>
+      </div>
     <% end %>
   </div>
 <% end %>

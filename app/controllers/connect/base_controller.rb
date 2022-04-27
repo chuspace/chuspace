@@ -8,6 +8,12 @@ module Connect
 
     skip_verify_authorized
 
+    def new
+      if turbo_frame_request?
+        render partial: 'form', locals: { folders: @publication.repository.folders, markdown_files: @publication.repository.markdown_files, publication: @publication }
+      end
+    end
+
     def index
       @git_providers = Current.user.git_providers
     end
@@ -51,6 +57,8 @@ module Connect
                 partial: partial_name,
                 locals: {
                   publication: @publication,
+                  folders: @publication.repository.folders,
+                  markdown_files: @publication.repository.markdown_files,
                   url: create_publication_path
                 }
               )

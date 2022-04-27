@@ -22,9 +22,5 @@ module Git
     def self.from(hash)
       new(**hash.slice(*new.attributes.symbolize_keys.keys))
     end
-
-    def self.chuspace
-      new(GitConfig.new.committer)
-    end
   end
 end

@@ -46,12 +46,12 @@ class GithubAdapter < ApplicationAdapter
     commit_from_response(get("repos/#{repo_fullname}/commits/#{sha}"))
   end
 
-  def create_blob(path:, content:, committer:, author:, sha: nil, message: nil)
+  def create_blob(path:, content:, author:, sha: nil, message: nil)
     message ||= "Create #{path}"
-    update_blob(path: path, content: content, committer: committer, author: author, sha: sha, message: message)
+    update_blob(path: path, content: content, author: author, sha: sha, message: message)
   end
 
-  def delete_blob(path:, id:, message: nil, committer:, author:)
+  def delete_blob(path:, id:, message: nil, author:)
     message ||= "Delete #{path}"
     blob_from_response(delete("repos/#{repo_fullname}/contents/#{path}", { sha: id, message: message }).content)
   end
@@ -91,13 +91,13 @@ class GithubAdapter < ApplicationAdapter
     repository_from_response(search('search/repositories', query, options).items)
   end
 
-  def tree(sha: head_sha)
-    get("repos/#{repo_fullname}/git/trees/#{sha}", { recursive: true }).tree
+  def tree(ref: 'HEAD')
+    get("repos/#{repo_fullname}/git/trees/#{ref}", { recursive: true }).tree
   end
 
-  def update_blob(path:, content:, committer:, author:, sha:, message: nil)
+  def update_blob(path:, content:, author:, sha:, message: nil)
     message ||= "Update #{path}"
-    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, committer: committer, author: author }).content)
+    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, author: author }).content)
   end
 
   # Github app endpoints

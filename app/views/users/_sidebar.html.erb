@@ -6,6 +6,9 @@
   <li class='mt-4 first:mt-0'>
     <%= tab_link_to('Overview', user_path(user), class: 'link link-hover') %>
   </li>
+  <li class='mt-4 first:mt-0'>
+    <%= tab_link_to('Drafts', user_drafts_path(user), class: 'link link-hover') %>
+  </li>
   <% UserTab::PAGES.each do |page| %>
     <li class='mt-4 first:mt-0'>
       <%= tab_link_to(page.humanize, user_tab_path(user, id: page), class: 'link link-hover') %>

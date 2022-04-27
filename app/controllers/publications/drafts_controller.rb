@@ -84,7 +84,6 @@ module Publications
       {
         content: @draft.persisted? ? @draft.local_or_remote_content : @draft.new_template,
         message: draft_params[:commit_message],
-        committer: Git::Committer.chuspace,
         author: Git::Committer.for(user: Current.user)
       }.freeze
     end

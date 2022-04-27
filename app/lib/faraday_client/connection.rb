@@ -173,25 +173,24 @@ module FaradayClient
 
     def sawyer_options
       opts = {
-        links_parser: Sawyer::LinkParsers::Simple.new
+        links_parser: Sawyer::LinkParsers::Simple.new,
+        faraday: faraday_builder
       }
-
-      opts[:faraday] = connection
-      opts
     end
 
-    def connection
-      opts = {
+    def faraday_builder
+      connection_opts = {
+        parallel_manager: Typhoeus::Hydra.new(max_concurrency: 10),
         headers: {
           accept: default_media_type,
           user_agent: user_agent,
           content_type: 'application/json'
         },
         url: git_provider.api_endpoint,
-        ssl: { verify: false }
+        ssl: { verify: Rails.env.production? }
       }
 
-      opts[:builder] = Faraday.new do |builder|
+      Faraday.new(connection_opts) do |builder|
         builder.use FaradayClient::Middleware::FollowRedirects
         builder.use FaradayClient::Middleware::RaiseError
         builder.use(

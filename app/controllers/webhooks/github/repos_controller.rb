@@ -62,7 +62,7 @@ module Webhooks
       end
 
       def verify_commit
-        if @commit.blank? || GitConfig.new.committer['name'] == @commit.dig('committer', 'name')
+        if @commit.blank? || GitConfig.new.github.dig('committer', 'name') == @commit.dig('committer', 'name')
           head :ok
         end
       end

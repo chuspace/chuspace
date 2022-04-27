@@ -1,0 +1,32 @@
+<div class='h-full'>
+  <div class='h-full'>
+    <div class='grid grid-cols-9 gap-8 mt-8'>
+      <aside class='col-span-2'>
+        <%= render 'users/sidebar', user: @user %>
+      </aside>
+
+      <section class='col-span-7'>
+        <%= render(Card::Component.new) do |card| %>
+          <% card.title do %>
+            <%= render 'shared/breadcrumbs' %>
+          <% end %>
+
+          <% card.actions do %>
+            <%= link_to 'New', publication_new_draft_path(@user.personal_publication), class: 'btn btn-primary btn-sm' if @user.personal_publication %>
+          <% end %>
+
+          <% card.body do %>
+            <% if @user.personal_publication.present? %>
+              <% path = params[:path].blank? ? user_drafts_path(@user) : nested_user_drafts_path(@user, path: params[:path]) %>
+              <%= turbo_frame_tag dom_id(@user, :drafts), src: path, lazy: true do %>
+                <%= render 'shared/card_loader', count: 5 %>
+              <% end %>
+            <% else %>
+              <%= render 'shared/placeholder', content: 'No personal published connected' %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </section>
+    </div>
+  </div>
+</div>
