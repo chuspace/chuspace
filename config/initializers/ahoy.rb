@@ -10,3 +10,7 @@ Ahoy.api = false
 # we recommend configuring local geocoding as well
 # see https://github.com/ankane/ahoy#geocoding
 Ahoy.geocode = false
+Ahoy.job_queue = :low
+Ahoy.visit_duration = 24.hours
+Safely.report_exception_method = ->(exception) { Raven::Rack.capture_exception(exception) }
+Ahoy.server_side_visits = false

@@ -124,6 +124,7 @@ Rails.application.routes.draw do
       scope constraints: { publication_permalink: /[a-z0-9_\-]+/, permalink: /[a-z0-9_\-]+/ } do
         resources :posts, path: '', except: :index, param: :permalink do
           resources :settings, only: %i[index show]
+          resources :revisions, module: :posts
         end
       end
     end

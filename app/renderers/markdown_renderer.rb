@@ -16,16 +16,11 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
 
   def link(node)
     if URI.parse(node.url).absolute?
-      out('<link-preview href="', node.url.nil? ? '' : escape_href(node.url), '"')
-      out('>')
       out('<a href="', node.url.nil? ? '' : escape_href(node.url), '"')
       out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?
       out(' target="', '_blank', '"')
-      out(' is="', 'link-preview', '"')
-      out(' data-behaviour="', 'has-tooltip', '"')
       out(' rel="', 'noopener noreferrer', '"')
       out('>', :children, '</a>')
-      out('</link-preview>')
     else
       out('<a href="', node.url.nil? ? '' : escape_href(node.url), '"')
       out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?
@@ -50,6 +45,7 @@ class MarkdownRenderer < CommonMarker::HtmlRenderer
       out(' mode="', node.fence_info.split(/\s+/)[0], '"') if node.fence_info && !node.fence_info.empty?
       out(' content="', escape_html(node.string_content), '"')
       out(' readonly="nocursor"')
+      out(' wrapper')
       out('></code-editor>')
     end
   end

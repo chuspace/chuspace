@@ -4,31 +4,10 @@ import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state'
 import { Fragment, Schema } from 'prosemirror-model'
 import { LitElement, html, svg } from 'lit'
 import { NodeSelection, Selection } from 'prosemirror-state'
-import {
-  PermanentUserData,
-  Doc as YDoc,
-  applyUpdateV2,
-  decodeSnapshotV2,
-  emptySnapshot,
-  encodeSnapshotV2,
-  encodeStateAsUpdateV2,
-  equalSnapshots,
-  snapshot
-} from 'yjs'
 import { baseKeymap, selectParentNode } from 'prosemirror-commands'
 import { createRef, ref } from 'lit/directives/ref.js'
-import { fromBase64, toBase64 } from 'lib0/buffer'
+import { history, redo, undo } from 'prosemirror-history'
 import { markdownParser, markdownSerializer } from 'editor/markdowner'
-import {
-  prosemirrorToYDoc,
-  redo,
-  undo,
-  yCursorPlugin,
-  yDocToProsemirror,
-  ySyncPlugin,
-  ySyncPluginKey,
-  yUndoPlugin
-} from 'y-prosemirror'
 
 import { CodeBlock as CodeBlockComponent } from 'editor/components'
 import Dialog from 'helpers/dialog'
@@ -85,22 +64,9 @@ export default class ContributionNodeEditor extends LitElement {
 
     this.contentParser = markdownParser(this.schema, true)
     this.contentSerializer = markdownSerializer(this.schema, true)
-
-    if (this.contribution.ydocBase64) {
-      this.ydoc = new YDoc()
-      this.ydoc.gc = false
-      this.versions = this.ydoc.getArray('versions')
-      applyUpdateV2(this.ydoc, fromBase64(this.contribution.ydocBase64))
-    } else {
-      this.doc = this.contentParser.parse(this.contribution.contentBefore)
-      this.ydoc = prosemirrorToYDoc(this.doc)
-      this.ydoc.gc = false
-      this.versions = this.ydoc.getArray('versions')
-      this.addVersion()
-    }
-
-    this.setupYDocUser()
-    this.setupYChangeColors()
+    this.doc = this.contentParser.parse(
+      this.contribution.contentAfter || this.contribution.contentBefore
+    )
   }
 
   firstUpdated() {
@@ -113,9 +79,8 @@ export default class ContributionNodeEditor extends LitElement {
 
     if (this.autoFocus) this.focus()
 
-    if (!this.editable) setTimeout(() => this.attachVersion(), 1)
     this.dialog.show()
-    this.checkDirty()
+    if (this.editable) this.checkDirty()
   }
 
   disconnectedCallback() {
@@ -170,17 +135,13 @@ export default class ContributionNodeEditor extends LitElement {
             tabindex: 0
           }
         }
-      }),
-      ySyncPlugin(this.ydoc.getXmlFragment('prosemirror'), {
-        permanentUserData: this.permanentUserData,
-        colors: this.colors
-      }),
-      yUndoPlugin()
+      })
     ]
   }
 
   createState = () =>
     EditorState.create({
+      doc: this.doc,
       schema: this.schema,
       plugins: this.plugins
     })
@@ -206,89 +167,9 @@ export default class ContributionNodeEditor extends LitElement {
     return view
   }
 
-  attachVersion = () => {
-    this.dispatchTransaction(
-      this.state.tr.setMeta(ySyncPluginKey, {
-        snapshot: decodeSnapshotV2(
-          this.versions.get(this.versions.length - 1).snapshot
-        ),
-        prevSnapshot: decodeSnapshotV2(this.versions.get(0).snapshot)
-      })
-    )
-  }
-
-  detachVersion = () => {
-    const binding = ySyncPluginKey.getState(this.state).binding
-
-    if (binding != null) {
-      binding.unrenderSnapshot()
-    }
-  }
-
   setContribution = () => {
     this.contribution = Object.assign({}, this.contribution, {
-      contentAfter: this.content,
-      ydocBase64: this.toYDocBase64
-    })
-  }
-
-  addVersion = () => {
-    const prevVersion =
-      this.versions.length === 0
-        ? null
-        : this.versions.get(this.versions.length - 1)
-    const prevSnapshot =
-      prevVersion === null
-        ? emptySnapshot
-        : decodeSnapshotV2(prevVersion.snapshot)
-
-    const currentSnapshot = snapshot(this.ydoc)
-
-    if (prevVersion != null) {
-      // account for the action of adding a version to ydoc
-      prevSnapshot.sv.set(
-        prevVersion.clientID,
-        prevSnapshot.sv.get(prevVersion.clientID) + 1
-      )
-    }
-
-    if (!equalSnapshots(prevSnapshot, currentSnapshot)) {
-      this.versions.push([
-        {
-          name: `Version ${this.versions.length}`,
-          date: new Date().getTime(),
-          snapshot: encodeSnapshotV2(currentSnapshot),
-          clientID: this.ydoc.clientID
-        }
-      ])
-    }
-
-    return currentSnapshot
-  }
-
-  setupYDocUser = (): void => {
-    this.permanentUserData = new PermanentUserData(this.ydoc)
-    this.permanentUserData.setUserMapping(
-      this.ydoc,
-      this.ydoc.clientID,
-      this.contribution.author.username
-    )
-  }
-
-  setupYChangeColors = (): void => {
-    this.colors = Array.from(this.ydoc.getMap('users').keys()).map((key) => {
-      return {
-        light: randomColor({
-          seed: key,
-          hue: 'orange',
-          luminosity: 'light'
-        }),
-        dark: randomColor({
-          seed: key,
-          hue: 'orange',
-          luminosity: 'dark'
-        })
-      }
+      contentAfter: this.content
     })
   }
 
@@ -314,10 +195,6 @@ export default class ContributionNodeEditor extends LitElement {
     return this.contentSerializer.serialize(this.state.doc)
   }
 
-  get toYDocBase64() {
-    return toBase64(encodeStateAsUpdateV2(this.ydoc))
-  }
-
   handleDialogClose = (event) => {
     event.preventDefault()
 
@@ -329,7 +206,6 @@ export default class ContributionNodeEditor extends LitElement {
   handleSave = (event) => {
     event.preventDefault()
 
-    this.addVersion()
     this.setContribution()
 
     this.parentEditor.addContribution(this.contribution)

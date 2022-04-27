@@ -5,9 +5,14 @@ class PostsController < ApplicationController
 
   before_action :find_publication
   before_action :find_post, only: %i[show update destroy edit]
+  after_action :track_action, only: :show
   skip_verify_authorized only: :show
 
   private
+
+  def track_action
+    ahoy.track 'Viewed post', request.path_parameters.merge(post_id: @post.id, publication_id: @publication.id)
+  end
 
   def find_post
     @post = @publication.posts.friendly.find(params[:permalink])

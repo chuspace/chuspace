@@ -2,6 +2,7 @@
 
 class UserConstraint
   def matches?(request)
-    request.params[:username].present? || request.params[:user_username].present?
+    username = request.params[:username] || request.params[:user_username]
+    User.exists?(username: username)
   end
 end

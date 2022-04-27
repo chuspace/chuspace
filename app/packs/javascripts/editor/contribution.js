@@ -184,8 +184,7 @@ export default class ContributionEditor extends LitElement {
           content_before: contribution.contentBefore,
           content_after: contribution.contentAfter,
           node: contribution.node,
-          widget_pos: contribution.widgetPos,
-          ydoc_base64: contribution.ydocBase64
+          widget_pos: contribution.widgetPos
         }
       }
     )

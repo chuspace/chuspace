@@ -6,7 +6,7 @@ module Publications
       layout false
 
       def update
-        authorize! @draft, to: :commit?
+        authorize! @draft, to: :edit?
         @draft.local_content.value = commit_params[:content]
 
         render turbo_stream: turbo_stream.replace(helpers.dom_id(@draft, :actions), partial: 'publications/drafts/actions', locals: { draft: @draft, publication: @publication })

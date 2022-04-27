@@ -90,6 +90,10 @@ class Draft < Git::Blob
     publication.repository.readme_path == path
   end
 
+  def reload!
+    self.assign_attributes(publication.repository.draft(path: path).attributes)
+  end
+
   def relative_path
     if readme?
       path
@@ -119,6 +123,8 @@ class Draft < Git::Blob
   end
 
   def publish(author:, other_attributes: {})
+    reload!
+
     post = publication.posts.build(author: author)
     post.assign_attributes(to_post_attributes)
     post.assign_attributes(other_attributes)

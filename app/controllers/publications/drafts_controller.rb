@@ -52,9 +52,13 @@ module Publications
       authorize! @draft, to: :commit?
 
       if @draft.update(**commit_params)
-        @draft.publish(author: Current.user) if draft_params[:auto_publish].present?
         @draft.local_content.value = nil
-        redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully updated!'
+
+        if draft_params[:auto_publish].present? && post = @draft.publish(author: Current.user)
+          redirect_to publication_post_path(@publication, post), notice: 'Succesfully committed and published!'
+        else
+          redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully committed!'
+        end
       else
         respond_to do |format|
           format.html { publication_edit_draft_path(@publication, @draft) }

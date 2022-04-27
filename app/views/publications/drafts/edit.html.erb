@@ -6,19 +6,6 @@
       editable
       <%= @draft.front_matter? ? '' : 'excludeFrontmatter' %>
     >
-    <%= turbo_frame_tag(@draft) do %>
-      <%= simple_form_for @draft, url: publication_update_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top' } do |form| %>
-        <div spellcheck="false" data-text='content'>
-          <%= form.input(
-              :body,
-              as: :text,
-              label: false,
-              wrapper: false,
-              input_html: { class: 'hidden content', value: @draft.local_or_remote_content  }
-            )
-          %>
-        </div>
-      <% end %>
-    <% end %>
+    <%= text_area_tag 'bio', @draft.local_or_remote_content, class: 'hidden content' %>
   </chu-editor>
 </div>

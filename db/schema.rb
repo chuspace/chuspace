@@ -27,6 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
   create_enum "membership_role_enum_type", ["writer", "editor", "admin", "owner", "member"]
   create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
   create_enum "publication_visibility_enum_type", ["private", "public", "member"]
+  create_enum "revision_status_enum_type", ["open", "closed", "merged"]
 
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.string "name", null: false
@@ -293,6 +294,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
     t.index ["publication_id"], name: "index_repositories_on_publication_id"
   end
 
+  create_table "revisions", force: :cascade do |t|
+    t.bigint "publication_id", null: false
+    t.bigint "post_id", null: false
+    t.bigint "author_id", null: false
+    t.text "content_before", null: false
+    t.text "content_after", null: false
+    t.integer "pos_from", null: false
+    t.integer "pos_to", null: false
+    t.integer "widget_pos", null: false
+    t.jsonb "node", default: {}, null: false
+    t.bigint "number", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.enum "status", default: "open", null: false, enum_type: "revision_status_enum_type"
+    t.index ["author_id"], name: "index_revisions_on_author_id"
+    t.index ["post_id"], name: "index_revisions_on_post_id"
+    t.index ["publication_id", "post_id", "number"], name: "index_revisions_on_publication_id_and_post_id_and_number", unique: true
+    t.index ["publication_id"], name: "index_revisions_on_publication_id"
+  end
+
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"
     t.string "taggable_type"
@@ -367,4 +388,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
   add_foreign_key "publications", "users", column: "owner_id"
   add_foreign_key "repositories", "git_providers"
   add_foreign_key "repositories", "publications"
+  add_foreign_key "revisions", "posts"
+  add_foreign_key "revisions", "publications"
+  add_foreign_key "revisions", "users", column: "author_id"
 end
