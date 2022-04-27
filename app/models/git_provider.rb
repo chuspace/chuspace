@@ -13,8 +13,13 @@ class GitProvider < ApplicationRecord
 
   enum name: GitStorageConfig.providers_enum
 
+  def adapter
+    # Implement adapters here
+    GithubAdapter.new(git_provider: self)
+  end
+
   def connected?
-    expiring? ? user_access_token_expires_at > Time.current.utc : user_access_token.present?
+    expiring? && user_access_token_expires_at > Time.current.utc
   end
 
   def config
@@ -22,12 +27,11 @@ class GitProvider < ApplicationRecord
   end
 
   def expiring?
-    user_access_token_expires_at.present?
+    user_access_token.present? && user_access_token_expires_at.present?
   end
 
-  def adapter
-    # Implement adapters here
-    GithubAdapter.new(git_provider: self)
+  def revoke!
+    update(user_access_token: nil, machine_access_token: nil, user_access_token_expires_at: nil)
   end
 
   def to_param
