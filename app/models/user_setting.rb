@@ -3,6 +3,6 @@
 class UserSetting
   include ActiveModel::API
 
-  PAGES = %w[profile publication front_matter permissions].freeze
+  PAGES = %w[profile publication].freeze
   DEFAULT_PAGE = :profile
 end

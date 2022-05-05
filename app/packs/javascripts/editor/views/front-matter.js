@@ -51,6 +51,6 @@ export default class FrontMatterView extends CodeBlockView {
 
   selectNode = () => {
     this.containerNode.open = true
-    this.cm.focus()
+    if (this.cm) this.cm.focus()
   }
 }

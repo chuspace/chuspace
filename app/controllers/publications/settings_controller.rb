@@ -21,7 +21,7 @@ module Publications
       authorize! @publication, to: :edit?
       @publication.update(publication_params)
 
-      redirect_to publication_setting_path(@publication, id: params[:id])
+      redirect_to @publication.personal? ? setting_path(id: params[:id]) : publication_setting_path(@publication, id: params[:id])
     end
 
     private
@@ -31,7 +31,9 @@ module Publications
         :name,
         :description,
         :icon,
-        repository_attributes: %i[posts_folder drafts_folder assets_folder readme_path id]
+        repository_attributes: %i[posts_folder drafts_folder assets_folder readme_path id],
+        content_attributes: %i[auto_publish],
+        front_matter_attributes: %i[title summary date topics]
       )
     end
   end

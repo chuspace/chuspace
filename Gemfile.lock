@@ -65,6 +65,11 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_storage_validations (0.9.8)
+      activejob (>= 5.2.0)
+      activemodel (>= 5.2.0)
+      activestorage (>= 5.2.0)
+      activesupport (>= 5.2.0)
     active_type (2.1.1)
       activerecord (>= 3.2)
     activejob (7.0.2.4)
@@ -527,6 +532,7 @@ PLATFORMS
 DEPENDENCIES
   aasm
   action_policy
+  active_storage_validations
   active_type
   acts-as-taggable-on!
   acts_as_votable

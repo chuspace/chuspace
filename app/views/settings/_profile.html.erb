@@ -1,0 +1,26 @@
+<%= turbo_frame_tag(dom_id(user, :profile)) do %>
+  <%= simple_form_for(user, url: setting_path(id: :profile)) do |form| %>
+    <drop-image class='mt-8'>
+      <%= render(Avatar::Component.new(avatar: user.avatar, fallback: user.name.initials, variant: :profile)) %>
+      <% if user.errors.include?(:avatar) %>
+        <%= content_tag :span, user.errors.full_messages_for(:avatar).to_sentence, class: 'input-error text-red block' %>
+      <% else %>
+        <span class="input-hint w-3/4">
+          <%= form.hint :avatar %>
+        </span>
+      <% end %>
+      <%= form.input(:avatar,
+        as: :file,
+        wrapper: false,
+        label: false,
+        hint: false,
+        input_html: { accept: "image/*", id: 'drop_input', class: 'hidden' }
+        )
+      %>
+    </drop-image>
+    <%= form.input :name %>
+    <%= form.input :username %>
+    <%= form.input :email, as: :string %>
+    <%= form.button :submit, 'Save', class: 'mt-8 btn btn-primary', 'data-turbo-frame': :_top %>
+  <% end %>
+<% end %>

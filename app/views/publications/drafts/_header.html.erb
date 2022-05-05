@@ -1,7 +1,7 @@
 <flexible-header>
   <header data-target='flexible-header.element' class='header fixed z-50 top-0 bg-base-100 h-14 w-full'>
     <nav class='container flex justify-between items-center w-full h-full'>
-      <%= link_to root_path, class: 'pt-1 pb-2' do %>
+      <%= link_to root_path do %>
         <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= logo %></span>
         <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
       <% end %>

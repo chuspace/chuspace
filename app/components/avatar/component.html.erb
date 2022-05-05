@@ -1,0 +1,13 @@
+<% if avatar.attached? %>
+  <div class="avatar">
+    <div class="<%= class_name %>">
+      <%= avatar.variable? ? image_tag(avatar.variant(variant)) : image_tag(avatar) %>
+    </div>
+  </div>
+<% else %>
+  <div class="avatar placeholder">
+    <div class="<%= class_name %>">
+      <span class="text-xl"><%= fallback %></span>
+    </div>
+  </div>
+<% end %>

@@ -41,3 +41,4 @@ en:
       user:
         email: Your email is safe with us
         username: Username should be maximum 40 characters
+        avatar: Drop images here or click to browse. Maximum image size 5MB

@@ -3,7 +3,7 @@
 module Connect
   class BaseController < ApplicationController
     before_action :authenticate!
-    before_action :find_git_provider
+    before_action :find_git_provider, :redirect_to_connect_home_if_not_connected
     before_action :build_publication
 
     skip_verify_authorized
@@ -89,6 +89,10 @@ module Connect
       @git_provider = Current.user.git_providers.find_by(name: params[:git_provider])
     rescue ActiveRecord::StatementInvalid
       fail ActiveRecord::RecordNotFound
+    end
+
+    def redirect_to_connect_home_if_not_connected
+      redirect_to connect_root_path, 'Reconnect' unless @git_provider.connected?
     end
   end
 end

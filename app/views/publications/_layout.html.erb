@@ -1,6 +1,10 @@
 <div class='flex items-center w-full'>
   <% if  @publication.icon.attached? %>
-    <%= image_tag(@publication.icon.variant(:thumb), class: 'mask mask-circle') %>
+    <div class="avatar">
+      <div class='w-8 rounded'>
+        <%= image_tag(@publication.icon.variant(:thumb)) %>
+      </div>
+    </div>
   <% else %>
     <div class="avatar placeholder">
       <div class="bg-neutral-focus text-neutral-content rounded-full w-32 h-32">

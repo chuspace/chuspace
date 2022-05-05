@@ -115,8 +115,8 @@ export default class CodeEditor extends LitElement {
     if (this.cm) return
 
     await loadMode(this.mode)
-    this.cm = await this.createCM(this.codeEditorNode)
-    if (this.onInit) await this.onInit(this.cm)
+    this.cm = this.createCM(this.codeEditorNode)
+    if (this.onInit) this.onInit(this.cm)
 
     this.cm.on('change', (editor) => {
       if (this.onChange) this.onChange(editor.doc.getValue())
@@ -125,8 +125,8 @@ export default class CodeEditor extends LitElement {
     this.loaded = true
   }
 
-  async connectedCallback() {
-    await super.connectedCallback()
+  connectedCallback() {
+    super.connectedCallback()
     this.lines = this.content.split(/\r\n|\r|\n/).length
 
     try {
@@ -144,7 +144,7 @@ export default class CodeEditor extends LitElement {
     return this
   }
 
-  createCM = async (node: ?HTMLElement) =>
+  createCM = (node: ?HTMLElement) =>
     new CodeMirror(node, {
       lineNumbers: true,
       styleActiveLine: true,

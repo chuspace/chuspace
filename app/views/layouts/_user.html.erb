@@ -2,7 +2,7 @@
   <div class="dropdown dropdown-end">
     <div tabindex="0" class="cursor-pointer avatar">
       <div class='w-8 rounded-full'>
-        <%= image_tag Current.user.avatar_url %>
+        <%= render(Avatar::Component.new(avatar: Current.user.avatar, fallback: Current.user.name.initials, variant: :thumb)) %>
       </div>
     </div>
     <ul tabindex="0" class="shadow menu dropdown-content bg-base-300 rounded-box w-52 z-50">

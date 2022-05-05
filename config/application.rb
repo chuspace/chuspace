@@ -35,5 +35,8 @@ module Chuspace
 
     # Ziet
     Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
+
+    # Serve SVG
+    config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
   end
 end

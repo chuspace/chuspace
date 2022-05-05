@@ -149,10 +149,10 @@ img.lazy:not([src]) {
   visibility: hidden;
 }
 
-file-attachment {
-  @apply block w-full p-16 text-center border-2 border-dashed border-base-100;
+drop-image {
+  @apply block w-full p-16 text-center border-2 cursor-pointer border-dashed border-base-200;
 
-  &[hover] {
+  &:hover {
     @apply border-base-300;
   }
 }

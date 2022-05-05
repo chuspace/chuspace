@@ -1,0 +1,12 @@
+<% if user.personal_publication %>
+  <div class='mt-4'>
+    <h3 class='border-b border-base-200 pb-2'>Content</h3>
+    <%= render 'publications/settings/content', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :publication) %>
+  </div>
+
+  <h3 class='border-b border-base-200 mt-8 pb-2'>Publishing</h3>
+  <%= render 'publications/settings/publishing', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :publication) %>
+
+  <h3 class='border-b border-base-200 mt-8 pb-2'>Front Matter</h3>
+  <%= render 'publications/settings/front_matter', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :publication) %>
+<% end %>

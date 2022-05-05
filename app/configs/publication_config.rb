@@ -3,6 +3,7 @@
 class PublicationConfig < ApplicationConfig
   attr_config(
     front_matter: {
+      keys: %i[title summary date topics published],
       title: :title,
       summary: :summary,
       date: :date,

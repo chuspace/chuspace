@@ -2,7 +2,14 @@
 
 import { LitElement, html } from 'lit'
 
-const ACCEPTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif']
+const ACCEPTED_IMAGES = [
+  'image/png',
+  'image/jpg',
+  'image/jpeg',
+  'image/gif',
+  'image/svg+xml',
+  'image/webp'
+]
 
 export default class DropImage extends LitElement {
   static get properties() {
@@ -13,15 +20,19 @@ export default class DropImage extends LitElement {
     }
   }
 
-  async connectedCallback() {
-    await super.connectedCallback()
-
-    this.input = this.querySelector('#drop_input')
-    this.input.classList.add('hidden')
+  connectedCallback() {
+    super.connectedCallback()
 
     this.addEventListener('click', this.handleClick)
     this.addEventListener('dragover', this.handleDrag)
     this.addEventListener('drop', this.handleDrop)
+  }
+
+  firstUpdated() {
+    this.input = this.querySelector('input')
+    if (!this.input) throw new Error('no <input /> provided')
+
+    this.input.classList.add('hidden')
     this.input.addEventListener('change', this.handleChange)
   }
 

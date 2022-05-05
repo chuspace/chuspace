@@ -8,6 +8,7 @@ class FrontMatterSetting
   attr_json :topics, :string, default: PublicationConfig.new.front_matter[:topics]
   attr_json :date, :string, default: PublicationConfig.new.front_matter[:date]
   attr_json :published, :string, default: PublicationConfig.new.front_matter[:published]
+  attr_json :keys, :string, array: true, default: PublicationConfig.new.front_matter[:keys]
 
-  validates :title, :summary, :topics, :date, :published, presence: true
+  validates :title, :summary, :topics, :date, :published, :keys, presence: true
 end

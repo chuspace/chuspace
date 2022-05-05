@@ -63,18 +63,19 @@ Rails.application.routes.draw do
   end
 
   resources :users, path: '', except: :index, param: :username, constraints: UserConstraint.new do
-    resources :settings, only: %i[index show update], module: :users
     resources :drafts, only: :index, module: :users do
       collection do
         get '/*path', to: 'drafts#index', as: :nested
       end
     end
+
     resources :tabs, only: :show, path: '', module: :users, constraints: UserTabConstraint.new
   end
 
+  resources :settings, only: %i[index show update]
   resources :publications, only: :index
 
-  resources :publications, path: '', only: :show, param: :permalink, constraints: { permalink: /[a-z0-9_\-]+/ } do
+  resources :publications, path: '', only: :show, param: :permalink, constraints: PublicationConstraint.new do
     resources :settings, only: %i[index show update], module: :publications
 
     resources :people, path: 'people', module: :publications do

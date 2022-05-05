@@ -1,30 +1,26 @@
 <div class='flex items-center w-full'>
   <div class='w-full flex items-center justify-between'>
     <div class='flex items-center'>
-      <%= image_tag(@user.avatar_url(variant: :icon), class: 'mask mask-circle') %>
-
+      <%= render(Avatar::Component.new(avatar: @user.avatar, fallback: @user.name.initials, variant: :icon)) %>
       <div class='ml-2'>
-        <h3><%= @user.name %></h3>
-        <p class='text-secondary'><%= @user.username %></p>
+        <h3 class='mb-0'><%= @user.name %></h3>
+        <p class='text-secondary text-sm'><%= @user.username %></p>
       </div>
     </div>
-
     <%= link_to 'Back to profile', user_path(@user), class: 'btn btn-sm btn-primary' %>
   </div>
 </div>
 
 <div class='grid grid-cols-4 gap-8 mt-8'>
   <%= render 'sidebar', user: @user %>
-
   <section class='col-span-3'>
     <%= render(Card::Component.new) do |card| %>
       <% card.title do %>
         <%= render('shared/breadcrumbs') %>
       <% end %>
-
       <% card.body do %>
         <div class='px-8 pb-8'>
-          <%= render "#{@partial}", user: @user, url: user_setting_path(@user, id: @partial.parameterize) %>
+          <%= render "#{@partial}", user: @user, url: setting_path(id: @partial.parameterize) %>
         </div>
       <% end %>
     <% end %>

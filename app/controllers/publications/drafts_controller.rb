@@ -81,6 +81,7 @@ module Publications
     private
 
     def build_draft
+      @drafts_root_path = @drafts_root_path.join(params[:path]) if params[:path].present?
       @draft = Draft.new(publication: @publication, content: '', adapter: @publication.repository.git_provider_adapter, path: @drafts_root_path)
     end
 

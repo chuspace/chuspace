@@ -16,10 +16,6 @@ class Draft < Git::Blob
     MarkdownRenderer.new(publication: publication).render(doc).html_safe
   end
 
-  def collab?
-    !readme?
-  end
-
   def date
     front_matter.dig(publication.front_matter.date)
   end

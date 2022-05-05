@@ -27,8 +27,6 @@ class ApplicationAdapter
 
   def initialize(git_provider:)
     @git_provider = git_provider
-    @git_provider.refresh_access_token unless @git_provider.connected?
-
     check_method_implementation!
   end
 

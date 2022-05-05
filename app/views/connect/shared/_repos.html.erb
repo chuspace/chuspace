@@ -1,8 +1,8 @@
 <%= turbo_frame_tag(dom_id(provider, :repositories), 'data-target': 'details-menu-form.loader') do %>
-  <div class='card bordered max-h-96 overflow-y-auto'>
+  <div class='card bordered bg-base-200 max-h-96 overflow-y-auto'>
     <% if repositories.any? %>
       <% repositories.each do |repo| %>
-        <div class='border-b last:border-b-0 p-4 border-base-200'>
+        <div class='p-4 flex items-center border-b last:border-b-0 border-base-300'>
           <div class='flex-1'>
             <% new_publication_path = publication.personal? ? new_connect_personal_publication_path(provider, repo_fullname: repo.fullname) : new_connect_other_publication_path(provider, repo_fullname: repo.fullname)%>
             <%= link_to(new_publication_path, 'data-turbo-frame': :_top) do %>
@@ -10,9 +10,17 @@
                 <%= repo.fullname %>
                 <%= content_tag :span, repo.visibility, class: 'badge badge-outline badge-secondary ml-2' %>
               <% end %>
-              <%= tag.div repo.description, class: 'text-secondary mt-1' %>
+              <%= tag.p repo.description, class: 'text-secondary text-sm sm:w-2/3 w-full mt-1' %>
             <% end %>
           </div>
+          <%= link_to(
+              'Choose',
+              new_publication_path,
+              class: 'btn btn-primary btn-sm',
+              data: { turbo: false },
+              title: "Choose this repository",
+            )
+          %>
         </div>
       <% end %>
     <% else %>

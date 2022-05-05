@@ -1,12 +1,16 @@
 // @flow
 
-import { controller, target, targets } from '@github/catalyst'
+import { controller, target } from '@github/catalyst'
 
 @controller
 export default class DetailsMenuFormElement extends HTMLElement {
   @target form: HTMLFormElement
   @target input: HTMLInputElement
   @target loader: HTMLElement
+
+  connectedCallback() {
+    console.log(this.input)
+  }
 
   onChange = (event) => {
     this.input.value = event.detail.relatedTarget?.textContent?.trim()
