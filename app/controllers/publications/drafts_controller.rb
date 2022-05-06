@@ -27,6 +27,7 @@ module Publications
       @draft.assign_attributes(name: draft_params[:name], path: @drafts_root_path.join(draft_params[:name]).to_s)
 
       if @draft.valid? && @draft.create(**commit_params)
+        @draft.reload!
         @draft.local_content.value = nil
         redirect_to publication_edit_draft_path(@publication, @draft)
       else
@@ -41,6 +42,7 @@ module Publications
       authorize! @draft
 
       if @draft.delete(**commit_params)
+        @draft.reload!
         @draft.local_content.value = nil
         redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
       else
@@ -52,6 +54,7 @@ module Publications
       authorize! @draft, to: :commit?
 
       if @draft.update(**commit_params)
+        @draft.reload!
         @draft.local_content.value = nil
 
         if draft_params[:auto_publish].present? && post = @draft.publish(author: Current.user)

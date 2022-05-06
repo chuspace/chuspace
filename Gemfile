@@ -148,6 +148,7 @@ end
 group :development do
   gem 'erb_lint', require: false
   gem 'htmlbeautifier', require: false
+  gem "prettier", require: false
 
   gem 'web-console', '>= 3.3.0', require: false
   # Code linting

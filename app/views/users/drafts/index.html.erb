@@ -5,7 +5,7 @@
 
   <% card.actions do %>
     <% if @user.personal_publication %>
-      <%= link_to 'New', publication_new_draft_path(@user.personal_publication, path: @path), class: 'btn btn-primary btn-sm' %>
+      <%= link_to 'New', publication_new_draft_path(@user.personal_publication), class: 'btn btn-primary btn-sm' %>
     <% else %>
       <%= link_to 'Connect', connect_personal_publications_path, class: 'btn btn-primary btn-sm' %>
     <% end %>

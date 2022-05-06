@@ -70,7 +70,6 @@ export default class CodeBlockView extends BaseView {
   }
 
   onInit = (cm: CodeMirror) => {
-    console.log(cm)
     this.cm = cm
     // Propagate updates from the code editor to ProseMirror
     this.cm.on('beforeChange', () => (this.incomingChanges = true))

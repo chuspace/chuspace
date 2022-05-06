@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
+  CodeBlock = Struct.new(:content, :language)
+
   attribute :publication, Publication
   validates :path, :name, markdown: true
   validates :publication, presence: true
 
-  kredis_string :local_content, expires_in: 1.day, key: ->(draft) { "#{draft.publication.permalink}:#{draft.path}:local_content" }
+  kredis_string :local_content, expires_in: 1.day, key: :local_content_key
 
   def body
     parsed.content
@@ -13,7 +15,7 @@ class Draft < Git::Blob
 
   def content_html(content: body)
     doc = CommonMarker.render_doc(content)
-    MarkdownRenderer.new(publication: publication).render(doc).html_safe
+    PostHtmlRenderer.new(publication: publication).render(doc).html_safe
   end
 
   def date
@@ -21,7 +23,7 @@ class Draft < Git::Blob
   end
 
   def decoded_content
-    Base64.decode64(content).force_encoding('UTF-8')
+    Base64.decode64(content).force_encoding("UTF-8")
   end
 
   def front_matter
@@ -58,16 +60,30 @@ class Draft < Git::Blob
   end
 
   def preview_image_url_or_path
-    image = nil
+    images.first
+  end
+
+  def images
+    images = []
+
+    markdown_doc.walk { |node| images << node.url if node.type == :image }
+
+    images
+  end
+
+  def snippets
+    snippets = []
 
     markdown_doc.walk do |node|
-      if node.type == :image
-        image = node.url
-        break
+      if node.type == :code_block
+        snippets << CodeBlock.new(
+          node.string_content,
+          node.fence_info.split(/\s+/)[0]
+        )
       end
     end
 
-    image
+    snippets
   end
 
   def summary
@@ -132,11 +148,7 @@ class Draft < Git::Blob
   end
 
   def status
-    if stale?
-      'Uncommitted changes'
-    else
-      'Everything up to date'
-    end
+    stale? ? "Uncommitted changes" : "Everything up to date"
   end
 
   def new_template
@@ -151,9 +163,16 @@ class Draft < Git::Blob
 
   private
 
+  def local_content_key
+    "#{publication.permalink}:#{path}:content"
+  end
+
   def parsed
-    yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
-    FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(decoded_content)
+    yaml_loader =
+      FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
+    FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(
+      decoded_content
+    )
   rescue Psych::SyntaxError, Base64
     OpenStruct.new(front_matter: {}, content: decoded_content)
   end

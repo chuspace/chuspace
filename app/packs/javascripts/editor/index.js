@@ -27,10 +27,7 @@ function arrowHandler(dir) {
     if (state.selection.empty && view.endOfTextblock(dir)) {
       let side = dir == 'left' || dir == 'up' ? -1 : 1,
         $head = state.selection.$head
-      let nextPos = Selection.near(
-        state.doc.resolve(side > 0 ? $head.after() : $head.before()),
-        side
-      )
+      let nextPos = Selection.near(state.doc.resolve(side > 0 ? $head.after() : $head.before()), side)
 
       if (CUSTOM_ARROW_HANDLERS.includes(nextPos?.$head?.parent?.type?.name)) {
         if (nextPos.$head.parent.type.name === 'front_matter') {
@@ -58,7 +55,7 @@ export default class ChuEditor extends LitElement {
     editable: { type: Boolean },
     mode: { type: String },
     status: { type: String, reflect: true },
-    onChange: { type: Function }
+    onChange: { type: Function },
   }
 
   manager: SchemaManager
@@ -84,7 +81,6 @@ export default class ChuEditor extends LitElement {
 
   connectedCallback() {
     super.connectedCallback()
-
     this.manager = new SchemaManager(this)
 
     this.schema = this.manager.schema
@@ -123,7 +119,7 @@ export default class ChuEditor extends LitElement {
     return [
       ...this.manager.plugins,
       inputRules({
-        rules: this.manager.inputRules
+        rules: this.manager.inputRules,
       }),
       ...this.manager.pasteRules,
       ...this.manager.keymaps,
@@ -136,7 +132,7 @@ export default class ChuEditor extends LitElement {
         'Ctrl-s': this.handleSave,
         'Mod-s': this.handleSave,
         Escape: selectParentNode,
-        Backspace: undoInputRule
+        Backspace: undoInputRule,
       }),
 
       dropCursor(),
@@ -145,17 +141,17 @@ export default class ChuEditor extends LitElement {
       new Plugin({
         key: new PluginKey('editable'),
         props: {
-          editable: () => this.editable
-        }
+          editable: () => this.editable,
+        },
       }),
       new Plugin({
         key: new PluginKey('tabindex'),
         props: {
           attributes: {
-            tabindex: 0
-          }
-        }
-      })
+            tabindex: 0,
+          },
+        },
+      }),
     ]
   }
 
@@ -163,7 +159,7 @@ export default class ChuEditor extends LitElement {
     let options = {
       doc: this.doc,
       schema: this.schema,
-      plugins: this.plugins
+      plugins: this.plugins,
     }
 
     return EditorState.create(options)
@@ -177,16 +173,13 @@ export default class ChuEditor extends LitElement {
       imageLoadPath: this.imageLoadPath,
       imageUploadPath: this.imageUploadPath,
       dispatchTransaction: this.dispatchTransaction.bind(this),
-      nodeViews: this.manager.nodeViews
+      nodeViews: this.manager.nodeViews,
     })
 
     view.dom.style.whiteSpace = 'pre-wrap'
     view.dom.title = 'Enter post content'
     view.dom.id = 'editor-content'
-    view.dom.classList.add(
-      'chu-editor',
-      this.editable ? 'editable' : 'read-only'
-    )
+    view.dom.classList.add('chu-editor', this.editable ? 'editable' : 'read-only')
 
     return view
   }
@@ -204,9 +197,9 @@ export default class ChuEditor extends LitElement {
       const response = await patch(this.autoSavePath, {
         body: JSON.stringify({
           draft: {
-            content: this.content
-          }
-        })
+            content: this.content,
+          },
+        }),
       })
 
       if (response.ok) {
@@ -254,8 +247,7 @@ export default class ChuEditor extends LitElement {
         if (this.dirty) {
           const event = e || window.event
           event.returnValue =
-            'It looks like you have been editing something. ' +
-            'If you leave before saving, your changes will be lost.'
+            'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.'
         } else {
           return undefined
         }

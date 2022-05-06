@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MarkdownRenderer < CommonMarker::HtmlRenderer
+class PostHtmlRenderer < CommonMarker::HtmlRenderer
   attr_reader :publication
 
   def initialize(publication:)

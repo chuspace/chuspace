@@ -25,6 +25,8 @@ class Post < ApplicationRecord
 
   friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
 
+  has_many_attached :snippets
+  has_many_attached :images
   has_one_attached :preview_image do |attachable|
     attachable.variant :post, resize_to_limit: [800, 300]
     attachable.variant :list, resize_to_limit: [250, 150]

@@ -6,7 +6,7 @@
       editable
       <%= @draft.front_matter? ? '' : 'excludeFrontmatter' %>
     >
-    <%= @draft.local_content.value %>
+
     <%= text_area_tag 'content', @draft.local_or_remote_content, class: 'hidden content' %>
   </chu-editor>
 </div>

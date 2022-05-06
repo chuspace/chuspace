@@ -12,8 +12,10 @@
           <h3><%= @post.author.name %></h3>
           <p class='text-secondary text-xs'>
             <%= @post.created_at.strftime("%d %b %Y %I:%M %p") %>
-            <span class=''>.</span>
-            <%= link_to @post.publication.personal? ? 'Personal' : @post.publication.name, publication_path(@post.publication) %>
+            <% unless @post.publication.personal? %>
+              <span class=''>.</span>
+              <%= link_to @post.publication.name, publication_path(@post.publication) %>
+            <% end %>
           </p>
         </div>
       </div>
