@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Posts
-  class RevisionsController < ApplicationController
-    before_action :authenticate!
-    before_action :find_publication, :find_post
+  class RevisionsController < BaseController
     before_action :find_revision, only: %i[edit show update]
 
     layout 'post'
@@ -53,14 +51,6 @@ module Posts
 
     def find_revision
       @revision = @post.revisions.find(params[:id])
-    end
-
-    def find_post
-      @post = @publication.posts.friendly.find(params[:post_permalink])
-    end
-
-    def find_publication
-      @publication = Publication.friendly.find(params[:publication_permalink])
     end
   end
 end

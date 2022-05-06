@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
-  include Immutable
   extend FriendlyId
 
   self.implicit_order_column = 'version'
@@ -23,10 +22,6 @@ class Post < ApplicationRecord
   acts_as_votable
   acts_as_taggable_on :topics
 
-  friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
-
-  has_many_attached :snippets
-  has_many_attached :images
   has_one_attached :preview_image do |attachable|
     attachable.variant :post, resize_to_limit: [800, 300]
     attachable.variant :list, resize_to_limit: [250, 150]
@@ -34,14 +29,25 @@ class Post < ApplicationRecord
     attachable.variant :social, resize_to_limit: [600, 315]
   end
 
+  friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
+  scope :published, -> { where(published: true) }
+
   delegate :repository, to: :publication
 
   def self.default_scope
-    where(published: true).order(date: :desc)
+    published.order(date: :desc)
+  end
+
+  def current_version
+    @current_version ||= publication.posts.find_by(blob_path: blob_path)
   end
 
   def draft
     repository.draft_at(path: blob_path, ref: commit_sha)
+  end
+
+  def markdown_doc
+    @markdown_doc ||= MarkdownDoc.new(content: body)
   end
 
   def short_commit_sha
@@ -56,7 +62,7 @@ class Post < ApplicationRecord
     {
       site: ChuspaceConfig.new.app[:name],
       title: title,
-      image_src: preview_image.variant(:list),
+      image_src: preview_image.variant(:list).processed.url,
       description: summary,
       keywords: topic_list,
       index: true,
@@ -67,7 +73,7 @@ class Post < ApplicationRecord
         type: :article,
         description: :description,
         site_name: :site,
-        image: preview_image.variant(:social),
+        image: preview_image.variant(:social).processed.url,
         url: Rails.application.routes.url_helpers.publication_post_url(publication, self)
       },
       twitter: {
@@ -76,7 +82,7 @@ class Post < ApplicationRecord
         description: :description,
         site: ChuspaceConfig.new.app[:twitter],
         url: Rails.application.routes.url_helpers.publication_post_url(publication, self),
-        image: preview_image.variant(:list)
+        image: preview_image.variant(:list).processed.url
       },
       article: { published_time: date, modified_time: updated_at, tag: topic_list, author: author.username }
     }

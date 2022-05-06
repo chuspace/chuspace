@@ -125,6 +125,7 @@ Rails.application.routes.draw do
       resources :posts, path: '', except: :index, param: :permalink do
         resources :settings, only: %i[index show]
         resources :revisions, module: :posts
+        resources :snippets, module: :posts, only: %i[index show]
       end
     end
   end

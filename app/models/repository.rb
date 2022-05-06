@@ -17,14 +17,8 @@ class Repository < ApplicationRecord
   def raw(path:)
     pathname = Pathname.new(path)
     path = (pathname.absolute? ? pathname.relative_path_from('/') : pathname).to_s
-    content = case git_provider.name.to_sym
-              when :github
-                blob = tree.find { |asset| asset.path == path }
-                git_provider_adapter.asset(sha: blob.sha).content
-              else
-                asset(path: path).content
-    end
-
+    blob = tree.find { |asset| asset.path == path }
+    content = git_provider_adapter.asset(sha: blob.sha).content
     Base64.decode64(content)
   end
 

@@ -4,6 +4,7 @@ import 'codemirror/lib/codemirror.css'
 import './styles.sass'
 import './themes/light.sass'
 import './themes/dark.sass'
+import 'tippy.js/dist/tippy.css'
 import 'codemirror/addon/fold/foldgutter.css'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/addon/edit/matchbrackets'
@@ -52,7 +53,7 @@ export default class CodeEditor extends LitElement {
     onInit: { type: Function },
     codeMirrorKeymap: { type: Function },
     onLanguageChange: { type: Function },
-    onDestroy: { type: Function }
+    onDestroy: { type: Function },
   }
 
   constructor() {
@@ -66,7 +67,7 @@ export default class CodeEditor extends LitElement {
     this.options = {
       root: null,
       rootMargin: '0px',
-      threshold: [0, 0.25, 0.5, 0.75, 1]
+      threshold: [0, 0.25, 0.5, 0.75, 1],
     }
   }
 
@@ -82,10 +83,7 @@ export default class CodeEditor extends LitElement {
       this.removeObserver()
     }
 
-    this.observer = new IntersectionObserver(
-      this.handleIntersection.bind(this),
-      this.options
-    )
+    this.observer = new IntersectionObserver(this.handleIntersection.bind(this), this.options)
     this.observer.observe(this)
   }
 
@@ -129,14 +127,6 @@ export default class CodeEditor extends LitElement {
     super.connectedCallback()
     this.lines = this.content.split(/\r\n|\r|\n/).length
 
-    try {
-      this.readonly = JSON.parse(this.readonly)
-    } catch (e) {}
-
-    try {
-      this.downloadable = JSON.parse(this.downloadable)
-    } catch (e) {}
-
     this.attachObserver()
   }
 
@@ -163,12 +153,12 @@ export default class CodeEditor extends LitElement {
       autoCloseBrackets: !this.readonly,
       autoCloseTags: !this.readonly,
       showTrailingSpace: !this.readonly,
-      matchTags: !this.readonly
+      matchTags: !this.readonly,
     })
 
   initClipboardJS = (node: ?HTMLElement) => {
     const clipboard = new ClipboardJS(node, {
-      text: (trigger) => this.cm && this.cm.getDoc().getValue()
+      text: (trigger) => this.cm && this.cm.getDoc().getValue(),
     })
 
     clipboard.on('success', (e) => {
@@ -177,7 +167,7 @@ export default class CodeEditor extends LitElement {
         arrow: true,
         showOnCreate: true,
         trigger: 'click',
-        content: 'Copied'
+        content: 'Copied',
       })
 
       setTimeout(() => {
@@ -188,10 +178,6 @@ export default class CodeEditor extends LitElement {
   }
 
   render = () => {
-    const downloadIcon = svg`
-      <svg class='fill-current' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M4.97 11.03a.75.75 0 111.06-1.06L11 14.94V2.75a.75.75 0 011.5 0v12.19l4.97-4.97a.75.75 0 111.06 1.06l-6.25 6.25a.75.75 0 01-1.06 0l-6.25-6.25zm-.22 9.47a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H4.75z"></path></svg>
-    `
-
     return html`
       <div
         class="code-editor-container ${this.wrapper
@@ -203,23 +189,12 @@ export default class CodeEditor extends LitElement {
         ${this.wrapper
           ? html`
               <div class="code-editor-toolbar" contenteditable="false">
-                ${this.readonly && this.downloadable ? downloadIcon : null}
                 ${!this.readonly ? Controls({ destroy: this.onDestroy }) : null}
-                ${this.filename
-                  ? html`
-                      <span>${this.filename}</span>
-                    `
-                  : null}
+                ${this.filename ? html` <span>${this.filename}</span> ` : null}
 
                 <div class="code-editor-toolbar-menu" contenteditable="false">
                   ${this.readonly
-                    ? html`
-                        <div
-                          class="code-editor-language-badge badge badge-primary mr-4"
-                        >
-                          ${this.mode}
-                        </div>
-                      `
+                    ? html` <div class="code-editor-language-badge badge badge-primary mr-4">${this.mode}</div> `
                     : html`
                         <code-editor-language-switcher
                           mode=${this.mode}
@@ -228,9 +203,7 @@ export default class CodeEditor extends LitElement {
                         ></code-editor-language-switcher>
                       `}
 
-                  <copy-clipboard
-                    .initClipboardJS=${this.initClipboardJS}
-                  ></copy-clipboard>
+                  <copy-clipboard .initClipboardJS=${this.initClipboardJS}></copy-clipboard>
                 </div>
               </div>
             `

@@ -27,7 +27,7 @@ export default class ImageView extends BaseView {
     const src = isUrl(this.node.attrs.src)
       ? this.node.attrs.src
       : `${this.imageLoadPath}?${queryString.stringify({
-          path: this.node.attrs.src
+          path: this.node.attrs.src,
         })}`
 
     render(
@@ -50,13 +50,7 @@ export default class ImageView extends BaseView {
 
   handleChange = (attrs: ?{ align: String, alt: string } = {}) => {
     this.node.attrs = Object.assign({}, this.node.attrs, attrs)
-    this.outerView.dispatch(
-      this.outerView.state.tr.setNodeMarkup(
-        this.getPos(),
-        null,
-        this.node.attrs
-      )
-    )
+    this.outerView.dispatch(this.outerView.state.tr.setNodeMarkup(this.getPos(), null, this.node.attrs))
   }
 
   handleDelete = () => {

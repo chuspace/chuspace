@@ -2,7 +2,7 @@ export type ModeType = {
   name: string,
   mode: string,
   mime?: string,
-  custom?: boolean
+  custom?: boolean,
 }
 
 export type ModesType = Array<LanguageType>
@@ -10,345 +10,345 @@ export type ModesType = Array<LanguageType>
 export const MODES: ModesType = [
   {
     name: 'Auto',
-    mode: 'auto'
+    mode: 'auto',
   },
   {
     name: 'Apache',
     mode: 'apache',
     mime: 'text/apache',
-    custom: true
+    custom: true,
   },
   {
     name: 'Bash',
     mode: 'shell',
-    mime: 'application/x-sh'
+    mime: 'application/x-sh',
   },
   {
     name: 'Plain Text',
-    mode: 'text'
+    mode: 'text',
   },
   {
     name: 'C',
     mode: 'clike',
     mime: 'text/x-csrc',
-    short: 'c'
+    short: 'c',
   },
   {
     name: 'C++',
     mode: 'clike',
     mime: 'text/x-c++src',
-    short: 'cpp'
+    short: 'cpp',
   },
   {
     name: 'C#',
     mode: 'clike',
     mime: 'text/x-csharp',
-    short: 'cs'
+    short: 'cs',
   },
   {
     name: 'Clojure',
-    mode: 'clojure'
+    mode: 'clojure',
   },
   {
     name: 'Cobol',
-    mode: 'cobol'
+    mode: 'cobol',
   },
   {
     name: 'CoffeeScript',
-    mode: 'coffeescript'
+    mode: 'coffeescript',
   },
   {
     name: 'Crystal',
-    mode: 'crystal'
+    mode: 'crystal',
   },
   {
     name: 'CSS',
-    mode: 'css'
+    mode: 'css',
   },
   {
     name: 'D',
-    mode: 'd'
+    mode: 'd',
   },
   {
     name: 'Dart',
-    mode: 'dart'
+    mode: 'dart',
   },
   {
     name: 'Diff',
     mode: 'diff',
-    mime: 'text/x-diff'
+    mime: 'text/x-diff',
   },
   {
     name: 'Django',
-    mode: 'django'
+    mode: 'django',
   },
   {
     name: 'Docker',
-    mode: 'dockerfile'
+    mode: 'dockerfile',
   },
   {
     name: 'Elixir',
     mode: 'elixir',
-    custom: true
+    custom: true,
   },
   {
     name: 'Elm',
-    mode: 'elm'
+    mode: 'elm',
   },
   {
     name: 'Erlang',
-    mode: 'erlang'
+    mode: 'erlang',
   },
   {
     name: 'Fortran',
-    mode: 'fortran'
+    mode: 'fortran',
   },
   {
     name: 'F#',
-    mode: 'mllike'
+    mode: 'mllike',
   },
   {
     name: 'Gherkin',
-    mode: 'gherkin'
+    mode: 'gherkin',
   },
   {
     name: 'GraphQL',
     mode: 'graphql',
-    custom: true
+    custom: true,
   },
   {
     name: 'Go',
     mode: 'go',
-    mime: 'text/x-go'
+    mime: 'text/x-go',
   },
   {
     name: 'Groovy',
-    mode: 'groovy'
+    mode: 'groovy',
   },
   {
     name: 'Handlebars',
-    mode: 'handlebars'
+    mode: 'handlebars',
   },
   {
     name: 'Haskell',
-    mode: 'haskell'
+    mode: 'haskell',
   },
   {
     name: 'Haxe',
-    mode: 'haxe'
+    mode: 'haxe',
   },
   {
     name: 'HTML',
-    mode: 'htmlmixed'
+    mode: 'htmlmixed',
   },
   {
     name: 'Java',
     mode: 'clike',
     mime: 'text/x-java',
-    short: 'java'
-  },
-  {
-    name: 'JavaScript',
-    mode: 'javascript',
-    short: 'javascript'
+    short: 'java',
   },
   {
     name: 'JSON',
     mode: 'javascript',
     mime: 'application/json',
-    short: 'json'
+    short: 'json',
   },
   {
     name: 'JSX',
-    mode: 'jsx'
+    mode: 'jsx',
   },
   {
     name: 'Julia',
-    mode: 'julia'
+    mode: 'julia',
   },
   {
     name: 'Kotlin',
     mode: 'clike',
     mime: 'text/x-kotlin',
-    short: 'kotlin'
+    short: 'kotlin',
   },
   {
     name: 'LaTeX',
-    mode: 'stex'
+    mode: 'stex',
   },
   {
     name: 'Lisp',
-    mode: 'commonlisp'
+    mode: 'commonlisp',
   },
   {
     name: 'Lua',
-    mode: 'lua'
+    mode: 'lua',
   },
   {
     name: 'Markdown',
-    mode: 'markdown'
+    mode: 'markdown',
   },
   {
     name: 'Gfm',
     mode: 'gfm',
-    mime: 'text/x-gfm'
+    mime: 'text/x-gfm',
   },
   {
     name: 'Mathematica',
-    mode: 'mathematica'
+    mode: 'mathematica',
   },
   {
     name: 'MATLAB/Octave',
     mode: 'octave',
-    mime: 'text/x-octave'
+    mime: 'text/x-octave',
   },
   {
     name: 'MySQL',
     mode: 'sql',
     mime: 'text/x-mysql',
-    short: 'mysql'
+    short: 'mysql',
   },
   {
     name: 'N-Triples',
     mode: 'ntriples',
-    mime: 'application/n-triples'
+    mime: 'application/n-triples',
   },
   {
     name: 'NGINX',
-    mode: 'nginx'
+    mode: 'nginx',
   },
   {
     name: 'Objective C',
     mode: 'clike',
     mime: 'text/x-objectivec',
-    short: 'objectivec'
+    short: 'objectivec',
   },
   {
     name: 'OCaml',
-    mode: 'mllike'
+    mode: 'mllike',
   },
   {
     name: 'Pascal',
-    mode: 'pascal'
+    mode: 'pascal',
   },
   {
     name: 'Perl',
-    mode: 'perl'
+    mode: 'perl',
   },
   {
     name: 'PHP',
     mode: 'php',
     mime: 'text/x-php',
-    short: 'php'
+    short: 'php',
   },
   {
     name: 'PowerShell',
-    mode: 'powershell'
+    mode: 'powershell',
   },
   {
     name: 'Python',
-    mode: 'python'
+    mode: 'python',
   },
   {
     name: 'R',
-    mode: 'r'
+    mode: 'r',
   },
   {
     name: 'Ruby',
-    mode: 'ruby'
+    mode: 'ruby',
   },
   {
     name: 'Rust',
-    mode: 'rust'
+    mode: 'rust',
   },
   {
     name: 'Sass',
-    mode: 'sass'
+    mode: 'sass',
   },
   {
     name: 'Scala',
     mode: 'clike',
     mime: 'text/x-scala',
-    short: 'scala'
+    short: 'scala',
   },
   {
     name: 'Smalltalk',
-    mode: 'smalltalk'
+    mode: 'smalltalk',
   },
   {
     name: 'SPARQL',
     mode: 'sparql',
-    mime: 'application/sparql-query'
+    mime: 'application/sparql-query',
   },
   {
     name: 'SQL',
-    mode: 'sql'
+    mode: 'sql',
   },
   {
     name: 'Stylus',
     mode: 'stylus',
-    mime: 'stylus'
+    mime: 'stylus',
   },
   {
     name: 'Swift',
-    mode: 'swift'
+    mode: 'swift',
   },
   {
     name: 'TCL',
-    mode: 'tcl'
+    mode: 'tcl',
   },
   {
     name: 'TOML',
-    mode: 'toml'
+    mode: 'toml',
   },
   {
     name: 'Turtle',
     mode: 'turtle',
-    mime: 'text/turtle'
+    mime: 'text/turtle',
+  },
+  {
+    name: 'JavaScript',
+    mode: 'javascript',
+    short: 'javascript',
   },
   {
     name: 'TypeScript',
     mode: 'javascript',
     mime: 'application/typescript',
-    short: 'typescript'
+    short: 'typescript',
   },
   {
     name: 'TSX',
     mode: 'jsx',
     mime: 'text/typescript-jsx',
-    short: 'tsx'
+    short: 'tsx',
   },
   {
     name: 'Twig',
     mode: 'twig',
-    mime: 'text/x-twig'
+    mime: 'text/x-twig',
   },
   {
     name: 'VB.NET',
-    mode: 'vb'
+    mode: 'vb',
   },
   {
     name: 'Verilog',
-    mode: 'verilog'
+    mode: 'verilog',
   },
   {
     name: 'VHDL',
-    mode: 'vhdl'
+    mode: 'vhdl',
   },
   {
     name: 'Vue',
-    mode: 'vue'
+    mode: 'vue',
   },
   {
     name: 'XML',
-    mode: 'xml'
+    mode: 'xml',
   },
   {
     name: 'YAML',
-    mode: 'yaml'
+    mode: 'yaml',
   },
   {
     name: 'YAML FrontMatter',
-    mode: 'yaml-frontmatter'
-  }
+    mode: 'yaml-frontmatter',
+  },
 ]

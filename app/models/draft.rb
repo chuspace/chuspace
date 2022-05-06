@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
-  CodeBlock = Struct.new(:content, :language)
-
   attribute :publication, Publication
   validates :path, :name, markdown: true
   validates :publication, presence: true
@@ -13,9 +11,8 @@ class Draft < Git::Blob
     parsed.content
   end
 
-  def content_html(content: body)
-    doc = CommonMarker.render_doc(content)
-    PostHtmlRenderer.new(publication: publication).render(doc).html_safe
+  def content_html
+    PostHtmlRenderer.new(publication: publication).render(markdown_doc.doc).html_safe
   end
 
   def date
@@ -44,7 +41,17 @@ class Draft < Git::Blob
   end
 
   def markdown_doc
-    CommonMarker.render_doc(body)
+    @markdown_doc ||= MarkdownDoc.new(content: body)
+  end
+
+  def new_template
+    <<~STR
+      ---
+      title: Untitled
+      summary:
+      ---
+
+    STR
   end
 
   def post
@@ -55,47 +62,29 @@ class Draft < Git::Blob
     post&.blob_sha != sha && !readme?
   end
 
-  def persisted?
-    id.present?
-  end
+  def publish(author:, other_attributes: {})
+    reload!
+    post = publication.posts.build(author: author, **to_post_attributes.merge(other_attributes))
+    preview_image = markdown_doc.preview_image
 
-  def preview_image_url_or_path
-    images.first
-  end
-
-  def images
-    images = []
-
-    markdown_doc.walk { |node| images << node.url if node.type == :image }
-
-    images
-  end
-
-  def snippets
-    snippets = []
-
-    markdown_doc.walk do |node|
-      if node.type == :code_block
-        snippets << CodeBlock.new(
-          node.string_content,
-          node.fence_info.split(/\s+/)[0]
-        )
+    if preview_image.present?
+      io = if preview_image.external
+        Down::Http.open(preview_image.url)
+      else
+        StringIO.new(publication.repository.raw(path: preview_image.url))
       end
+
+      post.preview_image.attach(
+        io: io,
+        filename: File.basename(preview_image.filename)
+      )
     end
 
-    snippets
+    post.save ? post : false
   end
 
-  def summary
-    front_matter.dig(publication.front_matter.summary)
-  end
-
-  def title
-    front_matter.dig(publication.front_matter.title)
-  end
-
-  def topics
-    front_matter.dig(publication.front_matter.topics)
+  def persisted?
+    id.present?
   end
 
   def readme?
@@ -116,6 +105,26 @@ class Draft < Git::Blob
     end
   end
 
+  def stale?
+    local_content.value.present? && local_content.value != decoded_content
+  end
+
+  def status
+    stale? ? 'Uncommitted changes' : 'Everything up to date'
+  end
+
+  def summary
+    front_matter.dig(publication.front_matter.summary)
+  end
+
+  def title
+    front_matter.dig(publication.front_matter.title)
+  end
+
+  def topics
+    front_matter.dig(publication.front_matter.topics)
+  end
+
   def to_param
     relative_path
   end
@@ -134,33 +143,6 @@ class Draft < Git::Blob
     }
   end
 
-  def publish(author:, other_attributes: {})
-    reload!
-
-    post = publication.posts.build(author: author)
-    post.assign_attributes(to_post_attributes)
-    post.assign_attributes(other_attributes)
-    post.save ? post : false
-  end
-
-  def stale?
-    local_content.value.present? && local_content.value != decoded_content
-  end
-
-  def status
-    stale? ? 'Uncommitted changes' : 'Everything up to date'
-  end
-
-  def new_template
-    <<~STR
-      ---
-      title: Untitled
-      summary:
-      ---
-
-    STR
-  end
-
   private
 
   def local_content_key
@@ -168,8 +150,7 @@ class Draft < Git::Blob
   end
 
   def parsed
-    yaml_loader =
-      FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
+    yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
     FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(
       decoded_content
     )

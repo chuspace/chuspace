@@ -85,7 +85,6 @@
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
-    "@prettier/plugin-ruby": "^3.0.0",
     "@webpack-cli/serve": "^1.6.1",
     "flow-bin": "^0.177.0",
     "flow-typed": "^3.7.0",

@@ -21,6 +21,7 @@ gem 'mini_mime'
 gem 'wicked'
 gem 'kredis'
 gem 'active_storage_validations'
+gem 'rubyzip'
 
 # Sign web tokens
 gem 'alba'

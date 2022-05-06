@@ -598,6 +598,7 @@ DEPENDENCIES
   rubocop
   rubocop-performance
   rubocop-rails
+  rubyzip
   sawyer!
   selenium-webdriver
   sentry-rails

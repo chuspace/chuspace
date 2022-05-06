@@ -5,7 +5,9 @@ class PostHtmlRenderer < CommonMarker::HtmlRenderer
 
   def initialize(publication:)
     super()
-    @count = 0
+
+    @headers = 1
+    @code_blocks = 1
     @publication = publication
   end
 
@@ -46,13 +48,16 @@ class PostHtmlRenderer < CommonMarker::HtmlRenderer
       out(' mode="', node.fence_info.split(/\s+/)[0], '"') if node.fence_info && !node.fence_info.empty?
       out(' content="', escape_html(node.string_content), '"')
       out(' readonly="nocursor"')
+      out(' id="', @code_blocks, '"')
       out(' wrapper')
       out('></code-editor>')
     end
   end
 
   def render(node)
-    @count += 1 if node.type == :header
+    @headers     += 1 if node.type == :header
+    @code_blocks += 1 if node.type == :code_block
+
     super(node)
   end
 

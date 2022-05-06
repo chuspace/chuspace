@@ -15,7 +15,7 @@ class PostsController < ApplicationController
   end
 
   def find_post
-    @post = @publication.posts.friendly.find(params[:permalink])
+    @post = @publication.posts.unscoped.friendly.find(params[:permalink])
   end
 
   def find_publication
