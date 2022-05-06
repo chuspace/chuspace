@@ -21,7 +21,8 @@ AddMissingIndexesOnTaggings.class_eval do
     end
 
     unless index_exists? :taggings, [:taggable_id, :taggable_type, :tagger_id, :context], name: 'taggings_idy'
-      add_index :taggings, [:taggable_id, :taggable_type, :tagger_id, :context], name: 'taggings_idy', algorithm: :concurrently
+      add_index :taggings, [:taggable_id, :taggable_type, :tagger_id, :context], name: 'taggings_idy',
+algorithm: :concurrently
     end
   end
 end

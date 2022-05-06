@@ -20,7 +20,9 @@ class CreateFriendlyIdSlugs < MIGRATION_CLASS
     end
 
     add_index :friendly_id_slugs, [:sluggable_type, :sluggable_id], algorithm: :concurrently
-    add_index :friendly_id_slugs, [:slug, :sluggable_type], length: { slug: 140, sluggable_type: 50 }, algorithm: :concurrently
-    add_index :friendly_id_slugs, [:slug, :sluggable_type, :scope], length: { slug: 70, sluggable_type: 50, scope: 70 }, unique: true, algorithm: :concurrently
+    add_index :friendly_id_slugs, [:slug, :sluggable_type], length: { slug: 140, sluggable_type: 50 },
+algorithm: :concurrently
+    add_index :friendly_id_slugs, [:slug, :sluggable_type, :scope],
+length: { slug: 70, sluggable_type: 50, scope: 70 }, unique: true, algorithm: :concurrently
   end
 end

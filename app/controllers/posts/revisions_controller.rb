@@ -42,7 +42,8 @@ module Posts
         revision_param[:post_id] = @post.id
         revision_param[:author_id] = Current.user.id
         attributes = ActionController::Parameters.new(revision: revision_param.deep_transform_keys(&:downcase))
-        attributes.require(:revision).permit(:publication_id, :post_id, :author_id, :pos_from, :pos_to, :content_before, :content_after, :widget_pos, node: {})
+        attributes.require(:revision).permit(:publication_id, :post_id, :author_id, :pos_from, :pos_to,
+:content_before, :content_after, :widget_pos, node: {})
       end
     end
 

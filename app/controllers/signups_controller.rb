@@ -19,7 +19,8 @@ class SignupsController < ApplicationController
     else
       respond_to do |format|
         format.html { redirect_to email_signups_path, notice: t('.failure') }
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@user, partial: 'signups/form', locals: { user: @user }) }
+        format.turbo_stream {
+ render turbo_stream: turbo_stream.replace(@user, partial: 'signups/form', locals: { user: @user }) }
       end
     end
   end

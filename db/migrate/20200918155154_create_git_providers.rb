@@ -32,6 +32,7 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
     end
 
     add_column :git_providers, :name, :git_provider_enum_type, null: false
-    add_index :git_providers, %i[app_installation_id name], unique: true, name: :one_installation_per_provider, algorithm: :concurrently
+    add_index :git_providers, %i[app_installation_id name], unique: true, name: :one_installation_per_provider,
+algorithm: :concurrently
   end
 end

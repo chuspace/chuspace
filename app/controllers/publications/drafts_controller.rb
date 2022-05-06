@@ -33,7 +33,8 @@ module Publications
       else
         respond_to do |format|
           format.html { publication_new_draft_path(@publication, @draft) }
-          format.turbo_stream { render turbo_stream: turbo_stream.replace(@draft, partial: 'form', locals: { draft: @draft }) }
+          format.turbo_stream {
+ render turbo_stream: turbo_stream.replace(@draft, partial: 'form', locals: { draft: @draft }) }
         end
       end
     end
@@ -65,7 +66,9 @@ module Publications
       else
         respond_to do |format|
           format.html { publication_edit_draft_path(@publication, @draft) }
-          format.turbo_stream { render turbo_stream: turbo_stream.replace(@draft, partial: 'edit_form', locals: { draft: @draft, publication: @publication }) }
+          format.turbo_stream {
+ render turbo_stream: turbo_stream.replace(@draft, partial: 'edit_form',
+locals: { draft: @draft, publication: @publication }) }
         end
       end
     end
@@ -85,7 +88,8 @@ module Publications
 
     def build_draft
       @drafts_root_path = @drafts_root_path.join(params[:path]) if params[:path].present?
-      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.repository.git_provider_adapter, path: @drafts_root_path)
+      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.repository.git_provider_adapter,
+path: @drafts_root_path)
     end
 
     def commit_params

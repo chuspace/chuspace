@@ -23,7 +23,7 @@ class Draft < Git::Blob
   end
 
   def decoded_content
-    Base64.decode64(content).force_encoding("UTF-8")
+    Base64.decode64(content).force_encoding('UTF-8')
   end
 
   def front_matter
@@ -148,7 +148,7 @@ class Draft < Git::Blob
   end
 
   def status
-    stale? ? "Uncommitted changes" : "Everything up to date"
+    stale? ? 'Uncommitted changes' : 'Everything up to date'
   end
 
   def new_template

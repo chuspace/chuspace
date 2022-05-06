@@ -25,7 +25,8 @@ class SessionsController < ApplicationController
 
       respond_to do |format|
         format.html { render :email }
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(@user, partial: 'sessions/form', locals: { user: @user }) }
+        format.turbo_stream {
+ render turbo_stream: turbo_stream.replace(@user, partial: 'sessions/form', locals: { user: @user }) }
       end
     end
   end

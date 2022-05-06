@@ -2,7 +2,7 @@
 
 module Avatar
   class Component < ApplicationComponent
-    validates :variant, inclusion: { in: User::AVATAR_VARIANTS.keys, message: "%{value} is not a valid size" }
+    validates :variant, inclusion: { in: User::AVATAR_VARIANTS.keys, message: '%{value} is not a valid size' }
     attr_reader :avatar, :fallback, :variant
 
     def initialize(avatar:, fallback:, variant: :icon)

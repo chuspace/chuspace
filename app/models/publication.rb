@@ -8,7 +8,8 @@ class Publication < ApplicationRecord
   include AttrJson::Record::QueryScopes
   include AttrJson::NestedAttributes
 
-  attr_json_config(default_container_attribute: :settings, default_rails_attribute: true, default_accepts_nested_attributes: { reject_if: :all_blank })
+  attr_json_config(default_container_attribute: :settings, default_rails_attribute: true,
+default_accepts_nested_attributes: { reject_if: :all_blank })
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
   multisearchable against: :name

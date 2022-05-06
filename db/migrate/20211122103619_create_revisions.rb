@@ -25,7 +25,8 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :revisions, :status, :revision_status_enum_type, null: false, default: ChuspaceConfig.new.revision[:default_status]
+    add_column :revisions, :status, :revision_status_enum_type, null: false,
+default: ChuspaceConfig.new.revision[:default_status]
     add_index :revisions, %i[publication_id post_id number], unique: true, algorithm: :concurrently
   end
 end

@@ -14,7 +14,8 @@ class OauthsController < ApplicationController
         identity.user
       elsif user = User.find_by(email: auth_hash.info.email)
         existing_provider = user.identities&.first&.provider&.titleize || provider_name
-        flash[:notice] = "An account with this email already exists. Please sign in with that account before connecting your #{existing_provider} account."
+        flash[:notice] =
+"An account with this email already exists. Please sign in with that account before connecting your #{existing_provider} account."
         redirect_to redirect_location_for(:user) || root_path
         return
       else

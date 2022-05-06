@@ -26,7 +26,8 @@ module Connect
     end
 
     def check_personal_publication_existence!
-      redirect_to connect_root_path, notice: t('connect.personal_publications.exists') if Current.user.personal_publication.present?
+      redirect_to connect_root_path,
+notice: t('connect.personal_publications.exists') if Current.user.personal_publication.present?
     end
   end
 end

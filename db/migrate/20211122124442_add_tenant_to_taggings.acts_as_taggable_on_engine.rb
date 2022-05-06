@@ -11,7 +11,9 @@ AddTenantToTaggings.class_eval do
 
   def self.up
     add_column ActsAsTaggableOn.taggings_table, :tenant, :string, limit: 128
-    add_index ActsAsTaggableOn.taggings_table, :tenant, algorithm: :concurrently unless index_exists? ActsAsTaggableOn.taggings_table, :tenant
+    add_index ActsAsTaggableOn.taggings_table, :tenant,
+algorithm: :concurrently unless index_exists? ActsAsTaggableOn.taggings_table,
+:tenant
   end
 
   def self.down

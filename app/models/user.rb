@@ -19,8 +19,10 @@ class User < ApplicationRecord
   has_many :memberships, dependent: :destroy, inverse_of: :user
   has_many :identities, dependent: :destroy, inverse_of: :user
   has_many :publications, through: :memberships, source: :publication
-  has_many :owning_publications, class_name: 'Publication', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
-  has_one  :personal_publication, -> (user) { where(personal: true, permalink: user.username) }, class_name: 'Publication', foreign_key: :owner_id, inverse_of: :owner
+  has_many :owning_publications, class_name: 'Publication', foreign_key: :owner_id, dependent: :destroy,
+inverse_of: :owner
+  has_one  :personal_publication, -> (user) {
+ where(personal: true, permalink: user.username) }, class_name: 'Publication', foreign_key: :owner_id, inverse_of: :owner
   has_many :posts, foreign_key: :author_id, dependent: :destroy
   has_many :git_providers, dependent: :destroy
 

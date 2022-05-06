@@ -28,7 +28,9 @@ class SettingsController < ApplicationController
     else
       respond_to do |format|
         format.html { redirect_to setting_path(@user, id: params[:id]) }
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@user, params[:id].to_sym), partial: 'profile', locals: { user: @user }) }
+        format.turbo_stream {
+ render turbo_stream: turbo_stream.replace(helpers.dom_id(@user, params[:id].to_sym), partial: 'profile',
+locals: { user: @user }) }
       end
     end
   end

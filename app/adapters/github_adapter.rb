@@ -106,7 +106,8 @@ class GithubAdapter < ApplicationAdapter
 
   def update_blob(path:, content:, author:, sha:, message: nil)
     message ||= "Update #{path}"
-    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, author: author }).content)
+    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}",
+{ content: content, message: message, sha: sha, author: author }).content)
   end
 
   # Github app endpoints
