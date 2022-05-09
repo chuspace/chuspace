@@ -2,6 +2,7 @@
 
 module TagOverride
   def self.prepended(base)
+    base.validates :name, presence: true, uniqueness: true
     base.include PgSearch::Model
     base.multisearchable against: :name
     base.pg_search_scope :search_by_name,
