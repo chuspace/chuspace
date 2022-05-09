@@ -62,7 +62,7 @@ class Post < ApplicationRecord
     {
       site: ChuspaceConfig.new.app[:name],
       title: title,
-      image_src: preview_image.variant(:list).processed.url,
+      image_src: preview_image.variant(:list)&.processed&.url,
       description: summary,
       keywords: topic_list,
       index: true,
@@ -73,7 +73,7 @@ class Post < ApplicationRecord
         type: :article,
         description: :description,
         site_name: :site,
-        image: preview_image.variant(:social).processed.url,
+        image: preview_image.variant(:social)&.processed&.url,
         url: Rails.application.routes.url_helpers.publication_post_url(publication, self)
       },
       twitter: {
@@ -82,7 +82,7 @@ class Post < ApplicationRecord
         description: :description,
         site: ChuspaceConfig.new.app[:twitter],
         url: Rails.application.routes.url_helpers.publication_post_url(publication, self),
-        image: preview_image.variant(:list).processed.url
+        image: preview_image.variant(:list)&.processed&.url
       },
       article: { published_time: date, modified_time: updated_at, tag: topic_list, author: author.username }
     }

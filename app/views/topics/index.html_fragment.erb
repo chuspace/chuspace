@@ -1,0 +1,18 @@
+<% if params[:q].present? %>
+  <% if @topics.any? %>
+    <% @topics.each do |topic| %>
+      <li
+        role="option"
+        class='border-b border-base-100 py-2 px-4 cursor-pointer last:border-b-0'
+        data-autocomplete-value='<%= topic.name %>'
+        id='<%= topic.name %>'
+      >
+        <%= topic.name %>
+      </li>
+    <% end %>
+  <% else %>
+    <div class='text-center py-12'>
+      <h4 class='text-gray-600'>No topics found matching <%= tag.strong params[:q] %></h4>
+    </div>
+  <% end %>
+<% end %>

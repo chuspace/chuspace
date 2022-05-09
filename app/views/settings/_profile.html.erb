@@ -1,7 +1,7 @@
 <%= turbo_frame_tag(dom_id(user, :profile)) do %>
   <%= simple_form_for(user, url: setting_path(id: :profile)) do |form| %>
     <drop-image class='mt-8'>
-      <%= render(Avatar::Component.new(avatar: user.avatar, fallback: user.name.initials, variant: :profile)) %>
+      <%= render(Avatar::Component.new(avatar: user.avatar, gravatar: user.gravatar_url, fallback: user.name.initials, variant: :profile)) %>
       <% if user.errors.include?(:avatar) %>
         <%= content_tag :span, user.errors.full_messages_for(:avatar).to_sentence, class: 'input-error text-red block' %>
       <% else %>

@@ -1,7 +1,7 @@
 <div class='flex items-center w-full'>
   <div class='w-full flex items-center justify-between'>
     <div class='flex items-center'>
-      <%= render(Avatar::Component.new(avatar: @user.avatar, fallback: @user.name.initials, variant: :icon)) %>
+      <%= render(Avatar::Component.new(avatar: @user.avatar, gravatar: @user.gravatar_url, fallback: @user.name.initials, variant: :icon)) %>
       <div class='ml-2'>
         <h3 class='mb-0'><%= @user.name %></h3>
         <p class='text-secondary text-sm'><%= @user.username %></p>

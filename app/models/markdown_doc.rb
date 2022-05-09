@@ -49,4 +49,8 @@ class MarkdownDoc
 
     snippets
   end
+
+  def snippets?
+    snippets.any?
+  end
 end

@@ -20,9 +20,7 @@ module Publications
         else
           respond_to do |format|
             format.html { redirect_to publication_new_publish_draft(@publication, @draft) }
-            format.turbo_stream {
- render turbo_stream: turbo_stream.replace(@post, partial: 'form',
-locals: { draft: @draft, publication: @publication, post: @post }) }
+            format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: 'form', locals: { draft: @draft, publication: @publication, post: @post }) }
           end
         end
       end

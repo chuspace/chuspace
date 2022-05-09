@@ -12,8 +12,6 @@ import isUrl from 'is-url'
 import queryString from 'query-string'
 
 export default class ImageView extends BaseView {
-  editable: boolean = false
-
   constructor(props: BaseViewPropType & { imageLoadPath: string }) {
     super(props, false)
 
@@ -37,6 +35,7 @@ export default class ImageView extends BaseView {
           alt=${this.node.attrs.alt || fileName}
           title=${this.node.attrs.title || this.node.attrs.alt || fileName}
           filename=${fileName}
+          ?editable=${this.editable}
           .handleChange=${this.editable ? this.handleChange : null}
           .handleDelete=${this.handleDelete}
         ></lazy-image>

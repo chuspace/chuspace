@@ -8,8 +8,7 @@ class Publication < ApplicationRecord
   include AttrJson::Record::QueryScopes
   include AttrJson::NestedAttributes
 
-  attr_json_config(default_container_attribute: :settings, default_rails_attribute: true,
-default_accepts_nested_attributes: { reject_if: :all_blank })
+  attr_json_config(default_container_attribute: :settings, default_rails_attribute: true, default_accepts_nested_attributes: { reject_if: :all_blank })
 
   friendly_id :name, use: %i[slugged history], slug_column: :permalink
   multisearchable against: :name
@@ -41,6 +40,10 @@ default_accepts_nested_attributes: { reject_if: :all_blank })
   scope :except_personal, -> { where(personal: false) }
 
   enum visibility: PublicationConfig.to_enum, _suffix: true
+
+  def initials
+    name.first(2).upcase
+  end
 
   def visibility
     super ? ActiveSupport::StringInquirer.new(super) : nil

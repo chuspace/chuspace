@@ -3,7 +3,7 @@
     <div class='flex-1'>
       <%= link_to publication_post_path(post.publication, post), data: { 'turbo-frame': :_top } do %>
         <%= tag.h5 post.title, class: 'link link-primary link-hover' %>
-        <%= tag.p post.summary, class: 'text-sm text-secondary mt-1' %>
+        <%= tag.p post.summary, class: 'text-sm text-secondary text-sm mt-1' %>
       <% end %>
 
       <div class='mt-4'>

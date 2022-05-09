@@ -2,21 +2,14 @@
 
 import { LitElement, html } from 'lit'
 
-const ACCEPTED_IMAGES = [
-  'image/png',
-  'image/jpg',
-  'image/jpeg',
-  'image/gif',
-  'image/svg+xml',
-  'image/webp'
-]
+const ACCEPTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/svg+xml', 'image/webp']
 
 export default class DropImage extends LitElement {
   static get properties() {
     return {
       hint: { type: String },
       errors: { type: String },
-      param: { type: String }
+      param: { type: String },
     }
   }
 
@@ -68,8 +61,11 @@ export default class DropImage extends LitElement {
       reader.readAsDataURL(image)
       reader.onload = (file) => {
         const image = this.querySelector('img')
+        const fallback = this.querySelector('.fallback')
         /* $FlowFixMe */
         image.src = file.target.result
+        image.classList.remove('hidden')
+        fallback.classList.add('hidden')
       }
     }
   }

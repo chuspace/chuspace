@@ -137,6 +137,10 @@ class GithubAdapter < ApplicationAdapter
     end
   end
 
+  def topics(query:)
+    search('search/topics', query, per_page: 100, accept: 'application/vnd.github.mercy-preview+json')
+  end
+
   def access_token
     case requestor
     when :user then git_provider.user_access_token

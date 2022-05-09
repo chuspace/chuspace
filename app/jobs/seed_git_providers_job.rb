@@ -11,6 +11,6 @@ class SeedGitProvidersJob < ApplicationJob
       }
     end
 
-    GitProvider.upsert_all(data, returning: false, unique_by: :one_provider_per_user_index)
+    GitProvider.upsert_all(data, returning: false, unique_by: :one_provider_per_user)
   end
 end

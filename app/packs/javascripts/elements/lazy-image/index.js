@@ -11,7 +11,8 @@ export default class LazyImage extends LitElement {
       alt: { type: String },
       title: { type: String },
       filename: { type: String },
-      editable: { type: Boolean }
+      editable: { type: Boolean },
+      rounded: { type: Boolean },
     }
   }
 
@@ -42,11 +43,11 @@ export default class LazyImage extends LitElement {
 
   render() {
     return html`
-      <figure class="relative border border-base-200 rounded-md">
+      <figure class="relative">
         ${
           this.editable
             ? svg`
-                <div class="bg-transparent border-b border-base-200 flex items-center justify-between py-3 px-4 rounded-t-md" contenteditable="false">
+                <div class="bg-base-200 border-b border-base-200 flex items-center justify-between py-3 px-4 rounded-t-md" contenteditable="false">
                   <svg contenteditable="false" xmlns="http://www.w3.org/2000/svg" width="54" height="14" viewBox="0 0 54 14">
                     <g fill="none" fillRule="evenodd" transform="translate(1 1)">
                       <circle cx="6" cy="6" r="6" fill="#FF5F56" stroke="#E0443E" strokeWidth=".5" @click=${this.delete} />
@@ -58,9 +59,9 @@ export default class LazyImage extends LitElement {
               `
             : null
         }
-        <img alt=${this.alt} data-src="${this.src}" title="${
-      this.title
-    }" data-sizes="auto" class="lazy blur-up p-2" />
+        <img alt=${this.alt} data-src="${this.src}" title="${this.title}" data-sizes="auto" class="lazy blur-up${
+      this.rounded ? ' rounded-full' : ''
+    }" />
         ${
           this.editable
             ? html`
@@ -68,7 +69,7 @@ export default class LazyImage extends LitElement {
                   <input
                     type="text"
                     @change=${this.onCaptionChange}
-                    class="input input-primary input-sm border-t border-base-200 rounded-tr-none focus:shadow-none rounded-tl-none border-0 w-full p-0 italic text-center text-sm"
+                    class="input input-sm border-t border-base-200 bg-base-200 rounded-tr-none focus:shadow-none rounded-tl-none border-0 w-full p-0 italic text-center text-sm"
                     value=${this.alt}
                     maxlength=${70}
                     placeholder="Click to enter caption (optional)"
@@ -76,11 +77,7 @@ export default class LazyImage extends LitElement {
                 </figcaption>
               `
             : this.alt
-            ? html`
-                <figcaption class="w-full p-0 italic text-center text-sm pb-2">
-                  ${this.alt}
-                </figcaption>
-              `
+            ? html` <figcaption class="w-full p-0 italic text-center text-sm pb-2">${this.alt}</figcaption> `
             : null
         }
         </figcaption>

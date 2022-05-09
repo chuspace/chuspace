@@ -11,7 +11,18 @@ ActsAsTaggableOnMigration.class_eval do
 
   def self.up
     create_table :tags do |t|
-      t.string :name
+      t.string :name, null: false
+      t.string :display_name
+      t.string :created_by
+      t.string :released
+
+      t.boolean :featured, index: true, default: false, null: false
+      t.boolean :curated, index: true, default: false, null: false
+
+      t.integer :score, default: 0, null: false
+
+      t.text   :short_description
+      t.text   :description
     end
 
     create_table :taggings do |t|

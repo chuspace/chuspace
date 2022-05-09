@@ -14,7 +14,7 @@
                 Commit authors:
                 <div class="avatar">
                   <%= link_to user_path(Current.user), class: 'w-6 font-bold link link-primary w-6', title: Current.user.name do %>
-                    <%= image_tag(Current.user.avatar_url, title: Current.user.name,  class: 'rounded-full') %>
+                    <%= render(Avatar::Component.new(avatar: Current.user.avatar, gravatar: Current.user.gravatar_url, fallback: Current.user.name.initials, variant: :icon)) %>
                   <% end %>
                 </div>
               </label>

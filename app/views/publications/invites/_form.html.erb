@@ -1,6 +1,6 @@
 <%= turbo_frame_tag dom_id(@invite, :form) do %>
   <%= simple_form_for invite, url: publication_invites_path(@publication), html: { 'data-turbo-frame': :_top } do |f| %>
-    <autocomplete-reset>
+    <autocomplete-extras>
       <auto-complete
         src="<%= autocomplete_publication_people_path(@publication) %>"
         for="users-popup"
@@ -20,7 +20,7 @@
         -->
         <div id="users-popup-feedback" class="sr-only"></div>
       </auto-complete>
-    </autocomplete-reset>
+    </autocomplete-extras>
 
     <%= f.input :role, collection: invitable_roles_collection, label_method: :second, value_method: :first, required: true %>
 

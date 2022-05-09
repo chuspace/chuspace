@@ -1,49 +1,48 @@
 <% set_meta_tags @post %>
 
 <div class='sm:w-2/3 mx-auto w-full'>
-  <%= render 'shared/breadcrumbs' %>
-    <div class='flex justify-between items-center w-full bg-base-100 sticky top-0 z-10 py-2'>
-      <div class='flex items-center flex-1 w-2/3'>
-        <div class="avatar w-8 h-8">
-          <%= image_tag(@post.author.avatar_url, class: 'mask mask-circle') %>
-        </div>
-
-        <div class='ml-4 w-2/3'>
-          <h3><%= @post.author.name %></h3>
-          <p class='text-secondary text-xs'>
-            <%= @post.created_at.strftime("%d %b %Y %I:%M %p") %>
-            <% unless @post.publication.personal? %>
-              <span class=''>.</span>
-              <%= link_to @post.publication.name, publication_path(@post.publication) %>
-            <% end %>
-          </p>
-        </div>
+  <div class='flex justify-between items-center w-full bg-base-100 sticky top-0 z-10 py-2'>
+    <div class='flex items-center flex-1 w-2/3'>
+      <div class="avatar w-8 h-8">
+        <%= render(Avatar::Component.new(avatar: @post.author.avatar, gravatar: @post.author.gravatar_url, fallback: @post.author.name.initials, variant: :icon)) %>
       </div>
+      <div class='ml-4 w-2/3'>
+        <h3><%= @post.author.name %></h3>
+        <p class='text-secondary text-xs'>
+          <%= @post.created_at.strftime("%d %b %Y %I:%M %p") %>
+          <% unless @post.publication.personal? %>
+            <span class=''>.</span>
+            <%= link_to @post.publication.name, publication_path(@post.publication) %>
+          <% end %>
+        </p>
+      </div>
+    </div>
 
-      <div class="flex justify-between items-center sm:w-1/5 w-1/3">
-        <% %w[facebook twitter email linkedin].each do |icon| %>
-          <%= inline_svg_tag "icons/#{icon}.svg", class: 'w-4 h-4 fill-current cursor-pointer' %>
-        <% end %>
-
+    <div class="flex justify-between items-center sm:w-1/5 w-1/3">
+      <% %w[facebook twitter email linkedin].each do |icon| %>
+        <%= inline_svg_tag "icons/#{icon}.svg", class: 'w-4 h-4 fill-current cursor-pointer' %>
+      <% end %>
+      <% if @post.markdown_doc.snippets? %>
         <%= link_to publication_post_snippets_path(@post.publication, @post), title: 'Download code snippets', target: "_blank" do %>
           <%= inline_svg_tag('icons/download', class: 'w-4 h-4 fill-current') %>
         <% end %>
-      </div>
-    </div>
-
-    <div class='chu-editor'>
-      <% unless @post.published? %>
-        <div class="alert alert-notice text-center absolute left-0 top-0 w-full z-20 rounded-none flex justify-center">
-          <span>You are viewing an old version of this post</span>
-          <%= link_to 'View', publication_post_path(@post.publication, @post.current_version) %>
-        </div>
       <% end %>
-
-      <div class='my-8'>
-        <%= content_tag :h1, @post.title, class: 'title' %>
-        <%= content_tag :h2, @post.summary, class: 'summary' %>
-      </div>
-
-      <%= content_tag :article, @post.body_html.html_safe %>
     </div>
+  </div>
+
+  <div class='chu-editor'>
+    <% unless @post.published? %>
+      <div class="alert alert-notice text-center text-sm absolute left-0 top-0 w-full z-20 rounded-none flex justify-center">
+        <span>You are viewing an old version of this post</span>
+        <%= link_to 'View', publication_post_path(@post.publication, @post.current_version), class: 'ml-2' %>
+      </div>
+    <% end %>
+
+    <div class='my-8'>
+      <%= content_tag :h1, @post.title, class: 'title' %>
+      <%= content_tag :h2, @post.summary, class: 'summary' %>
+    </div>
+
+    <%= content_tag :article, @post.body_html.html_safe %>
+  </div>
 </div>

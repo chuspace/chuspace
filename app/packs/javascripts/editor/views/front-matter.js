@@ -27,10 +27,8 @@ export default class FrontMatterView extends CodeBlockView {
 
     render(
       html`
-        <details class="whitespace-nowrap front-matter" as="tab">
-          <summary class="font-mono text-base p-2 px-4"
-            ><span>FrontMatter</span></summary
-          >
+        <details class="whitespace-nowrap front-matter" as="tab" ?open=${this.editable}>
+          <summary class="font-mono text-base cursor-pointer p-2 px-4"><span>FrontMatter</span></summary>
           <code-editor
             mode=${this.mode}
             readonly=${this.readOnly}

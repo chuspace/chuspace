@@ -1,13 +1,16 @@
 <% if avatar.attached? %>
   <div class="avatar">
-    <div class="<%= class_name %>">
-      <%= avatar.variable? ? image_tag(avatar.variant(variant)) : image_tag(avatar) %>
-    </div>
+    <lazy-image class='<%= class_name %>' rounded src='<%= avatar.variable? ? avatar.variant(variant).url : avatar.url %>' title='<%= fallback %>'></lazy-image>
+  </div>
+<% elsif gravatar.present? %>
+  <div class="avatar">
+    <lazy-image class='<%= class_name %>' rounded src='<%= gravatar %>' title='<%= fallback %>'></lazy-image>
   </div>
 <% else %>
-  <div class="avatar placeholder">
+  <div class="avatar placeholder bg-base-200 rounded-full">
     <div class="<%= class_name %>">
-      <span class="text-xl"><%= fallback %></span>
+      <%= image_tag('', class: 'hidden') if uploader %>
+      <span class="text-xl fallback"><%= fallback %></span>
     </div>
   </div>
 <% end %>

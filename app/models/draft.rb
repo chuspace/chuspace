@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "down/http"
 
 class Draft < Git::Blob
   attribute :publication, Publication
@@ -65,21 +66,6 @@ class Draft < Git::Blob
   def publish(author:, other_attributes: {})
     reload!
     post = publication.posts.build(author: author, **to_post_attributes.merge(other_attributes))
-    preview_image = markdown_doc.preview_image
-
-    if preview_image.present?
-      io = if preview_image.external
-        Down::Http.open(preview_image.url)
-      else
-        StringIO.new(publication.repository.raw(path: preview_image.url))
-      end
-
-      post.preview_image.attach(
-        io: io,
-        filename: File.basename(preview_image.filename)
-      )
-    end
-
     post.save ? post : false
   end
 

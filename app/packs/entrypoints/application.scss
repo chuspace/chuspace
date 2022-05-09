@@ -118,6 +118,61 @@ auto-complete {
   }
 }
 
+.spinner {
+  border: 4px solid theme('colors.primary');
+  border-top: 4px solid theme('colors.base-200');
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: block;
+  text-indent: -9999px;
+  text-align: left;
+  overflow: hidden;
+  margin: 40px auto;
+  animation: spin 2s linear infinite;
+
+  &.on-button {
+    border: 2px solid theme('colors.primary');
+    border-top: 2px solid theme('colors.neutral');
+    margin: unset;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+auto-complete {
+  ul {
+    @apply shadow menu absolute z-10 bg-base-200 border border-base-300 rounded-md max-h-48 overflow-y-auto w-full;
+  }
+
+  ul[hidden] {
+    @apply shadow-none border-none;
+  }
+}
+
+.turbo-btn .loading {
+  display: none;
+}
+
+.turbo-btn[disabled] .loading {
+  display: initial;
+}
+
+.turbo-btn .idle {
+  display: initial;
+}
+
+.turbo-btn[disabled] .idle {
+  display: none;
+}
+
 .header {
   will-change: transform;
   transition: transform 200ms linear;

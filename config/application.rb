@@ -10,10 +10,6 @@ Bundler.require(*Rails.groups)
 
 module Chuspace
   class Application < Rails::Application
-    # Configure the path for configuration classes that should be used before initialization
-    # NOTE: path should be relative to the project root (Rails.root)
-    config.anyway_config.autoload_static_config_path = 'app/configs'
-
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
@@ -38,5 +34,16 @@ module Chuspace
 
     # Serve SVG
     config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
+
+    # Autoload paths
+    config.anyway_config.autoload_static_config_path = 'app/configs'
+    overrides = "#{root}/app/overrides"
+    Rails.autoloaders.main.ignore(overrides)
+
+    config.to_prepare do
+      Dir.glob("#{overrides}/**/*.rb").each do |override|
+        load override
+      end
+    end
   end
 end
