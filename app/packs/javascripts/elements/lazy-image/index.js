@@ -69,7 +69,7 @@ export default class LazyImage extends LitElement {
                   <input
                     type="text"
                     @change=${this.onCaptionChange}
-                    class="input input-sm border-t border-base-200 bg-base-200 rounded-tr-none focus:shadow-none rounded-tl-none border-0 w-full p-0 italic text-center text-sm"
+                    class="input input-sm text-secondary border-t border-base-200 bg-base-200 rounded-tr-none focus:shadow-none rounded-tl-none border-0 w-full p-0 italic text-center text-sm"
                     value=${this.alt}
                     maxlength=${70}
                     placeholder="Click to enter caption (optional)"
@@ -77,7 +77,11 @@ export default class LazyImage extends LitElement {
                 </figcaption>
               `
             : this.alt
-            ? html` <figcaption class="w-full p-0 italic text-center text-sm pb-2">${this.alt}</figcaption> `
+            ? html`
+                <figcaption class="w-full mt-2 text-secondary p-0 italic text-center text-sm pb-2">
+                  ${this.alt}
+                </figcaption>
+              `
             : null
         }
         </figcaption>

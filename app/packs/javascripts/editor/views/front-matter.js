@@ -31,7 +31,7 @@ export default class FrontMatterView extends CodeBlockView {
           <summary class="font-mono text-base cursor-pointer p-2 px-4"><span>FrontMatter</span></summary>
           <code-editor
             mode=${this.mode}
-            readonly=${this.readOnly}
+            ?readonly=${this.readOnly}
             content=${this.content}
             .onInit=${this.onInit}
             .codeMirrorKeymap=${this.codeMirrorKeymap}

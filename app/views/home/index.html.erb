@@ -3,7 +3,13 @@
     <div class='col-span-8'>
       <%= render(Card::Component.new) do |card| %>
         <% card.title do %>
-          Popular posts
+          Posts
+        <% end %>
+
+        <% card.actions do %>
+          <%= tab_link_to 'Recent', authenticated_root_path, class: 'link link-primary link-hover text-sm' %>
+          <span class='mx-2 text-secondary'>|</span>
+          <%= tab_link_to 'Old', authenticated_root_path(sort: :oldest), class: 'link link-primary link-hover text-sm' %>
         <% end %>
 
         <% card.body do %>
@@ -29,7 +35,7 @@
         <% card.body do %>
           <% if @publications.any? %>
             <% @publications.each do |publication| %>
-              <div class='border-base-200 border-b last:border-b-0 p-4 px-8'>
+              <div class='border-base-200 border-b last:border-b-0 p-4 px-4'>
                 <div class='flex-1'>
                   <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
                     <%= tag.h5 publication.name, class: 'link link-primary link-hover' %>
@@ -47,13 +53,16 @@
       <div class='mt-8'>
         <%= render(Card::Component.new) do |card| %>
           <% card.title do %>
-            Treding topics
+            Topics
           <% end %>
 
           <% card.body do %>
-            <div class='flex flex-wrap p-8'>
-              <div class='badge badge-secondary'>Rails</div>
-              <div class='badge badge-error ml-2'>Ruby</div>
+            <div class='flex flex-wrap p-4'>
+              <% ActsAsTaggableOn::Tag.featured.limit(5).each do |topic| %>
+                <div class='ml-2 mb-2'>
+                  <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
+                </div>
+              <% end %>
             </div>
           <% end %>
         <% end %>

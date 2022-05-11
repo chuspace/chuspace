@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   root to: 'welcome#index'
 
   resources :auto_checks, only: :create
-  resources :topics, only: :index
+  resources :topics, only: %i[index show]
 
   namespace :connect do
     root to: 'home#index'

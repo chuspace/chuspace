@@ -10,7 +10,7 @@
     <% end %>
 
     <% card.body do %>
-      <div class='flex items-center mt-4 px-8 pb-8'>
+      <div class='flex items-center p-4'>
         <% publication.members.each do |member| %>
           <%= render(Avatar::Component.new(avatar: member.avatar, gravatar: member.gravatar_url, fallback: member.name.initials, variant: :icon)) %>
         <% end %>

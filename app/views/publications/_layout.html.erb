@@ -1,12 +1,12 @@
 <div class='flex items-center w-full'>
   <%= render(Avatar::Component.new(avatar: @publication.icon, fallback: @publication.initials, variant: :thumb)) %>
-  <div class='ml-4 w-2/3'>
+  <div class='ml-4 sm:w-2/3 w-full'>
     <h2><%= @publication.name %></h2>
-    <p class='sm:w-2/3 w-full text-secondary'><%= @publication.description %></p>
+    <p class='sm:w-2/3 w-full text-sm text-secondary'><%= @publication.description %></p>
   </div>
 </div>
 
-<div class='tabs border-b border-base-200 my-12' dir='horizontal'>
+<div class='tabs border-b border-base-200 my-8' dir='horizontal'>
   <%= tab_link_to 'Overview', publication_path(@publication), class: 'tab' %>
   <%= tab_link_to 'Drafts', publication_drafts_root_path(@publication), class: 'tab' %>
   <%= tab_link_to 'Assets', publication_assets_root_path(@publication), class: 'tab' %>

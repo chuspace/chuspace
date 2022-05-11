@@ -13,7 +13,7 @@ module Avatarable
   included do
     has_one_attached :avatar do |attachable|
       AVATAR_VARIANTS.each do |name, size|
-        attachable.variant name, resize_to_limit: [size, size]
+        attachable.variant name, resize_to_fill: [size, size]
       end
     end
 

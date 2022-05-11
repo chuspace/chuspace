@@ -21,20 +21,28 @@ IP = {
     port: []
   },
   chuspace: {
-    host: '192.168.50.9',
+    host: '192.168.50.10',
     port: [3036]
   },
   seaweedfs: {
     host: '192.168.50.8',
     port: [9333, 8333, 8888]
+  },
+  docker: {
+    host: '192.168.50.9',
+    port: [2357]
   }
 }.freeze
 
 docker_script = <<SCRIPT
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get update
-sudo apt-get install -y docker-ce
+sudo apt-get -y remove docker docker-engine docker.io containerd runc
+sudo apt-get -y install ca-certificates curl gnupg lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get -y update
+sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 # Make sure we can actually use docker as the vagrant user
 sudo service docker restart
 sudo usermod -aG docker vagrant
@@ -385,7 +393,8 @@ SCRIPT = {
   nomad: nomad_script,
   runner: drone_runner_script,
   seaweedfs: seaweedfs_script,
-  chuspace: chuspace_script
+  chuspace: chuspace_script,
+  docker: docker_script
 }.freeze
 
 BOX_IMAGE = 'ubuntu/focal64'

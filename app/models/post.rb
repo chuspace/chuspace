@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  WORDS_PER_MINUTE = 238
+
   extend FriendlyId
 
   self.implicit_order_column = 'version'
@@ -31,6 +33,8 @@ class Post < ApplicationRecord
 
   friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
   scope :published, -> { where(published: true) }
+  scope :newest, -> { order(id: :desc) }
+  scope :oldest, -> { order(:id) }
 
   delegate :repository, to: :publication
 
@@ -48,6 +52,14 @@ class Post < ApplicationRecord
 
   def markdown_doc
     @markdown_doc ||= MarkdownDoc.new(content: body)
+  end
+
+  def words_count
+    body.scan(/\w+/).size || 0
+  end
+
+  def reading_time
+    words_count > WORDS_PER_MINUTE ? (words_count / WORDS_PER_MINUTE).round : 1
   end
 
   def short_commit_sha

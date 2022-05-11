@@ -1,0 +1,41 @@
+<section>
+  <div class='grid grid-cols-12 gap-8'>
+    <div class='col-span-8'>
+      <%= render(Card::Component.new) do |card| %>
+        <% card.title do %>
+          Posts published in <%= @topic.name %>
+        <% end %>
+
+        <% card.actions do %>
+          <%= tab_link_to 'Recent', topic_path, class: 'link link-primary link-hover text-sm' %>
+          <span class='mx-2 text-secondary'>|</span>
+          <%= tab_link_to 'Old', topic_path(sort: :oldest), class: 'link link-primary link-hover text-sm' %>
+        <% end %>
+
+        <% card.body do %>
+          <% if @posts.any? %>
+            <%= render 'posts/list', posts: @posts %>
+          <% else %>
+            <%= render 'shared/placeholder', content: "No posts" %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class='col-span-4'>
+      <%= render(Card::Component.new) do |card| %>
+        <% card.title do %>
+          Topic
+        <% end %>
+
+        <% card.body do %>
+          <div class='p-4'>
+            <%= render(Avatar::Component.new(avatar: @topic.icon, fallback: '#', variant: :thumb)) %>
+            <h5><%= @topic.display_name || @topic.name %></h5>
+            <p class='text-secondary mt-1'><%= @topic.short_description %></p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

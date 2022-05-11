@@ -9,9 +9,13 @@
       <div class='ml-4 w-2/3'>
         <h3><%= @post.author.name %></h3>
         <p class='text-secondary text-xs'>
-          <%= @post.created_at.strftime("%d %b %Y %I:%M %p") %>
+          <%= @post.date.strftime("%d %b %Y %I:%M %p") %>
+          <span class='mx-2'>&#183;</span>
+          <%= tag.time class: 'text-secondary' do %>
+            <%= @post.reading_time %> min read
+          <% end %>
           <% unless @post.publication.personal? %>
-            <span class=''>.</span>
+            <span class='mx-2'>&#183;</span>
             <%= link_to @post.publication.name, publication_path(@post.publication) %>
           <% end %>
         </p>

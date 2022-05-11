@@ -41,7 +41,7 @@ export default class CodeEditor extends LitElement {
 
   static properties = {
     mode: { type: String, reflect: true },
-    readonly: { type: String },
+    readonly: { type: Boolean },
     wrapper: { type: Boolean },
     theme: { type: String },
     filename: { type: String },

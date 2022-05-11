@@ -2,8 +2,8 @@
   <%= content_tag :div, draft.status, id: 'chu-editor-status', class: 'text-xs mr-4' %>
 
   <% if allowed_to?(:commit?, draft) %>
-    <%= turbo_frame_tag(dom_id(@draft, :new_commit)) do %>
-      <%= link_to 'Commit', publication_new_commit_draft_path(publication, draft), class: 'btn btn-primary btn-xs turbo-btn mr-4' do %>
+    <%= turbo_frame_tag(dom_id(draft, :new_commit)) do %>
+      <%= link_to publication_new_commit_draft_path(publication, draft), class: 'btn btn-primary btn-xs turbo-btn mr-4' do %>
         <div class="idle">Commit</div>
         <div class="loading">
           <div class='flex items-center'>
@@ -16,7 +16,7 @@
   <% end %>
 
   <% if allowed_to?(:publish?, draft) %>
-    <%= turbo_frame_tag(dom_id(@draft, :new_publish)) do %>
+    <%= turbo_frame_tag(dom_id(draft, :new_publish)) do %>
       <%= button_to publication_new_publish_draft_path(publication, draft), method: :get, class: 'btn btn-accent btn-xs turbo-btn mr-4' do %>
         <div class="idle">Publish</div>
         <div class="loading">

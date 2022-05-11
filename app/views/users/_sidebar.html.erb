@@ -1,4 +1,4 @@
-<%= render(Avatar::Component.new(avatar: user.avatar, gravatar: user.gravatar_url, fallback: user.name.initials, variant: :profile)) %>
+<%= render(Avatar::Component.new(avatar: user.avatar, gravatar: user.gravatar_url(variant: :profile), fallback: user.name.initials, variant: :profile)) %>
 <h4 class='mt-4'><%= user.name %></h4>
 <h5 class='text-secondary font-normal'><%= user.username %></h5>
 

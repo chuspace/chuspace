@@ -18,6 +18,7 @@ module Publications
     def show
       authorize! @publication, to: :show?
       data = @publication.repository.raw(path: params[:path])
+      expires_in 1.year, public: true
       send_data data, disposition: :inline, filename: File.basename(params[:path])
     end
 

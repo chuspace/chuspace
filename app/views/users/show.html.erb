@@ -9,7 +9,7 @@
 
   <% card.body do %>
     <% if @user.personal_publication.present? %>
-      <%= content_tag :article, @user.personal_publication.readme.content_html, class: 'chu-editor chu-editor-sm px-8' %>
+      <%= content_tag :article, @user.personal_publication.readme.content_html, class: 'chu-editor chu-editor-sm px-4' %>
     <% else %>
       <div class='text-center py-8'>
         <p class='text-secondary w-3/4 mt-4 mx-auto'>

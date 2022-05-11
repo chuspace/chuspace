@@ -13,7 +13,7 @@
         <% end %>
 
         <% card.body do %>
-          <%= content_tag :article, @publication.readme.content_html, class: 'chu-editor chu-editor-sm px-8' %>
+          <%= content_tag :article, @publication.readme.content_html, class: 'chu-editor chu-editor-sm px-4' %>
         <% end %>
       <% end %>
 
@@ -24,7 +24,7 @@
           <% end %>
 
           <% card.actions do %>
-            <%= link_to 'New', publication_new_draft_path(@publication), class: 'btn btn-primary btn-sm' %>
+            <%= link_to 'New', publication_new_draft_path(@publication), class: 'btn btn-primary btn-outline btn-sm' %>
           <% end %>
 
           <% card.body do %>
