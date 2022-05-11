@@ -98,6 +98,8 @@ class ApplicationAdapter
         visibility: response.visibility || response.owner&.visibility,
         ssh_url: response.ssh_url_to_repo || response.ssh_url,
         html_url: response.web_url || response.html_url,
+        clone_url: response.clone_url,
+        temp_clone_token: response.temp_clone_token,
         default_branch: response.default_branch,
         adapter: self
       )
