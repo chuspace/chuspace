@@ -1,5 +1,5 @@
 <div class='flex items-center w-full'>
-  <%= render(Avatar::Component.new(avatar: @publication.icon, fallback: @publication.initials, variant: :thumb)) %>
+  <%= render(Avatar::Component.new(avatar: @publication.icon, fallback: @publication.initials, variant: :profile)) %>
   <div class='ml-4 sm:w-2/3 w-full'>
     <h2><%= @publication.name %></h2>
     <p class='sm:w-2/3 w-full text-sm text-secondary'><%= @publication.description %></p>

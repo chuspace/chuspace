@@ -21,6 +21,6 @@
 
   <div class='mt-8 flex items-center'>
     <span>Can't see your repo here?</span>
-    <%= button_to 'Configure repository', "https://github.com/apps/#{Rails.application.credentials.github_storage[:app_name]}/installations/new", class: 'link link-primary ml-2', data: { turbo: false } %>
+    <%= link_to 'Configure repository', "https://github.com/apps/#{Rails.application.credentials.github_storage[:app_name]}/installations/new", class: 'link link-primary ml-2', data: { turbo: false } %>
   </div>
 <% end %>

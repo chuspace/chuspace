@@ -1,10 +1,10 @@
 <%= render 'publications/layout' do %>
-  <div class='grid grid-cols-12 gap-4 mt-8'>
-    <aside class='col-span-3'>
+  <div class='grid grid-cols-4 gap-16 mt-8'>
+    <aside class='col-span-1'>
       <%= render 'publications/shared/people_actions', publication: @publication %>
     </aside>
 
-    <main class='col-span-9'>
+    <main class='col-span-3'>
       <%= render(Card::Component.new) do |card| %>
         <% card.title do %>
           <%= render 'shared/breadcrumbs' %>
@@ -12,7 +12,9 @@
 
         <% card.actions do %>
           <aside>
-            <%= link_to 'Invite member', new_publication_invite_path(@publication), class: 'btn btn-primary btn-sm', 'data-turbo-frame': dom_id(@invite, :popup) %>
+            <%= link_to new_publication_invite_path(@publication), 'data-turbo-frame': dom_id(@invite, :popup) do %>
+              <%= inline_svg_tag 'icons/plus.svg', class: 'fill-current w-4 h-4' %>
+            <% end %>
             <%= turbo_frame_tag dom_id(@invite, :popup) %>
           </aside>
         <% end %>

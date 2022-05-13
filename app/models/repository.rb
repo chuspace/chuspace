@@ -16,8 +16,8 @@ class Repository < ApplicationRecord
 
   def raw(path:)
     pathname = Pathname.new(path)
-    path = (pathname.absolute? ? pathname.relative_path_from('/') : pathname).to_s
-    blob = tree.find { |asset| asset.path == path }
+    pathname = (pathname.absolute? ? pathname.relative_path_from('/') : pathname)
+    blob = tree.find { |asset| asset.path == pathname.to_s || asset.path.include?(pathname.cleanpath.to_s) }
     content = git_provider_adapter.asset(sha: blob.sha).content
     Base64.decode64(content)
   end
@@ -55,12 +55,19 @@ class Repository < ApplicationRecord
     git_provider_adapter(ref: ref).blob(path: path).decorate(publication: publication)
   end
 
-  def drafts(path: drafts_folders)
+  def drafts(path: drafts_folders, published: false)
     paths = path.is_a?(Array) ? path : [path]
 
-    git_provider_adapter.blobs(paths: paths)
+    drafts = git_provider_adapter.blobs(paths: paths)
       .select { |blob| blob.type == 'dir' || MarkdownValidator.valid?(name_or_path: blob.name) }
       .map { |blob| blob.decorate(publication: publication) }
+
+    if published
+      published_draft_paths = publication.posts.pluck(:blob_path)
+      drafts = drafts.select { |draft| published_draft_paths.include?(draft.path) }
+    end
+
+    drafts
   end
 
   def drafts_folders

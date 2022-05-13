@@ -13,10 +13,12 @@ module Publications
     def index
       authorize! @draft
       @invite = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
-      add_breadcrumb(:drafts)
+      published = params[:status] == 'published'
+
+      published ? add_breadcrumb(:published) : add_breadcrumb(:drafts)
 
       if turbo_frame_request?
-        @drafts = @publication.repository.drafts(path: @draft_path)
+        @drafts = @publication.repository.drafts(path: @draft_path, published: published)
         render partial: 'list', locals: { drafts: @drafts, publication: @publication }
       end
     end

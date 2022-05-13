@@ -59,9 +59,9 @@ export default class LazyImage extends LitElement {
               `
             : null
         }
-        <img alt=${this.alt} data-src="${this.src}" title="${this.title}" data-sizes="auto" class="lazy blur-up${
-      this.rounded ? ' rounded-full' : ''
-    }" />
+        <img alt=${this.alt} width='100%' data-src="${this.src}" title="${
+      this.title
+    }" data-sizes="auto" class="lazy blur-up${this.rounded ? ' rounded-full' : ''}" />
         ${
           this.editable
             ? html`

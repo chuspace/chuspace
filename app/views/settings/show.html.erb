@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class='grid grid-cols-4 gap-8 mt-8'>
+<div class='grid grid-cols-4 gap-12 mt-8'>
   <%= render 'sidebar', user: @user %>
   <section class='col-span-3'>
     <%= render(Card::Component.new) do |card| %>
@@ -19,7 +19,7 @@
         <%= render('shared/breadcrumbs') %>
       <% end %>
       <% card.body do %>
-        <div class='px-8 pb-8'>
+        <div class='py-4'>
           <%= render "#{@partial}", user: @user, url: setting_path(id: @partial.parameterize) %>
         </div>
       <% end %>

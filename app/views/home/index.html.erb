@@ -1,5 +1,5 @@
 <section>
-  <div class='grid grid-cols-12 gap-8'>
+  <div class='grid grid-cols-12 gap-16'>
     <div class='col-span-8'>
       <%= render(Card::Component.new) do |card| %>
         <% card.title do %>
@@ -7,9 +7,9 @@
         <% end %>
 
         <% card.actions do %>
-          <%= tab_link_to 'Recent', authenticated_root_path, class: 'link link-primary link-hover text-sm' %>
+          <%= tab_link_to 'Recent', authenticated_root_path, class: 'link link-secondary link-hover text-sm' %>
           <span class='mx-2 text-secondary'>|</span>
-          <%= tab_link_to 'Old', authenticated_root_path(sort: :oldest), class: 'link link-primary link-hover text-sm' %>
+          <%= tab_link_to 'Old', authenticated_root_path(sort: :oldest), class: 'link link-secondary link-hover text-sm' %>
         <% end %>
 
         <% card.body do %>
@@ -23,49 +23,47 @@
     </div>
 
     <div class='col-span-4'>
-      <%= render(Card::Component.new) do |card| %>
-        <% card.title do %>
-          Publications
-        <% end %>
-
-        <% card.actions do %>
-          <%= link_to 'Connect', connect_root_path, class: 'btn btn-primary btn-outline btn-sm' %>
-        <% end %>
-
-        <% card.body do %>
-          <% if @publications.any? %>
-            <% @publications.each do |publication| %>
-              <div class='border-base-200 border-b last:border-b-0 p-4 px-4'>
-                <div class='flex-1'>
-                  <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
-                    <%= tag.h5 publication.name, class: 'link link-primary link-hover' %>
-                    <%= tag.div publication.description, class: 'text-sm mt-1 text-secondary' %>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
-          <% else %>
-            <%= render 'shared/placeholder', content: 'No publications' %>
-          <% end %>
-        <% end %>
-      <% end %>
-
-      <div class='mt-8'>
+      <div class='sticky top-0'>
         <%= render(Card::Component.new) do |card| %>
           <% card.title do %>
-            Topics
+            Publications
           <% end %>
 
           <% card.body do %>
-            <div class='flex flex-wrap p-4'>
-              <% ActsAsTaggableOn::Tag.featured.limit(5).each do |topic| %>
-                <div class='ml-2 mb-2'>
-                  <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
+            <% if @publications.any? %>
+              <% @publications.each do |publication| %>
+                <div class='border-base-200 border-b last:border-b-0 py-4'>
+                  <div class='flex-1'>
+                    <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
+                      <%= tag.h5 publication.name, class: 'link link-primary link-hover' %>
+                      <%= tag.div publication.description, class: 'text-sm mt-1 text-secondary' %>
+                    <% end %>
+                  </div>
                 </div>
               <% end %>
-            </div>
+            <% else %>
+              <%= render 'shared/placeholder', content: 'No publications' %>
+            <% end %>
           <% end %>
         <% end %>
+
+        <div class='mt-8'>
+          <%= render(Card::Component.new) do |card| %>
+            <% card.title do %>
+              Topics
+            <% end %>
+
+            <% card.body do %>
+              <div class='flex flex-wrap py-8'>
+                <% ActsAsTaggableOn::Tag.featured.limit(5).each do |topic| %>
+                  <div class='ml-2 mb-2'>
+                    <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

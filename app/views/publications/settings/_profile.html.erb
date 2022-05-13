@@ -1,6 +1,6 @@
 <%= turbo_frame_tag(publication) do %>
   <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
-    <drop-image class='mt-8'>
+    <drop-image>
       <%= render(Avatar::Component.new(avatar: publication.icon, fallback: publication.initials, variant: :profile, uploader: true)) %>
 
       <% if publication.errors.include?(:icon) %>

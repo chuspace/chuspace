@@ -123,11 +123,11 @@ export default class CodeEditor extends LitElement {
     this.loaded = true
   }
 
-  connectedCallback() {
-    super.connectedCallback()
+  async connectedCallback() {
+    await super.connectedCallback()
     this.lines = this.content.split(/\r\n|\r|\n/).length
 
-    this.attachObserver()
+    await this.loadEditor()
   }
 
   createRenderRoot() {
