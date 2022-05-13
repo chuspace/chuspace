@@ -29,7 +29,19 @@ export default class CodeBlockView extends BaseView {
   constructor(props: BaseViewPropType) {
     // Call super but don't render the view
     super(props, false)
-    const { mode } = LANGUAGE_MODE_HASH[this.node.attrs.language] || {
+
+    const regex = /[a-zA-Z]+/g
+    let language = this.node.attrs.language
+
+    if (language) {
+      const matches = this.node.attrs.language.match(regex)
+
+      if (matches) {
+        language = matches[0]
+      }
+    }
+
+    const { mode } = LANGUAGE_MODE_HASH[language] || {
       mode: 'auto',
     }
 

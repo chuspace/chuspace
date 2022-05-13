@@ -1,31 +1,30 @@
 <%= render 'publications/layout' do %>
-  <div class='grid grid-cols-12 gap-4 mt-8'>
-    <aside class='col-span-3'>
+  <div class='grid grid-cols-4 gap-16 mt-8'>
+    <aside class='col-span-1'>
       <ul class='card bordered side-menu'>
         <li class="border-b last:border-b-0 border-base-200">
-          <%= tab_link_to 'All', publication_drafts_root_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
+          <%= tab_link_to 'Drafts', publication_drafts_root_path(@publication), class: 'px-4 py-3 block', dir: :vertical %>
         </li>
         <li class="border-b last:border-b-0 border-base-200">
-          <%= tab_link_to 'Published', '#', class: 'px-4 py-3 block', dir: :vertical %>
-        </li>
-        <li class="border-b last:border-b-0 border-base-200">
-          <%= tab_link_to 'Unpublished', '#', class: 'px-4 py-3 block', dir: :vertical %>
+          <%= tab_link_to 'Published', publication_drafts_root_path(@publication, status: :published), class: 'px-4 py-3 block', dir: :vertical %>
         </li>
       </ul>
     </aside>
 
-    <main class='col-span-9'>
+    <main class='col-span-3'>
       <%= render(Card::Component.new) do |card| %>
         <% card.title do %>
           <%= render 'shared/breadcrumbs' %>
         <% end %>
 
         <% card.actions do %>
-          <%= link_to 'New', publication_new_draft_path(@publication), class: 'btn btn-primary btn-sm' %>
+          <%= link_to publication_new_draft_path(@publication) do %>
+            <%= inline_svg_tag 'icons/plus', class: 'fill-current w-4 h-4' %>
+          <% end %>
         <% end %>
 
         <% card.body do %>
-          <% path = @path.blank? ? publication_drafts_root_path(@publication) : publication_drafts_path(@publication, path: @path) %>
+          <% path = @path.blank? ? publication_drafts_root_path(@publication, status: params[:status]) : publication_drafts_path(@publication, path: @path, status: params[:status]) %>
           <%= turbo_frame_tag dom_id(@publication, :drafts), src: path, lazy: true do %>
             <%= render 'shared/card_loader', count: 10 %>
           <% end %>

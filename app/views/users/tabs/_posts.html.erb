@@ -5,7 +5,9 @@
 
   <% card.actions do %>
     <% if @user.personal_publication %>
-      <%= link_to 'New', publication_new_draft_path(@user.personal_publication), class: 'btn btn-primary btn-outline btn-sm' %>
+      <%= link_to publication_new_draft_path(@user.personal_publication) do %>
+        <%= inline_svg_tag 'icons/plus.svg', class: 'fill-current w-4 h-4' %>
+      <% end %>
     <% else %>
       <%= link_to 'Connect', connect_personal_publications_path, class: 'btn btn-primary btn-outline btn-sm' %>
     <% end %>

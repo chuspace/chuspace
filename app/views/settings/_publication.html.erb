@@ -1,5 +1,5 @@
 <% if user.personal_publication %>
-  <div class='mt-4'>
+  <div>
     <h3 class='border-b border-base-200 pb-2'>Content</h3>
     <%= render 'publications/settings/content', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :publication) %>
   </div>

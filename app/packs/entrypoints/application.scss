@@ -60,8 +60,10 @@
 
   .tabs {
     .tab {
+      @apply font-medium;
+
       &.active {
-        @apply relative text-primary;
+        @apply relative text-primary font-bold;
 
         &::after {
           @apply absolute w-full bottom-0 border-b-2 border-b-primary;
@@ -92,7 +94,12 @@
 
   .link {
     &.active {
-      @apply font-bold underline;
+      @apply relative text-primary font-bold pb-1 no-underline;
+
+      &::after {
+        @apply absolute w-full bottom-0 left-0 border-b-2 border-b-primary;
+        content: '';
+      }
     }
   }
 }

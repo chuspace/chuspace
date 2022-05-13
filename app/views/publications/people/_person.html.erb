@@ -3,7 +3,7 @@
     <div class='flex-1'>
       <div class='flex items-center'>
         <%= link_to(user_path(membership.user), 'data-turbo-frame': :_top, class: 'link link-primary link-hover') do %>
-          <%= render(Avatar::Component.new(avatar: membership.user.avatar, gravatar: membership.user.gravatar_url, fallback: membership.user.name.initials, variant: :thumb)) %>
+          <%= render(Avatar::Component.new(avatar: membership.user.avatar, gravatar: membership.user.gravatar_url, fallback: membership.user.name.initials, variant: :icon)) %>
         <% end %>
 
         <div class='ml-2'>

@@ -142,6 +142,10 @@ export const MODES: ModesType = [
     mode: 'htmlmixed',
   },
   {
+    name: 'html',
+    mode: 'htmlmixed',
+  },
+  {
     name: 'Java',
     mode: 'clike',
     mime: 'text/x-java',
