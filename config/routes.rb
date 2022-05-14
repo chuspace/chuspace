@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   resources :auto_checks, only: :create
   resources :topics, only: %i[index show]
+  resources :languages, only: %i[index show]
 
   namespace :connect do
     root to: 'home#index'

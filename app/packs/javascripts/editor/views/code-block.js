@@ -8,17 +8,15 @@ import { redo, undo } from 'prosemirror-history'
 
 import BaseView from './base'
 import type { BaseViewPropType } from './base'
-import CodeMirror from 'codemirror'
-import { DEFAULT_MODE } from 'editor/modes'
+import CodeMirror from 'editor/codemirror'
 import { Decoration } from 'prosemirror-view'
 import { EditorView } from 'prosemirror-view'
-import { LANGUAGE_MODE_HASH } from 'editor/modes'
 import { exitCode } from 'prosemirror-commands'
 
 export default class CodeBlockView extends BaseView {
   cm: typeof CodeMirror.defaults = null
   updating: boolean = false
-  mode: string = DEFAULT_MODE
+  mode: string = 'auto'
   content: string
   readOnly: boolean | 'nocursor'
   lines: number
@@ -30,24 +28,7 @@ export default class CodeBlockView extends BaseView {
     // Call super but don't render the view
     super(props, false)
 
-    const regex = /[a-zA-Z]+/g
-    let language = this.node.attrs.language
-
-    if (language) {
-      const matches = this.node.attrs.language.match(regex)
-
-      if (matches) {
-        language = matches[0]
-      }
-    }
-
-    const { mode } = LANGUAGE_MODE_HASH[language] || {
-      mode: 'auto',
-    }
-
-    // Custom attrs for code block node view
-    this.mode = mode
-    this.node.attrs.language = mode
+    this.mode = this.node.attrs.language
     this.content = this.node.textContent
     this.readOnly = this.editable ? false : 'nocursor'
     this.lines = this.content.split(/\r\n|\r|\n/).length
@@ -102,7 +83,6 @@ export default class CodeBlockView extends BaseView {
 
   /* Component calls to set cm instance mode and node attrs */
   onLanguageChange = (mode: string) => {
-    this.cm.setOption('mode', mode)
     this.node.attrs.language = mode
     this.outerView.dispatch(this.outerView.state.tr.setNodeMarkup(this.getPos(), null, this.node.attrs))
   }

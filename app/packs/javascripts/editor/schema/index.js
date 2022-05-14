@@ -18,7 +18,7 @@ export const filterElementsBy = (elements: [], type: string) => {
     .reduce(
       (nodes, { name, schema }) => ({
         ...nodes,
-        [name]: schema
+        [name]: schema,
       }),
       {}
     )
@@ -33,21 +33,17 @@ export default class SchemaManager {
     this.elements = [
       ...toArray(marks).map((Mark) => new Mark(editor.options)),
       ...toArray(plugins).map((Plugin) => new Plugin(editor.options)),
-      ...toArray(nodes).map((Node) => new Node(editor.options))
+      ...toArray(nodes).map((Node) => new Node(editor.options)),
     ]
 
     if (filteredNodes.length > 0) {
       this.elements = this.elements.filter(
-        (element) =>
-          (element.type === 'node' && filteredNodes.includes(element.name)) ||
-          element.type !== 'node'
+        (element) => (element.type === 'node' && filteredNodes.includes(element.name)) || element.type !== 'node'
       )
     }
 
     if (editor.excludeFrontmatter) {
-      this.elements = this.elements.filter(
-        (element) => element.name !== 'front_matter'
-      )
+      this.elements = this.elements.filter((element) => element.name !== 'front_matter')
     }
 
     this.elements.forEach((element) => {
@@ -60,7 +56,7 @@ export default class SchemaManager {
 
     this.schema = new Schema({
       nodes: nodeElements,
-      marks: markElements
+      marks: markElements,
     })
 
     this.editor = editor
@@ -94,7 +90,7 @@ export default class SchemaManager {
           view,
           getPos,
           decorations,
-          editor: this.editor
+          editor: this.editor,
         }),
       code_block: (node, view, getPos, decorations) =>
         new CodeBlockView({
@@ -102,7 +98,7 @@ export default class SchemaManager {
           view,
           getPos,
           decorations,
-          editor: this.editor
+          editor: this.editor,
         }),
       image: (node, view, getPos, decorations) =>
         new ImageView({
@@ -111,8 +107,8 @@ export default class SchemaManager {
           getPos,
           decorations,
           editor: this.editor,
-          imageLoadPath: this.editor.imageLoadPath
-        })
+          imageLoadPath: this.editor.imageLoadPath,
+        }),
     }
   }
 
@@ -128,7 +124,7 @@ export default class SchemaManager {
       .map((element) =>
         element.keys({
           type: this.schema[`${element.type}s`][element.name],
-          schema: this.schema
+          schema: this.schema,
         })
       )
 
@@ -147,7 +143,7 @@ export default class SchemaManager {
       .map((element) =>
         element.inputRules({
           type: this.schema[`${element.type}s`][element.name],
-          schema: this.schema
+          schema: this.schema,
         })
       )
 
@@ -171,7 +167,7 @@ export default class SchemaManager {
       .map((element) =>
         element.pasteRules({
           type: this.schema[`${element.type}s`][element.name],
-          schema: this.schema
+          schema: this.schema,
         })
       )
 
@@ -191,9 +187,9 @@ export default class SchemaManager {
           schema: this.schema,
           ...(['node', 'mark'].includes(type)
             ? {
-                type: this.schema[`${type}s`][name]
+                type: this.schema[`${type}s`][name],
               }
-            : {})
+            : {}),
         })
 
         if (Array.isArray(value)) {
@@ -203,11 +199,7 @@ export default class SchemaManager {
                 return false
               }
               this.editor.view.focus()
-              return callback(attrs)(
-                this.editor.view.state,
-                this.editor.view.dispatch,
-                this.editor.view
-              )
+              return callback(attrs)(this.editor.view.state, this.editor.view.dispatch, this.editor.view)
             })
         } else if (typeof value === 'function') {
           commands[name] = (attrs) => {
@@ -215,48 +207,34 @@ export default class SchemaManager {
               return false
             }
             this.editor.view.focus()
-            return value(attrs)(
-              this.editor.view.state,
-              this.editor.view.dispatch,
-              this.editor.view
-            )
+            return value(attrs)(this.editor.view.state, this.editor.view.dispatch, this.editor.view)
           }
         } else if (typeof value === 'object') {
-          Object.entries(value).forEach(
-            ([commandName, commandValue]: [string, Function]) => {
-              if (Array.isArray(commandValue)) {
-                commands[commandName] = (attrs) =>
-                  commandValue.forEach((callback: Function) => {
-                    if (!this.editor.editable) {
-                      return false
-                    }
-                    this.editor.view.focus()
-                    return callback(attrs)(
-                      this.editor.view.state,
-                      this.editor.view.dispatch,
-                      this.editor.view
-                    )
-                  })
-              } else {
-                commands[commandName] = (attrs) => {
+          Object.entries(value).forEach(([commandName, commandValue]: [string, Function]) => {
+            if (Array.isArray(commandValue)) {
+              commands[commandName] = (attrs) =>
+                commandValue.forEach((callback: Function) => {
                   if (!this.editor.editable) {
                     return false
                   }
                   this.editor.view.focus()
-                  return commandValue(attrs)(
-                    this.editor.view.state,
-                    this.editor.view.dispatch,
-                    this.editor.view
-                  )
+                  return callback(attrs)(this.editor.view.state, this.editor.view.dispatch, this.editor.view)
+                })
+            } else {
+              commands[commandName] = (attrs) => {
+                if (!this.editor.editable) {
+                  return false
                 }
+                this.editor.view.focus()
+                return commandValue(attrs)(this.editor.view.state, this.editor.view.dispatch, this.editor.view)
               }
             }
-          )
+          })
         }
 
         return {
           ...allCommands,
-          ...commands
+          ...commands,
         }
       }, {})
   }

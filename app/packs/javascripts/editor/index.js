@@ -169,6 +169,9 @@ export default class ChuEditor extends LitElement {
     const view = new EditorView(this, {
       state: this.state,
       schema: this.schema,
+      attributes: {
+        spellcheck: 'false',
+      },
       editable: () => this.editable,
       imageLoadPath: this.imageLoadPath,
       imageUploadPath: this.imageUploadPath,
@@ -206,8 +209,8 @@ export default class ChuEditor extends LitElement {
         this.dirty = false
       }
     },
-    500,
-    { maxWait: 2000 }
+    2000,
+    { maxWait: 5000 }
   )
 
   dispatchTransaction(transaction: Transaction) {

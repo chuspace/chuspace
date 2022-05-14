@@ -75,6 +75,14 @@ class Language
     @languages
   end
 
+  def self.find(id)
+    find_by_extension(id) ||
+      find_by_name(id) ||
+      find_by_alias(id) ||
+      find_by_filename(id) ||
+      find_by_interpreter(id)
+  end
+
   # Public: Look up Language by its proper name.
   #
   # name - The String name of the Language

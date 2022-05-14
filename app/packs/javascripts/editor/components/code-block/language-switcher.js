@@ -1,88 +1,106 @@
 // @flow
 
-import { LANGUAGE_MODE_HASH, MODES } from 'editor/modes'
 import { LitElement, html } from 'lit'
 
-import type { ModeType } from 'editor/modes/modes'
-import autoComplete from '@tarekraafat/autocomplete.js'
+import Codemirror from 'editor/codemirror'
+import Fuse from 'fuse.js'
 import classNames from 'classnames'
+import debounce from 'lodash.debounce'
+import { repeat } from 'lit/directives/repeat.js'
 
 export default class LanguageSwitcher extends LitElement {
   static get properties() {
     return {
       mode: { type: String, reflect: true },
-      setMode: { type: Function }
+      items: { type: Array },
+      open: { type: Boolean },
+      setMode: { type: Function },
     }
   }
 
-  async connectedCallback() {
-    await super.connectedCallback()
-    this.initAutocomplete()
+  connectedCallback() {
+    super.connectedCallback()
+    this.initFuse()
+
+    this.close()
   }
 
-  get input() {
-    return this.querySelector('input')
+  initFuse = async () => {
+    if (this.fuse) return
+
+    const options = {
+      includeScore: true,
+      keys: ['name', 'mode'],
+    }
+
+    this.fuse = new Fuse(CodeMirror.modeInfo, options)
   }
 
-  initAutocomplete = () => {
-    if (this.autocompleteInstance) return
-
-    // this.autocompleteInstance = new autoComplete({
-    //   data: {
-    //     src: MODES,
-    //     key: ['name'],
-    //     cache: false
-    //   },
-    //   placeHolder: 'Select language',
-    //   selector: () => this.input,
-    //   threshold: 0,
-    //   debounce: 300,
-    //   searchEngine: 'strict',
-    //   maxResults: 5,
-    //   highlight: true,
-    //   resultsList: {
-    //     render: true,
-    //     container: function(source) {
-    //       source.removeAttribute('id')
-    //       source.className = 'code-editor-language-switcher arrow'
-    //     },
-    //     destination: this.querySelector(
-    //       '.code-editor-language-switcher-container '
-    //     ),
-    //     position: 'beforeend',
-    //     element: 'ul'
-    //   },
-    //   resultItem: {
-    //     content: function(data, source) {
-    //       source.innerHTML = data.match
-    //       source.removeAttribute('id')
-    //     },
-    //     element: 'li'
-    //   },
-    //   onSelection: (feedback) => this.add(feedback.selection.value)
-    // })
+  firstUpdated() {
+    this.input = this.renderRoot.querySelector('input')
   }
 
-  add = (language: ModeType) => {
-    this.mode = language.mode
-    this.input.value = language.name
-    this.setMode(this.mode)
+  select = (event: Event, mode: ModeType) => {
+    event.preventDefault()
+
+    this.mode = mode.mode
+    this.input.value = mode.mode
+    this.setMode(mode.mode)
+    this.close()
   }
 
   createRenderRoot() {
     return this
   }
 
-  render() {
-    const { name } = LANGUAGE_MODE_HASH[this.mode]
+  searchModes = debounce((event: Event) => {
+    if (event.target.value) {
+      this.items = this.fuse.search(event.target.value).map((item) => item.item)
+      this.show()
+    } else {
+      this.close()
+    }
+  }, 200)
 
+  show = () => (this.open = true)
+  close = () => {
+    this.open = false
+    this.items = CodeMirror.modeInfo
+  }
+
+  render() {
     return html`
       <div class="code-editor-language-switcher-container mr-4">
-        <input
-          type="text"
-          value=${name}
-          class="input input-sm w-full max-w-xs"
-        />
+        <div class="dropdown dropdown-end">
+          <input
+            type="text"
+            placeholder="Type to search..."
+            value=${this.mode}
+            class="input input-sm w-full max-w-xs"
+            @input=${this.searchModes}
+            @focus=${this.show}
+            @blur=${this.hide}
+          />
+          ${this.open
+            ? html`<ul
+                class="shadow menu dropdown-content absolute z-10 bg-base-100 border border-base-100 rounded-box w-52 h-48 overflow-y-scroll"
+              >
+                ${repeat(
+                  this.items,
+                  (item) => item.name,
+                  (item) =>
+                    html`<button
+                      role="option"
+                      class="border-b p-2 text-left border-base-200 py-2 px-4 cursor-pointer last:border-b-0"
+                      id="${item.id}"
+                      @click="${(event) => this.select(event, item)}"
+                    >
+                      ${item.name}
+                    </button>`
+                )}
+              </ul>`
+            : null}
+        </div>
       </div>
     `
   }

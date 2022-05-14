@@ -3,20 +3,19 @@
 
 
 code-editor
-  position: relative
   width: 100%
   white-space: nowrap
 
 
   .code-editor-container
-    @apply rounded shadow-lg border border-base-300 overflow-hidden
+    @apply rounded shadow-lg border border-base-300
     border-radius: 0.5rem
 
     &.no-wrapper
       @apply rounded-none border-0
 
     .CodeMirror
-      @apply rounded-b max-w-full pt-4 font-normal overflow-y-auto pb-4
+      @apply rounded-b max-w-full pt-4 font-normal overflow-hidden pb-4
       height: auto
 
       .CodeMirror-scroll
@@ -24,6 +23,7 @@ code-editor
 
     &.contribution-modal
       .CodeMirror
+        @apply overflow-y-auto
         height: 300px
 
       .CodeMirror-scroll

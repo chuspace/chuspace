@@ -1,12 +1,13 @@
 // @flow
 
+import 'codemirror/mode/yaml-frontmatter/yaml-frontmatter'
+
 import CodeBlockView, { computeChange } from './code-block'
 import { Node as ProsemirrorNode, Schema } from 'prosemirror-model'
 import { html, render } from 'lit'
 import { redo, undo } from 'prosemirror-history'
 
 import type { BaseViewPropType } from './base'
-import CodeMirror from 'codemirror'
 
 export default class FrontMatterView extends CodeBlockView {
   constructor(props: BaseViewPropType) {

@@ -13,6 +13,26 @@ class MarkdownDoc
     @doc     = CommonMarker.render_doc(content)
   end
 
+  def to_chuspace
+    doc.walk do |node|
+      if node.type == IMAGE_NODE
+        format_image_to_chuspace(node)
+      elsif node.type == CODE_NODE
+        format_code_block_to_chuspace(node)
+      end
+    end
+  end
+
+  def from_chuspace
+    doc.walk do |node|
+      if node.type == IMAGE_NODE
+        format_image_from_chuspace(node)
+      elsif node.type == CODE_NODE
+        format_code_block_from_chuspace(node)
+      end
+    end
+  end
+
   def images
     images = []
     idx = 1
@@ -52,5 +72,10 @@ class MarkdownDoc
 
   def snippets?
     snippets.any?
+  end
+
+  private
+
+  def format_image_to_chuspace(node)
   end
 end

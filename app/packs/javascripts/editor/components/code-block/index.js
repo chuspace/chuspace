@@ -1,33 +1,15 @@
 // @flow
 
-import 'codemirror/lib/codemirror.css'
 import './styles.sass'
 import './themes/light.sass'
 import './themes/dark.sass'
 import 'tippy.js/dist/tippy.css'
-import 'codemirror/addon/fold/foldgutter.css'
-import 'codemirror/mode/javascript/javascript'
-import 'codemirror/addon/edit/matchbrackets'
-import 'codemirror/addon/edit/closebrackets'
-import 'codemirror/addon/edit/matchtags'
-import 'codemirror/addon/edit/trailingspace'
-import 'codemirror/addon/edit/closetag'
-import 'codemirror/addon/fold/foldcode'
-import 'codemirror/addon/fold/foldgutter'
-import 'codemirror/addon/fold/indent-fold'
-import 'codemirror/addon/fold/brace-fold'
-import 'codemirror/addon/fold/comment-fold'
-import 'codemirror/addon/fold/markdown-fold'
-import 'codemirror/addon/display/autorefresh'
-import 'codemirror/addon/mode/multiplex'
 import './language-switcher'
 
-import * as CodeMirror from 'codemirror'
-
 import { LitElement, css, html, svg } from 'lit'
-import { MODES, loadMode } from 'editor/modes'
 
 import ClipboardJS from 'clipboard'
+import CodeMirror from 'editor/codemirror'
 import Controls from './controls'
 import { CopyClipboard } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
@@ -63,44 +45,30 @@ export default class CodeEditor extends LitElement {
     this.loaded = false
     this.downloadable = true
     this.lines = 0
-
-    this.options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: [0, 0.25, 0.5, 0.75, 1],
-    }
   }
 
   setMode = async (mode: string) => {
-    await loadMode(mode)
-
     this.mode = mode
+    this.cm.setOption('mode', mode)
+    await CodeMirror.autoLoadMode(this.cm, mode)
     this.onLanguageChange(mode)
   }
 
   attachObserver = () => {
-    if (this.observer) {
-      this.removeObserver()
-    }
+    this.observer = new IntersectionObserver(this.handleIntersection.bind(this), {
+      root: null,
+      rootMargin: '0px',
+      threshold: [0, 0.25, 0.5, 0.75, 1],
+    })
 
-    this.observer = new IntersectionObserver(this.handleIntersection.bind(this), this.options)
     this.observer.observe(this)
   }
 
-  removeObserver = () => {
-    this.observer.unobserve(this)
-    this.observer = null
-  }
-
-  handleIntersection(entries: Array<any>) {
+  handleIntersection(entries: Array<any>, observer) {
     entries.forEach(({ intersectionRatio }) => {
-      if (intersectionRatio === 0) {
-        if (this.timer) {
-          clearTimeout(this.timer)
-          this.timer = null
-        }
-      } else if (intersectionRatio > 0.1) {
-        this.timer = setTimeout(() => this.loadEditor(), this.delay)
+      if (intersectionRatio > 0.1) {
+        this.loadEditor()
+        observer.unobserve(this)
       }
     })
   }
@@ -109,10 +77,26 @@ export default class CodeEditor extends LitElement {
     return this.renderRoot.querySelector('#code-editor')
   }
 
-  loadEditor = async () => {
-    if (this.cm) return
+  loadEditor = () => {
+    if (this.cm || this.loaded) return
 
-    await loadMode(this.mode)
+    let mode = this.mode
+    const regex = /[a-zA-Z]+/g
+
+    if (this.mode) {
+      const matches = this.mode.match(regex)
+
+      if (matches) {
+        mode =
+          CodeMirror.findModeByMIME(matches[0]) ||
+          CodeMirror.findModeByExtension(matches[0]) ||
+          CodeMirror.findModeByFileName(matches[0]) ||
+          CodeMirror.findModeByName(matches[0])
+      }
+    }
+
+    this.mode = mode.mode
+
     this.cm = this.createCM(this.codeEditorNode)
     if (this.onInit) this.onInit(this.cm)
 
@@ -120,14 +104,15 @@ export default class CodeEditor extends LitElement {
       if (this.onChange) this.onChange(editor.doc.getValue())
     })
 
+    CodeMirror.autoLoadMode(this.cm, this.mode)
+
     this.loaded = true
   }
 
-  async connectedCallback() {
-    await super.connectedCallback()
+  connectedCallback() {
+    super.connectedCallback()
     this.lines = this.content.split(/\r\n|\r|\n/).length
-
-    await this.loadEditor()
+    this.attachObserver()
   }
 
   createRenderRoot() {
@@ -145,6 +130,7 @@ export default class CodeEditor extends LitElement {
       mode: this.mode,
       lineWrapping: true,
       foldGutter: true,
+      scrollbarStyle: 'null',
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
       indentWithTabs: !this.readonly,
       theme: `chuspace-${this.theme}`,
