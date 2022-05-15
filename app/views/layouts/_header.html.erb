@@ -1,20 +1,27 @@
 <flexible-header data-on='<%= signed_in? %>'>
   <header data-target='flexible-header.element' class='header z-10 fixed top-0 bg-base-100 h-14 w-full'>
     <nav class='container flex justify-between items-center'>
-      <%= link_to root_path, class: 'pt-1 pb-2' do %>
-        <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= logo %></span>
-        <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
-      <% end %>
+      <div class='flex-1 flex items-center'>
+        <%= link_to root_path, class: 'pt-1 pb-2' do %>
+          <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= logo %></span>
+          <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
+        <% end %>
+
+        <%= yield :after_logo_contents %>
+      </div>
 
       <div class='flex items-center py-2'>
         <% if signed_in? %>
           <%= yield :header_actions %>
+
           <%= link_to connect_root_path do %>
-            <%= inline_svg_tag 'icons/plug', class: 'w-4 h-4 fill-current mr-8' %>
+            <%= inline_svg_tag 'icons/plug', class: 'w-5 h-5 fill-current mr-8' %>
           <% end %>
+
           <details class='dropdown dropdown-end'>
-            <summary role='button'>
-              <%= inline_svg_tag 'icons/plus', class: 'w-4 h-4 fill-current mr-8' %>
+            <summary role='button' class='flex items-center mr-8'>
+              <%= inline_svg_tag 'icons/pencil', class: 'w-4 h-4 inline-block fill-current' %>
+              <span class="dropdown-caret ml-2"></span>
             </summary>
             <details-menu
               role="menu"

@@ -53,8 +53,10 @@ export default class CodeEditor extends LitElement {
   }
 
   setMode = async (mode: String) => {
-    this.cm.setOption('mode', mode)
-    await CodeMirror.autoLoadMode(this.cm, mode)
+    if (mode) {
+      this.cm.setOption('mode', mode)
+      await CodeMirror.autoLoadMode(this.cm, mode)
+    }
   }
 
   attachObserver = () => {

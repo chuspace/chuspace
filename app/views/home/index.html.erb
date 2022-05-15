@@ -16,8 +16,8 @@
       <% end %>
     </div>
 
-    <div class='col-span-4'>
-      <div class='sticky top-0'>
+    <div class='col-span-4 h-screen max-h-screen'>
+      <div class='fixed top-0 sm:mt-24 sm:w-1/4 h-full overflow-y-scroll'>
         <%= render(Card::Component.new) do |card| %>
           <% card.title do %>
             Publications
