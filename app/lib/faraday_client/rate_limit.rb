@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FaradayClient
   class RateLimit < Struct.new(:limit, :remaining, :resets_at, :resets_in)
     def self.from_response(response)

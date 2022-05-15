@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RedirectUrl
   attr_reader :path, :params
 
@@ -8,23 +10,16 @@ class RedirectUrl
 
   def for(record, only_path: true)
     model     = record.class.name.downcase
-    attribute = permalink_attribute[model.to_sym]
+    attribute = record.friendly_id_config.slug_column
     permalink = params[:"#{model}_#{attribute}"] || params[:"#{attribute}"]
     route     = Rails.application.routes.recognize_path(path)
 
-    route[:"#{model}_#{attribute}"] = record.send(attribute) if route.key?(:"#{model}_#{attribute}")
-    route[:"#{attribute}"] = record.send(attribute) if route.key?(:"#{attribute}")
+    if route.key?(:"#{model}_#{attribute}")
+      route[:"#{model}_#{attribute}"] = record.send(attribute)
+    elsif route.key?(:"#{attribute}")
+      route[:"#{attribute}"] = record.send(attribute)
+    end
 
     Rails.application.routes.url_helpers.url_for(**route.merge(only_path: only_path))
-  end
-
-  private
-
-  def permalink_attribute
-    {
-      publication: :permalink,
-      user: :username,
-      post: :permalink
-    }.freeze
   end
 end

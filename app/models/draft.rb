@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require "down/http"
+
+require 'down/http'
 
 class Draft < Git::Blob
   attribute :publication, Publication
