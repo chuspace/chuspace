@@ -4,7 +4,6 @@ import './styles.sass'
 import './themes/light.sass'
 import './themes/dark.sass'
 import 'tippy.js/dist/tippy.css'
-import './language-switcher'
 
 import { LitElement, css, html, svg } from 'lit'
 
@@ -13,13 +12,10 @@ import CodeMirror from 'editor/codemirror'
 import Controls from './controls'
 import { CopyClipboard } from 'editor/components'
 import { EditorView } from 'prosemirror-view'
-import { query } from 'lit/decorators/query.js'
 import tippy from 'tippy.js'
 
 export default class CodeEditor extends LitElement {
   cm: ?CodeMirror
-  @query('.code-editor')
-  _codeEditor
 
   static properties = {
     mode: { type: String, reflect: true },
@@ -47,11 +43,18 @@ export default class CodeEditor extends LitElement {
     this.lines = 0
   }
 
-  setMode = async (mode: string) => {
-    this.mode = mode
+  onLanguageChange = async (event: Event, update: boolean = false) => {
+    const modeObj = CodeMirror.lookupMode(event.target.value)
+
+    if (modeObj) {
+      this.setMode(modeObj.mode)
+      this.onLanguageChange(event.target.value)
+    }
+  }
+
+  setMode = async (mode: String) => {
     this.cm.setOption('mode', mode)
     await CodeMirror.autoLoadMode(this.cm, mode)
-    this.onLanguageChange(mode)
   }
 
   attachObserver = () => {
@@ -80,31 +83,14 @@ export default class CodeEditor extends LitElement {
   loadEditor = () => {
     if (this.cm || this.loaded) return
 
-    let mode = this.mode
-    const regex = /[a-zA-Z]+/g
-
-    if (this.mode) {
-      const matches = this.mode.match(regex)
-
-      if (matches) {
-        mode =
-          CodeMirror.findModeByMIME(matches[0]) ||
-          CodeMirror.findModeByExtension(matches[0]) ||
-          CodeMirror.findModeByFileName(matches[0]) ||
-          CodeMirror.findModeByName(matches[0])
-      }
-    }
-
-    this.mode = mode.mode
-
     this.cm = this.createCM(this.codeEditorNode)
     if (this.onInit) this.onInit(this.cm)
+
+    this.setMode(CodeMirror.lookupMode(this.mode)?.mode)
 
     this.cm.on('change', (editor) => {
       if (this.onChange) this.onChange(editor.doc.getValue())
     })
-
-    CodeMirror.autoLoadMode(this.cm, this.mode)
 
     this.loaded = true
   }
@@ -112,6 +98,7 @@ export default class CodeEditor extends LitElement {
   connectedCallback() {
     super.connectedCallback()
     this.lines = this.content.split(/\r\n|\r|\n/).length
+
     this.attachObserver()
   }
 
@@ -163,6 +150,26 @@ export default class CodeEditor extends LitElement {
     })
   }
 
+  createRenderRoot() {
+    return this
+  }
+
+  renderSwitcher() {
+    return html`
+      <div class="code-editor-language-switcher-container mr-4">
+        <div class="dropdown dropdown-end">
+          <input
+            type="text"
+            placeholder="Type to search..."
+            value=${this.mode}
+            @change=${this.onLanguageChange}
+            class="input input-sm w-full max-w-xs"
+          />
+        </div>
+      </div>
+    `
+  }
+
   render = () => {
     return html`
       <div
@@ -181,13 +188,7 @@ export default class CodeEditor extends LitElement {
                 <div class="code-editor-toolbar-menu" contenteditable="false">
                   ${this.readonly
                     ? html` <div class="code-editor-language-badge badge badge-primary mr-4">${this.mode}</div> `
-                    : html`
-                        <code-editor-language-switcher
-                          mode=${this.mode}
-                          readonly=${this.readonly}
-                          .setMode=${this.setMode}
-                        ></code-editor-language-switcher>
-                      `}
+                    : this.renderSwitcher()}
 
                   <copy-clipboard .initClipboardJS=${this.initClipboardJS}></copy-clipboard>
                 </div>

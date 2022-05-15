@@ -9,6 +9,28 @@
       <div class='flex items-center py-2'>
         <% if signed_in? %>
           <%= yield :header_actions %>
+          <%= link_to connect_root_path do %>
+            <%= inline_svg_tag 'icons/plug', class: 'w-4 h-4 fill-current mr-8' %>
+          <% end %>
+          <details class='dropdown dropdown-end'>
+            <summary role='button'>
+              <%= inline_svg_tag 'icons/plus', class: 'w-4 h-4 fill-current mr-8' %>
+            </summary>
+            <details-menu
+              role="menu"
+              tabindex="0"
+              src='<%= user_publications_path(Current.user) %>'
+            >
+              <ul class="shadow menu dropdown-content bg-base-300 rounded-box w-72 max-h-96 overflow-y-scroll z-50">
+                <include-fragment>
+                  <div class="text-center mt-4">
+                    <span class='btn btn-lg btn-ghost btn-circle loading'></span>
+                  </div>
+                </include-fragment>
+              </ul>
+            </details-menu>
+          </details>
+
           <%= render 'layouts/user' %>
         <% else %>
           <%= link_to 'Our Story', '#', class: 'link link-primary link-hover text-sm ml-8' %>

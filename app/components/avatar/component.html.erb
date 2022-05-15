@@ -1,10 +1,20 @@
 <% if avatar.attached? %>
   <div class="avatar">
-    <lazy-image class='<%= class_name %>' rounded src='<%= avatar.variable? ? avatar.variant(variant).processed.url : avatar.processed.url %>' title='<%= fallback %>'></lazy-image>
+    <lazy-image
+      class='<%= class_name %>'
+      rounded
+      src='<%= avatar.variable? ? avatar.variant(variant).processed.url : avatar.processed.url %>'
+      title='<%= fallback %>'>
+    </lazy-image>
   </div>
 <% elsif gravatar.present? %>
   <div class="avatar">
-    <lazy-image class='<%= class_name %>' rounded src='<%= gravatar %>' title='<%= fallback %>'></lazy-image>
+    <lazy-image
+      class='<%= class_name %>'
+      rounded
+      src='<%= gravatar %>'
+      title='<%= fallback %>'>
+    </lazy-image>
   </div>
 <% else %>
   <div class="avatar placeholder bg-base-200 rounded-full">

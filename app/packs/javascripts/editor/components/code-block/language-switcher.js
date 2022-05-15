@@ -43,9 +43,9 @@ export default class LanguageSwitcher extends LitElement {
   select = (event: Event, mode: ModeType) => {
     event.preventDefault()
 
-    this.mode = mode.mode
-    this.input.value = mode.mode
-    this.setMode(mode.mode)
+    this.mode = mode.name
+    this.input.value = this.mode
+    this.setMode(this.mode)
     this.close()
   }
 

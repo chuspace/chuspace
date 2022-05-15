@@ -20,5 +20,11 @@ class PublicationPolicy < ApplicationPolicy
     record.memberships.publishers.exists?(user: user)
   end
 
-  relation_scope { |relation| relation.joins(:members).where(memberships: { user_id: user.id }) }
+  scope_for :relation, :write do |relation|
+    relation.where(personal: false).joins(:members).where(memberships: { user_id: user.id, role: RolesConfig.writers })
+  end
+
+  scope_for :relation, :member do |relation|
+    relation.where(personal: false).joins(:members).where(memberships: { user_id: user.id })
+  end
 end

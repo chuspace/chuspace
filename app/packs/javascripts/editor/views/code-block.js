@@ -25,7 +25,6 @@ export default class CodeBlockView extends BaseView {
   onLanguageChange: (mode: string) => void
 
   constructor(props: BaseViewPropType) {
-    // Call super but don't render the view
     super(props, false)
 
     this.mode = this.node.attrs.language
@@ -82,8 +81,8 @@ export default class CodeBlockView extends BaseView {
   }
 
   /* Component calls to set cm instance mode and node attrs */
-  onLanguageChange = (mode: string) => {
-    this.node.attrs.language = mode
+  onLanguageChange = (language: string) => {
+    this.node.attrs.language = language
     this.outerView.dispatch(this.outerView.state.tr.setNodeMarkup(this.getPos(), null, this.node.attrs))
   }
 

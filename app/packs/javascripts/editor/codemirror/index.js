@@ -23,6 +23,8 @@ import * as CodeMirror from 'codemirror'
 
 import { LexRules, ParseRules, isIgnored, onlineParser } from 'graphql-language-service-parser'
 
+import codemirror from 'codemirror'
+
 // Make CodeMirror available globally so the modes' can register themselves.
 window.CodeMirror = CodeMirror
 
@@ -47,6 +49,18 @@ function ensureDeps(mode, cont) {
   if (!missing.length) return cont()
   var split = splitCallback(cont, missing.length)
   for (i = 0; i < missing.length; ++i) CodeMirror.requireMode(missing[i], split)
+}
+
+CodeMirror.lookupMode = function (text) {
+  const regex = /[a-zA-Z]+/g
+  const matches = text.match(regex)
+
+  return matches
+    ? CodeMirror.findModeByMIME(matches[0]) ||
+        CodeMirror.findModeByExtension(matches[0]) ||
+        CodeMirror.findModeByFileName(matches[0]) ||
+        CodeMirror.findModeByName(matches[0])
+    : CodeMirror.findModeByExtension('txt')
 }
 
 CodeMirror.autoLoadMode = function (instance, mode) {

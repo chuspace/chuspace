@@ -1,0 +1,11 @@
+<% @publications.each do |publication| %>
+  <li
+    role="option"
+    tabindex="-1"
+    class='border-b border-base-300 last:border-b-0'
+    data-autocomplete-value='<%= publication.name %>'
+    id='<%= publication.name %>'
+  >
+    <%= link_to publication.name, publication_new_draft_path(publication), class: 'block py-2 px-4 cursor-pointer' %>
+  </li>
+<% end %>

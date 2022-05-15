@@ -11,4 +11,8 @@ class UserPolicy < ApplicationPolicy
   def edit?
     user == record
   end
+
+  def publications?
+    Publication.joins(:members).where(memberships: { user_id: user.id, role: RolesConfig.writers })
+  end
 end

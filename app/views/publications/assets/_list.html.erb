@@ -2,6 +2,6 @@
   <% if assets.any? %>
     <%= render partial: 'publications/assets/item', collection: assets, locals: { publication: publication }, as: :asset %>
   <% else %>
-    <div class='text-center text-2xl py-16'>No assets in this publication</div>
+    <%= render 'shared/placeholder', content: 'No assets' %>
   <% end %>
 <% end %>

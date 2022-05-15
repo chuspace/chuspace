@@ -4,13 +4,13 @@ module Avatar
   class Component < ApplicationComponent
     CLASSNAMES = {
       icon: {
-        classname: 'w-8 rounded-full'
+        classname: 'w-8 h-8 rounded-full'
       },
       thumb: {
-        classname: 'w-16 rounded-full'
+        classname: 'w-16 h-16 rounded-full'
       },
       profile: {
-        classname: 'w-32 rounded-full'
+        classname: 'w-32 h-32 rounded-full'
       }
     }
 

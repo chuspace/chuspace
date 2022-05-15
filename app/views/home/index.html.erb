@@ -6,12 +6,6 @@
           Posts
         <% end %>
 
-        <% card.actions do %>
-          <%= tab_link_to 'Recent', authenticated_root_path, class: 'link link-secondary link-hover text-sm' %>
-          <span class='mx-2 text-secondary'>|</span>
-          <%= tab_link_to 'Old', authenticated_root_path(sort: :oldest), class: 'link link-secondary link-hover text-sm' %>
-        <% end %>
-
         <% card.body do %>
           <% if @posts.any? %>
             <%= render 'posts/list', posts: @posts %>

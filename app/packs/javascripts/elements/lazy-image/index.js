@@ -19,10 +19,8 @@ export default class LazyImage extends LitElement {
   connectedCallback() {
     super.connectedCallback()
 
-    try {
-      this.alt = JSON.parse(this.alt) || ''
-      this.title = JSON.parse(this.title) || ''
-    } catch (e) {}
+    this.alt = this.alt || ''
+    this.title = this.title || ''
 
     if (this.handleChange) this.setAttribute('editable', true)
   }

@@ -227,6 +227,7 @@ export default class ChuEditor extends LitElement {
   }
 
   emitUpdate() {
+    console.log(this.content)
     this.editable ? this.onChange && this.onChange(this.content) : false
   }
 

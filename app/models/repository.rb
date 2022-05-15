@@ -31,7 +31,7 @@ class Repository < ApplicationRecord
     paths = path.is_a?(Array) ? path : [path]
 
     git_provider_adapter.blobs(paths: paths)
-      .select { |blob|  blob.type == 'dir' || ImageValidator.valid?(name_or_path: blob.name) }
+      .select { |blob|  blob.type == 'dir' || (blob&.name && ImageValidator.valid?(name_or_path: blob.name)) }
       .map { |blob| blob.decorate(publication: publication) }
   end
 

@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class PostsController < ApplicationController
-  include Breadcrumbable
+  include Breadcrumbable, FindPublication
 
-  before_action :find_publication
   before_action :find_post, only: %i[show update destroy edit]
   after_action :track_action, only: :show
   skip_verify_authorized only: :show
@@ -16,9 +15,5 @@ class PostsController < ApplicationController
 
   def find_post
     @post = @publication.posts.unscoped.friendly.find(params[:permalink])
-  end
-
-  def find_publication
-    @publication = Publication.friendly.find(params[:publication_permalink])
   end
 end
