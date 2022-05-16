@@ -24,7 +24,6 @@ class CreatePublications < ActiveRecord::Migration[6.1]
     add_index :publications, :personal, algorithm: :concurrently
     add_index :publications, %i[permalink owner_id], algorithm: :concurrently, unique: true
 
-    add_column :publications, :visibility, :publication_visibility_enum_type, index: { algorithm: :concurrently },
-null: false, default: :private
+    add_column :publications, :visibility, :publication_visibility_enum_type, index: { algorithm: :concurrently }, null: false, default: :public
   end
 end

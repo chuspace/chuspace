@@ -8,7 +8,7 @@
 
           <div class="form-control mt-8">
             <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
-            <%= form.input :auto_publish, as: :boolean, label: false, input_html: { checked: @publication.content.auto_publish }, checked_value: true, unchecked_value: false, placeholder: 'Commit message' %>
+            <%= form.input :auto_publish, as: :boolean, label: false, input_html: { checked: @publication.content.auto_publish }, checked_value: true, unchecked_value: false %>
             <div class='mt-8 font-mono'>
               <label class='text-sm flex items-center' id='commit-authors'>
                 Commit authors:

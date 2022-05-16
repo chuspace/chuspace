@@ -11,7 +11,6 @@ class CreateMemberships < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :memberships, :role, :membership_role_enum_type, index: { algorithm: :concurrently }, null: false,
-default: :writer
+    add_column :memberships, :role, :membership_role_enum_type, index: { algorithm: :concurrently }, null: false, default: :writer
   end
 end

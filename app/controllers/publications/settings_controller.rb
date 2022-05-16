@@ -31,6 +31,7 @@ module Publications
         :name,
         :description,
         :icon,
+        :visibility,
         repository_attributes: %i[posts_folder drafts_folder assets_folder readme_path id],
         content_attributes: %i[auto_publish],
         front_matter_attributes: %i[title summary date topics]

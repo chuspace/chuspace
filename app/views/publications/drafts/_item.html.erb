@@ -2,7 +2,7 @@
   <div class='flex-1'>
     <% path = draft.type == 'file' ? publication_edit_draft_path(publication, draft) : publication_drafts_path(publication, draft) %>
     <%= link_to path, data: { 'turbo-frame': :_top } do %>
-      <%= tag.h5 class: 'link link-primary link-hover' do %>
+      <%= tag.h5 class: 'link link-content link-hover' do %>
         <%= draft.name %>
         <%= content_tag :span, draft.type, class: 'badge badge-outline badge-secondary ml-2' %>
       <% end %>

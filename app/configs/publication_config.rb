@@ -18,8 +18,7 @@ class PublicationConfig < ApplicationConfig
     },
     visibility: {
       private: 'private',
-      public: 'public',
-      member: 'member'
+      public: 'public'
     }
   )
 

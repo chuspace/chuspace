@@ -5,8 +5,7 @@ class RolesConfig < ApplicationConfig
     writer: 'writer',
     editor: 'editor',
     admin: 'admin',
-    owner: 'owner',
-    member: 'member'
+    owner: 'owner'
   )
 
   class << self
@@ -26,8 +25,7 @@ class RolesConfig < ApplicationConfig
       {
         writer: 'read . write',
         editor: 'read . write . publish',
-        admin: 'read . write . publish . admin',
-        member: 'read'
+        admin: 'read . write . publish . admin'
       }
     end
 
