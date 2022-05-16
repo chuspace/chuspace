@@ -24,7 +24,7 @@
 
         <% if post.topics.any? %>
           <span class='mx-2'>&#183;</span>
-          <%= link_to post.topics.order(:score).first.name, topic_path(post.topics.first), class: 'badge badge-secondary badge-sm', data: { 'turbo-frame': :_top } %>
+          <%= link_to post.topics.first.name, topic_path(post.topics.first), class: 'badge badge-secondary badge-sm', data: { 'turbo-frame': :_top } %>
         <% end %>
       </div>
     </div>

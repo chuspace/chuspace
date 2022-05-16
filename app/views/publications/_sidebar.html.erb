@@ -14,7 +14,9 @@
     <% card.body do %>
       <div class='flex items-center p-4'>
         <% publication.members.each do |member| %>
-          <%= render(Avatar::Component.new(avatar: member.avatar, gravatar: member.gravatar_url, fallback: member.name.initials, variant: :icon)) %>
+          <%= link_to user_path(member), title: member.name do %>
+            <%= render(Avatar::Component.new(avatar: member.avatar, gravatar: member.gravatar_url, fallback: member.name.initials, variant: :icon)) %>
+          <% end %>
         <% end %>
       </div>
     <% end %>

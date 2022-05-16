@@ -3,5 +3,5 @@
 class UserTab
   include ActiveModel::API
 
-  PAGES = %w[org_publications posts].freeze
+  PAGES = %w[publications posts].freeze
 end

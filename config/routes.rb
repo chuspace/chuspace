@@ -71,8 +71,8 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :publications, only: :index, module: :users
     resources :tabs, only: :show, path: '', module: :users, constraints: UserTabConstraint.new
+    resources :publications, only: :index, module: :users
   end
 
   resources :settings, only: %i[index show update]
