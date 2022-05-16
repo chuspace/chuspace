@@ -1,32 +1,30 @@
-<article class='border-base-200 border-b last:border-b-0 py-8'>
-  <%= turbo_frame_tag(post, class: 'flex') do %>
-    <div class='flex-1'>
-      <%= link_to publication_post_path(post.publication, post), data: { 'turbo-frame': :_top } do %>
-        <%= tag.h3 post.title, class: 'link link-content link-hover' %>
-        <%= tag.p post.summary, class: 'text-secondary mt-1 w-full sm:w-3/4' %>
+<article class='border-base-200 border-b last:border-b-0 py-8 flex'>
+  <div class='flex-1'>
+    <%= link_to publication_post_path(post.publication, post), data: { 'turbo-frame': :_top } do %>
+      <%= tag.h3 post.title, class: 'link link-content link-hover' %>
+      <%= tag.p post.summary, class: 'text-secondary mt-1 w-full sm:w-3/4' %>
+    <% end %>
+
+    <div class='mt-6 text-xs'>
+      <%= link_to post.author.name, user_path(post.author), class: 'link link-hover link-secondary', data: { 'turbo-frame': :_top } %>
+      <% unless post.publication.personal? %>
+        <%= tag.span do %>
+          in <%= link_to post.publication.name, publication_path(post.publication), class: 'link link-hover link-secondary', data: { 'turbo-frame': :_top } %>
+        <% end %>
       <% end %>
 
-      <div class='mt-6 text-xs'>
-        <%= link_to post.author.name, user_path(post.author), class: 'link link-hover link-secondary', data: { 'turbo-frame': :_top } %>
-        <% unless post.publication.personal? %>
-          <%= tag.span do %>
-            in <%= link_to post.publication.name, publication_path(post.publication), class: 'link link-hover link-secondary', data: { 'turbo-frame': :_top } %>
-          <% end %>
-        <% end %>
+      <span class='mx-2'>&#183;</span>
 
+      <%= tag.time class: 'text-secondary' do %>
+        <%= post.reading_time %> min read
+      <% end %>
+      <span class='mx-2'>&#183;</span>
+      <%= tag.time post.date.strftime("%d %b %Y"), class: 'text-secondary' %>
+
+      <% if post.topics.any? %>
         <span class='mx-2'>&#183;</span>
-
-        <%= tag.time class: 'text-secondary' do %>
-          <%= post.reading_time %> min read
-        <% end %>
-        <span class='mx-2'>&#183;</span>
-        <%= tag.time post.date.strftime("%d %b %Y"), class: 'text-secondary' %>
-
-        <% if post.topics.any? %>
-          <span class='mx-2'>&#183;</span>
-          <%= link_to post.topics.first.name, topic_path(post.topics.first), class: 'badge badge-secondary badge-sm', data: { 'turbo-frame': :_top } %>
-        <% end %>
-      </div>
+        <%= link_to post.topics.first.name, topic_path(post.topics.first), class: 'badge badge-secondary badge-sm', data: { 'turbo-frame': :_top } %>
+      <% end %>
     </div>
-  <% end %>
+  </div>
 </article>

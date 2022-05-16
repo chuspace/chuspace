@@ -3,18 +3,24 @@
 <h6 class='text-secondary'><%= user.username %></h6>
 
 <ul class='mt-8'>
-  <li class='mt-4 first:mt-0'>
-    <%= tab_link_to('Overview', user_path(user), class: 'link link-hover text-sm text-secondary font-medium') %>
+  <li>
+    <%= tab_link_to(t('.tabs.overview'), user_path(user), class: 'link link-hover text-sm text-secondary font-medium') %>
   </li>
-  <li class='mt-4 first:mt-0'>
-    <%= tab_link_to('Drafts', user_drafts_path(user), class: 'link link-hover text-sm text-secondary font-medium') %>
+
+  <li class='mt-4'>
+    <%= tab_link_to(t(".tabs.publications"), user_publications_path(user), class: 'link link-hover text-sm text-secondary font-medium') %>
   </li>
-  <% UserTab::PAGES.each do |page| %>
-    <li class='mt-4 first:mt-0'>
-      <%= tab_link_to(page.humanize, user_tab_path(user, id: page), class: 'link link-hover text-sm text-secondary font-medium') %>
+
+  <li class='mt-4'>
+    <%= tab_link_to(t(".tabs.posts"), user_posts_path(user), class: 'link link-hover text-sm text-secondary font-medium') %>
+  </li>
+
+  <% if allowed_to?(:edit?, @user) %>
+    <li class='mt-4'>
+      <%= tab_link_to(t('.tabs.drafts'), user_drafts_path(user), class: 'link link-hover text-sm text-secondary font-medium') %>
+    </li>
+    <li class='mt-4'>
+      <%= tab_link_to(t(".tabs.settings"), setting_path(id: UserSetting::DEFAULT_PAGE), class: 'link link-hover text-sm text-secondary font-medium') %>
     </li>
   <% end %>
-  <li class='mt-4 first:mt-0'>
-    <%= tab_link_to('Settings', setting_path(id: UserSetting::DEFAULT_PAGE), class: 'link link-hover text-sm text-secondary font-medium') %>
-  </li>
 </ul>

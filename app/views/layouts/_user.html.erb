@@ -12,7 +12,7 @@
         <%= tab_link_to 'Your profile', user_path(Current.user), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
       </li>
       <li>
-        <%= tab_link_to 'Publications', user_tab_path(Current.user, id: :publications), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
+        <%= tab_link_to 'Publications', user_publications_path(Current.user), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
       </li>
       <li>
         <%= link_to connect_root_path do %>

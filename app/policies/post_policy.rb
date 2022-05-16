@@ -27,4 +27,8 @@ class PostPolicy < ApplicationPolicy
   def create?
     publication.memberships.publishers.exists?(user: user)
   end
+
+  scope_for :relation, :author do |relation|
+    relation.where(author_id: user.id)
+  end
 end

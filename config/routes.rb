@@ -70,8 +70,7 @@ Rails.application.routes.draw do
         get '/*path', to: 'drafts#index', as: :nested
       end
     end
-
-    resources :tabs, only: :show, path: '', module: :users, constraints: UserTabConstraint.new
+    resources :posts, only: :index, module: :users
     resources :publications, only: :index, module: :users
   end
 

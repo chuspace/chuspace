@@ -2,11 +2,10 @@
 
 module Users
   class PublicationsController < BaseController
-    layout false
-
     def index
-      authorize! Current.user, to: :publications?
-      @publications = authorized_scope(Publication.all, type: :relation, as: :write)
+      authorize! Current.user, to: :show?
+      add_breadcrumb(:Publications)
+      @publications = authorized_scope(Publication.all, type: :relation, as: :member)
     end
   end
 end

@@ -3,7 +3,7 @@
 class Publication < ApplicationRecord
   extend FriendlyId
   include PgSearch::Model
-  include Iconable
+  include Iconable, Readmeable
   include AttrJson::Record
   include AttrJson::Record::QueryScopes
   include AttrJson::NestedAttributes
@@ -18,8 +18,6 @@ class Publication < ApplicationRecord
   has_many :members, through: :memberships, source: :user
   has_many :posts, dependent: :destroy, inverse_of: :publication
   has_one  :repository, dependent: :destroy, inverse_of: :publication, required: true
-
-  delegate :readme, to: :repository
 
   belongs_to :owner, class_name: 'User'
   belongs_to :git_provider

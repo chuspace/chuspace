@@ -5,9 +5,13 @@
 
   <% card.actions do %>
     <% if @user.personal_publication %>
-      <%= link_to 'New', publication_new_draft_path(@user.personal_publication), class: 'btn btn-primary btn-sm' %>
+      <%= link_to publication_new_draft_path(@user.personal_publication) do %>
+        <%= inline_svg_tag 'icons/plus.svg', class: 'fill-current w-4 h-4' %>
+      <% end %>
     <% else %>
-      <%= link_to 'Connect', connect_personal_publications_path, class: 'btn btn-primary btn-sm' %>
+      <%= link_to connect_personal_publications_path do %>
+        <%= inline_svg_tag 'icons/plug.svg', class: 'fill-current w-4 h-4', title: 'Connect personal publication' %>
+      <% end %>
     <% end %>
   <% end %>
 
@@ -18,7 +22,15 @@
         <%= render 'shared/card_loader', count: 5 %>
       <% end %>
     <% else %>
-      <%= render 'shared/placeholder', content: 'Personal publication not connected' %>
+      <%= render Placeholder::Component.new do |placeholder| %>
+        <%= placeholder.text do %>
+          <%= simple_format allowed_to?(:edit?, @user) ? t('drafts.list.empty') : t('drafts.list.none') %>
+        <% end %>
+
+        <%= placeholder.cta do %>
+          <%= link_to t('shared.publications.connect_personal'), connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2' if allowed_to?(:edit?, @user) %>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>

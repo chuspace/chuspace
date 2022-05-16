@@ -1,11 +1,29 @@
-<% @publications.each do |publication| %>
-  <li
-    role="option"
-    tabindex="-1"
-    class='border-b border-base-300 last:border-b-0'
-    data-autocomplete-value='<%= publication.name %>'
-    id='<%= publication.name %>'
-  >
-    <%= link_to publication.name, publication_new_draft_path(publication), class: 'block py-2 px-4 cursor-pointer' %>
-  </li>
+<%= render(Card::Component.new) do |card| %>
+  <% card.title do %>
+    <%= render 'shared/breadcrumbs' %>
+  <% end %>
+
+  <% card.actions do %>
+    <% if allowed_to?(:edit?, @user) %>
+      <%= link_to connect_root_path, title: t('shared.publications.connect') do %>
+        <%= inline_svg_tag 'icons/plug.svg', class: 'fill-current w-4 h-4' %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% card.body do %>
+    <% if @user.publications.except_personal.any? %>
+      <%= render 'publications/list', publications: @user.publications.except_personal %>
+    <% else %>
+      <%= render Placeholder::Component.new do |placeholder| %>
+        <%= placeholder.text do %>
+          <%= allowed_to?(:edit?, @user) ? simple_format(t('publications.list.empty')) : simple_format(t('publications.list.none')) %>
+        <% end %>
+
+        <%= placeholder.cta do %>
+          <%= link_to t('shared.publications.connect'), connect_root_path, class: 'btn btn-primary btn-sm ml-2', title: t('shared.publications.connect') if allowed_to?(:edit?, @user) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>

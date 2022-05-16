@@ -5,7 +5,7 @@ module Users
     def index
       authorize! @user, to: :drafts?
 
-      add_breadcrumb(:drafts, user_drafts_path(@user))
+      add_breadcrumb(:Drafts)
 
       if @user.personal_publication.present?
         @drafts_root_path = Pathname.new(@user.personal_publication.repository.drafts_or_posts_folder)

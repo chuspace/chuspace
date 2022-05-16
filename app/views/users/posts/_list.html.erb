@@ -1,0 +1,43 @@
+<%= render(Card::Component.new) do |card| %>
+  <% card.title do %>
+    <%= defined?(card_title) ? card_title : render('shared/breadcrumbs') %>
+  <% end %>
+
+  <% card.actions do %>
+    <% if allowed_to?(:edit?, user) %>
+      <% if user.personal_publication.present? %>
+        <%= link_to publication_new_draft_path(user.personal_publication) do %>
+          <%= inline_svg_tag 'icons/plus.svg', class: 'fill-current w-4 h-4' %>
+        <% end %>
+      <% else %>
+        <%= link_to connect_personal_publications_path do %>
+          <%= inline_svg_tag 'icons/plug.svg', class: 'fill-current w-4 h-4', title: t('shared.publications.connect_personal') %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% card.body do %>
+    <% if user.personal_publication.present? %>
+      <% if user.personal_publication&.posts&.any? %>
+        <%= render 'posts/list', posts: user.personal_publication.posts %>
+      <% else %>
+        <%= render Placeholder::Component.new do |placeholder| %>
+          <%= placeholder.text do %>
+            <%= simple_format t('posts.list.none') %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= render Placeholder::Component.new do |placeholder| %>
+        <%= placeholder.text do %>
+          <%= simple_format allowed_to?(:edit?, user) ? t('posts.list.empty') : t('posts.list.none') %>
+        <% end %>
+
+        <%= placeholder.cta do %>
+          <%= link_to t('shared.publications.connect_personal'), connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2' if allowed_to?(:edit?, user) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

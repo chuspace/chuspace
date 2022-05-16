@@ -264,6 +264,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
     t.string "name", null: false
     t.citext "permalink", null: false
     t.text "description"
+    t.text "readme"
     t.text "canonical_url"
     t.bigint "owner_id", null: false
     t.bigint "git_provider_id", null: false

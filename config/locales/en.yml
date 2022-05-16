@@ -46,12 +46,18 @@ en:
       exists: You already have a connected personal publication
     publications:
       shared:
-        provider_not_found: '%{name} Git provider not supported'
-        repo_not_found: '%{name} Repository not found'
+        provider_not_found: "%{name} Git provider not supported"
+        repo_not_found: "%{name} Repository not found"
         tabs:
           provider: Pick your Git Provider
           publication: Publication settings
           repository: Pick your git repository
+  drafts:
+    list:
+      empty: |
+        Your drafts are sourced from connected personal publication.
+        Connect your personal publication git repository.
+      none: No drafts found in the git repository
   layouts:
     mailer:
       do_not_share: Do not share this email
@@ -59,10 +65,16 @@ en:
     index:
       expired: Your magic auth token is expired
       success: Successfully signed in
+  posts:
+    list:
+      empty: |
+        Your posts are published from connected personal publication.
+        Connect your personal publication git repository.
+      none: No published posts
   private_beta_signup_mailer:
     notify:
       body: "%{name} just signed up on Chuspace for Beta access using %{provider}
-        \U0001F389"
+        🎉"
       salutation: Hey Chuspace,
       subject: 'Chuspace: %{name} Signed up for Beta access'
   publications:
@@ -78,6 +90,11 @@ en:
         notice: Invite sent successfully!
       destroy:
         notice: Invite deleted!
+    list:
+      empty: |
+        Your publications are sourced from connected git repositories.
+        Connect a git repository to get started.
+      none: No connected publications
     people:
       destroy:
         notice: Person removed!
@@ -119,24 +136,27 @@ en:
   shared:
     features:
       list:
-        - title: Truly own your content
-          description: Publish from your git repository hosted on Github . Gitlab or
-            Gitea
-          available: true
-        - title: Any static site framework
-          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
-          available: true
-        - title: Publishing and collaboration
-          description: Collaborate with community and teams in realtime
-          available: true
-        - title: Custom domains and hosting
-          description: Integrated deployment coming soon
-          available: false
+      - title: Truly own your content
+        description: Publish from your git repository hosted on Github . Gitlab or
+          Gitea
+        available: true
+      - title: Any static site framework
+        description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
+        available: true
+      - title: Publishing and collaboration
+        description: Collaborate with community and teams in realtime
+        available: true
+      - title: Custom domains and hosting
+        description: Integrated deployment coming soon
+        available: false
     identities:
       login_with: Click to log in with %{provider}
     login_prompt: Click to go to log  in page
     pitch: Integrated blogging platform for programmers and teams
     private_beta: Chuspace is in private beta. Please wait for an invite!
+    publications:
+      connect: Connect publication
+      connect_personal: Connect personal publication
     signup_prompt: Click to go to sign up page
   signups:
     create:
@@ -157,9 +177,9 @@ en:
       salutation: Hey %{name},
       subject: Welcome to Chuspace, %{name}
     invite:
-      body: '%{person} invited you to join %{publication}'
+      body: "%{person} invited you to join %{publication}"
       salutation: Hey %{name},
-      subject: '%{person} invited you to join %{publication}'
+      subject: "%{person} invited you to join %{publication}"
     send_magic_login:
       body: Click on the button below to sign in to your Chuspace account. This magic
         link will expire in %{expires_in} minutes and can only be used once.
@@ -171,6 +191,12 @@ en:
       token: If you can't use the magic login link, for example when using our PWA
         app, please %{link} and enter the token below
   users:
+    about:
+      no_readme: Readme.md not found
+      placeholder: Your profile about section is sourced from Readme.md file in your
+        personal publication repository. Connect your personal publication to get
+        started.
+      title: About
     settings:
       actions:
         front_matter: FrontMatter
@@ -186,6 +212,16 @@ en:
           title: Profile settings
         publication:
           title: Publication settings
+    show:
+      posts:
+        title: Posts
+    sidebar:
+      tabs:
+        drafts: Drafts
+        overview: Overview
+        posts: Posts
+        publications: Publications
+        settings: Settings
   welcome:
     index:
       heading: Read Write Collaborate

@@ -10,6 +10,9 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.citext :username, null: false
       t.citext :email, null: false
 
+      # Store readme
+      t.text :readme
+
       # track associations
       t.bigint :publications_count, null: false, default: 0
 
