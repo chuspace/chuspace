@@ -26,6 +26,10 @@ const serializableNodes = {
     state.write(`---`)
     state.closeBlock(node)
   },
+  // html_inline: (state, node) => {
+  //   state.renderInline(node)
+  //   state.closeBlock(node)
+  // },
   horizontal_rule(state, node) {
     state.write(node.attrs.markup || '---')
     state.closeBlock(node)
@@ -69,7 +73,7 @@ const serializableNodes = {
   },
   text(state, node) {
     state.text(node.text)
-  }
+  },
 }
 
 export default (schema: Schema) => {
@@ -78,7 +82,7 @@ export default (schema: Schema) => {
     .reduce(
       (nodes, name) => ({
         ...nodes,
-        [name]: serializableNodes[name]
+        [name]: serializableNodes[name],
       }),
       {}
     )
@@ -88,19 +92,19 @@ export default (schema: Schema) => {
       open: '*',
       close: '*',
       mixable: true,
-      expelEnclosingWhitespace: true
+      expelEnclosingWhitespace: true,
     },
     strong: {
       open: '**',
       close: '**',
       mixable: true,
-      expelEnclosingWhitespace: true
+      expelEnclosingWhitespace: true,
     },
     strike_through: {
       open: '~',
       close: '~',
       mixable: true,
-      expelEnclosingWhitespace: true
+      expelEnclosingWhitespace: true,
     },
     link: {
       open(_state, mark, parent, index) {
@@ -109,11 +113,8 @@ export default (schema: Schema) => {
       close(state, mark, parent, index) {
         return isPlainURL(mark, parent, index, -1)
           ? '>'
-          : '](' +
-              state.esc(mark.attrs.href) +
-              (mark.attrs.title ? ' ' + state.quote(mark.attrs.title) : '') +
-              ')'
-      }
+          : '](' + state.esc(mark.attrs.href) + (mark.attrs.title ? ' ' + state.quote(mark.attrs.title) : '') + ')'
+      },
     },
     code: {
       open(_state, _mark, parent, index) {
@@ -122,8 +123,8 @@ export default (schema: Schema) => {
       close(_state, _mark, parent, index) {
         return backticksFor(parent.child(index - 1), 1)
       },
-      escape: false
-    }
+      escape: false,
+    },
   })
 }
 
@@ -131,8 +132,7 @@ function backticksFor(node, side) {
   let ticks = /`+/g,
     m,
     len = 0
-  if (node.isText)
-    while ((m = ticks.exec(node.text))) len = Math.max(len, m[0].length)
+  if (node.isText) while ((m = ticks.exec(node.text))) len = Math.max(len, m[0].length)
   let result = len > 0 && side > 0 ? ' `' : '`'
   for (let i = 0; i < len; i++) result += '`'
   if (len > 0 && side < 0) result += ' '
@@ -142,11 +142,7 @@ function backticksFor(node, side) {
 function isPlainURL(link, parent, index, side) {
   if (link.attrs.title) return false
   let content = parent.child(index + (side < 0 ? -1 : 0))
-  if (
-    !content.isText ||
-    content.text != link.attrs.href ||
-    content.marks[content.marks.length - 1] != link
-  )
+  if (!content.isText || content.text != link.attrs.href || content.marks[content.marks.length - 1] != link)
     return false
   if (index == (side < 0 ? 1 : parent.childCount - 1)) return true
   let next = parent.child(index + (side < 0 ? -2 : 1))

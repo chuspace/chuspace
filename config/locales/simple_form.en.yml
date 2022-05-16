@@ -35,7 +35,7 @@ en:
       draft:
         name: valid file extensions are .markdown, .mkd, .md
       publication:
-        visibility: visibility of publication - public, internal or private
+        visibility: visibility of publication - public or private
         repo:
           posts_folder: choose folder where your publication posts are stored in markdown format
           drafts_folder: optional drafts folder in case it's stored separately

@@ -2,7 +2,6 @@
   <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
     <drop-image>
       <%= render(Avatar::Component.new(avatar: publication.icon, fallback: publication.initials, variant: :profile, uploader: true)) %>
-
       <% if publication.errors.include?(:icon) %>
         <%= content_tag :span, publication.errors.full_messages_for(:icon).to_sentence, class: 'input-error text-red block' %>
       <% else %>
@@ -10,6 +9,7 @@
           <%= form.hint :icon %>
         </span>
       <% end %>
+
       <%= form.input(:icon,
         as: :file,
         wrapper: false,
@@ -19,6 +19,7 @@
         )
       %>
     </drop-image>
+
     <%= form.input :name %>
     <%= form.input :description %>
     <%= form.button :submit, 'Save', class: "mt-12 btn btn-primary" %>

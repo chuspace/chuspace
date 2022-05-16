@@ -13,27 +13,27 @@ const parsableNodes = {
   bullet_list: { block: 'bullet_list' },
   ordered_list: {
     block: 'ordered_list',
-    getAttrs: (tok) => ({ order: +tok.attrGet('order') || 1 })
+    getAttrs: (tok) => ({ order: +tok.attrGet('order') || 1 }),
   },
   front_matter: {
     block: 'front_matter',
-    noCloseToken: true
+    noCloseToken: true,
   },
   heading: {
     block: 'heading',
-    getAttrs: (tok) => ({ level: +tok.tag.slice(1) })
+    getAttrs: (tok) => ({ level: +tok.tag.slice(1) }),
   },
   code_block: {
     block: 'code_block',
     getAttrs: (tok: any) => {
       return {
-        language: (tok.info && tok.info.trim()) || null
+        language: (tok.info && tok.info.trim()) || null,
       }
-    }
+    },
   },
   fence: {
     block: 'code_block',
-    getAttrs: (tok) => ({ language: (tok.info && tok.info.trim()) || null })
+    getAttrs: (tok) => ({ language: (tok.info && tok.info.trim()) || null }),
   },
   hr: { node: 'horizontal_rule' },
   image: {
@@ -42,17 +42,15 @@ const parsableNodes = {
       return {
         src: tok.attrGet('src'),
         title: tok.attrGet('title') || null,
-        alt: (tok.children[0] && tok.children[0].content) || null
+        alt: (tok.children[0] && tok.children[0].content) || null,
       }
-    }
+    },
   },
-  hardbreak: { node: 'hard_break' }
+  hardbreak: { node: 'hard_break' },
 }
 
 export default (schema: Schema, isNodeEditor: boolean = false) => {
-  let schemaNodes = isNodeEditor
-    ? Object.keys(schema.nodes)
-    : [...Object.keys(schema.nodes)]
+  let schemaNodes = isNodeEditor ? Object.keys(schema.nodes) : [...Object.keys(schema.nodes)]
 
   if (schemaNodes.includes('code_block')) schemaNodes.push('fence')
   if (schemaNodes.includes('horizontal_rule')) schemaNodes.push('hr')
@@ -62,7 +60,7 @@ export default (schema: Schema, isNodeEditor: boolean = false) => {
     .reduce(
       (nodes, name) => ({
         ...nodes,
-        [name]: parsableNodes[name]
+        [name]: parsableNodes[name],
       }),
       {}
     )
@@ -70,7 +68,8 @@ export default (schema: Schema, isNodeEditor: boolean = false) => {
   return new MarkdownParser(
     schema,
     markdownit('commonmark', {
-      html: false
+      html: false,
+      typographer: true,
     }).use(frontMatterPlugin),
     {
       ...schemaNodes,
@@ -80,10 +79,10 @@ export default (schema: Schema, isNodeEditor: boolean = false) => {
         mark: 'link',
         getAttrs: (tok) => ({
           href: tok.attrGet('href'),
-          title: tok.attrGet('title') || null
-        })
+          title: tok.attrGet('title') || null,
+        }),
       },
-      code_inline: { mark: 'code' }
+      code_inline: { mark: 'code' },
     }
   )
 }

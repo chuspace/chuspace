@@ -11,7 +11,10 @@
           include_blank: 'Choose'
         )
       %>
-      <%= repo_form.input :auto_publish, as: :boolean, label: false, input_html: { checked: publication.content.auto_publish }, checked_value: true, unchecked_value: false %>
+    <% end %>
+
+    <%= form.simple_fields_for :content do |content_form| %>
+      <%= content_form.input :auto_publish, as: :boolean, wrapper_html: { class: 'w-1/4' } %>
     <% end %>
 
     <%= form.button :submit, publication.persisted? ? 'Save' : 'Connect', class: "mt-8 btn btn-primary" %>
