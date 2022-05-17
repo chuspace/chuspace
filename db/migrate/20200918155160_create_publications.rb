@@ -9,8 +9,8 @@ class CreatePublications < ActiveRecord::Migration[6.1]
       t.citext :permalink, null: false
 
       t.text :description
-      t.text :readme
       t.text :canonical_url
+      t.text :twitter_handle
 
       t.references :owner, null: false, foreign_key: { to_table: :users }
       t.references :git_provider, null: false, foreign_key: true

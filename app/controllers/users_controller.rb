@@ -26,7 +26,12 @@ class UsersController < ApplicationController
   private
 
   def find_user
-    @user = User.friendly.find(params[:username])
+    @user = User.friendly.includes(personal_publication: :repository).find(params[:username])
+
+    if params[:username] != @user.username
+      redirect_to RedirectUrl.new(path: request.path, params: params).for(@user), status: :moved_permanently
+    end
+
     add_breadcrumb(@user.username, user_path(@user))
   end
 

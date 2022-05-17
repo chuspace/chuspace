@@ -12,7 +12,7 @@ module Publications
 
     def index
       authorize! @draft
-      @invite = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
+      @invite   = @publication.invites.build(sender: Current.user, role: Membership::DEFAULT_ROLE)
       published = params[:status] == 'published'
 
       published ? add_breadcrumb(:published) : add_breadcrumb(:drafts)
@@ -29,14 +29,11 @@ module Publications
       @draft.assign_attributes(name: draft_params[:name], path: @drafts_root_path.join(draft_params[:name]).to_s)
 
       if @draft.valid? && @draft.create(**commit_params)
-        @draft.reload!
-        @draft.local_content.value = nil
         redirect_to publication_edit_draft_path(@publication, @draft)
       else
         respond_to do |format|
           format.html { publication_new_draft_path(@publication, @draft) }
-          format.turbo_stream {
- render turbo_stream: turbo_stream.replace(@draft, partial: 'form', locals: { draft: @draft }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace(@draft, partial: 'form', locals: { draft: @draft }) }
         end
       end
     end
@@ -45,8 +42,6 @@ module Publications
       authorize! @draft
 
       if @draft.delete(**commit_params)
-        @draft.reload!
-        @draft.local_content.value = nil
         redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
       else
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
@@ -57,10 +52,7 @@ module Publications
       authorize! @draft, to: :commit?
 
       if @draft.update(**commit_params)
-        @draft.reload!
-        @draft.local_content.value = nil
-
-        if draft_params[:auto_publish].present? && post = @draft.publish(author: Current.user)
+        if @draft.published
           redirect_to publication_post_path(@publication, post), notice: 'Succesfully committed and published!'
         else
           redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully committed!'
@@ -68,16 +60,13 @@ module Publications
       else
         respond_to do |format|
           format.html { publication_edit_draft_path(@publication, @draft) }
-          format.turbo_stream {
- render turbo_stream: turbo_stream.replace(@draft, partial: 'edit_form',
-locals: { draft: @draft, publication: @publication }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace(@draft, partial: 'edit_form', locals: { draft: @draft, publication: @publication }) }
         end
       end
     end
 
     def new
       authorize! @draft
-
       add_breadcrumb(:drafts, find_publication_drafts_root_path)
     end
 
@@ -90,8 +79,7 @@ locals: { draft: @draft, publication: @publication }) }
 
     def build_draft
       @drafts_root_path = @drafts_root_path.join(params[:path]) if params[:path].present?
-      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.repository.git_provider_adapter,
-path: @drafts_root_path)
+      @draft = Draft.new(publication: @publication, content: '', adapter: @publication.repository.git_provider_adapter, path: @drafts_root_path)
     end
 
     def commit_params

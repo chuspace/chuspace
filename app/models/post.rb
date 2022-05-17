@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
-  WORDS_PER_MINUTE = 238
-
   extend FriendlyId
+  include ReadingTime, Metatagable
 
   self.implicit_order_column = 'version'
 
@@ -15,8 +14,8 @@ class Post < ApplicationRecord
   validates :blob_path, presence: :true, uniqueness: { scope: %i[version publication_id] }, markdown: true
   validates :version, presence: :true, uniqueness: { scope: :publication_id }
 
-  before_validation :set_visibility
-  before_validation :assign_next_version, on: :create
+  before_validation   :set_visibility
+  before_validation   :assign_next_version, on: :create
   after_create_commit :unpublish_previous_versions
 
   enum visibility: PublicationConfig.to_enum, _suffix: true
@@ -32,9 +31,10 @@ class Post < ApplicationRecord
   end
 
   friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
+
   scope :published, -> { where(published: true) }
-  scope :newest, -> { order(id: :desc) }
-  scope :oldest, -> { order(:id) }
+  scope :newest,    -> { order(id: :desc) }
+  scope :oldest,    -> { order(:id) }
 
   delegate :repository, to: :publication
 
@@ -54,50 +54,12 @@ class Post < ApplicationRecord
     @markdown_doc ||= MarkdownDoc.new(content: body)
   end
 
-  def words_count
-    body.scan(/\w+/).size || 0
-  end
-
-  def reading_time
-    words_count > WORDS_PER_MINUTE ? (words_count / WORDS_PER_MINUTE).round : 1
-  end
-
   def short_commit_sha
     commit_sha.first(7)
   end
 
   def stale?
     blob_sha != repository.draft(path: blob_path).sha
-  end
-
-  def to_meta_tags
-    {
-      site: ChuspaceConfig.new.app[:name],
-      title: title,
-      image_src: preview_image.variant(:list)&.processed&.url,
-      description: summary,
-      keywords: topic_list,
-      index: true,
-      follow: true,
-      canonical: canonical_url || Rails.application.routes.url_helpers.publication_post_url(publication, self),
-      og: {
-        title: :title,
-        type: :article,
-        description: :description,
-        site_name: :site,
-        image: preview_image.variant(:social)&.processed&.url,
-        url: Rails.application.routes.url_helpers.publication_post_url(publication, self)
-      },
-      twitter: {
-        title: :title,
-        card: :summary,
-        description: :description,
-        site: ChuspaceConfig.new.app[:twitter],
-        url: Rails.application.routes.url_helpers.publication_post_url(publication, self),
-        image: preview_image.variant(:list)&.processed&.url
-      },
-      article: { published_time: date, modified_time: updated_at, tag: topic_list, author: author.username }
-    }
   end
 
   private

@@ -7,19 +7,27 @@
       <li>
         <%= content_tag :div, "Signed in as <strong>#{Current.user.username}</strong>".html_safe, role: 'menuitem', class: 'block text-current', tabindex: '-1' %>
       </li>
-      <div class='divider my-0 h-0'></div>
+      <div class='divider my-1 h-0'></div>
+      <li>
+        <%= link_to 'Connect', connect_root_path, class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
+      </li>
+      <div class='divider my-1 h-0'></div>
       <li>
         <%= tab_link_to 'Your profile', user_path(Current.user), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
       </li>
       <li>
-        <%= tab_link_to 'Publications', user_publications_path(Current.user), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
+        <%= tab_link_to ' Your posts', user_posts_path(Current.user), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
       </li>
       <li>
-        <%= link_to connect_root_path do %>
-          <%= inline_svg_tag 'icons/plug', class: 'w-5 h-5 fill-current' %>Connect
-        <% end %>
+        <%= tab_link_to 'Your publications', user_publications_path(Current.user), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
       </li>
-      <div class='divider my-0 h-0'></div>
+      <li>
+        <%= tab_link_to 'Your drafts', user_drafts_path(Current.user), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
+      </li>
+      <div class='divider my-1 h-0'></div>
+      <li>
+        <%= tab_link_to 'Settings', setting_path(id: UserSetting::DEFAULT_PAGE), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
+      </li>
       <li>
         <%= button_to 'Sign out', session_path(Current.user), class: 'text-current', form: { role: 'menuitem', tabindex: '-1' }, method: :delete, remote: true %>
       </li>

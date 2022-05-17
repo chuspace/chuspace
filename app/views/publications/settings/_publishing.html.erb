@@ -1,9 +1,0 @@
-<%= turbo_frame_tag(dom_id(publication, :settings_publishing)) do %>
-  <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
-    <%= form.simple_fields_for :content do |content_form| %>
-      <%= content_form.input :auto_publish, as: :boolean, wrapper_html: { class: 'w-1/4' } %>
-    <% end %>
-
-    <%= form.button :submit, 'Save', class: "mt-8 btn btn-secondary btn-outline" %>
-  <% end %>
-<% end %>

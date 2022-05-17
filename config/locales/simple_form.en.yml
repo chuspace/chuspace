@@ -16,6 +16,9 @@ en:
         email: Type your email
       post:
         topic_list: Type to choose topics
+      publication:
+        twitter_handle: '@john_doe'
+        canonical_url: 'https://johndoeblogs.com'
 
     labels:
       defaults:

@@ -5,13 +5,17 @@ module Users
     def index
       authorize! @user, to: :drafts?
 
-      add_breadcrumb(:Drafts)
+      @path = params[:path] || ''
+      add_breadcrumb(:Drafts) if @path.blank?
 
       if @user.personal_publication.present?
         @drafts_root_path = Pathname.new(@user.personal_publication.repository.drafts_or_posts_folder)
-        @path = params[:path] || ''
-        add_breadcrumb(@path, nested_user_drafts_path(@user, path: @path)) if @path.present?
-        @draft_path ||= @drafts_root_path.join(@path).to_s
+        @draft_path = @drafts_root_path.join(@path).to_s
+
+        if @path.present?
+          add_breadcrumb(:Drafts, user_drafts_path(@user))
+          add_breadcrumb(@path)
+        end
 
         if turbo_frame_request?
           @drafts = @user.personal_publication.repository.drafts(path: @draft_path) || []

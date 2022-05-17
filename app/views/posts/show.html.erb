@@ -32,14 +32,24 @@
 <% end %>
 
 <div class='sm:w-2/3 mx-auto w-full'>
-  <div class='chu-editor'>
-    <% unless @post.published? %>
-      <div class="alert alert-notice text-center text-sm absolute left-0 top-0 w-full z-20 rounded-none flex justify-center">
-        <span>You are viewing an old version of this post</span>
-        <%= link_to 'View', publication_post_path(@post.publication, @post.current_version), class: 'ml-2' %>
-      </div>
-    <% end %>
+  <% unless @post.published? %>
+    <div class="alert alert-notice text-center text-sm absolute left-0 top-0 w-full z-20 rounded-none flex justify-center">
+      <span>You are viewing an old version of this post</span>
+      <%= link_to 'View', publication_post_path(@post.publication, @post.current_version), class: 'ml-2' %>
+    </div>
+  <% end %>
 
+  <% if @post.topics.any? %>
+    <div class='flex flex-wrap my-8'>
+      <% @post.topics.each do |topic| %>
+        <div class='ml-2 mb-2'>
+          <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class='chu-editor'>
     <div class='my-8'>
       <%= content_tag :h1, @post.title, class: 'title' %>
       <%= content_tag :h2, @post.summary, class: 'summary' %>

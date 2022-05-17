@@ -6,7 +6,7 @@
   <% card.actions do %>
     <% if allowed_to?(:edit?, @user) %>
       <% if @user.personal_publication.present? %>
-        <%= link_to publication_edit_draft_path(@user.personal_publication, path: @user.personal_publication.readme) do %>
+        <%= link_to publication_edit_draft_path(@user.personal_publication, path: @user.personal_publication.repository.readme_path) do %>
           <%= inline_svg_tag 'icons/pencil.svg', class: 'fill-current w-3 h-3' %>
         <% end %>
       <% else %>
@@ -19,7 +19,7 @@
 
   <% card.body do %>
     <% if @user.personal_publication.present? %>
-      <%= content_tag :article, @user.personal_publication.readme, class: 'chu-editor chu-editor-sm w-full sm:w-4/5' %>
+      <%= content_tag :article, @user.personal_publication.readme.html_safe, class: 'chu-editor chu-editor-sm pt-4 w-full sm:w-4/5' %>
     <% else %>
       <%= render Placeholder::Component.new do |placeholder| %>
         <%= placeholder.text do %>

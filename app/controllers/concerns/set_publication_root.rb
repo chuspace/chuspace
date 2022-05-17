@@ -18,7 +18,7 @@ module SetPublicationRoot
 
   def find_publication_drafts_root_path
     if @publication.personal?
-      user_tab_path(@publication.owner, id: :drafts)
+      user_drafts_path(@publication.owner)
     else
       publication_drafts_root_path(@publication)
     end

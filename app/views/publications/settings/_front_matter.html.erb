@@ -1,9 +1,12 @@
 <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
   <%= form.simple_fields_for :front_matter do |front_matter_form| %>
-    <%= front_matter_form.input :title, as: :select, collection: publication.front_matter.keys, include_blank: 'Choose' %>
-    <%= front_matter_form.input :summary, as: :select, collection: publication.front_matter.keys, include_blank: 'Choose' %>
-    <%= front_matter_form.input :date, as: :select, collection: publication.front_matter.keys, include_blank: 'Choose' %>
-    <%= front_matter_form.input :topics, as: :select, collection: publication.front_matter.keys, include_blank: 'Choose' %>
+    <%= front_matter_form.input :title %>
+    <%= front_matter_form.input :summary %>
+    <%= front_matter_form.input :date %>
+    <%= front_matter_form.input :topics %>
+    <%= front_matter_form.input :visibility %>
+    <%= front_matter_form.input :canonical_url %>
+
     <%= front_matter_form.button :submit, 'Save', class: "mt-8 btn btn-secondary btn-outline" %>
   <% end %>
 <% end %>

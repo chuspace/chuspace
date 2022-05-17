@@ -16,6 +16,9 @@ end
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include ActiveJob::TestHelper
+  include ActionMailer::TestHelper
+  include ActiveSupport::Testing::TimeHelpers
+
   fixtures :all
   self.use_transactional_tests = true
 

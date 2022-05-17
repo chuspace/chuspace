@@ -3,7 +3,7 @@
 class Publication < ApplicationRecord
   extend FriendlyId
   include PgSearch::Model
-  include Iconable, Readmeable
+  include Iconable, Metatagable
   include AttrJson::Record
   include AttrJson::Record::QueryScopes
   include AttrJson::NestedAttributes
@@ -39,41 +39,14 @@ class Publication < ApplicationRecord
 
   enum visibility: PublicationConfig.to_enum, _suffix: true
 
+  delegate :readme, to: :repository
+
   def initials
     name.first(2).upcase
   end
 
   def visibility
     super ? ActiveSupport::StringInquirer.new(super) : nil
-  end
-
-  def to_meta_tags
-    {
-      site: ChuspaceConfig.new.app[:name],
-      title: name,
-      image_src: icon.variant(:profile),
-      description: description,
-      keywords: topic_list,
-      index: true,
-      follow: true,
-      canonical: canonical_url || Rails.application.routes.url_helpers.publication_url(self),
-      og: {
-        title: :title,
-        type: :article,
-        description: :description,
-        site_name: :site,
-        image: icon.variant(:profile),
-        url: Rails.application.routes.url_helpers.publication_url(self)
-      },
-      twitter: {
-        title: :title,
-        card: :summary,
-        description: :description,
-        site: ChuspaceConfig.new.app[:twitter],
-        image: icon.variant(:profile),
-        url: Rails.application.routes.url_helpers.publication_url(self),
-      }
-    }
   end
 
   private

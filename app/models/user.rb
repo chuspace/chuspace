@@ -39,14 +39,6 @@ class User < ApplicationRecord
     end
   end
 
-  def editor_attrs
-    {
-      username: username,
-      name: name,
-      avatar_url: avatar_url
-    }
-  end
-
   private
 
   def unset_slug_if_invalid

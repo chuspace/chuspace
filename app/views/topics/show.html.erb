@@ -3,20 +3,18 @@
     <div class='col-span-8'>
       <%= render(Card::Component.new) do |card| %>
         <% card.title do %>
-          Posts published in <%= @topic.name %>
-        <% end %>
-
-        <% card.actions do %>
-          <%= tab_link_to 'Recent', topic_path, class: 'link link-primary link-hover text-sm' %>
-          <span class='mx-2 text-secondary'>|</span>
-          <%= tab_link_to 'Old', topic_path(sort: :oldest), class: 'link link-primary link-hover text-sm' %>
+          <%= t('.heading', name: @topic.name) %>
         <% end %>
 
         <% card.body do %>
           <% if @posts.any? %>
             <%= render 'posts/list', posts: @posts %>
           <% else %>
-            <%= render 'shared/placeholder', content: "No posts" %>
+            <%= render Placeholder::Component.new do |placeholder| %>
+              <%= placeholder.text do %>
+                <%= simple_format t('posts.list.none') %>
+              <% end %>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>

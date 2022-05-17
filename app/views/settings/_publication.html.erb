@@ -1,12 +1,24 @@
 <% if user.personal_publication %>
   <div>
-    <h3 class='border-b border-base-200 pb-2'>Content</h3>
+    <h3 class='border-b border-base-200 pb-2'>Settings</h3>
+    <%= render 'publications/settings/profile', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :publication) %>
+  </div>
+
+  <div>
+    <h3 class='border-b border-base-200 mt-8 pb-2'>Content</h3>
     <%= render 'publications/settings/content', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :publication) %>
   </div>
 
-  <h3 class='border-b border-base-200 mt-8 pb-2'>Publishing</h3>
-  <%= render 'publications/settings/publishing', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :publication) %>
-
   <h3 class='border-b border-base-200 mt-8 pb-2'>Front Matter</h3>
   <%= render 'publications/settings/front_matter', publication: user.personal_publication, url: publication_setting_path(Current.user.personal_publication, id: :publication) %>
+<% else %>
+  <%= render Placeholder::Component.new do |placeholder| %>
+    <%= placeholder.text do %>
+      <%= simple_format(t('publications.personal.none'))  %>
+    <% end %>
+
+    <%= placeholder.cta do %>
+      <%= link_to t('shared.publications.connect_personal'), connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2', title: t('shared.publications.connect_personal') if allowed_to?(:edit?, user) %>
+    <% end %>
+  <% end %>
 <% end %>

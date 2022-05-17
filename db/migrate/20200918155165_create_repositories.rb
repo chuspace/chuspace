@@ -16,6 +16,9 @@ class CreateRepositories < ActiveRecord::Migration[7.0]
       t.string :assets_folder, null: false
       t.string :readme_path, default: PublicationConfig.new.repo[:readme_path]
 
+      # Store readme
+      t.text :readme
+
       t.timestamps
     end
 

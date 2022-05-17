@@ -13,9 +13,9 @@ module Publications
 
       def create
         authorize! @draft, to: :publish?
-        @post = @draft.publish(author: Current.user, other_attributes: publish_params)
+        @post = @publication.posts.build(author: Current.user, **@draft.to_post_attributes)
 
-        if @post
+        if @post.save
           redirect_to publication_post_path(@publication, @post)
         else
           respond_to do |format|
@@ -23,12 +23,6 @@ module Publications
             format.turbo_stream { render turbo_stream: turbo_stream.replace(@post, partial: 'form', locals: { draft: @draft, publication: @publication, post: @post }) }
           end
         end
-      end
-
-      private
-
-      def publish_params
-        params.require(:post).permit(:visibility, :date, :topic_list)
       end
     end
   end

@@ -1,59 +1,31 @@
 # frozen_string_literal: true
 
-require 'down/http'
-
 class Draft < Git::Blob
+  include Drafts::Markdown
+  include Drafts::FrontMatter # Depends on Markdown
+
   attribute :publication, Publication
+  attribute :published, default: proc { false }
   validates :path, :name, markdown: true
   validates :publication, presence: true
 
   kredis_string :local_content, expires_in: 1.day, key: :local_content_key
 
+  delegate :repository, to: :publication
+
+  after_create :auto_publish_post, :clear_local_content, :parse_and_store_readme
+  after_update :auto_publish_post, :clear_local_content, :parse_and_store_readme
+
   def body
     parsed.content
-  end
-
-  def content_html
-    PostHtmlRenderer.new(publication: publication).render(markdown_doc.doc).html_safe
-  end
-
-  def date
-    front_matter.dig(publication.front_matter.date)
   end
 
   def decoded_content
     Base64.decode64(content).force_encoding('UTF-8')
   end
 
-  def front_matter
-    parsed&.front_matter.presence || {}
-  end
-
-  def front_matter?
-    !readme?
-  end
-
-  def front_matter_str
-    str = front_matter.to_yaml
-    str += "---\n"
-  end
-
   def local_or_remote_content
     local_content.value.presence || decoded_content
-  end
-
-  def markdown_doc
-    @markdown_doc ||= MarkdownDoc.new(content: body)
-  end
-
-  def new_template
-    <<~STR
-      ---
-      title: Untitled
-      summary:
-      ---
-
-    STR
   end
 
   def post
@@ -64,29 +36,23 @@ class Draft < Git::Blob
     post&.blob_sha != sha && !readme?
   end
 
-  def publish(author:, other_attributes: {})
-    reload!
-    post = publication.posts.build(author: author, **to_post_attributes.merge(other_attributes))
-    post.save ? post : false
-  end
-
   def persisted?
     id.present?
   end
 
   def readme?
-    publication.repository.readme_path == path
+    repository.readme_path == path
   end
 
   def reload!
-    self.assign_attributes(publication.repository.draft(path: path).attributes)
+    self.assign_attributes(repository.draft(path: path).attributes)
   end
 
   def relative_path
     if readme?
       path
     else
-      base_path = Pathname.new(publication.repository.posts_folder)
+      base_path = Pathname.new(repository.posts_folder)
       file_path = Pathname.new(path)
       file_path.relative_path_from(base_path).to_s
     end
@@ -97,19 +63,10 @@ class Draft < Git::Blob
   end
 
   def status
-    stale? ? 'Uncommitted changes' : 'Everything up to date'
-  end
-
-  def summary
-    front_matter.dig(publication.front_matter.summary)
-  end
-
-  def title
-    front_matter.dig(publication.front_matter.title)
-  end
-
-  def topics
-    front_matter.dig(publication.front_matter.topics)
+    if stale? then 'Uncommitted changes'
+    elsif publishable? then 'Unpublished changes'
+    else 'Everything up to date'
+    end
   end
 
   def to_param
@@ -136,12 +93,17 @@ class Draft < Git::Blob
     "#{publication.permalink}:#{path}:content"
   end
 
-  def parsed
-    yaml_loader = FrontMatterParser::Loader::Yaml.new(allowlist_classes: [Date, Time])
-    FrontMatterParser::Parser.new(:md, loader: yaml_loader).call(
-      decoded_content
-    )
-  rescue Psych::SyntaxError, Base64
-    OpenStruct.new(front_matter: {}, content: decoded_content)
+  def auto_publish_post
+    if publication.content.auto_publish && publishable?
+      self.published = true if publication.posts.create(author: Current.user, **to_post_attributes)
+    end
+  end
+
+  def clear_local_content
+    local_content.value = nil
+  end
+
+  def parse_and_store_readme
+    repository.update(readme: content_html)
   end
 end

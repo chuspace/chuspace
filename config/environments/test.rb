@@ -54,6 +54,10 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
 
+  config.action_mailer.default_url_options = { host: 'test.host' }
+  config.default_url_options = { host: 'test.host' }
+  Rails.application.routes.default_url_options[:host] = 'test.host'
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

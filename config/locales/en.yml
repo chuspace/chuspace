@@ -46,8 +46,8 @@ en:
       exists: You already have a connected personal publication
     publications:
       shared:
-        provider_not_found: "%{name} Git provider not supported"
-        repo_not_found: "%{name} Repository not found"
+        provider_not_found: '%{name} Git provider not supported'
+        repo_not_found: '%{name} Repository not found'
         tabs:
           provider: Pick your Git Provider
           publication: Publication settings
@@ -71,10 +71,11 @@ en:
         Your posts are published from connected personal publication.
         Connect your personal publication git repository.
       none: No published posts
+      title: Posts
   private_beta_signup_mailer:
     notify:
-      body: "%{name} just signed up on Chuspace for Beta access using %{provider}
-        🎉"
+      body: '%{name} just signed up on Chuspace for Beta access using %{provider}
+        🎉'
       salutation: Hey Chuspace,
       subject: 'Chuspace: %{name} Signed up for Beta access'
   publications:
@@ -90,11 +91,16 @@ en:
         notice: Invite sent successfully!
       destroy:
         notice: Invite deleted!
+    personal:
+      none: |
+        No personal publication found!
+        Connect a git repository to get started.
     list:
       empty: |
-        Your publications are sourced from connected git repositories.
+        Your publications are sourced from connected git repositories
         Connect a git repository to get started.
       none: No connected publications
+      title: Publications
     people:
       destroy:
         notice: Person removed!
@@ -136,19 +142,19 @@ en:
   shared:
     features:
       list:
-      - title: Truly own your content
-        description: Publish from your git repository hosted on Github . Gitlab or
-          Gitea
-        available: true
-      - title: Any static site framework
-        description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
-        available: true
-      - title: Publishing and collaboration
-        description: Collaborate with community and teams in realtime
-        available: true
-      - title: Custom domains and hosting
-        description: Integrated deployment coming soon
-        available: false
+        - title: Truly own your content
+          description: Publish from your git repository hosted on Github . Gitlab or
+            Gitea
+          available: true
+        - title: Any static site framework
+          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
+          available: true
+        - title: Publishing and collaboration
+          description: Collaborate with community and teams in realtime
+          available: true
+        - title: Custom domains and hosting
+          description: Integrated deployment coming soon
+          available: false
     identities:
       login_with: Click to log in with %{provider}
     login_prompt: Click to go to log  in page
@@ -168,6 +174,11 @@ en:
     index:
       cta: Sign up with one of the following
       welcome: Welcome to Chuspace
+  topics:
+    list:
+      title: Topics
+    show:
+      heading: 'Posts published in: %{name}'
   user_mailer:
     email_welcome:
       body: Thank you for signing up! Chuspace is currently in alpha and we're really
@@ -177,9 +188,9 @@ en:
       salutation: Hey %{name},
       subject: Welcome to Chuspace, %{name}
     invite:
-      body: "%{person} invited you to join %{publication}"
+      body: '%{person} invited you to join %{publication}'
       salutation: Hey %{name},
-      subject: "%{person} invited you to join %{publication}"
+      subject: '%{person} invited you to join %{publication}'
     send_magic_login:
       body: Click on the button below to sign in to your Chuspace account. This magic
         link will expire in %{expires_in} minutes and can only be used once.

@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class Repository < ApplicationRecord
+  include Readmeable
+
   belongs_to :publication
   belongs_to :git_provider
 
-  validates :full_name, :default_ref, :posts_folder, :assets_folder, :readme_path, presence: true
+  validates :full_name, :default_ref, :posts_folder, :assets_folder, presence: true
   validates :full_name, uniqueness: true
-  validates :readme_path, markdown: true
 
   delegate :name, :description, :html_url, :owner, :default_branch, to: :git
 
@@ -116,10 +117,6 @@ class Repository < ApplicationRecord
 
   def draft?(path:)
     drafts_folder.present? && path.start_with?(drafts_folder) || path.start_with?(posts_folder)
-  end
-
-  def readme(ref: default_ref)
-    git_provider_adapter(ref: ref).blob(path: readme_path).decorate(publication: publication)
   end
 
   def tree(ref: default_ref)

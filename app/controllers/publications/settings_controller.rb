@@ -32,6 +32,7 @@ module Publications
         :description,
         :icon,
         :visibility,
+        :twitter_handle,
         repository_attributes: %i[auto_publish posts_folder drafts_folder assets_folder readme_path id],
         content_attributes: %i[auto_publish id],
         front_matter_attributes: %i[title summary date topics id]

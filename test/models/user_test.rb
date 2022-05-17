@@ -31,8 +31,8 @@ class UserTest < ActiveSupport::TestCase
     perform_enqueued_jobs do
       assert @valid_user.save
       assert_not_empty @valid_user.git_providers
-      assert_equal 3, @valid_user.git_providers.count
-      assert_equal @valid_user.git_providers.pluck(:name), %w[github gitlab gitea]
+      assert_equal 5, @valid_user.git_providers.count
+      assert_equal @valid_user.git_providers.pluck(:name), %w[github github_enterprise gitlab gitlab_foss gitea]
     end
   end
 end
