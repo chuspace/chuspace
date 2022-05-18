@@ -7,7 +7,7 @@ module Publications
 
     def index
       authorize! @publication, to: :write?
-      add_breadcrumb(:assets)
+      add_breadcrumb(:Assets)
 
       if turbo_frame_request?
         @assets = @publication.repository.assets(path: @asset_path)
@@ -17,8 +17,7 @@ module Publications
 
     def show
       authorize! @publication, to: :show?
-      data = @publication.repository.raw(path: params[:path])
-      expires_in 1.year, public: true
+      data = @publication.images.find_by(blob_path: params[:path])&.image&.download || @publication.repository.raw(path: params[:path])
       send_data data, disposition: :inline, filename: File.basename(params[:path])
     end
 
@@ -41,12 +40,6 @@ module Publications
       end
 
       render json: { url: File.join('/', path) }
-    end
-
-    def destroy
-      authorize! @publication, to: :write?
-      @asset = @publication.repository.asset(path: CGI.unescape(params[:path]))
-      @asset.delete(**commit_params)
     end
 
     private

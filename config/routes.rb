@@ -96,7 +96,6 @@ Rails.application.routes.draw do
         get '/assets/*path', action: :index, as: :assets
         get '/asset', action: :show, as: :asset, constraints: AssetConstraint.new
         post '/assets', action: :create, as: :create_assets
-        delete '/*path', action: :destroy, as: :delete_asset, constraints: AssetConstraint.new
       end
 
       scope controller: :drafts, module: :publications, format: false do

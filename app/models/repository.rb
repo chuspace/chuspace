@@ -128,7 +128,7 @@ class Repository < ApplicationRecord
     blob     = tree.find { |asset| asset.path == pathname.to_s || asset.path.include?(pathname.cleanpath.to_s) }
     content  = git_provider_adapter.asset(sha: blob.sha).content
 
-    Base64.decode64(content)
+    content.present? ? Base64.decode64(content) : fail(ActiveRecord::RecordNotFound, 'Image not found')
   end
 
   def readme_doc
