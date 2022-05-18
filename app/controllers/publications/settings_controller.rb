@@ -33,9 +33,9 @@ module Publications
         :icon,
         :visibility,
         :twitter_handle,
-        repository_attributes: %i[auto_publish posts_folder drafts_folder assets_folder readme_path id],
+        repository_attributes: %i[posts_folder drafts_folder assets_folder readme_path id],
         content_attributes: %i[auto_publish id],
-        front_matter_attributes: %i[title summary date topics id]
+        front_matter_attributes: %i[title summary date topics visibility canonical_url id]
       )
     end
   end

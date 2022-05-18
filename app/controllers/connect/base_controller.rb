@@ -10,8 +10,7 @@ module Connect
 
     def new
       if turbo_frame_request?
-        render partial: 'form',
-locals: { folders: @publication.repository.folders, markdown_files: @publication.repository.markdown_files, publication: @publication }
+        render partial: 'form', locals: { folders: @publication.repository.folders, markdown_files: @publication.repository.markdown_files, publication: @publication }
       end
     end
 

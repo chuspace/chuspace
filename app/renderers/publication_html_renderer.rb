@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PostHtmlRenderer < CommonMarker::HtmlRenderer
+class PublicationHtmlRenderer < CommonMarker::HtmlRenderer
   attr_reader :publication
 
   def initialize(publication:)
@@ -31,8 +31,9 @@ class PostHtmlRenderer < CommonMarker::HtmlRenderer
   end
 
   def image(node)
-    url = URI.parse(node.url).absolute? ? node.url : Rails.application.routes.url_helpers.publication_asset_path(
-      publication, path: node.url)
+    url = publication.images.find_by(blob_path: node.url)&.image&.variant(:post)&.processed&.url
+    url ||= URI.parse(node.url).absolute? ? node.url : Rails.application.routes.url_helpers.publication_asset_path(publication, path: node.url)
+
     out('<lazy-image')
     out(' src="', escape_href(url), '"')
     out(' filename="', escape_href(File.basename(node.url)), '"')

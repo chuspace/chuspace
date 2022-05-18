@@ -1,16 +1,8 @@
 # frozen_string_literal: true
 
 module Drafts
-  module Markdown
+  module Yaml
     extend ActiveSupport::Concern
-
-    def content_html
-      PostHtmlRenderer.new(publication: publication).render(markdown_doc.doc).html_safe
-    end
-
-    def markdown_doc
-      @markdown_doc ||= MarkdownDoc.new(content: body)
-    end
 
     def new_template
       <<~STR

@@ -19,7 +19,7 @@
 
   <% card.body do %>
     <% if @user.personal_publication.present? %>
-      <%= content_tag :article, @user.personal_publication.readme.html_safe, class: 'chu-editor chu-editor-sm pt-4 w-full sm:w-4/5' %>
+      <%= content_tag :article, @user.personal_publication.readme_html.html_safe, class: 'chu-editor chu-editor-sm pt-4 w-full sm:w-4/5' %>
     <% else %>
       <%= render Placeholder::Component.new do |placeholder| %>
         <%= placeholder.text do %>

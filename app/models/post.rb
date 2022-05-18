@@ -4,79 +4,65 @@ class Post < ApplicationRecord
   extend FriendlyId
   include ReadingTime, Metatagable
 
-  self.implicit_order_column = 'version'
-
   belongs_to :publication, touch: true
   belongs_to :author, class_name: 'User', touch: true
   has_many   :revisions, dependent: :delete_all, inverse_of: :post
+  has_many   :publishings, dependent: :delete_all, inverse_of: :post
+  has_many   :images, ->(post) { where(blob_path: post.blob_path) }, through: :publication, dependent: :delete_all, source: :images
+  has_one    :featured_image, ->(post) { where(blob_path: post.blob_path, featured: true) }, through: :publication, class_name: 'Image', source: :images
 
-  validates :title, :permalink, :body, :body_html, :blob_sha, :commit_sha, :visibility, presence: true
-  validates :blob_path, presence: :true, uniqueness: { scope: %i[version publication_id] }, markdown: true
-  validates :version, presence: :true, uniqueness: { scope: :publication_id }
+  validates :title, :permalink, :blob_path, :body, :blob_sha, :commit_sha, :visibility, presence: true
+  validates :blob_path, uniqueness: { scope: :publication_id }, markdown: true
+  validates :permalink, uniqueness: { scope: :permalink }
 
-  before_validation   :set_visibility
-  before_validation   :assign_next_version, on: :create
-  after_create_commit :unpublish_previous_versions
+  before_validation :set_visibility
+  after_commit :record_publishing, :cache_images
 
   enum visibility: PublicationConfig.to_enum, _suffix: true
 
   acts_as_votable
   acts_as_taggable_on :topics
 
-  has_one_attached :preview_image do |attachable|
-    attachable.variant :post, resize_to_limit: [800, 300]
-    attachable.variant :list, resize_to_limit: [250, 150]
-    attachable.variant :icon, resize_to_limit: [64, 64]
-    attachable.variant :social, resize_to_limit: [600, 315]
-  end
+  friendly_id :title, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
 
-  friendly_id :slug_candidates, use: %i[slugged history scoped], slug_column: :permalink, scope: :publication
-
-  scope :published, -> { where(published: true) }
-  scope :newest,    -> { order(id: :desc) }
-  scope :oldest,    -> { order(:id) }
+  scope :newest, -> { order(id: :desc) }
+  scope :oldest, -> { order(:id) }
 
   delegate :repository, to: :publication
 
-  def self.default_scope
-    published.order(date: :desc)
-  end
-
-  def current_version
-    @current_version ||= publication.posts.find_by(blob_path: blob_path)
+  def short_commit_sha
+    commit_sha.first(7)
   end
 
   def draft
     repository.draft_at(path: blob_path, ref: commit_sha)
   end
 
-  def markdown_doc
-    @markdown_doc ||= MarkdownDoc.new(content: body)
-  end
-
-  def short_commit_sha
-    commit_sha.first(7)
-  end
-
   def stale?
     blob_sha != repository.draft(path: blob_path).sha
   end
 
-  private
-
-  def slug_candidates
-    [[:title, :short_commit_sha]]
+  def markdown_doc
+    MarkdownDoc.new(content: body)
   end
+
+  def body_html
+    PublicationHtmlRenderer.new(publication: publication).render(markdown_doc.doc)
+  end
+
+  private
 
   def set_visibility
     self.visibility ||= publication.visibility
   end
 
-  def assign_next_version
-    self.version = (publication.posts.maximum(:version) || 0) + 1
+  def record_publishing
+    publishings.create(post: self, author: Current.user, content: draft.decoded_content, commit_sha: commit_sha)
   end
 
-  def unpublish_previous_versions
-    publication.posts.where(blob_path: blob_path).where('version < ?', version).update_all(published: false)
+  def cache_images
+    markdown_doc.images.each do |image|
+      publication.images.create(name: image.filename, blob_path: image.url, featured: image.featured, external: image.external)
+    end
   end
 end

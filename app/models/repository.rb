@@ -1,26 +1,20 @@
 # frozen_string_literal: true
 
 class Repository < ApplicationRecord
-  include Readmeable
-
   belongs_to :publication
   belongs_to :git_provider
 
   validates :full_name, :default_ref, :posts_folder, :assets_folder, presence: true
   validates :full_name, uniqueness: true
+  validates :readme_path, markdown: true
 
   delegate :name, :description, :html_url, :owner, :default_branch, to: :git
 
+  before_save  :cache_readme, if: -> { readme.blank? || readme_path_changed? }
+  after_save   :cache_readme_images, if: -> { readme.present? }
+
   def assets_folders
     [assets_folder].freeze
-  end
-
-  def raw(path:)
-    pathname = Pathname.new(path)
-    pathname = (pathname.absolute? ? pathname.relative_path_from('/') : pathname)
-    blob = tree.find { |asset| asset.path == pathname.to_s || asset.path.include?(pathname.cleanpath.to_s) }
-    content = git_provider_adapter.asset(sha: blob.sha).content
-    Base64.decode64(content)
   end
 
   def asset(path:)
@@ -46,9 +40,12 @@ class Repository < ApplicationRecord
       .map { |blob| blob.decorate(publication: publication) }
   end
 
+  def draft?(path:)
+    drafts_folder.present? && path.start_with?(drafts_folder) || path.start_with?(posts_folder)
+  end
+
   def draft(path:)
-    fail ActiveRecord::RecordNotFound, 'not found' unless MarkdownValidator.valid?(name_or_path: path)
-    git_provider_adapter.blob(path: path).decorate(publication: publication)
+    draft_at(path: path, ref: default_ref)
   end
 
   def draft_at(path:, ref:)
@@ -69,6 +66,14 @@ class Repository < ApplicationRecord
     end
 
     drafts
+  end
+
+  def draft_files
+    tree.filter_map do |item|
+      next unless draft?(path: item.path) && MarkdownValidator.valid?(name_or_path: item.path)
+
+      item
+    end
   end
 
   def drafts_folders
@@ -107,16 +112,24 @@ class Repository < ApplicationRecord
     files.select { |path| MarkdownValidator.valid?(name_or_path: path) }
   end
 
-  def draft_files
-    tree.filter_map do |item|
-      next unless draft?(path: item.path) && MarkdownValidator.valid?(name_or_path: item.path)
-
-      item
-    end
+  def raw(path:)
+    pathname = Pathname.new(path)
+    pathname = (pathname.absolute? ? pathname.relative_path_from('/') : pathname)
+    blob = tree.find { |asset| asset.path == pathname.to_s || asset.path.include?(pathname.cleanpath.to_s) }
+    content = git_provider_adapter.asset(sha: blob.sha).content
+    Base64.decode64(content)
   end
 
-  def draft?(path:)
-    drafts_folder.present? && path.start_with?(drafts_folder) || path.start_with?(posts_folder)
+  def readme_doc
+    MarkdownDoc.new(content: readme || readme_draft.decoded_content)
+  end
+
+  def readme_draft
+    draft(path: readme_path)
+  end
+
+  def readme_html
+    PublicationHtmlRenderer.new(publication: publication).render(readme_doc.doc)
   end
 
   def tree(ref: default_ref)
@@ -125,5 +138,17 @@ class Repository < ApplicationRecord
 
   def webhooks
     git_provider_adapter.webhooks
+  end
+
+  private
+
+  def cache_readme
+    self.readme = readme_draft.decoded_content
+  end
+
+  def cache_readme_images
+    readme_doc.images.each do |image|
+      publication.images.create(name: image.filename, blob_path: image.url, featured: image.featured, external: image.external)
+    end
   end
 end

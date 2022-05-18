@@ -63,7 +63,7 @@ module Metatagable
   def og_image_url
     case self
     when Publication then icon.variant(:profile)&.processed&.url
-    when Post then preview_image.variant(:profile)&.processed&.url
+    when Post then featured_image&.image&.variant(:social)&.processed&.url
     end
   end
 

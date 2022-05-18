@@ -14,6 +14,14 @@
       %>
     <% end %>
 
-    <%= form.button :submit, 'Connect', class: "mt-12 btn btn-primary" %>
+    <%= form.button :button, class: "mt-12 btn btn-primary turbo-btn" do %>
+      <div class="idle">Connect</div>
+      <div class="loading">
+        <div class='flex items-center'>
+          <div class='spinner on-button'></div>
+          <span class='ml-2'>Connecting</span>
+        </div>
+      </div>
+    <% end %>
   <% end %>
 <% end %>

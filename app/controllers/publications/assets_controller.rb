@@ -23,12 +23,14 @@ module Publications
     end
 
     def create
-      name = params[:image].original_filename
-      path = @assets_root_path.join(name).to_s
+      extname = File.extname(params[:image].original_filename)
+      filename = File.basename(params[:image].original_filename, '.*')
+      normalized_name = filename.to_slug.normalize.to_s + extname
+      path = @assets_root_path.join(normalized_name).to_s
 
       unless @publication.repository.blob_exists?(path: path)
         @asset = Asset.new(
-          name: name,
+          name: normalized_name,
           publication: @publication,
           adapter: @publication.repository.git_provider_adapter,
           path: path

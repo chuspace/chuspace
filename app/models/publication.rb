@@ -17,6 +17,7 @@ class Publication < ApplicationRecord
   has_many :memberships, dependent: :destroy, inverse_of: :publication
   has_many :members, through: :memberships, source: :user
   has_many :posts, dependent: :destroy, inverse_of: :publication
+  has_many :images, dependent: :destroy, inverse_of: :publication
   has_one  :repository, dependent: :destroy, inverse_of: :publication, required: true
 
   belongs_to :owner, class_name: 'User'
@@ -39,7 +40,7 @@ class Publication < ApplicationRecord
 
   enum visibility: PublicationConfig.to_enum, _suffix: true
 
-  delegate :readme, to: :repository
+  delegate :readme, :readme_html, to: :repository
 
   def initials
     name.first(2).upcase

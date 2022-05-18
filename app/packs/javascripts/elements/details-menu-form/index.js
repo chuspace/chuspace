@@ -8,10 +8,6 @@ export default class DetailsMenuFormElement extends HTMLElement {
   @target input: HTMLInputElement
   @target loader: HTMLElement
 
-  connectedCallback() {
-    console.log(this.input)
-  }
-
   onChange = (event) => {
     this.input.value = event.detail.relatedTarget?.textContent?.trim()
   }

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
-  include Drafts::Markdown
-  include Drafts::FrontMatter # Depends on Markdown
+  include Drafts::Yaml
+  include Drafts::FrontMatter
 
   attribute :publication, Publication
   attribute :published, default: proc { false }
@@ -13,8 +13,8 @@ class Draft < Git::Blob
 
   delegate :repository, to: :publication
 
-  after_create :auto_publish_post, :clear_local_content, :parse_and_store_readme
-  after_update :auto_publish_post, :clear_local_content, :parse_and_store_readme
+  after_create :clear_local_content, :store_readme
+  after_update :clear_local_content, :store_readme
 
   def body
     parsed.content
@@ -34,6 +34,14 @@ class Draft < Git::Blob
 
   def publishable?
     post&.blob_sha != sha && !readme?
+  end
+
+  def publish(author:)
+    if post.present?
+      post.update(author: author, **to_post_attributes)
+    else
+      publication.posts.create(author: author, **to_post_attributes)
+    end
   end
 
   def persisted?
@@ -82,7 +90,6 @@ class Draft < Git::Blob
       blob_path: path,
       blob_sha: id,
       body: body,
-      body_html: content_html,
       commit_sha: commits.first&.id || commits.first&.sha
     }
   end
@@ -90,20 +97,14 @@ class Draft < Git::Blob
   private
 
   def local_content_key
-    "#{publication.permalink}:#{path}:content"
-  end
-
-  def auto_publish_post
-    if publication.content.auto_publish && publishable?
-      self.published = true if publication.posts.create(author: Current.user, **to_post_attributes)
-    end
+    "#{publication.permalink}:#{path}:local_content"
   end
 
   def clear_local_content
     local_content.value = nil
   end
 
-  def parse_and_store_readme
-    repository.update(readme: content_html)
+  def store_readme
+    repository.update(readme: decoded_content)
   end
 end
