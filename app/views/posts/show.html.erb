@@ -19,8 +19,10 @@
 
   <div class="flex justify-between items-center text-xs">
     <span class='mx-4'>&#183;</span>
-    <% %w[facebook twitter email linkedin].each_with_index do |icon, index| %>
-      <%= inline_svg_tag "icons/#{icon}.svg", class: "w-4 h-4 fill-current text-secondary hover:text-primary cursor-pointer#{index == 0 ? '' : ' ml-4'}" %>
+    <% %w[facebook twitter email linkedin].each_with_index do |provider, index| %>
+      <%= link_to social_share_url(post: @post, provider: provider), target: :_blank do %>
+        <%= inline_svg_tag "icons/#{provider}.svg", class: "w-4 h-4 fill-current text-secondary hover:text-primary cursor-pointer#{index == 0 ? '' : ' ml-4'}" %>
+      <% end %>
     <% end %>
     <span class='mx-4'>&#183;</span>
     <% if @post.markdown_doc.snippets? %>
