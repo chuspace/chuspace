@@ -109,7 +109,6 @@ Rails.application.routes.draw do
         delete '/*path/delete', action: :destroy, as: :delete_draft
 
         scope controller: :publishings, module: :drafts do
-          get '/*path/publish', action: :new, as: :new_publish_draft
           post '/*path/publish', action: :create, as: :publish_draft
         end
 

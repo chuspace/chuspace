@@ -33,16 +33,16 @@
   </div>
 <% end %>
 
+<%= content_for :header_actions do %>
+  <div class='mr-8'>
+    <% if allowed_to?(:edit?, @post) %>
+      <%= link_to 'Edit', publication_edit_draft_path(@post.publication, path: @post.relative_path), class: 'btn btn-primary btn-xs' %>
+    <% end %>
+  </div>
+<% end %>
+
 <div class='sm:w-2/3 mx-auto w-full'>
-  <% if @post.topics.any? %>
-    <div class='flex flex-wrap my-8'>
-      <% @post.topics.each do |topic| %>
-        <div class='ml-2 mb-2'>
-          <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
+  <%= render 'topics', post: @post if @post.topics.any? %>
 
   <div class='chu-editor'>
     <div class='my-8'>

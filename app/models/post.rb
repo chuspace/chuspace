@@ -32,34 +32,40 @@ class Post < ApplicationRecord
 
   delegate :repository, to: :publication
 
-  def short_commit_sha
-    commit_sha.first(7)
-  end
-
-  def draft
-    repository.draft_at(path: blob_path, ref: commit_sha)
-  end
-
-  def stale?
-    blob_sha != repository.draft(path: blob_path).sha
-  end
-
-  def markdown_doc
-    MarkdownDoc.new(content: body)
-  end
-
   def body_html
     PublicationHtmlRenderer.new(publication: publication).render(markdown_doc.doc)
-  end
-
-  def record_publishing
-    publishings.create(post: self, author: Current.user, content: draft.decoded_content, commit_sha: commit_sha)
   end
 
   def cache_images
     markdown_doc.images.each do |image|
       publication.images.create(name: image.filename, draft_blob_path: blob_path, blob_path: image.url, featured: image.featured, external: image.external)
     end
+  end
+
+  def draft
+    repository.draft_at(path: blob_path, ref: commit_sha)
+  end
+
+  def markdown_doc
+    MarkdownDoc.new(content: body)
+  end
+
+  def short_commit_sha
+    commit_sha.first(7)
+  end
+
+  def stale?
+    blob_sha != repository.draft(path: blob_path).sha
+  end
+
+  def relative_path
+    posts_folder = Pathname.new(repository.posts_folder)
+    full_path = Pathname.new(blob_path)
+    full_path.relative_path_from(posts_folder).to_s
+  end
+
+  def record_publishing
+    publishings.create(post: self, author: Current.user, content: draft.decoded_content, commit_sha: commit_sha)
   end
 
   private

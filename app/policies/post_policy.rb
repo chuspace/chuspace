@@ -12,12 +12,8 @@ class PostPolicy < ApplicationPolicy
     true
   end
 
-  def update?
-    false
-  end
-
-  def destroy?
-    false
+  def edit?
+    publication.memberships.writers.exists?(user: user)
   end
 
   def revise?

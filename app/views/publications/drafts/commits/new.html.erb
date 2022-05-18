@@ -7,23 +7,28 @@
           <p class='text-secondary text-sm'>Commit changes to connected git repository</p>
 
           <div class="form-control mt-8">
-            <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message' %>
+            <%= form.input :commit_message, label: false, input_html: { value: nil }, placeholder: 'Commit message (optional)' %>
             <div class='mt-8 font-mono'>
-              <label class='text-sm flex items-center' id='commit-authors'>
-                Commit authors:
-                <div class="avatar">
-                  <%= link_to user_path(Current.user), class: 'w-6 font-bold link link-primary w-6', title: Current.user.name do %>
-                    <%= render(Avatar::Component.new(avatar: Current.user.avatar, gravatar: Current.user.gravatar_url, fallback: Current.user.name.initials, variant: :icon)) %>
-                  <% end %>
-                </div>
-              </label>
               <label class='text-sm block'>Author: <%= content_tag :span, Current.user.name, class: 'font-bold' %></label>
               <label class='text-sm block'>Commit Date: <%= content_tag :span, Date.today.strftime('%d %b %Y'), class: 'font-bold' %></label>
+              <label class='text-sm block'>
+                Auto Publish: <%= content_tag :span, @publication.content.auto_publish, class: 'font-bold' %>
+                <%= link_to 'Change', publication_setting_path(@publication, id: :content), class: 'link link-primary text-xs', 'data-turbo-frame': '_top' %>
+              </label>
             </div>
           </div>
 
           <div class="modal-action">
-            <%= form.submit 'Commit', class: 'btn btn-primary btn-sm' %>
+            <%= form.button :button, class: 'btn btn-primary btn-sm turbo-btn' do %>
+              <div class="idle">Commit</div>
+              <div class="loading">
+                <div class='flex items-center'>
+                  <div class='spinner on-button'></div>
+                  <span class='ml-2'>Committing</span>
+                </div>
+              </div>
+            <% end %>
+
             <%= link_to 'Cancel', publication_edit_draft_path(@publication, @draft), class: "btn btn-error btn-sm", data: { 'turbo-frame': :_top } %>
           </div>
         <% end %>

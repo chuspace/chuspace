@@ -29,7 +29,7 @@ class Draft < Git::Blob
   end
 
   def post
-    @post ||= publication.posts.find_by(blob_path: path)
+    publication.posts.find_by(blob_path: path)
   end
 
   def publishable?
@@ -39,6 +39,7 @@ class Draft < Git::Blob
   def publish(author:)
     if post.present?
       post.update(author: author, **to_post_attributes)
+      post
     else
       publication.posts.create(author: author, **to_post_attributes)
     end

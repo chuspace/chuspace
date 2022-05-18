@@ -14,6 +14,10 @@ class PostsController < ApplicationController
   end
 
   def find_post
-    @post = @publication.posts.unscoped.friendly.find(params[:permalink])
+    @post = @publication.posts.friendly.find(params[:permalink])
+
+    if params[:permalink] != @post.permalink
+      redirect_to RedirectUrl.new(path: request.path, params: params).for(@post), status: :moved_permanently
+    end
   end
 end

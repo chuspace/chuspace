@@ -52,6 +52,8 @@ module Publications
       authorize! @draft, to: :commit?
 
       if @draft.update(**commit_params)
+        @draft.reload!
+
         if @publication.content.auto_publish && @draft.publishable? && post = @draft.publish(author: Current.user)
           redirect_to publication_post_path(@publication, post), notice: 'Succesfully committed and published!'
         else

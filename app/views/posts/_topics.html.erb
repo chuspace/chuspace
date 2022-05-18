@@ -1,0 +1,7 @@
+<div class='flex flex-wrap my-8'>
+  <% post.topics.each do |topic| %>
+    <div class='ml-2 mb-2'>
+      <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
+    </div>
+  <% end %>
+</div>
