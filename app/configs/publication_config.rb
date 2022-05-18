@@ -15,6 +15,14 @@ class PublicationConfig < ApplicationConfig
     repo: {
       readme_path: 'README.md'
     },
+    revision: {
+      default_status: 'open',
+      statuses: {
+        open: 'open',
+        closed: 'closed',
+        merged: 'merged'
+      }
+    },
     settings: {
       auto_publish: false
     },

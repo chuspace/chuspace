@@ -8,15 +8,17 @@ class Post < ApplicationRecord
   belongs_to :author, class_name: 'User', touch: true
   has_many   :revisions, dependent: :delete_all, inverse_of: :post
   has_many   :publishings, dependent: :delete_all, inverse_of: :post
-  has_many   :images, ->(post) { where(blob_path: post.blob_path) }, through: :publication, dependent: :delete_all, source: :images
-  has_one    :featured_image, ->(post) { where(blob_path: post.blob_path, featured: true) }, through: :publication, class_name: 'Image', source: :images
+  has_many   :images, ->(post) { where(draft_blob_path: post.blob_path) }, through: :publication, dependent: :delete_all, source: :images
+  has_one    :featured_image, ->(post) { where(draft_blob_path: post.blob_path, featured: true) }, through: :publication, class_name: 'Image', source: :images
 
   validates :title, :permalink, :blob_path, :body, :blob_sha, :commit_sha, :visibility, presence: true
   validates :blob_path, uniqueness: { scope: :publication_id }, markdown: true
   validates :permalink, uniqueness: { scope: :permalink }
 
   before_validation :set_visibility
-  after_commit :record_publishing, :cache_images
+
+  after_create_commit :record_publishing
+  after_create_commit -> { CachePostImagesJob.perform_later(post: self) }
 
   enum visibility: PublicationConfig.to_enum, _suffix: true
 
@@ -50,19 +52,19 @@ class Post < ApplicationRecord
     PublicationHtmlRenderer.new(publication: publication).render(markdown_doc.doc)
   end
 
-  private
-
-  def set_visibility
-    self.visibility ||= publication.visibility
-  end
-
   def record_publishing
     publishings.create(post: self, author: Current.user, content: draft.decoded_content, commit_sha: commit_sha)
   end
 
   def cache_images
     markdown_doc.images.each do |image|
-      publication.images.create(name: image.filename, blob_path: image.url, featured: image.featured, external: image.external)
+      publication.images.create(name: image.filename, draft_blob_path: blob_path, blob_path: image.url, featured: image.featured, external: image.external)
     end
+  end
+
+  private
+
+  def set_visibility
+    self.visibility ||= publication.visibility
   end
 end

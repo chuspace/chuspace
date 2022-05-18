@@ -5,6 +5,7 @@ class CreateImages < ActiveRecord::Migration[7.0]
     create_table :images do |t|
       t.string :name, index: { algorithm: :concurrently }
       t.text :blob_path, index: { algorithm: :concurrently }
+      t.text :draft_blob_path, index: { algorithm: :concurrently }
 
       t.boolean :featured, default: false, index: { algorithm: :concurrently }
       t.boolean :external, default: false, index: { algorithm: :concurrently }

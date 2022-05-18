@@ -3,12 +3,12 @@
 class Image < ApplicationRecord
   belongs_to :publication
 
-  validates :name, presence: true
+  validates :name, :draft_blob_path, presence: true
   validates :blob_path, presence: true, uniqueness: { scope: :publication_id }
 
   delegate :repository, to: :publication
 
-  before_create :attach_image
+  after_create :attach_image
 
   has_one_attached :image do |attachable|
     attachable.variant :post, resize_to_fit: [800, 300]

@@ -13,8 +13,8 @@ class Draft < Git::Blob
 
   delegate :repository, to: :publication
 
-  after_create :clear_local_content, :store_readme
-  after_update :clear_local_content, :store_readme
+  after_create :clear_local_content, :store_repository_readme
+  after_update :clear_local_content, :store_repository_readme
 
   def body
     parsed.content
@@ -104,7 +104,7 @@ class Draft < Git::Blob
     local_content.value = nil
   end
 
-  def store_readme
-    repository.update(readme: decoded_content)
+  def store_repository_readme
+    repository.update(readme: decoded_content) if readme?
   end
 end

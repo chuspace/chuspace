@@ -3,7 +3,7 @@
 class CreatePostVisibilityEnumType < ActiveRecord::Migration[6.1]
   def up
     execute <<-SQL
-      CREATE TYPE post_visibility_enum_type AS ENUM ('private', 'public', 'subscriber');
+      CREATE TYPE post_visibility_enum_type AS ENUM ('private', 'public');
     SQL
   end
 

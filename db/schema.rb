@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
   create_enum "identity_provider_enum_type", ["email", "github", "gitlab", "bitbucket"]
   create_enum "invite_status_enum_type", ["pending", "expired", "joined"]
   create_enum "membership_role_enum_type", ["writer", "editor", "admin", "owner"]
-  create_enum "post_visibility_enum_type", ["private", "public", "subscriber"]
+  create_enum "post_visibility_enum_type", ["private", "public"]
   create_enum "publication_visibility_enum_type", ["private", "public"]
   create_enum "revision_status_enum_type", ["open", "closed", "merged"]
 
@@ -192,12 +192,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
   create_table "images", force: :cascade do |t|
     t.string "name"
     t.text "blob_path"
+    t.text "draft_blob_path"
     t.boolean "featured", default: false
     t.boolean "external", default: false
     t.bigint "publication_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["blob_path"], name: "index_images_on_blob_path"
+    t.index ["draft_blob_path"], name: "index_images_on_draft_blob_path"
     t.index ["external"], name: "index_images_on_external"
     t.index ["featured"], name: "index_images_on_featured"
     t.index ["name"], name: "index_images_on_name"

@@ -5,14 +5,6 @@ class ChuspaceConfig < ApplicationConfig
     app: {
       name: 'Chuspace',
       twitter: '@chuspace_com'
-    },
-    revision: {
-      default_status: 'open',
-      statuses: {
-        open: 'open',
-        closed: 'closed',
-        merged: 'merged'
-      }
     }
   )
 end

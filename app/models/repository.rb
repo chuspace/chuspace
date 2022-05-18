@@ -3,6 +3,7 @@
 class Repository < ApplicationRecord
   belongs_to :publication
   belongs_to :git_provider
+  has_many   :readme_images, ->(repository) { where(draft_blob_path: repository.readme_path) }, through: :publication, dependent: :delete_all, source: :images
 
   validates :full_name, :default_ref, :posts_folder, :assets_folder, presence: true
   validates :full_name, uniqueness: true
@@ -10,8 +11,7 @@ class Repository < ApplicationRecord
 
   delegate :name, :description, :html_url, :owner, :default_branch, to: :git
 
-  before_save  :cache_readme, if: -> { readme.blank? || readme_path_changed? }
-  after_save   :cache_readme_images, if: -> { readme.present? }
+  after_create_commit -> { CacheRepositoryReadmeJob.perform_later(repository: self) }
 
   def assets_folders
     [assets_folder].freeze
@@ -28,6 +28,16 @@ class Repository < ApplicationRecord
     git_provider_adapter.blobs(paths: paths)
       .select { |blob|  blob.type == 'dir' || (blob&.name && ImageValidator.valid?(name_or_path: blob.name)) }
       .map { |blob| blob.decorate(publication: publication) }
+  end
+
+  def cache_readme!
+    update(readme: readme_draft.decoded_content)
+  end
+
+  def cache_readme_images!
+    readme_doc.images.each do |image|
+      publication.images.create(name: image.filename, draft_blob_path: readme_path, blob_path: image.url, featured: image.featured, external: image.external)
+    end
   end
 
   def content_folders
@@ -115,8 +125,9 @@ class Repository < ApplicationRecord
   def raw(path:)
     pathname = Pathname.new(path)
     pathname = (pathname.absolute? ? pathname.relative_path_from('/') : pathname)
-    blob = tree.find { |asset| asset.path == pathname.to_s || asset.path.include?(pathname.cleanpath.to_s) }
-    content = git_provider_adapter.asset(sha: blob.sha).content
+    blob     = tree.find { |asset| asset.path == pathname.to_s || asset.path.include?(pathname.cleanpath.to_s) }
+    content  = git_provider_adapter.asset(sha: blob.sha).content
+
     Base64.decode64(content)
   end
 
@@ -138,17 +149,5 @@ class Repository < ApplicationRecord
 
   def webhooks
     git_provider_adapter.webhooks
-  end
-
-  private
-
-  def cache_readme
-    self.readme = readme_draft.decoded_content
-  end
-
-  def cache_readme_images
-    readme_doc.images.each do |image|
-      publication.images.create(name: image.filename, blob_path: image.url, featured: image.featured, external: image.external)
-    end
   end
 end

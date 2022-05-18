@@ -31,7 +31,7 @@ class PublicationHtmlRenderer < CommonMarker::HtmlRenderer
   end
 
   def image(node)
-    url = publication.images.find_by(blob_path: node.url)&.image&.variant(:post)&.processed&.url
+    url = publication.images.find_by(blob_path: node.url)&.image&.variant(:post)&.processed&.url if publication.images.any?
     url ||= URI.parse(node.url).absolute? ? node.url : Rails.application.routes.url_helpers.publication_asset_path(publication, path: node.url)
 
     out('<lazy-image')

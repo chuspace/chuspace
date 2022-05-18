@@ -4,7 +4,7 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
   disable_ddl_transaction!
 
   def change
-    create_enum :revision_status_enum_type, ChuspaceConfig.new.revision[:statuses].keys
+    create_enum :revision_status_enum_type, PublicationConfig.new.revision[:statuses].keys
 
     create_table :revisions do |t|
       t.references :publication, null: false, foreign_key: true
@@ -25,8 +25,7 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :revisions, :status, :revision_status_enum_type, null: false,
-default: ChuspaceConfig.new.revision[:default_status]
+    add_column :revisions, :status, :revision_status_enum_type, null: false, default: PublicationConfig.new.revision[:default_status]
     add_index :revisions, %i[publication_id post_id number], unique: true, algorithm: :concurrently
   end
 end
