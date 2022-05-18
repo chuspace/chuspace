@@ -8,7 +8,7 @@ class SettingsController < ApplicationController
   def index
     authorize! @user, to: :edit?
 
-    redirect_to setting_path(@user, id: UserSetting::DEFAULT_PAGE)
+    redirect_to setting_path(id: UserSetting::DEFAULT_PAGE)
   end
 
   def show
@@ -17,7 +17,7 @@ class SettingsController < ApplicationController
 
     add_breadcrumb(t("users.settings.show.#{@partial}.title"))
 
-    fail ActiveRecord::RecordNotFoundError if UserSetting::PAGES.exclude?(@partial)
+    fail ActiveRecord::RecordNotFound if UserSetting::PAGES.exclude?(@partial)
   end
 
   def update

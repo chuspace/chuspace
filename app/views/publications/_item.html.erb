@@ -3,16 +3,25 @@
     <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
       <%= tag.h5 class: 'link link-content link-hover' do %>
         <%= publication.name %>
-        <%= content_tag :span, publication.visibility, class: 'badge badge-outline badge-secondary ml-2' %>
       <% end %>
 
       <%= tag.div publication.description, class: 'text-secondary text-sm mt-1 w-full sm:w-3/4' %>
 
-      <div class='mt-4 text-sm text-secondary'>
-        <%= publication.topic_list %>
-        updated <%= time_ago_in_words(publication.updated_at) %> ago
-        <%= content_tag :span, publication.git_provider.name, class: 'badge badge-primary mr-2' %>
-      </div>
+      <p class='mt-4 text-secondary text-xs'>
+        <% if publication.personal? %>
+          <%= content_tag :span, :Personal %>
+        <% end %>
+
+        <span class='mx-2'>&#183;</span>
+        <%= content_tag :span, publication.visibility.titlecase %>
+        <span class='mx-2'>&#183;</span>
+        Last updated <%= time_ago_in_words(publication.updated_at) %> ago
+
+        <% if publication.topics.any? %>
+          <span class='mx-2'>&#183;</span>
+          <%= link_to publication.topics.first.name, topic_path(publication.topics.first), class: 'badge badge-secondary badge-sm', data: { 'turbo-frame': :_top } %>
+        <% end %>
+      </p>
     <% end %>
   </div>
 

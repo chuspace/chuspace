@@ -42,8 +42,24 @@ class Publication < ApplicationRecord
 
   delegate :readme, :readme_html, to: :repository
 
+  def gravatar_url(variant: :thumb)
+    personal? ? owner.gravatar_url(variant: variant) : nil
+  end
+
+  def icon
+    if personal?
+      owner.avatar
+    else
+      super
+    end
+  end
+
   def initials
-    name.first(2).upcase
+    personal? ? owner.name.initials : name.first(2).upcase
+  end
+
+  def name
+    personal? ? owner.name : super
   end
 
   def visibility

@@ -12,8 +12,8 @@
   <% end %>
 
   <% card.body do %>
-    <% if @user.publications.except_personal.any? %>
-      <%= render 'publications/list', publications: @user.publications.except_personal %>
+    <% if @user.publications.any? %>
+      <%= render 'publications/list', publications: @user.publications %>
     <% else %>
       <%= render Placeholder::Component.new do |placeholder| %>
         <%= placeholder.text do %>

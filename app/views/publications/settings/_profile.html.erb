@@ -1,5 +1,7 @@
 <%= turbo_frame_tag(publication) do %>
   <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+    <%= content_tag :p, 'Set your publication profile info', class: 'text-secondary text-sm mb-4' %>
+
     <% unless publication.personal? %>
       <drop-image>
         <%= render(Avatar::Component.new(avatar: publication.icon, fallback: publication.initials, variant: :profile, uploader: true)) %>

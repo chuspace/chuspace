@@ -1,12 +1,15 @@
 <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+  <%= content_tag :p, 'Map your posts front matter keys', class: 'text-secondary text-sm mb-4' %>
   <%= form.simple_fields_for :front_matter do |front_matter_form| %>
-    <%= front_matter_form.input :title %>
-    <%= front_matter_form.input :summary %>
-    <%= front_matter_form.input :date %>
-    <%= front_matter_form.input :topics %>
-    <%= front_matter_form.input :visibility %>
-    <%= front_matter_form.input :canonical_url %>
+    <div class='grid grid-cols-2 gap-4'>
+      <%= front_matter_form.input :title %>
+      <%= front_matter_form.input :summary %>
+      <%= front_matter_form.input :date %>
+      <%= front_matter_form.input :topics %>
+      <%= front_matter_form.input :visibility %>
+      <%= front_matter_form.input :canonical_url %>
+    </div>
 
-    <%= front_matter_form.button :submit, 'Save', class: "mt-8 btn btn-secondary btn-outline" %>
+    <%= front_matter_form.button :submit, 'Save', class: "mt-8 btn btn-primary" %>
   <% end %>
 <% end %>

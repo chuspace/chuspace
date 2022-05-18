@@ -1,5 +1,32 @@
 <%= turbo_frame_tag(publication) do %>
   <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
+    <%= content_tag :p, 'Map your publication contents', class: 'text-secondary text-sm mb-4' %>
+
+    <%= form.simple_fields_for :content do |content_form| %>
+      <%= content_form.input :auto_publish, as: :boolean, wrapper_html: { class: 'w-1/4' } %>
+    <% end %>
+
+    <autocomplete-extras data-tags data-items='<%= publication.topic_list %>'>
+      <auto-complete
+        src="<%= topics_path %>"
+        for="topics-popup"
+        class='w-full dropdown'
+        data-target='autocomplete-extras.completer'
+      >
+        <%= form.input :topic_list, input_html: { value: '', placeholder: 'Type to search','data-target': 'autocomplete-extras.targetInput', 'data-action': 'input:autocomplete-extras#toggle', class: 'bg-transparent' } %>
+        <div data-target='autocomplete-extras.selections' class='flex w-auto flex-wrap mt-2'></div>
+        <%= form.input :topic_list, as: :hidden, input_html: { 'data-target': 'autocomplete-extras.valueInput' } %>
+
+        <button data-target='autocomplete-extras.handle' class='hidden absolute right-0 bottom-0 mb-4 mr-4' data-action='click:autocomplete-extras#clear'>
+          <%= inline_svg_tag('icons/x.svg', class: 'w-4 h-4 fill-current', 'data-action': 'click:autocomplete-extras#clear') %>
+        </button>
+
+        <ul id="topics-popup" data-target='autocomplete-extras.dropdown'></ul>
+        <div id="topics-popup-feedback" class="sr-only"></div>
+      </auto-complete>
+    </autocomplete-extras>
+
+    <div class='border-b border-base-200 my-4'></div>
     <%= form.simple_fields_for :repository do |repo_form| %>
       <%= repo_form.input :posts_folder, as: :select, collection: publication.repository.folders, include_blank: 'Choose' %>
       <%= repo_form.input :drafts_folder, as: :select, collection: publication.repository.folders, include_blank: 'Choose' %>
@@ -11,10 +38,6 @@
           include_blank: 'Choose'
         )
       %>
-    <% end %>
-
-    <%= form.simple_fields_for :content do |content_form| %>
-      <%= content_form.input :auto_publish, as: :boolean, wrapper_html: { class: 'w-1/4' } %>
     <% end %>
 
     <%= form.button :submit, publication.persisted? ? 'Save' : 'Connect', class: "mt-8 btn btn-primary" %>

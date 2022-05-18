@@ -1,19 +1,31 @@
-<%= render 'publications/layout' do %>
-  <div class='grid grid-cols-4 gap-16 mt-8'>
-    <%= render 'sidebar', publication: @publication %>
+<div class='flex items-center w-full'>
+  <div class='w-full flex items-center justify-between'>
+    <div class='flex items-center'>
+      <%= render(Avatar::Component.new(avatar: @publication.icon, gravatar: @publication.gravatar_url(variant: :thumb), fallback: @publication.initials, variant: :thumb)) %>
+      <div class='ml-2'>
+        <h3 class='mb-0'><%= @publication.name %></h3>
+        <%= content_tag :p, :personal, class: 'text-sm text-secondary' if @publication.personal? %>
+      </div>
+    </div>
 
-    <section class='col-span-3'>
-      <%= render(Card::Component.new) do |card| %>
-        <% card.title do %>
-          <%= render('shared/breadcrumbs') %>
-        <% end %>
-
-        <% card.body do %>
-          <div class='py-4'>
-            <%= render "#{@partial}", publication: @publication, url: publication_setting_path(@publication, id: @partial.parameterize) %>
-          </div>
-        <% end %>
-      <% end %>
-    </section>
+    <%= link_to 'Back to publication', publication_path(@publication), class: 'btn btn-sm btn-primary' %>
   </div>
-<% end %>
+</div>
+
+<div class='grid grid-cols-4 gap-16 mt-8'>
+  <%= render 'sidebar', publication: @publication %>
+
+  <section class='col-span-3'>
+    <%= render(Card::Component.new) do |card| %>
+      <% card.title do %>
+        <%= render('shared/breadcrumbs') %>
+      <% end %>
+
+      <% card.body do %>
+        <div class='py-4'>
+          <%= render "#{@partial}", publication: @publication, url: publication_setting_path(@publication, id: @partial.parameterize) %>
+        </div>
+      <% end %>
+    <% end %>
+  </section>
+</div>

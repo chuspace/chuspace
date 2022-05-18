@@ -5,6 +5,7 @@ import { html, render } from 'lit-html'
 @controller
 export default class AutocompleteExtrasElement extends HTMLElement {
   @attr tags: boolean = false
+  @attr items: string = []
   @target targetInput: HTMLInputElement
   @target valueInput: HTMLInputElement
   @target handle: HTMLButtonElement
@@ -15,6 +16,12 @@ export default class AutocompleteExtrasElement extends HTMLElement {
   connectedCallback() {
     if (this.tags) {
       this.tagsMap = new Map()
+
+      this.items.split(',').forEach((item) => {
+        this.tagsMap.set(item, item)
+        this.renderTags()
+      })
+
       this.completer.addEventListener('auto-complete-change', (event) => {
         if (this.completer.value.trim()) {
           this.tagsMap.set(this.completer.value.trim(), this.completer.value.trim())
