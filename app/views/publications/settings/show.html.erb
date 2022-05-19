@@ -1,21 +1,18 @@
-<div class='flex items-center w-full'>
-  <div class='w-full flex items-center justify-between'>
-    <div class='flex items-center'>
-      <%= render(Avatar::Component.new(avatar: @publication.icon, gravatar: @publication.gravatar_url(variant: :thumb), fallback: @publication.initials, variant: :thumb)) %>
-      <div class='ml-2'>
-        <h3 class='mb-0'><%= @publication.name %></h3>
-        <%= content_tag :p, :personal, class: 'text-sm text-secondary' if @publication.personal? %>
-      </div>
+<div class='w-full sm:flex items-center justify-between'>
+  <div class='flex items-center'>
+    <%= render(Avatar::Component.new(avatar: @publication.icon, gravatar: @publication.gravatar_url(variant: :mini), fallback: @publication.initials, variant: :mini)) %>
+    <div class='ml-2'>
+      <h3 class='mb-0 sm:text-3xl text-xl'><%= @publication.name %></h3>
+      <%= content_tag :p, :personal, class: 'text-sm text-secondary' if @publication.personal? %>
     </div>
-
-    <%= link_to 'Back to publication', publication_path(@publication), class: 'btn btn-sm btn-primary' %>
   </div>
+
+  <%= link_to 'Back to publication', publication_path(@publication), class: 'btn btn-sm btn-primary sm:ml-0 ml-16' %>
 </div>
 
-<div class='grid grid-cols-4 gap-16 mt-8'>
+<div class='sm:grid grid-cols-4 gap-16 mt-8'>
   <%= render 'sidebar', publication: @publication %>
-
-  <section class='col-span-3'>
+  <section class='col-span-3 mt-8 sm:mt-0'>
     <%= render(Card::Component.new) do |card| %>
       <% card.title do %>
         <%= render('shared/breadcrumbs') %>

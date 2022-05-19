@@ -1,7 +1,5 @@
-<div class='flex flex-wrap my-8'>
+<div class='flex flex-wrap'>
   <% post.topics.each do |topic| %>
-    <div class='ml-2 mb-2'>
-      <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
-    </div>
+    <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
   <% end %>
 </div>

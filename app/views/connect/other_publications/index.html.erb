@@ -1,8 +1,8 @@
 <%= render 'layout' do %>
-  <div class="grid grid-cols-3 gap-4 my-8 w-full">
+  <div class="grid sm:grid-cols-3 grid-cols-1 rounded-md sm:border-0 border border-base-200 gap-4 my-8 w-full">
     <%= link_to t('connect.publications.shared.tabs.provider'), connect_other_publications_path, class: "tab tab-bordered tab-active" %>
     <a class="tab tab-bordered"><%= t('connect.publications.shared.tabs.repository') %></a>
-    <a class="tab tab-bordered "><%= t('connect.publications.shared.tabs.publication') %></a>
+    <a class="tab tab-bordered"><%= t('connect.publications.shared.tabs.publication') %></a>
   </div>
 
   <h4><%= t('connect.publications.shared.tabs.provider') %></h4>

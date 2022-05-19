@@ -7,21 +7,19 @@
 
       <%= tag.div publication.description, class: 'text-secondary text-sm mt-1 w-full sm:w-3/4' %>
 
-      <p class='mt-4 text-secondary text-xs'>
+      <div class='mt-4 flex flex-wrap text-secondary text-xs'>
         <% if publication.personal? %>
           <%= content_tag :span, :Personal %>
         <% end %>
 
         <span class='mx-2'>&#183;</span>
         <%= content_tag :span, publication.visibility.titlecase %>
-        <span class='mx-2'>&#183;</span>
-        Last updated <%= time_ago_in_words(publication.updated_at) %> ago
 
         <% if publication.topics.any? %>
           <span class='mx-2'>&#183;</span>
           <%= link_to publication.topics.first.name, topic_path(publication.topics.first), class: 'badge badge-secondary badge-sm', data: { 'turbo-frame': :_top } %>
         <% end %>
-      </p>
+      </div>
     <% end %>
   </div>
 

@@ -75,7 +75,6 @@ Rails.application.routes.draw do
   end
 
   resources :settings, only: %i[index show update]
-  resources :publications, only: :index
 
   resources :publications, path: '', only: :show, param: :permalink, constraints: PublicationConstraint.new do
     resources :settings, only: %i[index show update], module: :publications

@@ -10,7 +10,7 @@
   margin-top: 16px
 
 .chu-editor
-  @apply antialiased font-sans
+  @apply antialiased font-sans max-w-full
 
   line-height: 2rem
   font-size: 21px
@@ -94,7 +94,10 @@
     @apply mb-0
 
   lazy-image
-    @apply inline-block
+    @apply inline-block max-w-full w-full
+
+    img
+      @apply max-w-full w-full
 
   lazy-image, content-loader, contribution-modal
     @apply whitespace-nowrap

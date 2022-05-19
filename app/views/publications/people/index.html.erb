@@ -1,10 +1,10 @@
 <%= render 'publications/layout' do %>
-  <div class='grid grid-cols-4 gap-16 mt-8'>
+  <div class='grid sm:grid-cols-4 grid-cols-1 gap-16 mt-8'>
     <aside class='col-span-1'>
       <%= render 'publications/shared/people_actions', publication: @publication %>
     </aside>
 
-    <main class='col-span-3'>
+    <main class='sm:col-span-3 col-span-1'>
       <%= render(Card::Component.new) do |card| %>
         <% card.title do %>
           <%= render 'shared/breadcrumbs' %>

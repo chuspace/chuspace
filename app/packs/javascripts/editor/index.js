@@ -207,10 +207,11 @@ export default class ChuEditor extends LitElement {
 
       if (response.ok) {
         this.dirty = false
+        statusElement.textContent = 'Saved'
       }
     },
-    2000,
-    { maxWait: 5000 }
+    500,
+    { maxWait: 2000 }
   )
 
   dispatchTransaction(transaction: Transaction) {

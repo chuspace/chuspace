@@ -3,7 +3,7 @@
     <%= content_tag :p, 'Map your publication contents', class: 'text-secondary text-sm mb-4' %>
 
     <%= form.simple_fields_for :content do |content_form| %>
-      <%= content_form.input :auto_publish, as: :boolean, wrapper_html: { class: 'w-1/4' } %>
+      <%= content_form.input :auto_publish, as: :boolean, wrapper_html: { class: 'sm:w-1/4' } %>
     <% end %>
 
     <autocomplete-extras data-tags data-items='<%= publication.topic_list %>'>

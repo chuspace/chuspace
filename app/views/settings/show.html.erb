@@ -11,9 +11,10 @@
   </div>
 </div>
 
-<div class='grid grid-cols-4 gap-12 mt-8'>
+<div class='sm:grid grid-cols-4 gap-12 mt-8'>
   <%= render 'sidebar', user: @user %>
-  <section class='col-span-3'>
+
+  <section class='col-span-3 sm:mt-0 mt-8'>
     <%= render(Card::Component.new) do |card| %>
       <% card.title do %>
         <%= render('shared/breadcrumbs') %>

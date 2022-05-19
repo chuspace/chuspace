@@ -7,7 +7,28 @@
   </head>
   <body class="flex flex-col h-full">
     <%= render 'layouts/flash' %>
-    <%= render 'publications/drafts/header', draft: @draft %>
+    <%= render(Header::Component.new) do |header| %>
+      <%= header.after_logo_contents do %>
+        <span class='mx-4 text-secondary'>|</span>
+        <div class='sm:w-2/3 sm:block hidden overflow-x-auto'>
+          <%= render 'shared/breadcrumbs' %>
+        </div>
+        <div class='sm:hidden block'>
+          <%= link_to @publication.name, publication_path(@publication), class: 'link text-secondary hover:text-primary link-hover text-sm' %>
+        </div>
+      <% end %>
+
+      <%= header.before_user_dropdown do %>
+        <% if allowed_to?(:edit?, @draft) %>
+          <%= content_tag :div, nil, id: 'chu-editor-status', class: 'text-secondary text-xs mr-4' %>
+          <% if @draft.post %>
+            <%= link_to 'View post', publication_post_path(@publication, @draft.post), class: 'btn btn-primary btn-xs mr-4', 'data-turbo-frame': :'_top' %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <%= render 'publications/drafts/actions', draft: @draft, publication: @publication if @draft.persisted? %>
 
     <main class="container flex-1 pt-24">
       <%= yield %>

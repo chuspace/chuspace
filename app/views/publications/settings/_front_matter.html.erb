@@ -1,7 +1,7 @@
 <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
   <%= content_tag :p, 'Map your posts front matter keys', class: 'text-secondary text-sm mb-4' %>
   <%= form.simple_fields_for :front_matter do |front_matter_form| %>
-    <div class='grid grid-cols-2 gap-4'>
+    <div class='sm:grid grid-cols-2 gap-4'>
       <%= front_matter_form.input :title %>
       <%= front_matter_form.input :summary %>
       <%= front_matter_form.input :date %>

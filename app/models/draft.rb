@@ -74,7 +74,7 @@ class Draft < Git::Blob
   def status
     if stale? then 'Uncommitted changes'
     elsif publishable? then 'Unpublished changes'
-    else 'Everything up to date'
+    else 'Up to date'
     end
   end
 

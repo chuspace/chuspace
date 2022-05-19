@@ -1,8 +1,8 @@
 <% set_meta_tags @publication %>
 
 <%= render 'layout' do %>
-  <div class='grid grid-cols-3 gap-16 mt-8'>
-    <section class='col-span-2'>
+  <div class='grid sm:grid-cols-3 grid-cols-1 gap-16 mt-8'>
+    <section class='sm:col-span-2 col-span-1'>
       <%= render(Card::Component.new) do |card| %>
         <% card.title do %>
           About
@@ -15,7 +15,7 @@
         <% end %>
 
         <% card.body do %>
-          <%= content_tag :article, @publication.readme.html_safe, class: 'chu-editor chu-editor-sm pt-4' %>
+          <%= content_tag :article, @publication.readme_html.html_safe, class: 'chu-editor chu-editor-sm pt-4' %>
         <% end %>
       <% end %>
 

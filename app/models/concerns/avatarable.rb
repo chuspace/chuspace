@@ -6,6 +6,7 @@ module Avatarable
 
   AVATAR_VARIANTS = {
     icon: 32,
+    mini: 64,
     thumb: 100,
     profile: 200
   }

@@ -5,7 +5,7 @@ import { html, render } from 'lit-html'
 @controller
 export default class AutocompleteExtrasElement extends HTMLElement {
   @attr tags: boolean = false
-  @attr items: string = []
+  @attr items: string = ''
   @target targetInput: HTMLInputElement
   @target valueInput: HTMLInputElement
   @target handle: HTMLButtonElement
@@ -21,6 +21,8 @@ export default class AutocompleteExtrasElement extends HTMLElement {
         this.tagsMap.set(item, item)
         this.renderTags()
       })
+
+      this.valueInput.value = this.items
 
       this.completer.addEventListener('auto-complete-change', (event) => {
         if (this.completer.value.trim()) {
@@ -53,7 +55,7 @@ export default class AutocompleteExtrasElement extends HTMLElement {
 
     this.tagsMap.forEach((value, key) => {
       const node = document.createElement('span')
-      node.className = 'badge badge-primary gap-2 relative'
+      node.className = 'badge badge-primary ml-2 mt-2 relative'
 
       if (this.selections.children.length > 0) node.classList.add('ml-2')
 

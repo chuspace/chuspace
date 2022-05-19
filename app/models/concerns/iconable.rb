@@ -5,6 +5,7 @@ module Iconable
 
   ICON_VARIANTS = {
     icon: 32,
+    mini: 64,
     thumb: 100,
     profile: 250
   }

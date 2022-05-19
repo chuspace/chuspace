@@ -67,7 +67,7 @@ export default class CodeEditor extends LitElement {
     this.observer.observe(this)
   }
 
-  handleIntersection(entries: Array<any>, observer) {
+  handleIntersection = (entries: Array<any>, observer) => {
     entries.forEach(({ intersectionRatio }) => {
       if (intersectionRatio > 0.1) {
         this.loadEditor()
@@ -180,7 +180,9 @@ export default class CodeEditor extends LitElement {
 
                 <div class="code-editor-toolbar-menu" contenteditable="false">
                   ${this.readonly
-                    ? html` <div class="code-editor-language-badge badge badge-primary mr-4">${this.mode}</div> `
+                    ? this.mode
+                      ? html`<div class="code-editor-language-badge badge badge-primary mr-4">${this.mode}</div> `
+                      : null
                     : this.renderSwitcher()}
 
                   <copy-clipboard class="link link-primary" .initClipboardJS=${this.initClipboardJS}></copy-clipboard>
@@ -191,7 +193,7 @@ export default class CodeEditor extends LitElement {
 
         <textarea
           rows="${this.lines}"
-          class="textarea textarea-bordered textarea-md bg-transparent w-full"
+          class="textarea textarea-md bg-transparent w-full"
           .value=${this.content.trim()}
         ></textarea>
       </div>

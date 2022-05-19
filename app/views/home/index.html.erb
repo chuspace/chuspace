@@ -1,67 +1,67 @@
-<section>
-  <div class='grid grid-cols-12 gap-16'>
-    <div class='col-span-8'>
-      <%= render(Card::Component.new) do |card| %>
-        <% card.title do %>
-          <%= t('posts.list.title') %>
-        <% end %>
+<section class='grid sm:grid-cols-12 grid-cols-1 sm:gap-16 gap-8'>
+  <div class='sm:col-span-8 col-span-1'>
+    <%= render(Card::Component.new) do |card| %>
+      <% card.title do %>
+        <%= t('posts.list.title') %>
+      <% end %>
 
-        <% card.body do %>
-          <% if @posts.any? %>
-            <%= render 'posts/list', posts: @posts %>
-          <% else %>
-            <%= render Placeholder::Component.new do |placeholder| %>
-              <%= placeholder.text do %>
-                <%= simple_format t('posts.list.none') %>
-              <% end %>
+      <% card.body do %>
+        <% if @posts.any? %>
+          <%= render 'posts/list', posts: @posts %>
+        <% else %>
+          <%= render Placeholder::Component.new do |placeholder| %>
+            <%= placeholder.text do %>
+              <%= simple_format t('posts.list.none') %>
             <% end %>
           <% end %>
         <% end %>
       <% end %>
-    </div>
+    <% end %>
+  </div>
 
-    <div class='col-span-4 h-screen max-h-screen'>
-      <div class='fixed top-0 sm:mt-24 sm:w-1/4 h-full overflow-y-scroll'>
+  <div class='sm:col-span-4 col-span-1 order-first sm:order-2 sm:h-screen max-h-screen'>
+    <div class='sm:fixed top-0 sm:mt-24 sm:w-1/4 h-full overflow-y-scroll'>
+      <%= render(Card::Component.new) do |card| %>
+        <% card.title do %>
+          <%= t('publications.list.title') %>
+        <% end %>
+
+        <% card.body do %>
+          <div class='py-4'>
+            <% if @publications.any? %>
+              <ul>
+                <% @publications.each do |publication| %>
+                  <%= link_to(publication_path(publication), class: 'border-base-200 border-b last:border-b-0 py-4', 'data-turbo-frame': :_top) do %>
+                    <%= tag.h5 publication.name, class: 'link link-primary link-hover' %>
+                    <%= tag.div publication.description, class: 'text-sm mt-1 text-secondary' %>
+                  <% end %>
+                <% end %>
+              </ul>
+            <% else %>
+              <%= render Placeholder::Component.new do |placeholder| %>
+                <%= placeholder.text do %>
+                  <%= simple_format t('publications.list.none') %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class='mt-8'>
         <%= render(Card::Component.new) do |card| %>
           <% card.title do %>
-            <%= t('publications.list.title') %>
+            <%= t('topics.list.title') %>
           <% end %>
 
           <% card.body do %>
-            <% if @publications.any? %>
-              <% @publications.each do |publication| %>
-                <div class='border-base-200 border-b last:border-b-0 py-4'>
-                  <div class='flex-1'>
-                    <%= link_to(publication_path(publication), 'data-turbo-frame': :_top) do %>
-                      <%= tag.h5 publication.name, class: 'link link-primary link-hover' %>
-                      <%= tag.div publication.description, class: 'text-sm mt-1 text-secondary' %>
-                    <% end %>
-                  </div>
-                </div>
+            <div class='flex flex-wrap py-4'>
+              <% ActsAsTaggableOn::Tag.most_used(10).featured.each do |topic| %>
+                <div class='badge badge-secondary ml-2 mb-2'><%= link_to topic.name, topic_path(topic) %></div>
               <% end %>
-            <% else %>
-              <%= render 'shared/placeholder', content: 'No publications' %>
-            <% end %>
+            </div>
           <% end %>
         <% end %>
-
-        <div class='mt-8'>
-          <%= render(Card::Component.new) do |card| %>
-            <% card.title do %>
-              <%= t('topics.list.title') %>
-            <% end %>
-
-            <% card.body do %>
-              <div class='flex flex-wrap py-4'>
-                <% ActsAsTaggableOn::Tag.most_used(10).featured.each do |topic| %>
-                  <div class='ml-2 mb-2'>
-                    <div class='badge badge-secondary'><%= link_to topic.name, topic_path(topic) %></div>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>
-          <% end %>
-        </div>
       </div>
     </div>
   </div>

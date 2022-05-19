@@ -60,7 +60,11 @@
 
   .tabs {
     .tab {
-      @apply font-medium;
+      @apply font-medium px-2;
+
+      @screen sm {
+        @apply px-4;
+      }
 
       &.active {
         @apply relative text-primary font-bold;

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class DraftPolicy < ApplicationPolicy
-  alias_rule :autosave?, :index?, :update?, :create?, :show?, :new?, :destroy?, to: :edit?
+  alias_rule :autosave?, :update?, :destroy?, to: :edit?
+  alias_rule :create?, :index?, to: :new?
+
   delegate :publication, to: :record
 
   def commit?
@@ -9,6 +11,10 @@ class DraftPolicy < ApplicationPolicy
   end
 
   def edit?
+    record.persisted?
+  end
+
+  def new?
     publication.memberships.writers.exists?(user: user)
   end
 

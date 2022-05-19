@@ -1,14 +1,38 @@
 <% set_meta_tags @post %>
 
 <div class='sm:w-2/3 mx-auto w-full'>
-  <%= render 'topics', post: @post if @post.topics.any? %>
-
-  <div class='chu-editor'>
-    <div class='my-8'>
+  <div class='wrapper'>
+    <div class='chu-editor'>
       <%= content_tag :h1, @post.title, class: 'title' %>
-      <%= content_tag :h2, @post.summary, class: 'summary' %>
+      <%= content_tag :h2, @post.summary, class: 'summary mb-0' %>
     </div>
 
-    <%= content_tag :article, @post.body_html.html_safe %>
+    <div class='sm:flex items-center justify-between'>
+      <div class='flex items-center text-secondary text-xs'>
+        <%= @post.date.strftime("%d %b %Y") %>
+        <span class='mx-2'>&#183;</span>
+        <%= tag.time do %>
+          <%= @post.reading_time %> min read
+        <% end %>
+        <span class='mx-2'>&#183;</span>
+        <%= render 'topics', post: @post if @post.topics.any? %>
+      </div>
+
+      <div class="mt-4 sm:mt-0 flex items-center text-secondary text-xs">
+        <% %w[facebook twitter email linkedin].each_with_index do |provider, index| %>
+          <%= link_to social_share_url(post: @post, provider: provider), target: :_blank do %>
+            <%= inline_svg_tag "icons/#{provider}.svg", class: "w-4 h-4 fill-current hover:text-primary cursor-pointer#{index == 0 ? '' : ' ml-4'}" %>
+          <% end %>
+        <% end %>
+        <span class='mx-4'>&#183;</span>
+        <% if @post.markdown_doc.snippets? %>
+          <%= link_to publication_post_snippets_path(@post.publication, @post), title: 'Download code snippets', target: "_blank" do %>
+            <%= inline_svg_tag('icons/download', class: 'w-4 h-4 hover:text-primary fill-current ml-2') %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= content_tag :article, @post.body_html.html_safe, class: 'chu-editor py-8' %>
   </div>
 </div>
