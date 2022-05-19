@@ -7,6 +7,8 @@ class PostsController < ApplicationController
   after_action :track_action, only: :show
   skip_verify_authorized only: :show
 
+  layout 'post'
+
   private
 
   def track_action
@@ -14,7 +16,7 @@ class PostsController < ApplicationController
   end
 
   def find_post
-    @post = @publication.posts.friendly.find(params[:permalink])
+    @post = @publication.posts.includes(:publication, :topics).friendly.find(params[:permalink])
 
     if params[:permalink] != @post.permalink
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@post), status: :moved_permanently

@@ -1,25 +1,23 @@
-<flexible-header data-on='<%= signed_in? %>'>
-  <header data-target='flexible-header.element' class='header z-10 fixed top-0 bg-base-100 h-14 w-full'>
-    <nav class='container flex justify-between items-center'>
-      <div class='flex-1 flex items-center'>
-        <%= link_to root_path, class: 'pt-1 pb-2' do %>
-          <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= logo %></span>
-          <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
-        <% end %>
+<header class='header z-10 fixed top-0 bg-base-100 h-14 w-full'>
+  <nav class='container flex justify-between items-center'>
+    <div class='flex-1 flex items-center'>
+      <%= link_to root_path, class: 'pt-1 pb-2' do %>
+        <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= logo %></span>
+        <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
+      <% end %>
 
-        <%= yield :after_logo_contents %>
-      </div>
+      <%= yield :after_logo_contents %>
+    </div>
 
-      <div class='flex items-center py-2'>
-        <% if signed_in? %>
-          <%= yield :header_actions %>
-          <%= render 'layouts/user' %>
-        <% else %>
-          <%= link_to 'Our Story', '#', class: 'link link-primary link-hover text-sm ml-8' %>
-          <%= link_to 'Sign up', signups_path, class: 'link link-primary link-hover text-sm ml-8' %>
-          <%= link_to 'Sign in', sessions_path, class: 'link link-primary link-hover text-sm ml-8' %>
-        <% end %>
-      </div>
-    </nav>
-  </header>
-</flexible-header>
+    <div class='flex items-center py-2'>
+      <% if signed_in? %>
+        <%= yield :header_actions %>
+        <%= render 'layouts/user' %>
+      <% else %>
+        <%= link_to 'Our Story', '#', class: 'link link-primary link-hover text-sm ml-8' %>
+        <%= link_to 'Sign up', signups_path, class: 'link link-primary link-hover text-sm ml-8' %>
+        <%= link_to 'Sign in', sessions_path, class: 'link link-primary link-hover text-sm ml-8' %>
+      <% end %>
+    </div>
+  </nav>
+</header>

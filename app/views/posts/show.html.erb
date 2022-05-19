@@ -1,46 +1,5 @@
 <% set_meta_tags @post %>
 
-<%= content_for(:after_logo_contents) do %>
-  <span class='mx-8'>|</span>
-  <% if @post.publication.personal? %>
-    <%= link_to @post.author.name, user_path(@post.author), class: 'link text-secondary hover:text-primary link-hover text-sm' %>
-  <% else %>
-    <%= link_to @post.publication.name, publication_path(@post.publication), class: 'link text-secondary hover:text-primary link-hover text-sm' %>
-  <% end %>
-
-  <p class='text-secondary text-xs'>
-    <span class='mx-2'>&#183;</span>
-    <%= @post.date.strftime("%d %b %Y") %>
-    <span class='mx-2'>&#183;</span>
-    <%= tag.time do %>
-      <%= @post.reading_time %> min read
-    <% end %>
-  </p>
-
-  <div class="flex justify-between items-center text-xs">
-    <span class='mx-4'>&#183;</span>
-    <% %w[facebook twitter email linkedin].each_with_index do |provider, index| %>
-      <%= link_to social_share_url(post: @post, provider: provider), target: :_blank do %>
-        <%= inline_svg_tag "icons/#{provider}.svg", class: "w-4 h-4 fill-current text-secondary hover:text-primary cursor-pointer#{index == 0 ? '' : ' ml-4'}" %>
-      <% end %>
-    <% end %>
-    <span class='mx-4'>&#183;</span>
-    <% if @post.markdown_doc.snippets? %>
-      <%= link_to publication_post_snippets_path(@post.publication, @post), title: 'Download code snippets', target: "_blank" do %>
-        <%= inline_svg_tag('icons/download', class: 'w-4 h-4 text-secondary hover:text-primary fill-current ml-2') %>
-      <% end %>
-    <% end %>
-  </div>
-<% end %>
-
-<%= content_for :header_actions do %>
-  <div class='mr-8'>
-    <% if allowed_to?(:edit?, @post) %>
-      <%= link_to 'Edit', publication_edit_draft_path(@post.publication, path: @post.relative_path), class: 'btn btn-primary btn-xs' %>
-    <% end %>
-  </div>
-<% end %>
-
 <div class='sm:w-2/3 mx-auto w-full'>
   <%= render 'topics', post: @post if @post.topics.any? %>
 

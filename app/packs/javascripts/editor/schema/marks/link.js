@@ -18,23 +18,23 @@ export default class Link extends Mark {
     return {
       attrs: {
         href: {
-          default: null
-        }
+          default: null,
+        },
       },
       inclusive: false,
       parseDOM: [
         {
           tag: 'a[href]',
           getAttrs: (dom: PMMark) => ({
-            href: dom.getAttribute('href')
-          })
-        }
+            href: dom.getAttribute('href'),
+          }),
+        },
       ],
       toDOM: (mark: PMMark) => {
         const linkAttrs = isUrl(mark.attrs.href)
           ? {
               rel: 'noopener noreferrer nofollow',
-              target: '_blank'
+              target: '_blank',
             }
           : {}
 
@@ -42,11 +42,11 @@ export default class Link extends Mark {
           'a',
           {
             ...mark.attrs,
-            ...linkAttrs
+            ...linkAttrs,
           },
-          0
+          0,
         ]
-      }
+      },
     }
   }
 
@@ -61,20 +61,13 @@ export default class Link extends Mark {
   }
 
   inputRules({ type }: PMMark) {
-    const markdownInputRule = new InputRule(
-      LINK_INPUT_REGEX,
-      (state, match, start, end) => {
-        const { schema } = state
-        const [, prefix, linkText, linkUrl] = match
-        const markType = schema.mark('link', { href: linkUrl })
+    const markdownInputRule = new InputRule(LINK_INPUT_REGEX, (state, match, start, end) => {
+      const { schema } = state
+      const [, prefix, linkText, linkUrl] = match
+      const markType = schema.mark('link', { href: linkUrl })
 
-        return state.tr.replaceWith(
-          start + prefix.length,
-          end,
-          schema.text(linkText, [markType])
-        )
-      }
-    )
+      return state.tr.replaceWith(start + prefix.length, end, schema.text(linkText, [markType]))
+    })
 
     return [markdownInputRule]
   }
@@ -85,7 +78,7 @@ export default class Link extends Mark {
         /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g,
         type,
         (url: string) => ({ href: url })
-      )
+      ),
     ]
   }
 
@@ -95,42 +88,42 @@ export default class Link extends Mark {
         key: new PluginKey('link'),
         view: (editorView) => {
           return {
-            // update: (view, laststate) => {
-            //   const state = view.state
-            //   let sel = state.selection
-            //   const mark = Object.entries(view.state.schema.marks).find(([name, type], _) => {
-            //     return getMarkRange(view.state.doc.resolve(sel.anchor), type)
-            //   })
-            //   if (mark) {
-            //     const [name, type] = mark
-            //     const range = getMarkRange(view.state.doc.resolve(sel.anchor), type)
-            //     const $start = view.state.doc.resolve(range.from)
-            //     const $end = view.state.doc.resolve(range.to)
-            //     let parent = $start.parent
-            //     let child = parent.childAfter($start.parentOffset)
-            //     if (!child.node) return
-            //     console.log(parent)
-            //     let markElement = child.node.marks.find((mark) => mark.type.name == name)
-            //     let markIndex = child.node.marks.findIndex((mark) => mark.type.name == name)
-            //     let markdownString
-            //     switch (name) {
-            //       case 'link':
-            //         markdownString = `[${child.node.text}](${markElement.attrs.href})`
-            //         break
-            //       case 'code':
-            //         markdownString = `\`${child.node.text}\``
-            //         break
-            //       default:
-            //         open = markdownSerializer.marks[name].open
-            //         close = markdownSerializer.marks[name].close
-            //         markdownString = `${open}${child.node.text}${close}`
-            //         break
-            //     }
-            //     const marker = Fragment.from(view.state.schema.text(markdownString, child.node.marks))
-            //     const newtr = view.state.tr.insertText(markdownString, $start.pos, $end.pos)
-            //     view.dispatch(newtr)
-            //   }
-            // }
+            update: (view, laststate) => {
+              const state = view.state
+              let sel = state.selection
+              const mark = Object.entries(view.state.schema.marks).find(([name, type], _) => {
+                return getMarkRange(view.state.doc.resolve(sel.anchor), type)
+              })
+              if (mark) {
+                const [name, type] = mark
+                const range = getMarkRange(view.state.doc.resolve(sel.anchor), type)
+                const $start = view.state.doc.resolve(range.from)
+                const $end = view.state.doc.resolve(range.to)
+                let parent = $start.parent
+                let child = parent.childAfter($start.parentOffset)
+                if (!child.node) return
+                console.log(parent)
+                let markElement = child.node.marks.find((mark) => mark.type.name == name)
+                let markIndex = child.node.marks.findIndex((mark) => mark.type.name == name)
+                let markdownString
+                switch (name) {
+                  case 'link':
+                    markdownString = `[${child.node.text}](${markElement.attrs.href})`
+                    break
+                  case 'code':
+                    markdownString = `\`${child.node.text}\``
+                    break
+                  default:
+                    open = markdownSerializer.marks[name].open
+                    close = markdownSerializer.marks[name].close
+                    markdownString = `${open}${child.node.text}${close}`
+                    break
+                }
+                const marker = Fragment.from(view.state.schema.text(markdownString, child.node.marks))
+                const newtr = view.state.tr.insertText(markdownString, $start.pos, $end.pos)
+                view.dispatch(newtr)
+              }
+            },
           }
         },
         props: {
@@ -149,9 +142,9 @@ export default class Link extends Mark {
             // const markdownString = `[${child.node.text}](${link.attrs.href})`
             // const newTr = tr.insertText(markdownString, range.from, range.to)
             // view.dispatch(newTr)
-          }
-        }
-      })
+          },
+        },
+      }),
     ]
   }
 }

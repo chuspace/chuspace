@@ -3,7 +3,7 @@
   <%= render 'layouts/head' %>
   <body class="flex flex-col h-full">
     <%= render 'layouts/flash' %>
-    <%= render 'layouts/header' %>
+    <%= render(Header::Component.new) %>
 
     <main class="container flex-1 pt-24">
       <%= yield %>
