@@ -41,7 +41,7 @@ export default class LazyImage extends LitElement {
 
   render() {
     return html`
-      <figure class="relative">
+      <figure class="relative" width='100%'>
         ${
           this.editable
             ? svg`
@@ -57,17 +57,17 @@ export default class LazyImage extends LitElement {
               `
             : null
         }
-        <img alt=${this.alt} data-srcset="${this.src} 300w, ${this.src} 600w, ${this.src} 900w" data-src="${
-      this.src
-    }" title="${this.title}" data-sizes="auto" class="lazy blur-up${this.rounded ? ' rounded-full' : ''}" />
+        <img alt=${this.alt} width='100%' data-src="${this.src}" title="${
+      this.title
+    }" data-sizes="auto" class="lazy blur-up${this.rounded ? ' rounded-full' : ''}" />
         ${
           this.editable
             ? html`
-                <figcaption contentEditable="false">
+                <figcaption class="max-w-full" contentEditable="false">
                   <input
                     type="text"
                     @change=${this.onCaptionChange}
-                    class="input input-sm text-secondary border-t border-base-200 bg-base-200 rounded-tr-none focus:shadow-none rounded-tl-none border-0 w-full p-0 italic text-center text-sm"
+                    class="input input-sm text-secondary border-t border-base-200 bg-base-200 rounded-tr-none focus:shadow-none rounded-tl-none border-0 w-full p-0 italic text-center px-8 text-sm"
                     value=${this.alt}
                     maxlength=${70}
                     placeholder="Click to enter caption (optional)"

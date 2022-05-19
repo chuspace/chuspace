@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'down/http'
+
 class Image < ApplicationRecord
   belongs_to :publication
 

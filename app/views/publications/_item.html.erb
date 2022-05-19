@@ -10,10 +10,12 @@
       <div class='mt-4 flex flex-wrap text-secondary text-xs'>
         <% if publication.personal? %>
           <%= content_tag :span, :Personal %>
+          <span class='mx-2'>&#183;</span>
         <% end %>
 
-        <span class='mx-2'>&#183;</span>
-        <%= content_tag :span, publication.visibility.titlecase %>
+        <%= content_tag :span do %>
+          <%= publication.visibility.titlecase %>
+        <% end %>
 
         <% if publication.topics.any? %>
           <span class='mx-2'>&#183;</span>

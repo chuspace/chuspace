@@ -96,8 +96,11 @@
   lazy-image
     @apply inline-block max-w-full w-full
 
-    img
+    img, figure, figcaption
       @apply max-w-full w-full
+
+    figcaption
+      @apply whitespace-normal
 
   lazy-image, content-loader, contribution-modal
     @apply whitespace-nowrap
@@ -182,4 +185,4 @@
 .card
   .chu-editor
     figure
-      @apply inline-block
+      display: unset

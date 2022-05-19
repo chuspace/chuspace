@@ -18,6 +18,7 @@ class Publication < ApplicationRecord
   has_many :members, through: :memberships, source: :user
   has_many :posts, dependent: :destroy, inverse_of: :publication
   has_many :images, dependent: :destroy, inverse_of: :publication
+  has_many :readme_images, ->(publication) { where(draft_blob_path: publication.repository.readme_path) }, class_name: 'Image', dependent: :destroy, inverse_of: :publication
   has_one  :repository, dependent: :destroy, inverse_of: :publication, required: true
 
   belongs_to :owner, class_name: 'User'

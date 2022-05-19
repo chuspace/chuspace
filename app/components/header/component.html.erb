@@ -3,7 +3,7 @@
     <div class='flex-1 flex items-center'>
       <%= link_to root_path, class: 'pt-1 pb-2' do %>
         <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= Current.request_authenticated? ? 'Chu' : 'Chuspace' %></span>
-        <%= content_tag :span, 'axiom', class: 'text-xs font-sans' %>
+        <%= content_tag :span, 'axiom', class: 'text-xs text-secondary font-sans' %>
       <% end %>
 
       <%= after_logo_contents %>
