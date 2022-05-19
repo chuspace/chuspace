@@ -12,7 +12,7 @@ export default class ContentLoader extends LitElement {
       type: { type: String },
       lines: { type: Number },
       width: { type: Number },
-      height: { type: Number }
+      height: { type: Number },
     }
   }
 
@@ -47,7 +47,7 @@ export default class ContentLoader extends LitElement {
       speed: 2,
       style: {},
       boxWidth: 400,
-      className: 'loader'
+      className: 'loader',
     }
 
     const idClip = nanoid()
@@ -57,8 +57,11 @@ export default class ContentLoader extends LitElement {
     const dur = `${props.speed}s`
     const clipPath = `url(${props.baseUrl}#${idClip})`
 
+    if (this.type !== 'image') {
+      this.height = this.lines * 20
+    }
+
     this.boxHeight = this.height
-    if (this.type !== 'image') this.boxHeight = this.lines * 20
 
     return svg`
       <svg
@@ -85,24 +88,11 @@ export default class ContentLoader extends LitElement {
 
         <defs>
           <clipPath id=${idClip}>
-          ${
-            this.type === 'image'
-              ? svg`<rect x="0" y="0" width=${this.width} height=${this.height} />`
-              : Array.from({ length: this.lines }, (v, i) => i + 1).map(
-                  (_, index) =>
-                    svg`
-                  <rect x="15" y="${index * 20}" rx="2" ry="2" width=${
-                      this.width
-                    } height='10' />
-                `
-                )
-          }
+          <rect x="0" y="0" width=${this.width} height=${this.height} />
           </clipPath>
 
           <linearGradient id=${idGradient}>
-            <stop offset="0%" stop-color=${props.primaryColor} stop-opacity=${
-      props.primaryOpacity
-    }>
+            <stop offset="0%" stop-color=${props.primaryColor} stop-opacity=${props.primaryOpacity}>
               <animate
                 attributeName="offset"
                 values=${`${-props.gradientRatio}; ${-props.gradientRatio}; 1`}
@@ -112,22 +102,17 @@ export default class ContentLoader extends LitElement {
               />
             </stop>
 
-            <stop offset="50%" stop-color="${
-              props.secondaryColor
-            }" stop-opacity="${props.secondaryOpacity}">
+            <stop offset="50%" stop-color="${props.secondaryColor}" stop-opacity="${props.secondaryOpacity}">
               <animate
                 attributeName="offset"
-                values=${`${-props.gradientRatio / 2}; ${-props.gradientRatio /
-                  2}; ${1 + props.gradientRatio / 2}`}
+                values=${`${-props.gradientRatio / 2}; ${-props.gradientRatio / 2}; ${1 + props.gradientRatio / 2}`}
                 keyTimes=${keyTimes}
                 dur=${dur}
                 repeatCount="indefinite"
               />
             </stop>
 
-            <stop offset="100%" stop-color=${props.primaryColor} stop-opacity=${
-      props.primaryOpacity
-    }>
+            <stop offset="100%" stop-color=${props.primaryColor} stop-opacity=${props.primaryOpacity}>
               <animate
                 attributeName="offset"
                 values=${`0; 0; ${1 + props.gradientRatio}`}

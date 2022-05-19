@@ -26,7 +26,6 @@ export default class CodeEditor extends LitElement {
     contribution: { type: Boolean },
     downloadable: { type: String },
     onChange: { type: Function },
-    loaded: { type: Boolean },
     content: { type: String, reflect: true },
     onInit: { type: Function },
     codeMirrorKeymap: { type: Function },
@@ -38,7 +37,6 @@ export default class CodeEditor extends LitElement {
     super()
 
     this.theme = window.colorScheme
-    this.loaded = false
     this.downloadable = true
     this.lines = 0
   }
@@ -78,14 +76,10 @@ export default class CodeEditor extends LitElement {
     })
   }
 
-  get codeEditorNode() {
-    return this.renderRoot.querySelector('#code-editor')
-  }
-
   loadEditor = () => {
-    if (this.cm || this.loaded) return
+    if (this.cm) return
 
-    this.cm = this.createCM(this.codeEditorNode)
+    this.cm = this.createCM(this.renderRoot.querySelector('textarea'))
     if (this.onInit) this.onInit(this.cm)
 
     this.setMode(CodeMirror.lookupMode(this.mode)?.mode)
@@ -93,8 +87,6 @@ export default class CodeEditor extends LitElement {
     this.cm.on('change', (editor) => {
       if (this.onChange) this.onChange(editor.doc.getValue())
     })
-
-    this.loaded = true
   }
 
   connectedCallback() {
@@ -109,13 +101,12 @@ export default class CodeEditor extends LitElement {
   }
 
   createCM = (node: ?HTMLElement) =>
-    new CodeMirror(node, {
+    CodeMirror.fromTextArea(node, {
       lineNumbers: true,
       styleActiveLine: true,
       smartIndent: !this.readonly,
       readOnly: this.readonly || false,
       indentUnit: 2,
-      value: this.content.trim(),
       mode: this.mode,
       lineWrapping: true,
       foldGutter: true,
@@ -192,23 +183,17 @@ export default class CodeEditor extends LitElement {
                     ? html` <div class="code-editor-language-badge badge badge-primary mr-4">${this.mode}</div> `
                     : this.renderSwitcher()}
 
-                  <copy-clipboard .initClipboardJS=${this.initClipboardJS}></copy-clipboard>
+                  <copy-clipboard class="link link-primary" .initClipboardJS=${this.initClipboardJS}></copy-clipboard>
                 </div>
               </div>
             `
           : null}
 
-        <div class="code-editor" id="code-editor">
-          ${!this.loaded
-            ? html`
-                <content-loader
-                  contentEditable="false"
-                  lines=${this.lines}
-                  class="block whitespace-no-wrap py-4"
-                ></content-loader>
-              `
-            : null}
-        </div>
+        <textarea
+          rows="${this.lines}"
+          class="textarea textarea-bordered textarea-md bg-transparent w-full"
+          .value=${this.content.trim()}
+        ></textarea>
       </div>
     `
   }
