@@ -1,8 +1,8 @@
 <% t('.list').each do |feature| %>
-  <li class='mt-6<%= ' opacity-50' unless feature[:available] %>'>
+  <li class='mt-6<%= ' opacity-50' unless feature[:available] %>' title='<%= feature[:status] %>'>
     <div class='flex items-center'>
       <span class='text-primary'>
-        <%= inline_svg_tag 'icons/check.svg', class: 'w-6 h-6 fill-current' %>
+        <%= inline_svg_tag feature[:available] ? 'icons/check.svg' : 'icons/tools.svg', class: 'w-6 h-6 fill-current' %>
       </span>
       <h4 class='ml-4'><%= feature[:title] %></h4>
     </div>

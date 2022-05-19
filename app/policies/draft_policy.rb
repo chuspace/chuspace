@@ -2,7 +2,7 @@
 
 class DraftPolicy < ApplicationPolicy
   alias_rule :autosave?, :update?, :destroy?, to: :edit?
-  alias_rule :create?, :index?, to: :new?
+  alias_rule :create?, :index?, :new?, to: :write?
 
   delegate :publication, to: :record
 
@@ -11,10 +11,14 @@ class DraftPolicy < ApplicationPolicy
   end
 
   def edit?
-    record.persisted?
+    record.persisted? && write?
   end
 
-  def new?
+  def action?
+    commit? || publish?
+  end
+
+  def write?
     publication.memberships.writers.exists?(user: user)
   end
 

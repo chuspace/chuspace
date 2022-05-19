@@ -138,23 +138,30 @@ en:
       welcome: Login with email
     index:
       cta: Log in with one of the following
-      welcome: Welcome back to Chuspace
+      welcome: Welcome back
   shared:
     features:
       list:
         - title: Truly own your content
-          description: Publish from your git repository hosted on Github . Gitlab or
-            Gitea
+          description: Publish from your git repositories hosted on Github
           available: true
+          status: Beta
         - title: Any static site framework
           description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
           available: true
-        - title: Publishing and collaboration
-          description: Collaborate with community and teams in realtime
+          status: Beta
+        - title: Publish without limits
+          description: Publish from multiple branded publications
           available: true
-        - title: Custom domains and hosting
-          description: Integrated deployment coming soon
+          status: Beta
+        - title: Community and Collaboration
+          description: Collaborate with community and teams in realtime
           available: false
+          status: In development
+        - title: Link custom domains and hosting
+          description: Integrated deployment to our secure global CDN
+          available: false
+          status: In development
     identities:
       login_with: Click to log in with %{provider}
     login_prompt: Click to go to log  in page
@@ -170,7 +177,7 @@ en:
       success: Thanks for signing up. Please check your email
     email:
       intro: You will recieve a login link in your email to log in
-      welcome: Create a Chuspace account
+      welcome: Create an email account
     index:
       cta: Sign up with one of the following
       welcome: Welcome to Chuspace
@@ -238,5 +245,5 @@ en:
       heading: Read Write Collaborate
       intro: |
         Chuspace is a collaborative blogging platform for programmers and teams.
-        Publish straight from your git repository hosted on Github, Gitlab and Gitea.
+        Publish straight from your git repository hosted on Github.
         Works with any static site framework that supports markdown

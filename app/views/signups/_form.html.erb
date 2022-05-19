@@ -17,8 +17,8 @@
 
     <div class='mt-4 flex justify-between items-center'>
       <%= form.button :submit, 'Sign up', title: 'Click to start signup', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top, 'disable-with': 'Signing up...' } %>
-      <%= link_to 'Other signup options →', signups_path, title: t('shared.signup_prompt'), class: 'link link-primary block mt-3', data: { 'turbo-frame': :_top } %>
-      <%= link_to 'Login →', sessions_path, title: t('shared.login_prompt'), class: 'link link-primary block mt-3', data: { 'turbo-frame': :_top } %>
+      <%= link_to 'Other signup options →', signups_path, title: t('shared.signup_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
+      <%= link_to 'Login →', email_sessions_path, title: t('shared.login_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
     </div>
   <% end %>
 </turbo-reconnect>
