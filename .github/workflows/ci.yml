@@ -18,6 +18,13 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        redis:
+          image: redis:latest
+          options: >-
+            --health-cmd "redis-cli ping"
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
     env:
       RAILS_ENV: test
 
@@ -40,6 +47,9 @@ jobs:
         run: bin/rails db:prepare
 
       - name: Run tests
+        env:
+          RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
+          REDIS_URL: redis://localhost:6379
         run: bin/rails test:all
 
       - name: Run brakeman
