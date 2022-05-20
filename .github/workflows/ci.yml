@@ -33,6 +33,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - uses: nanasess/setup-chromedriver@v1
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -55,6 +57,14 @@ jobs:
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
+
+      - name: Compile assets
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
+          REDIS_URL: redis://localhost:6379
+          DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@localhost:5432/chuspace_test
+        run: bin/rails assets:precompile
 
       - name: Run tests
         env:

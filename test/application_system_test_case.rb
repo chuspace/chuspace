@@ -3,6 +3,8 @@
 require 'test_helper'
 require 'capybara/rails'
 require 'capybara/minitest'
+require 'webdrivers'
+require 'webdrivers/chromedriver'
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include FactoryBot::Syntax::Methods
