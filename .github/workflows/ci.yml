@@ -94,7 +94,10 @@ jobs:
       - name: Upload coverage
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        run: ./cc-test-reporter format-coverage -t simplecov -o tmp/codeclimate.minitest.json coverage/coverage.json
+        run: |
+          ./cc-test-reporter format-coverage -t simplecov -o tmp/codeclimate.*.json coverage/coverage.json
+          ./cc-test-reporter sum-coverage codeclimate.*.json -p 3 -o codeclimate.total.json
+          ./cc-test-reporter upload-coverage -i codeclimate.total.json
 
       - name: Run brakeman
         run: bundle exec brakeman
