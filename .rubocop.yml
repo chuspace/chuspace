@@ -1,7 +1,6 @@
 require:
   - rubocop-performance
   - rubocop-rails
-  - database_validations/rubocop/cops
 
 AllCops:
   TargetRubyVersion: 2.6.3

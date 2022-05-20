@@ -11,7 +11,6 @@ gem 'rails', '~> 7.x'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 1.x'
 gem 'strong_migrations'
-gem 'database_validations'
 gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'

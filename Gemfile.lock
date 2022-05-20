@@ -190,8 +190,6 @@ GEM
     crass (1.0.6)
     database_consistency (1.1.12)
       activerecord (>= 3.2)
-    database_validations (1.1.1)
-      activerecord (>= 4.2.0)
     device_detector (1.0.7)
     diffy (3.4.0)
     digest (3.1.0)
@@ -554,7 +552,6 @@ DEPENDENCIES
   commonmarker
   coveralls
   database_consistency
-  database_validations
   diffy
   dotenv-rails
   down
