@@ -15,10 +15,11 @@ en:
           attributes:
             email:
               blank: A valid email is required
+              identity_taken: No email identity found. You have a %{provider} identity
+                with same email
               invalid: Email is invalid or already taken
-              taken: Email is already taken
               no_email_identity: No email identity found for this email
-              identity_taken: No email identity found. You have a %{provider} identity with same email
+              taken: Email is already taken
             name:
               blank: Your full name is required
             username:
@@ -48,8 +49,8 @@ en:
       exists: You already have a connected personal publication
     publications:
       shared:
-        provider_not_found: '%{name} Git provider not supported'
-        repo_not_found: '%{name} Repository not found'
+        provider_not_found: "%{name} Git provider not supported"
+        repo_not_found: "%{name} Repository not found"
         tabs:
           provider: Pick your Git Provider
           publication: Publication settings
@@ -76,8 +77,8 @@ en:
       title: Posts
   private_beta_signup_mailer:
     notify:
-      body: '%{name} just signed up on Chuspace for Beta access using %{provider}
-        🎉'
+      body: "%{name} just signed up on Chuspace for Beta access using %{provider}
+        🎉"
       salutation: Hey Chuspace,
       subject: 'Chuspace: %{name} Signed up for Beta access'
   publications:
@@ -93,10 +94,6 @@ en:
         notice: Invite sent successfully!
       destroy:
         notice: Invite deleted!
-    personal:
-      none: |
-        No personal publication found!
-        Connect a git repository to get started.
     list:
       empty: |
         Your publications are sourced from connected git repositories
@@ -109,6 +106,10 @@ en:
       update:
         error: Role update failed!
         notice: Role updated successfully!
+    personal:
+      none: |
+        No personal publication found!
+        Connect a git repository to get started.
     settings:
       actions:
         content: Content
@@ -144,26 +145,26 @@ en:
   shared:
     features:
       list:
-        - title: Truly own your content
-          description: Publish from your git repositories hosted on Github
-          available: true
-          status: Beta
-        - title: Any static site framework
-          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
-          available: true
-          status: Beta
-        - title: Publish without limits
-          description: Publish from multiple branded publications
-          available: true
-          status: Beta
-        - title: Community and Collaboration
-          description: Collaborate with community and teams in realtime
-          available: false
-          status: In development
-        - title: Link custom domains and hosting
-          description: Integrated deployment to our secure global CDN
-          available: false
-          status: In development
+      - title: Truly own your content
+        description: Publish from your git repositories hosted on Github
+        available: true
+        status: Beta
+      - title: Any static site framework
+        description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
+        available: true
+        status: Beta
+      - title: Publish without limits
+        description: Publish from multiple branded publications
+        available: true
+        status: Beta
+      - title: Community and Collaboration
+        description: Collaborate with community and teams in realtime
+        available: false
+        status: In development
+      - title: Link custom domains and hosting
+        description: Integrated deployment to our secure global CDN
+        available: false
+        status: In development
     identities:
       login_with: Click to sign in with %{provider}
     login_prompt: Click to go to sign in page
@@ -189,26 +190,29 @@ en:
     show:
       heading: 'Posts published in: %{name}'
   user_mailer:
-    welcome_email:
-      body: Thank you for signing up! Chuspace is currently in beta and we're really
-        happy to have you onboard. Please give it a try and help us make it better.
-      outro: Hope you have a good experience. Send us an email if any questions.
-      salutation: Hey %{name},
-      subject: Welcome to Chuspace, %{name}
     invite_email:
-      body: '%{person} invited you to join %{publication}'
+      body: "%{person} invited you to join %{publication}"
       salutation: Hey %{name},
-      subject: '%{person} invited you to join %{publication}'
+      subject: "%{person} invited you to join %{publication}"
     magic_login_email:
       body: Click on the button below to sign in to your Chuspace account. This magic
         link will expire in %{expires_in} minutes and can only be used once.
       compliance: If you did not make this request, you can safely ignore this email.
+      cta_login: Click to sign in
       direct_url: If the button above doesn’t work, paste this link into your web
         browser
       salutation: Hey %{name},
       subject: Sign in to Chuspace, %{name}
       token: If you can't use the magic signin link, for example when using our PWA
         app, please %{link} and enter the token below
+    welcome_email:
+      body: Thank you for signing up! Chuspace is currently in beta and we're really
+        happy to have you onboard. Please give it a try and help us make it better.
+      cta_login: Click to sign in
+      cta_visit: Get started
+      outro: Hope you have a good experience. Send us an email if any questions.
+      salutation: Hey %{name},
+      subject: Welcome to Chuspace, %{name}
   users:
     about:
       no_readme: No readme

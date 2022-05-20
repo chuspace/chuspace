@@ -1,5 +1,5 @@
 <tr><td><h3><%= t('.salutation', name: @user.name.first) %></h3></td></tr>
 <tr><td><p><%= t('.body', expires_in: Identity::MAGIC_AUTH_TOKEN_LIFE) %></p></td></tr>
-<tr><td><p><%= link_to 'Click to sign in', magic_logins_url(token: @identity.magic_auth_token) %></p></td></tr>
+<tr><td><p><%= link_to t('.cta_login'), magic_logins_url(token: @identity.magic_auth_token) %></p></td></tr>
 <tr><td><p><%= t('.direct_url') %>: <%= link_to magic_logins_url(token: @identity.magic_auth_token), magic_logins_url(token: @identity.magic_auth_token) %></p></td></tr>
 <tr><td style='margin-top: 16px;'><p><%= t('.compliance') %></p></td></tr>
