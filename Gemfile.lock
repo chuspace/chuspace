@@ -596,6 +596,7 @@ DEPENDENCIES
   rubocop-rails
   rubyzip
   sawyer!
+  selenium-webdriver
   sentry-rails
   sentry-ruby
   simple_form

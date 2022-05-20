@@ -13,5 +13,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include ActiveSupport::Testing::TimeHelpers
   include ActionPolicy::TestHelper
 
-  driven_by :selenium, using: :chrome, screen_size: [1_400, 1_400]
+  DRIVER = if ENV['DRIVER']
+    ENV['DRIVER'].to_sym
+  else
+    :headless_chrome
+  end
+
+  driven_by :selenium, using: DRIVER, screen_size: [1_400, 1_400]
 end

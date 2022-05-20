@@ -169,5 +169,6 @@ group :test do
   gem 'simplecov_json_formatter', require: false
   gem 'rails-controller-testing'
   gem 'capybara'
+  gem 'selenium-webdriver'
   gem 'webdrivers'
 end
