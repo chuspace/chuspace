@@ -11,13 +11,13 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Turn false under Spring and add config.action_view.cache_template_loading = true
-  config.cache_classes = false
+  config.cache_classes = true
   config.action_view.cache_template_loading = true
 
   # Eager loading loads your whole application. When running a single test locally,
   # this probably isn't necessary. It's a good idea to do in a continuous integration
   # system, or in some way before deploying your code.
-  config.eager_load = ENV['CI'].present?
+  config.eager_load = true
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true

@@ -7,7 +7,7 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     @topic = create(:topic)
   end
 
-  def test_authenticated_home
+  def test_topics_show
     get topic_path(@topic)
 
     assert_equal 200, status
