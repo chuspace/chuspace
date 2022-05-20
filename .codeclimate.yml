@@ -26,3 +26,5 @@ exclude_patterns:
   - app/assets/
   - app/packs
   - node_modules/
+  - .tomo/
+  - .github/
