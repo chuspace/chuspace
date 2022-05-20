@@ -4,8 +4,8 @@
     <%= form.hint :email unless user.errors.key?(:email) %>
 
     <div class='mt-8 flex items-center justify-between'>
-      <%= form.button :submit, 'Log in', title: 'Click to receive magic link', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top } %>
-      <%= link_to 'Other login options →', sessions_path, title: t('shared.login_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
+      <%= form.button :button, 'Sign in', title: 'Click to receive magic link', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top } %>
+      <%= link_to 'Other sign in options →', sessions_path, title: t('shared.login_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
       <%= link_to 'Signup →', email_signups_path, title: t('shared.signup_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
     </div>
   <% end %>

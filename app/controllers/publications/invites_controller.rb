@@ -34,14 +34,11 @@ module Publications
       if @invite.save
         redirect_to(
           publication_invites_path(@publication),
-          notice: t('publications.invites.create.notice', identifier: @invite.identifier,
-publication: @publication.name)
+          notice: t('publications.invites.create.notice', identifier: @invite.identifier, publication: @publication.name)
         )
       else
         respond_to do |format|
-          format.turbo_stream {
- render turbo_stream: turbo_stream.replace(helpers.dom_id(@invite, :form), partial: 'form',
-locals: { invite: @invite }) }
+          format.turbo_stream {  render turbo_stream: turbo_stream.replace(helpers.dom_id(@invite, :form), partial: 'form', locals: { invite: @invite }) }
           format.html do
             redirect_to publication_people_path(@publication), notice: @invite.errors.full_messages.to_sentence
           end
@@ -55,8 +52,7 @@ locals: { invite: @invite }) }
       @invite.send_email
 
       respond_to do |format|
-        format.turbo_stream {
- render turbo_stream: turbo_stream.replace(helpers.dom_id(@invite), partial: 'invite', locals: { invite: @invite }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@invite), partial: 'invite', locals: { invite: @invite }) }
         format.html do
           redirect_to publication_invites_path(@publication), notice: @invite.errors.full_messages.to_sentence
         end
@@ -68,8 +64,7 @@ locals: { invite: @invite }) }
       authorize! @invite, to: :destroy?
       @invite.destroy
 
-      redirect_to publication_invites_path(@publication),
-notice: @invite.errors.full_messages.to_sentence || t('publications.invites.destroy.notice')
+      redirect_to publication_invites_path(@publication), notice: @invite.errors.full_messages.to_sentence || t('publications.invites.destroy.notice')
     end
 
     def accept
@@ -91,6 +86,7 @@ notice: @invite.errors.full_messages.to_sentence || t('publications.invites.dest
 
             @publication.memberships.create(role: @invite.role, user: @invite.recipient)
             @invite.destroy
+            signin(@invite.recipient.identities.email.first)
 
             redirect_to(
               publication_people_path(@publication),

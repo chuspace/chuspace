@@ -134,10 +134,10 @@ en:
       failure: User with email not found
       success: Please check your email
     email:
-      intro: You will recieve a magic link in your email to log in
-      welcome: Login with email
+      intro: You will recieve a magic link in your email to sign in
+      welcome: Sign in
     index:
-      cta: Log in with one of the following
+      cta: Sign in with one of the following
       welcome: Welcome back
   shared:
     features:
@@ -163,8 +163,8 @@ en:
           available: false
           status: In development
     identities:
-      login_with: Click to log in with %{provider}
-    login_prompt: Click to go to log  in page
+      login_with: Click to sign in with %{provider}
+    login_prompt: Click to go to sign in page
     pitch: Integrated blogging platform for programmers and teams
     private_beta: Chuspace is in private beta. Please wait for an invite!
     publications:
@@ -176,7 +176,7 @@ en:
       failure: Something went wrong!!
       success: Thanks for signing up. Please check your email
     email:
-      intro: You will recieve a login link in your email to log in
+      intro: You will recieve a signin link in your email to sign in
       welcome: Create an email account
     index:
       cta: Sign up with one of the following
@@ -205,8 +205,8 @@ en:
       direct_url: If the button above doesn’t work, paste this link into your web
         browser
       salutation: Hey %{name},
-      subject: Log in to Chuspace, %{name}
-      token: If you can't use the magic login link, for example when using our PWA
+      subject: sign in to Chuspace, %{name}
+      token: If you can't use the magic signin link, for example when using our PWA
         app, please %{link} and enter the token below
   users:
     about:

@@ -14,13 +14,11 @@ class SignupsController < ApplicationController
     @user = User.build_with_email_identity(signup_params)
 
     if @user.save
-      signin(@user.identities.email.first)
       redirect_to redirect_location_for(:user) || signups_path, notice: t('.success')
     else
       respond_to do |format|
         format.html { redirect_to email_signups_path, notice: t('.failure') }
-        format.turbo_stream {
- render turbo_stream: turbo_stream.replace(@user, partial: 'signups/form', locals: { user: @user }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@user, partial: 'signups/form', locals: { user: @user }) }
       end
     end
   end

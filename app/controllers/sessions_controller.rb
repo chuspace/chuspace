@@ -21,12 +21,16 @@ class SessionsController < ApplicationController
       redirect_to redirect_location_for(:user) || root_path, notice: t('.success')
     else
       @user = User.new(email: session_params[:email])
-      @user.errors.add(:email, 'Email not found')
+
+      if user = User.find_by(email: session_params[:email])
+        @user.errors.add(:email, "No email identity found. You have a #{user.identities.pluck(:provider).to_sentence} identity with same email")
+      else
+        @user.errors.add(:email, 'No email identity found for this email')
+      end
 
       respond_to do |format|
         format.html { render :email }
-        format.turbo_stream {
- render turbo_stream: turbo_stream.replace(@user, partial: 'sessions/form', locals: { user: @user }) }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@user, partial: 'sessions/form', locals: { user: @user }) }
       end
     end
   end
