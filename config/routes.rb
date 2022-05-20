@@ -64,7 +64,7 @@ Rails.application.routes.draw do
     resources :oauth_callbacks, only: :index, path: 'callback', module: :git_providers
   end
 
-  resources :users, path: '', except: :index, param: :username, constraints: UserConstraint.new do
+  resources :users, path: '', only: :show, param: :username, constraints: UserConstraint.new do
     resources :drafts, only: :index, module: :users do
       collection do
         get '/*path', to: 'drafts#index', as: :nested

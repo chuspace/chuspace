@@ -6,13 +6,7 @@ class UsersController < ApplicationController
   layout 'user'
 
   before_action :find_user
-  before_action :set_content_partial, only: :show
   skip_verify_authorized only: :show
-
-  def update
-    @user.update(user_params)
-    redirect_to user_path(@user), notice: 'Sucessfully updated'
-  end
 
   private
 
@@ -24,21 +18,5 @@ class UsersController < ApplicationController
     end
 
     add_breadcrumb(@user.username, user_path(@user))
-  end
-
-  def set_content_partial
-    @partial = case params[:tab]
-               when 'settings' then 'users/form'
-               when 'publications' then 'users/publications'
-               when 'drafts' then 'users/drafts'
-               when 'posts' then 'users/posts'
-    else 'users/overview'
-    end
-
-    add_breadcrumb(params[:tab] || 'about')
-  end
-
-  def user_params
-    params.require(:user).permit(:name, :username, :email)
   end
 end
