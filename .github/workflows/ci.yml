@@ -48,7 +48,7 @@ jobs:
         env:
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
           REDIS_URL: redis://localhost:6379
-          DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@postgres:5432/chuspace_test
+          DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@localhost:5432/chuspace_test
         run: bin/rails db:prepare
 
       - name: Setup codeclimate test reporter
