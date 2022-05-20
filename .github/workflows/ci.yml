@@ -46,9 +46,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'yarn'
-
-      - name: Setup node dependencies
-        run: yarn install --frozen-lockfile
+      - run: yarn install --frozen-lockfile
 
       - name: Preparing database
         env:
