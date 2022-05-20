@@ -1,0 +1,28 @@
+version: '2'
+
+plugins:
+  brakeman:
+    enabled: true
+    config:
+      app_path: .
+  duplication:
+    enabled: true
+    config:
+      languages:
+        ruby:
+          mass_threshold: 21
+  rubocop:
+    enabled: true
+    config: .rubocop.yml
+    channel: 'rubocop-1-23-0'
+
+exclude_patterns:
+  - config/
+  - db/
+  - db/
+  - bin/
+  - storage/
+  - test/
+  - app/assets/
+  - app/packs
+  - node_modules/
