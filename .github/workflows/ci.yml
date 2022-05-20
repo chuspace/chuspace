@@ -33,7 +33,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - uses: nanasess/setup-chromedriver@v1
+      - name: Setup chrome
+        uses: nanasess/setup-chromedriver@v1
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
