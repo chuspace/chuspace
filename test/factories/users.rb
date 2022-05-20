@@ -8,6 +8,8 @@ FactoryBot.define do
     f.sequence(:username) { |n| "user-#{n}" }
 
     trait :gaurav do
+      first_name { 'Gaurav' }
+      last_name  { 'Tiwari' }
       email { 'gaurav@chuspace.com' }
       username { 'gaurav' }
     end
