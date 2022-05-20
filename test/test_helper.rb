@@ -5,11 +5,10 @@ ENV['RAILS_ENV'] = 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 require 'simplecov'
-require 'simplecov-lcov'
+require "simplecov_json_formatter"
 require 'action_policy/test_helper'
 
-SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
-SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
+SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter
 SimpleCov.start 'rails' do
   add_filter(%r{^\/test|bin|db|config|views|javascript|lib\/})
 end

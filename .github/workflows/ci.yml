@@ -49,11 +49,21 @@ jobs:
           REDIS_URL: redis://localhost:6379
         run: bin/rails db:prepare
 
+      - name: Setup codeclimate test reporter
+        run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        run: chmod +x ./cc-test-reporter
+
       - name: Run tests
         env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
           REDIS_URL: redis://localhost:6379
         run: bin/rails test:all
+
+      - name: Upload coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: ./cc-test-reporter format-coverage -t simplecov -o tmp/codeclimate.minitest.json coverage/coverage.json
 
       - name: Run brakeman
         run: bundle exec brakeman

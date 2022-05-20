@@ -166,7 +166,7 @@ end
 
 group :test do
   gem 'simplecov', require: false
-  gem 'simplecov-lcov', require: false
+  gem 'simplecov_json_formatter', require: false
   gem 'rails-controller-testing'
   gem 'capybara'
   gem 'selenium-webdriver'
