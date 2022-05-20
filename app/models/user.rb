@@ -40,6 +40,10 @@ class User < ApplicationRecord
     end
   end
 
+  def send_welcome_email
+    UserMailer.with(user: self).welcome_email.deliver_later
+  end
+
   private
 
   def unset_slug_if_invalid

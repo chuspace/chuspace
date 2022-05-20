@@ -1,6 +1,10 @@
 class UserMailerPreview < ActionMailer::Preview
-  def welcome_email
-    UserMailer.with(identity: Identity.first).welcome_email
+  def welcome_email_for_github
+    UserMailer.with(user: User.first).welcome_email
+  end
+
+  def welcome_email_for_email
+    UserMailer.with(user: User.second).welcome_email
   end
 
   def magic_login_email

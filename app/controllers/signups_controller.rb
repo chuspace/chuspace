@@ -13,7 +13,7 @@ class SignupsController < ApplicationController
   def create
     @user = User.build_with_email_identity(signup_params)
 
-    if @user.save
+    if @user.save && @user.send_welcome_email
       redirect_to redirect_location_for(:user) || signups_path, notice: t('.success')
     else
       respond_to do |format|

@@ -2,8 +2,8 @@
 
 class UserMailer < ApplicationMailer
   def welcome_email
-    @identity = params[:identity]
-    @user     = @identity.user
+    @user     = params[:user]
+    @identity = @user.identities.email.first
     @subject  = t('.subject', name: @user.name)
 
     mail(to: @user.email, subject: @subject)

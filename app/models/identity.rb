@@ -13,7 +13,6 @@ class Identity < ApplicationRecord
 
   before_validation     :set_magic_auth_token_expires_at, if: :email?
   validates_presence_of :magic_auth_token_expires_at, if: :email?
-  after_create_commit   :send_access_email, if: :email?
 
   def magic_auth_token_valid?
     magic_auth_token_expires_at.to_i >= Time.current.to_i
@@ -27,10 +26,6 @@ class Identity < ApplicationRecord
   end
 
   private
-
-  def send_access_email
-    UserMailer.with(identity: self).welcome_email.deliver_later
-  end
 
   def set_magic_auth_token_expires_at
     self.magic_auth_token_expires_at = Time.current + MAGIC_AUTH_TOKEN_LIFE.minutes
