@@ -96,7 +96,7 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
           ./cc-test-reporter format-coverage -t simplecov -o tmp/codeclimate.all.json coverage/coverage.json
-          ./cc-test-reporter upload-coverage -i codeclimate.all.json
+          ./cc-test-reporter upload-coverage -i tmp/codeclimate.all.json
 
       - name: Run brakeman
         run: bundle exec brakeman
