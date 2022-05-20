@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserMailerPreview < ActionMailer::Preview
   def welcome_email_for_github
     UserMailer.with(user: User.first).welcome_email
