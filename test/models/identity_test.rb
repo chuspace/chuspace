@@ -9,12 +9,7 @@ class IdentityTest < ActiveSupport::TestCase
 
   test 'sends welcome email' do
     assert @identity.valid?
-    assert_emails 0
-
-    perform_enqueued_jobs do
-      @identity.save
-      assert_emails 1
-    end
+    @identity.save
 
     travel_to Time.current + 29.minutes do
       assert @identity.magic_auth_token_valid?
