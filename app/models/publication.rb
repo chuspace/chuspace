@@ -24,10 +24,10 @@ class Publication < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :git_provider
 
-  before_save  :set_permalink_to_owner_username
+  before_save  :set_permalink_to_owner_username, if: :personal?
   after_create :create_owning_membership
 
-  validates :name, presence: true, length: { in: 1..80 }, format: { with: /\A\p{L}+(?:[- ]\p{L}+)*\z/ }
+  validates :name, presence: true, length: { in: 1..80 }
   validates :name, :visibility, presence: true
   validate  :one_personal_publication_per_owner, on: :create
 

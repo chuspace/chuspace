@@ -24,10 +24,10 @@ class SettingsController < ApplicationController
     authorize! @user, to: :edit?
 
     if @user.update(user_params)
-      redirect_to setting_path(@user, id: params[:id])
+      redirect_to setting_path(@user, id: params[:id]), notice: t('users.settings.update.success')
     else
       respond_to do |format|
-        format.html { redirect_to setting_path(@user, id: params[:id]) }
+        format.html { redirect_to setting_path(@user, id: params[:id]), error: t('users.settings.update.failure') }
         format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@user, params[:id].to_sym), partial: 'profile', locals: { user: @user }) }
       end
     end

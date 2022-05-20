@@ -49,8 +49,8 @@ en:
       exists: You already have a connected personal publication
     publications:
       shared:
-        provider_not_found: "%{name} Git provider not supported"
-        repo_not_found: "%{name} Repository not found"
+        provider_not_found: '%{name} Git provider not supported'
+        repo_not_found: '%{name} Repository not found'
         tabs:
           provider: Pick your Git Provider
           publication: Publication settings
@@ -77,8 +77,8 @@ en:
       title: Posts
   private_beta_signup_mailer:
     notify:
-      body: "%{name} just signed up on Chuspace for Beta access using %{provider}
-        🎉"
+      body: '%{name} just signed up on Chuspace for Beta access using %{provider}
+        🎉'
       salutation: Hey Chuspace,
       subject: 'Chuspace: %{name} Signed up for Beta access'
   publications:
@@ -145,26 +145,26 @@ en:
   shared:
     features:
       list:
-      - title: Truly own your content
-        description: Publish from your git repositories hosted on Github
-        available: true
-        status: Beta
-      - title: Any static site framework
-        description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
-        available: true
-        status: Beta
-      - title: Publish without limits
-        description: Publish from multiple branded publications
-        available: true
-        status: Beta
-      - title: Community and Collaboration
-        description: Collaborate with community and teams in realtime
-        available: false
-        status: In development
-      - title: Link custom domains and hosting
-        description: Integrated deployment to our secure global CDN
-        available: false
-        status: In development
+        - title: Truly own your content
+          description: Publish from your git repositories hosted on Github
+          available: true
+          status: Beta
+        - title: Any static site framework
+          description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
+          available: true
+          status: Beta
+        - title: Publish without limits
+          description: Publish from multiple branded publications
+          available: true
+          status: Beta
+        - title: Community and Collaboration
+          description: Collaborate with community and teams in realtime
+          available: false
+          status: In development
+        - title: Link custom domains and hosting
+          description: Integrated deployment to our secure global CDN
+          available: false
+          status: In development
     identities:
       login_with: Click to sign in with %{provider}
     login_prompt: Click to go to sign in page
@@ -191,9 +191,9 @@ en:
       heading: 'Posts published in: %{name}'
   user_mailer:
     invite_email:
-      body: "%{person} invited you to join %{publication}"
+      body: '%{person} invited you to join %{publication}'
       salutation: Hey %{name},
-      subject: "%{person} invited you to join %{publication}"
+      subject: '%{person} invited you to join %{publication}'
     magic_login_email:
       body: Click on the button below to sign in to your Chuspace account. This magic
         link will expire in %{expires_in} minutes and can only be used once.
@@ -226,6 +226,9 @@ en:
         permissions: Permissions
         profile: Profile
         publication: Publication
+      update:
+        success: Successfully updated!
+        error: Something went wrong!
       show:
         front_matter:
           title: Frontmatter settings

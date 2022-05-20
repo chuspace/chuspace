@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :identity do |f|
-    f.sequence(:uid) { |n| "user#{n}@chuspace.com" }
     user
+    f.sequence(:uid) { |n| "user#{n}@chuspace.com" }
     trait :email do
       provider { :email }
     end
