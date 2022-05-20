@@ -17,6 +17,8 @@ en:
               blank: A valid email is required
               invalid: Email is invalid or already taken
               taken: Email is already taken
+              no_email_identity: No email identity found for this email
+              identity_taken: No email identity found. You have a %{provider} identity with same email
             name:
               blank: Your full name is required
             username:
@@ -187,25 +189,24 @@ en:
     show:
       heading: 'Posts published in: %{name}'
   user_mailer:
-    email_welcome:
-      body: Thank you for signing up! Chuspace is currently in alpha and we're really
+    welcome_email:
+      body: Thank you for signing up! Chuspace is currently in beta and we're really
         happy to have you onboard. Please give it a try and help us make it better.
-      outro: Hope you will have a good experience. Just send us an email if you have
-        any questions.
+      outro: Hope you have a good experience. Send us an email if any questions.
       salutation: Hey %{name},
       subject: Welcome to Chuspace, %{name}
-    invite:
+    invite_email:
       body: '%{person} invited you to join %{publication}'
       salutation: Hey %{name},
       subject: '%{person} invited you to join %{publication}'
-    send_magic_login:
+    magic_login_email:
       body: Click on the button below to sign in to your Chuspace account. This magic
         link will expire in %{expires_in} minutes and can only be used once.
       compliance: If you did not make this request, you can safely ignore this email.
       direct_url: If the button above doesn’t work, paste this link into your web
         browser
       salutation: Hey %{name},
-      subject: sign in to Chuspace, %{name}
+      subject: Sign in to Chuspace, %{name}
       token: If you can't use the magic signin link, for example when using our PWA
         app, please %{link} and enter the token below
   users:

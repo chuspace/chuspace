@@ -23,13 +23,13 @@ class Identity < ApplicationRecord
     regenerate_magic_auth_token
     update(magic_auth_token_expires_at: Time.current + MAGIC_AUTH_TOKEN_LIFE.minutes)
 
-    UserMailer.with(identity: self).send_magic_login.deliver_later
+    UserMailer.with(identity: self).magic_login_email.deliver_later
   end
 
   private
 
   def send_access_email
-    UserMailer.with(identity: self).email_welcome.deliver_later
+    UserMailer.with(identity: self).welcome_email.deliver_later
   end
 
   def set_magic_auth_token_expires_at

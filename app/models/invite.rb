@@ -18,6 +18,10 @@ class Invite < ApplicationRecord
 
   has_secure_token :code
 
+  def recipient_name
+    recipient.present? ? recipient.name : recipient_email.split('@').first
+  end
+
   def recipient
     @recipient ||= User.find_by(email: identifier) || User.find_by(username: identifier)
   end
@@ -28,7 +32,7 @@ class Invite < ApplicationRecord
 
   def send_email(resend: false)
     user.regenerate_code if resend
-    UserMailer.with(invitation: self).invite.deliver_later
+    UserMailer.with(invitation: self).invite_email.deliver_later
   end
 
   def to_param

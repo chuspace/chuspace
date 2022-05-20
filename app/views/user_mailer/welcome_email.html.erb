@@ -1,0 +1,6 @@
+<tr><td><h3><%= t('.salutation', name: @user.name.first) %></h3></td></tr>
+<tr><td><p><%= t('.body').html_safe %></p></td></tr>
+<tr><td><p><%= t('user_mailer.magic_login_email.body', expires_in: Identity::MAGIC_AUTH_TOKEN_LIFE) %></p></td></tr>
+<tr><td><p><%= link_to 'Click to login', magic_logins_url(token: @identity.magic_auth_token) %></p></td></tr>
+<tr><td><p><%= t('user_mailer.magic_login_email.direct_url') %>: <%= link_to magic_logins_url(token: @identity.magic_auth_token), magic_logins_url(token: @identity.magic_auth_token) %></p></td></tr>
+<tr><td ><p><%= t('.outro').html_safe %></p></td></tr>

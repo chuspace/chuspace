@@ -18,14 +18,14 @@ class SessionsController < ApplicationController
 
     if @identity
       @identity.send_magic_auth_email!
-      redirect_to redirect_location_for(:user) || root_path, notice: t('.success')
+      redirect_to redirect_location_for(:user) || root_path, notice: t('sessions.create.success')
     else
       @user = User.new(email: session_params[:email])
 
       if user = User.find_by(email: session_params[:email])
-        @user.errors.add(:email, "No email identity found. You have a #{user.identities.pluck(:provider).to_sentence} identity with same email")
+        @user.errors.add(:email, :identity_taken, provider: user.identities.pluck(:provider).to_sentence)
       else
-        @user.errors.add(:email, 'No email identity found for this email')
+        @user.errors.add(:email, :no_email_identity)
       end
 
       respond_to do |format|

@@ -1,0 +1,3 @@
+<tr><td><h3><%= t('.salutation', name: @invite.recipient_name) %></h3></td></tr>
+<tr><td><p><%= @subject %></p></td></tr>
+<tr><td><p><%= link_to "Join #{@publication.permalink}", accept_publication_invites_url(@publication, invite_token: @invite.code) %></p></td></tr>

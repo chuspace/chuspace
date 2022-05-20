@@ -14,11 +14,11 @@
         <%= before_user_dropdown %>
 
         <div class='flex items-center'>
-          <div class="dropdown dropdown-end">
-            <div tabindex="0" class="cursor-pointer">
+          <details class="dropdown dropdown-end">
+            <summary tabindex="0" class="cursor-pointer" id='header-user-dropdown'>
               <%= render(Avatar::Component.new(avatar: Current.user.avatar, gravatar: Current.user.gravatar_url, fallback: Current.user.name.initials, variant: :icon)) %>
-            </div>
-            <ul tabindex="0" class="shadow menu dropdown-content bg-base-300 rounded-box w-52 z-50">
+            </summary>
+            <details-menu tabindex="0" class="shadow menu dropdown-content bg-base-300 rounded-box w-52 z-50">
               <li>
                 <%= content_tag :div, "Signed in as <strong>#{Current.user.username}</strong>".html_safe, role: 'menuitem', class: 'block text-current', tabindex: '-1' %>
               </li>
@@ -49,8 +49,8 @@
               <li>
                 <%= button_to 'Sign out', session_path(Current.user), class: 'text-current', form: { role: 'menuitem', tabindex: '-1' }, method: :delete, remote: true %>
               </li>
-            </ul>
-          </div>
+            </details-menu>
+          </details>
         </div>
       <% else %>
         <%= link_to 'Sign up', signups_path, class: 'link link-primary link-hover text-sm ml-8' %>

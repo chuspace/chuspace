@@ -1,25 +1,27 @@
 # frozen_string_literal: true
 
 class UserMailer < ApplicationMailer
-  def email_welcome
+  def welcome_email
     @identity = params[:identity]
-    @user = @identity.user
-    @subject = t('.subject', name: @user.name)
+    @user     = @identity.user
+    @subject  = t('.subject', name: @user.name)
+
     mail(to: @user.email, subject: @subject)
   end
 
-  def send_magic_login
+  def magic_login_email
     @identity = params[:identity]
-    @user = @identity.user
-    @subject = t('.subject', name: @user.name)
+    @user     = @identity.user
+    @subject  = t('.subject', name: @user.name)
+
     mail(to: @user.email, subject: @subject)
   end
 
-  def invite
-    @invite = params[:invitation]
-    @sender = @invite.sender
-    @publication = @invite.publication
-    @subject = t('.subject', person: @sender.name, publication: @publication.name)
+  def invite_email
+    @invite       = params[:invitation]
+    @sender       = @invite.sender
+    @publication  = @invite.publication
+    @subject      = t('.subject', person: @sender.name, publication: @publication.name)
 
     mail(to: @invite.recipient_email, subject: @subject)
   end
