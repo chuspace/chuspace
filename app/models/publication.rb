@@ -24,9 +24,10 @@ class Publication < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :git_provider
 
+  before_save  :set_permalink_to_owner_username
   after_create :create_owning_membership
 
-  validates :name, uniqueness: { scope: :owner_id }
+  validates :name, presence: true, length: { in: 1..80 }, format: { with: /\A\p{L}+(?:[- ]\p{L}+)*\z/ }
   validates :name, :visibility, presence: true
   validate  :one_personal_publication_per_owner, on: :create
 
@@ -69,19 +70,19 @@ class Publication < ApplicationRecord
 
   private
 
+  def create_owning_membership
+    memberships.create(user: owner, role: :owner)
+  end
+
+  def set_permalink_to_owner_username
+    self.permalink = owner.username
+  end
+
   def should_generate_new_friendly_id?
     name.blank? || name_changed?
   end
 
-  def resolve_friendly_id_conflict(candidates)
-    self.name = normalize_friendly_id(name) if name
-  end
-
   def one_personal_publication_per_owner
     errors.add(:personal, :one_personal_publication_allowed) if personal? && owner.publications.personal.any?
-  end
-
-  def create_owning_membership
-    memberships.create(user: owner, role: :owner)
   end
 end

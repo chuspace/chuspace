@@ -38,7 +38,9 @@ class Post < ApplicationRecord
 
   def cache_images
     markdown_doc.images.each do |image|
-      publication.images.create(name: image.filename, draft_blob_path: blob_path, blob_path: image.url, featured: image.featured, external: image.external)
+      next if image.external
+
+      publication.images.create(name: image.filename, draft_blob_path: blob_path, blob_path: image.url, featured: image.featured)
     end
   end
 

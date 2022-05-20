@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class UserPolicy < ApplicationPolicy
-  alias_rule :index?, :create?, :show?, :new?, to: :show?
+  alias_rule :new?, to: :create?
   alias_rule :update?, :destroy?, :drafts?, to: :edit?
 
-  def show?
+  def create?
     true
   end
 

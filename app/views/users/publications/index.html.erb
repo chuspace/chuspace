@@ -4,7 +4,7 @@
   <% end %>
 
   <% card.actions do %>
-    <% if allowed_to?(:edit?, @user) %>
+    <% if Current.request_authenticated? && allowed_to?(:edit?, @user) %>
       <%= link_to connect_root_path, title: t('shared.publications.connect') do %>
         <%= inline_svg_tag 'icons/plug.svg', class: 'fill-current w-4 h-4' %>
       <% end %>
@@ -17,11 +17,11 @@
     <% else %>
       <%= render Placeholder::Component.new do |placeholder| %>
         <%= placeholder.text do %>
-          <%= allowed_to?(:edit?, @user) ? simple_format(t('publications.list.empty')) : simple_format(t('publications.list.none')) %>
+          <%= Current.request_authenticated? && allowed_to?(:edit?, @user) ? simple_format(t('publications.list.empty')) : simple_format(t('publications.list.none')) %>
         <% end %>
 
         <%= placeholder.cta do %>
-          <%= link_to t('shared.publications.connect'), connect_root_path, class: 'btn btn-primary btn-sm ml-2', title: t('shared.publications.connect') if allowed_to?(:edit?, @user) %>
+          <%= link_to t('shared.publications.connect'), connect_root_path, class: 'btn btn-primary btn-sm ml-2', title: t('shared.publications.connect') if Current.request_authenticated? && allowed_to?(:edit?, @user) %>
         <% end %>
       <% end %>
     <% end %>

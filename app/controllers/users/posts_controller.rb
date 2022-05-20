@@ -2,10 +2,11 @@
 
 module Users
   class PostsController < BaseController
+    skip_verify_authorized
+
     def index
-      authorize! Current.user, to: :show?
       add_breadcrumb(:Posts)
-      @posts = authorized_scope(Post.all, type: :relation, as: :author)
+      @posts = @user.posts
     end
   end
 end

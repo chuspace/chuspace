@@ -6,6 +6,7 @@ require_relative '../config/environment'
 require 'rails/test_help'
 require 'simplecov'
 require 'simplecov-lcov'
+require 'action_policy/test_helper'
 
 SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
 SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
@@ -18,6 +19,7 @@ class ActiveSupport::TestCase
   include ActiveJob::TestHelper
   include ActionMailer::TestHelper
   include ActiveSupport::Testing::TimeHelpers
+  include ActionPolicy::TestHelper
 
   fixtures :all
   self.use_transactional_tests = true

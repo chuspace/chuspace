@@ -16,7 +16,7 @@
       <%= tab_link_to(t(".tabs.posts"), user_posts_path(user), class: 'link link-hover text-sm text-secondary font-medium') %>
     </li>
 
-    <% if allowed_to?(:edit?, @user) %>
+    <% if Current.request_authenticated? && allowed_to?(:edit?, @user) %>
       <li class='mt-0 sm:mt-4'>
         <%= tab_link_to(t('.tabs.drafts'), user_drafts_path(user), class: 'link link-hover text-sm text-secondary font-medium') %>
       </li>

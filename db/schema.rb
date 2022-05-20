@@ -196,13 +196,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_03_145540) do
     t.text 'blob_path'
     t.text 'draft_blob_path'
     t.boolean 'featured', default: false
-    t.boolean 'external', default: false
     t.bigint 'publication_id', null: false
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.index ['blob_path'], name: 'index_images_on_blob_path'
     t.index ['draft_blob_path'], name: 'index_images_on_draft_blob_path'
-    t.index ['external'], name: 'index_images_on_external'
     t.index ['featured'], name: 'index_images_on_featured'
     t.index ['name'], name: 'index_images_on_name'
     t.index ['publication_id', 'blob_path'], name: 'index_images_on_publication_id_and_blob_path', unique: true

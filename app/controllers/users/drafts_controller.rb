@@ -2,6 +2,8 @@
 
 module Users
   class DraftsController < BaseController
+    prepend_before_action :authenticate!
+
     def index
       authorize! @user, to: :drafts?
 

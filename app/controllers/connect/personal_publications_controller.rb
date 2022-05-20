@@ -17,8 +17,8 @@ module Connect
     end
 
     def set_as_personal_publication
-      @publication.name = Current.user.username
-      @publication.personal = true
+      @publication.name      = Current.user.username
+      @publication.personal  = true
     end
 
     def partial_name
@@ -26,8 +26,7 @@ module Connect
     end
 
     def check_personal_publication_existence!
-      redirect_to connect_root_path,
-notice: t('connect.personal_publications.exists') if Current.user.personal_publication.present?
+      redirect_to connect_root_path, notice: t('connect.personal_publications.exists') if Current.user.personal_publication.present?
     end
   end
 end

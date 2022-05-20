@@ -19,13 +19,9 @@ class Image < ApplicationRecord
     attachable.variant :social, resize_to_fit: [600, 315]
   end
 
-  def io
-    external? ? Down::Http.open(blob_path) : StringIO.new(repository.raw(path: blob_path))
-  end
-
   private
 
   def attach_image
-    image.attach(io: io, filename: name)
+    image.attach(io: StringIO.new(repository.raw(path: blob_path)), filename: name)
   end
 end

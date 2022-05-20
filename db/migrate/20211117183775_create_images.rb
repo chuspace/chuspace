@@ -10,7 +10,6 @@ class CreateImages < ActiveRecord::Migration[7.0]
       t.text :draft_blob_path, index: { algorithm: :concurrently }
 
       t.boolean :featured, default: false, index: { algorithm: :concurrently }
-      t.boolean :external, default: false, index: { algorithm: :concurrently }
 
       t.references :publication, null: false, foreign_key: true
 

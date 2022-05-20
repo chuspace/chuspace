@@ -2,7 +2,7 @@
   <div class='flex items-center'>
     <%= render(Avatar::Component.new(avatar: @publication.icon, gravatar: @publication.gravatar_url(variant: :mini), fallback: @publication.initials, variant: :mini)) %>
     <div class='ml-2'>
-      <h3 class='mb-0 sm:text-3xl text-xl'><%= @publication.name %></h3>
+      <h3 class='mb-0'><%= @publication.name %></h3>
       <%= content_tag :p, @publication.description, class: 'text-sm text-secondary' %>
       <%= content_tag :p, :personal, class: 'text-sm text-secondary' if @publication.personal? %>
     </div>

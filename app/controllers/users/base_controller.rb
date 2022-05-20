@@ -5,6 +5,5 @@ module Users
     layout 'user'
 
     include Breadcrumbable, FindUser
-    prepend_before_action :authenticate!
   end
 end

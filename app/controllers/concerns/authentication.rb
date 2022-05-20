@@ -4,14 +4,13 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
-    COOKIE_DOMAINS = %w[chuspace.com]
     before_action :authenticate
     helper_method :signed_in?
   end
 
   def signin(identity)
     cookies.encrypted[:identity_id] = {
-      value: identity.id, expires: 1.year.from_now, domain: COOKIE_DOMAINS, secure: Rails.env.production?
+      value: identity.id, expires: 1.year.from_now, secure: Rails.env.production?
     }
 
     identity.user.update_tracked_fields!(request)
@@ -20,14 +19,11 @@ module Authentication
   end
 
   def signout
-    cookies.delete(:identity_id, domain: COOKIE_DOMAINS)
+    cookies.delete(:identity_id)
   end
 
   def signed_in?
     Current.identity.present? && Current.user.present?
-  end
-
-  def store_location
   end
 
   private

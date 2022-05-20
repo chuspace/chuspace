@@ -4,7 +4,7 @@
   <% end %>
 
   <% card.actions do %>
-    <% if allowed_to?(:edit?, user) %>
+    <% if Current.request_authenticated? && allowed_to?(:edit?, user) %>
       <% if user.personal_publication.present? %>
         <%= link_to publication_new_draft_path(user.personal_publication) do %>
           <%= inline_svg_tag 'icons/plus.svg', class: 'fill-current w-4 h-4' %>
@@ -31,11 +31,11 @@
     <% else %>
       <%= render Placeholder::Component.new do |placeholder| %>
         <%= placeholder.text do %>
-          <%= simple_format allowed_to?(:edit?, user) ? t('posts.list.empty') : t('posts.list.none') %>
+          <%= simple_format Current.request_authenticated? && allowed_to?(:edit?, user) ? t('posts.list.empty') : t('posts.list.none') %>
         <% end %>
 
         <%= placeholder.cta do %>
-          <%= link_to t('shared.publications.connect_personal'), connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2' if allowed_to?(:edit?, user) %>
+          <%= link_to t('shared.publications.connect_personal'), connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2' if Current.request_authenticated? && allowed_to?(:edit?, user) %>
         <% end %>
       <% end %>
     <% end %>

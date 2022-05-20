@@ -9,18 +9,9 @@ class UsersController < ApplicationController
   before_action :set_content_partial, only: :show
   skip_verify_authorized only: :show
 
-  def show
-  end
-
-  def edit
-  end
-
   def update
     @user.update(user_params)
     redirect_to user_path(@user), notice: 'Sucessfully updated'
-  end
-
-  def destroy
   end
 
   private

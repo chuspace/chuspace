@@ -2,10 +2,11 @@
 
 module Users
   class PublicationsController < BaseController
+    skip_verify_authorized
+
     def index
-      authorize! Current.user, to: :show?
       add_breadcrumb(:Publications)
-      @publications = authorized_scope(Publication.all, type: :relation, as: :member)
+      @publications = @user.publications
     end
   end
 end
