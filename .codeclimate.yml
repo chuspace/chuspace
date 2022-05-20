@@ -28,3 +28,5 @@ exclude_patterns:
   - node_modules/
   - .tomo/
   - .github/
+  - babel.config.js
+  - postcss.config.js
