@@ -20,10 +20,6 @@ class Draft < Git::Blob
     parsed.content
   end
 
-  def decoded_content
-    Base64.decode64(content).force_encoding('UTF-8')
-  end
-
   def local_or_remote_content
     local_content.value.presence || decoded_content
   end

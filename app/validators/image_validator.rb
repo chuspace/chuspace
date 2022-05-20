@@ -4,7 +4,7 @@ class ImageValidator < ActiveModel::EachValidator
   VALID_MIMES = %w[image/jpeg image/png image/jpg image/gif]
 
   def self.valid?(name_or_path:)
-    VALID_MIMES.include?(MiniMime.lookup_by_filename(name_or_path)&.content_type)
+    VALID_MIMES.include?(MiniMime.lookup_by_filename(name_or_path)&.content_type) if name_or_path
   end
 
   def self.absolute?(path:)

@@ -4,8 +4,7 @@ class PublicationsController < ApplicationController
   before_action :authenticate!, only: :new
   skip_verify_authorized except: :new
 
-  def index
-    @publications = Publication.except_personal.limit(10)
+  def new
   end
 
   def show

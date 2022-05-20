@@ -9,7 +9,11 @@ FactoryBot.define do
     f.sequence(:name) { |n| "Rails #{n}" }
 
     before(:create) do |publication|
-      publication.repository = FactoryBot.build :repository, publication: publication, git_provider: publication.git_provider
+      publication.repository = if publication.personal?
+        FactoryBot.build :repository, :personal, publication: publication, git_provider: publication.git_provider
+      else
+        FactoryBot.build :repository, publication: publication, git_provider: publication.git_provider
+      end
     end
 
     trait :personal do

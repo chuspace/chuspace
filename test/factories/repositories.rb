@@ -8,5 +8,9 @@ FactoryBot.define do
     full_name { 'chuspace/blog' }
     posts_folder { 'src/pages/posts' }
     assets_folder { 'public/assets/blog' }
+
+    trait :personal  do
+      full_name { 'gauravtiwari/blog' }
+    end
   end
 end

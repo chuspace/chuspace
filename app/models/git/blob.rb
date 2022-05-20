@@ -42,6 +42,10 @@ module Git
       end
     end
 
+    def decoded_content
+      Base64.decode64(content).force_encoding('UTF-8')
+    end
+
     def update(content:, message: nil, author:)
       run_callbacks :update do
         fail ArgumentError, 'Not a valid author' unless author.is_a?(Git::Committer)
