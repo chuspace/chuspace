@@ -47,6 +47,9 @@ jobs:
           node-version: 'lts/*'
           cache: 'yarn'
 
+      - name: Setup node dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Preparing database
         env:
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
