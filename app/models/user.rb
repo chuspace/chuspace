@@ -30,7 +30,7 @@ class User < ApplicationRecord
   encrypts  :email, deterministic: true, downcase: true
 
   after_create_commit -> { SeedGitProvidersJob.perform_later(user: self) }
-  after_update_commit -> { personal_publication.save }, if: -> { username_previously_changed? }
+  after_update_commit -> { personal_publication.save }, if: -> { personal_publication.present? && username_previously_changed? }
 
   class << self
     def build_with_email_identity(email_params)

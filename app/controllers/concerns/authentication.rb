@@ -15,6 +15,8 @@ module Authentication
 
     identity.user.update_tracked_fields!(request)
     identity.update(magic_auth_token_expires_at: Time.now)
+    identity.regenerate_magic_auth_token
+
     authenticate
   end
 

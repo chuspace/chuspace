@@ -12,7 +12,7 @@
 
         <%= header.before_user_dropdown do %>
           <div class='mr-8'>
-            <% if allowed_to?(:edit?, @post) %>
+            <% if Current.request_authenticated? && allowed_to?(:edit?, @post) %>
               <%= link_to 'Edit', publication_edit_draft_path(@post.publication, path: @post.relative_path), class: 'btn btn-primary btn-xs' %>
             <% end %>
           </div>

@@ -213,6 +213,10 @@ en:
       outro: Hope you have a good experience. Send us an email if any questions.
       salutation: Hey %{name},
       subject: Welcome to Chuspace, %{name}
+  oauths:
+    create:
+      success: Successfully logged in
+      failure: An account with this email already exists. Please sign in with that account before connecting your %{existing_provider} account.
   users:
     about:
       no_readme: No readme

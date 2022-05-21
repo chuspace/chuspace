@@ -13,5 +13,9 @@ FactoryBot.define do
       email { 'gaurav@chuspace.com' }
       username { 'gaurav' }
     end
+
+    after(:create) do |user|
+      user.identities.create(provider: :email, uid: user.email)
+    end
   end
 end

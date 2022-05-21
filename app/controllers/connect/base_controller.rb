@@ -2,23 +2,28 @@
 
 module Connect
   class BaseController < ApplicationController
-    before_action :authenticate!
+    prepend_before_action :authenticate!
+
     before_action :find_git_provider
     before_action :build_publication
 
-    skip_verify_authorized
-
     def new
+      authorize! @publication
+
       if turbo_frame_request?
         render partial: 'form', locals: { folders: @publication.repository.folders, markdown_files: @publication.repository.markdown_files, publication: @publication }
       end
     end
 
     def index
+      authorize! @publication, to: :new?
+
       @git_providers = Current.user.git_providers
     end
 
     def show
+      authorize! @publication, to: :new?
+
       @git_provider_user ||= @git_provider.adapter.user
     end
 
@@ -43,6 +48,8 @@ module Connect
     end
 
     def create
+      authorize! @publication
+
       @publication.assign_attributes(publication_params)
 
       if @publication.save

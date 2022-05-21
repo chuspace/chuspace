@@ -10,9 +10,9 @@ class MagicLoginsController < ApplicationController
 
     if identity&.magic_auth_token_valid?
       signin(identity)
-      redirect_to root_url, notice: t('.success')
+      redirect_to root_url, notice: t('magic_logins.index.success')
     else
-      redirect_to sessions_url, notice: t('.expired')
+      redirect_to sessions_url, notice: t('magic_logins.index.expired')
     end
   end
 end
