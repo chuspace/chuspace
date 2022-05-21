@@ -1,12 +1,17 @@
-<auto-refresh-form>
-  <%= simple_form_for user, url: sessions_path do |form| %>
-    <%= form.input :email, as: :string, hint: false, error_html: { class: 'input-error' } %>
-    <%= form.hint :email unless user.errors.key?(:email) %>
+<turbo-reconnect>
+  <auto-refresh-form>
+    <%= simple_form_for user, url: sessions_path do |form| %>
+      <auto-check src="<%= auto_checks_path(attribute: :email, type: :auth) %>">
+        <%= form.input :email, as: :string, hint: false %>
+        <%= form.hint :email unless user.errors.key?(:email) %>
+        <input hidden data-csrf value="<%= form_authenticity_token %>">
+      </auto-check>
 
-    <div class='mt-8 flex items-center justify-between'>
-      <%= form.button :button, 'Sign in', title: 'Click to receive magic link', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top } %>
-      <%= link_to 'Other sign in options →', sessions_path, title: t('shared.login_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
-      <%= link_to 'Signup →', email_signups_path, title: t('shared.signup_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
-    </div>
-  <% end %>
-</auto-refresh-form>
+      <div class='mt-8 flex items-center justify-between'>
+        <%= form.button :button, 'Sign in', title: 'Click to receive magic link', class: 'btn btn-primary mt-4', data: { 'turbo-frame': :_top } %>
+        <%= link_to 'Other sign in options →', sessions_path, title: t('shared.login_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
+        <%= link_to 'Signup →', email_signups_path, title: t('shared.signup_prompt'), class: 'link link-primary text-sm mt-3', data: { 'turbo-frame': :_top } %>
+      </div>
+    <% end %>
+  </auto-refresh-form>
+</turbo-reconnect>

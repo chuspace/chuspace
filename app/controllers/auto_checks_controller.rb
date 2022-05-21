@@ -4,11 +4,27 @@ class AutoChecksController < ApplicationController
   skip_verify_authorized
 
   def create
-    case params[:attribute].to_sym
-    when :email
-      perform_check(resource: User, attribute: 'email')
-    when :username
-      perform_check(resource: User, attribute: 'username')
+    attribute = params[:attribute]
+
+    case params[:type]
+    when 'auth'
+      if %w[email username].include?(attribute) && params[:value]
+        user = User.joins(:identities).where(identities: { provider: :email }).find_or_initialize_by("#{attribute}": params[:value])
+
+        unless user.persisted?
+          user.errors.add(:email, 'Not found')
+          render html: user.errors.messages_for(attribute.to_sym).uniq.to_sentence.html_safe, status: :unprocessable_entity
+        else
+          head :ok
+        end
+      else
+        head :ok
+      end
+    when nil
+      case attribute
+      when 'email', 'username'
+        perform_check(resource: User, attribute: attribute)
+      end
     end
   end
 

@@ -15,7 +15,15 @@ export default class TurboReconnectElement extends HTMLElement {
       const input = check.querySelector('input')
 
       if (input) {
-        input.addEventListener('auto-check-error', async function(event) {
+        input.addEventListener('input', function (event) {
+          if (!input.value) {
+            input.classList.remove('input-error')
+            const error = check.querySelector('.input-error-message')
+            if (error) error.remove()
+          }
+        })
+
+        input.addEventListener('auto-check-error', async function (event) {
           const { response, setValidity } = event.detail
 
           setValidity('Validation failed')
@@ -25,22 +33,15 @@ export default class TurboReconnectElement extends HTMLElement {
           const hint = check.querySelector('.input-hint-message')
           if (hint) hint.classList.add('hidden')
 
-          const error =
-            check.querySelector('.input-error-message') ||
-            document.createElement('div')
+          const error = check.querySelector('.input-error-message') || document.createElement('div')
 
-          error.classList.add(
-            'text-xs',
-            'mt-2',
-            'text-error',
-            'input-error-message'
-          )
+          error.classList.add('text-xs', 'mt-2', 'text-error', 'input-error-message')
 
           error.textContent = message
           input.insertAdjacentElement('afterend', error)
         })
 
-        input.addEventListener('auto-check-success', async function(event) {
+        input.addEventListener('auto-check-success', async function (event) {
           const { response } = event.detail
           const message = await response.text()
           input.classList.remove('input-error')
