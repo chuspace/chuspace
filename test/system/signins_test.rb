@@ -5,7 +5,7 @@ require 'application_system_test_case'
 class SigninsTest < ApplicationSystemTestCase
   def setup
     @user     = create(:user, :gaurav)
-    @identity = create(:identity, provider: :email, user: @user, uid: @user.email)
+    @identity = @user.identities.email.first
   end
 
   test 'Sign in' do
