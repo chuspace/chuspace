@@ -9,7 +9,7 @@ class AutoChecksController < ApplicationController
     case params[:type]
     when 'auth'
       if %w[email username].include?(attribute) && params[:value]
-        user = User.joins(:identities).where(identities: { provider: :email }).find_or_initialize_by("#{attribute}": params[:value])
+        user = User.joins(:email_identities).find_or_initialize_by("#{attribute}": params[:value])
 
         unless user.persisted?
           user.errors.add(:email, 'Not found')

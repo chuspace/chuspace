@@ -18,6 +18,7 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :destroy, inverse_of: :user
   has_many :identities, dependent: :destroy, inverse_of: :user
+  has_many :email_identities, -> { where(identities: { provider: :email }) }, class_name: 'Identity', inverse_of: :user
   has_many :publications, through: :memberships, source: :publication
   has_many :owning_publications, class_name: 'Publication', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_one  :personal_publication, -> (user) { where(personal: true) }, class_name: 'Publication', foreign_key: :owner_id, inverse_of: :owner
