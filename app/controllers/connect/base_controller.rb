@@ -28,10 +28,12 @@ module Connect
     end
 
     def users
+      authorize! @publication, to: :new?
       render partial: 'connect/shared/users', locals: { git_provider_users: @git_provider.users }
     end
 
     def repos
+      authorize! @publication, to: :new?
       @repositories = @git_provider.adapter.search_repositories(query: params[:query], login: params[:login])
 
       render(
