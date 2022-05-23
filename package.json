@@ -20,7 +20,6 @@
     "@github/textarea-autosize": "^0.2.2",
     "@github/time-elements": "^3.1.2",
     "@hotwired/turbo-rails": "^7.1.1",
-    "@rails/actioncable": "^7.0.2-4",
     "@rails/request.js": "^0.0.6",
     "@rails/ujs": "^7.0.2-4",
     "@rails/webpacker": "^6.0.0-rc.6",

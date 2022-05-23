@@ -3,6 +3,7 @@
       imageUploadPath='<%= publication_create_assets_path(@publication) %>'
       imageLoadPath='<%= publication_asset_path(@publication) %>'
       autoSavePath='<%= publication_autosave_draft_path(@publication, @draft) %>'
+      startingContent='<%= @draft.decoded_content %>'
       editable
       <%= @draft.front_matter? ? '' : 'excludeFrontmatter' %>
     >

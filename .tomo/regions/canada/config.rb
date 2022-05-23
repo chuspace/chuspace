@@ -32,8 +32,6 @@ set env_vars: {
   RAILS_SERVE_STATIC_FILES: '1',
   BOOTSNAP_CACHE_DIR: 'tmp/bootsnap-cache',
   DATABASE_URL: :prompt,
-  DATABASE_REPLICA_URL: :prompt,
-  REDIS_URL: :prompt,
   EXECJS_RUNTIME: 'Node',
   OUT_OF_PRIVATE_BETA: :prompt,
   RAILS_MASTER_KEY: :prompt

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Draft < Git::Blob
+  include Keyable
   include Drafts::Yaml
   include Drafts::FrontMatter
 
@@ -9,7 +10,8 @@ class Draft < Git::Blob
   validates :path, :name, markdown: true
   validates :publication, presence: true
 
-  kredis_string :local_content, expires_in: 1.day, key: :local_content_key
+  kv_string  :local_content, expires_in: 1.day
+  kv_boolean :stale, expires_in: 1.day
 
   delegate :repository, to: :publication
 
@@ -64,7 +66,7 @@ class Draft < Git::Blob
   end
 
   def stale?
-    local_content.value.present? && local_content.value != decoded_content
+    stale.value
   end
 
   def status
@@ -93,12 +95,12 @@ class Draft < Git::Blob
 
   private
 
-  def local_content_key
-    "#{publication.permalink}:#{path}:local_content"
+  def kv_key_prefix
+    "#{publication.permalink}:#{path}"
   end
 
   def clear_local_content
-    local_content.value = nil
+    local_content.clear
   end
 
   def store_repository_readme

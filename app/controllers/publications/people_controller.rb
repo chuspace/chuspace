@@ -9,8 +9,7 @@ module Publications
     def index
       @memberships = @publication.memberships.order(:created_at)
       @invite = @publication.invites.build
-      add_breadcrumb(:people)
-
+      add_breadcrumb(:People)
       authorize! @publication.memberships.build
     end
 
@@ -21,9 +20,7 @@ module Publications
         redirect_to publication_people_path(@publication), notice: t('publications.people.update.notice')
       else
         respond_to do |format|
-          format.turbo_stream {
- render turbo_stream: turbo_stream.replace(helpers.dom_id(@membership, :form), partial: 'form',
-locals: { membership: @membership }) }
+          format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@membership, :form), partial: 'form', locals: { membership: @membership }) }
           format.html do
             redirect_to publication_people_path(@publication), notice: @membership.errors.full_messages.to_sentence
           end

@@ -102,10 +102,9 @@ export default class Link extends Mark {
                 let parent = $start.parent
                 let child = parent.childAfter($start.parentOffset)
                 if (!child.node) return
-                console.log(parent)
                 let markElement = child.node.marks.find((mark) => mark.type.name == name)
-                let markIndex = child.node.marks.findIndex((mark) => mark.type.name == name)
                 let markdownString
+
                 switch (name) {
                   case 'link':
                     markdownString = `[${child.node.text}](${markElement.attrs.href})`
@@ -114,14 +113,15 @@ export default class Link extends Mark {
                     markdownString = `\`${child.node.text}\``
                     break
                   default:
-                    open = markdownSerializer.marks[name].open
-                    close = markdownSerializer.marks[name].close
-                    markdownString = `${open}${child.node.text}${close}`
+                    markdownString = null
                     break
                 }
-                const marker = Fragment.from(view.state.schema.text(markdownString, child.node.marks))
-                const newtr = view.state.tr.insertText(markdownString, $start.pos, $end.pos)
-                view.dispatch(newtr)
+
+                if (markdownString) {
+                  view.dispatch(
+                    state.tr.removeMark($start.pos, $end.pos, type).insertText(markdownString, $start.pos, $end.pos)
+                  )
+                }
               }
             },
           }

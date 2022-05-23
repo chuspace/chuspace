@@ -20,21 +20,6 @@ GEM
       concurrent-ruby (~> 1.0)
     action_policy (0.6.0)
       ruby-next-core (>= 0.11.0)
-    actioncable (7.0.2.4)
-      actionpack (= 7.0.2.4)
-      activesupport (= 7.0.2.4)
-      nio4r (~> 2.0)
-      websocket-driver (>= 0.6.1)
-    actionmailbox (7.0.2.4)
-      actionpack (= 7.0.2.4)
-      activejob (= 7.0.2.4)
-      activerecord (= 7.0.2.4)
-      activestorage (= 7.0.2.4)
-      activesupport (= 7.0.2.4)
-      mail (>= 2.7.1)
-      net-imap
-      net-pop
-      net-smtp
     actionmailer (7.0.2.4)
       actionpack (= 7.0.2.4)
       actionview (= 7.0.2.4)
@@ -52,13 +37,6 @@ GEM
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actiontext (7.0.2.4)
-      actionpack (= 7.0.2.4)
-      activerecord (= 7.0.2.4)
-      activestorage (= 7.0.2.4)
-      activesupport (= 7.0.2.4)
-      globalid (>= 0.6.0)
-      nokogiri (>= 1.8.5)
     actionview (7.0.2.4)
       activesupport (= 7.0.2.4)
       builder (~> 3.1)
@@ -257,7 +235,6 @@ GEM
       webrick (>= 1.3)
       zeitwerk (>= 2.0)
     hashie (5.0.0)
-    hiredis (0.6.3)
     html_tokenizer (0.0.7)
     htmlbeautifier (1.4.2)
     http (5.0.4)
@@ -279,9 +256,6 @@ GEM
       nokogiri (>= 1.6)
     jmespath (1.6.1)
     jwt (2.3.0)
-    kredis (1.1.0)
-      activesupport (>= 6.0.0)
-      redis (~> 4.2)
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
@@ -372,20 +346,6 @@ GEM
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
-    rails (7.0.2.4)
-      actioncable (= 7.0.2.4)
-      actionmailbox (= 7.0.2.4)
-      actionmailer (= 7.0.2.4)
-      actionpack (= 7.0.2.4)
-      actiontext (= 7.0.2.4)
-      actionview (= 7.0.2.4)
-      activejob (= 7.0.2.4)
-      activemodel (= 7.0.2.4)
-      activerecord (= 7.0.2.4)
-      activestorage (= 7.0.2.4)
-      activesupport (= 7.0.2.4)
-      bundler (>= 1.15.0)
-      railties (= 7.0.2.4)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -512,9 +472,6 @@ GEM
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
     webrick (1.7.0)
-    websocket-driver (0.7.5)
-      websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.5)
     wicked (1.4.0)
       railties (>= 3.0.7)
     xml-simple (1.1.9)
@@ -529,8 +486,16 @@ PLATFORMS
 DEPENDENCIES
   aasm
   action_policy
+  actionmailer (~> 7.x)
+  actionpack (~> 7.x)
+  actionview (~> 7.x)
   active_storage_validations
   active_type
+  activejob (~> 7.x)
+  activemodel (~> 7.x)
+  activerecord (~> 7.x)
+  activestorage (~> 7.x)
+  activesupport (~> 7.x)
   acts-as-taggable-on!
   acts_as_votable
   ahoy_matey
@@ -565,13 +530,11 @@ DEPENDENCIES
   friendly_id
   front_matter_parser
   good_job
-  hiredis
   htmlbeautifier
   http
   image_processing
   inline_svg
   jwt
-  kredis
   maxminddb
   meta-tags
   mini_mime
@@ -588,9 +551,8 @@ DEPENDENCIES
   rack-attack
   rack-mini-profiler
   rack-proxy
-  rails (~> 7.x)
   rails-controller-testing
-  redis
+  railties (~> 7.x)
   rubocop
   rubocop-performance
   rubocop-rails

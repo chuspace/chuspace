@@ -53,6 +53,7 @@ export default class ChuEditor extends LitElement {
     imageUploadPath: { type: String },
     imageLoadPath: { type: String },
     editable: { type: Boolean },
+    startingContent: { type: String },
     mode: { type: String },
     status: { type: String, reflect: true },
     onChange: { type: Function },
@@ -87,8 +88,9 @@ export default class ChuEditor extends LitElement {
     this.contentParser = markdownParser(this.schema, this.isNodeEditor)
     this.contentSerializer = markdownSerializer(this.schema, this.isNodeEditor)
 
-    this.initialContent = this.querySelector('textarea.content').value
-    this.doc = this.contentParser.parse(this.initialContent)
+    this.currentContent = this.querySelector('textarea.content').value
+    this.startingDoc = this.contentParser.parse(this.startingContent)
+    this.doc = this.contentParser.parse(this.currentContent)
 
     this.state = this.createState()
     this.view = this.createView()
@@ -197,10 +199,12 @@ export default class ChuEditor extends LitElement {
       const statusElement = document.getElementById('chu-editor-status')
       if (statusElement) statusElement.textContent = 'Auto saving...'
 
+      const stale = Fragment.from(this.startingDoc).findDiffStart(Fragment.from(this.state.doc))
       const response = await patch(this.autoSavePath, {
         body: JSON.stringify({
           draft: {
-            content: this.content,
+            content: stale ? this.content : null,
+            stale,
           },
         }),
       })
@@ -210,7 +214,7 @@ export default class ChuEditor extends LitElement {
         statusElement.textContent = 'Saved'
       }
     },
-    500,
+    2000,
     { maxWait: 2000 }
   )
 

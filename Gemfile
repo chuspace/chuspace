@@ -5,8 +5,16 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.1.2'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.x'
+gem 'activerecord', '~> 7.x'
+gem 'activemodel', '~> 7.x'
+gem 'actionpack', '~> 7.x'
+gem 'actionview', '~> 7.x'
+gem 'actionmailer', '~> 7.x'
+gem 'activejob', '~> 7.x'
+gem 'activesupport', '~> 7.x'
+gem 'activestorage', '~> 7.x'
+gem 'railties', '~> 7.x'
+gem 'sprockets-rails'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 1.x'
@@ -18,7 +26,6 @@ gem 'name_of_person'
 gem 'good_job'
 gem 'mini_mime'
 gem 'wicked'
-gem 'kredis'
 gem 'active_storage_validations'
 gem 'rubyzip'
 
@@ -30,13 +37,8 @@ gem 'jwt'
 gem 'active_type'
 gem 'attr_json'
 
-# Redis WS
-gem 'hiredis'
+# JSON
 gem 'oj'
-gem 'redis'
-
-# Sprockets
-gem 'sprockets-rails'
 
 # Tagging
 gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'
