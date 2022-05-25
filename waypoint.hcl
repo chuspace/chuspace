@@ -11,22 +11,6 @@ config {
             })
         }
     }
-
-    env = {
-        DATABASE_URL = dynamic("aws-ssm", {
-            path = "chuspace-primary-db-connection-string"
-        })
-        RAILS_MASTER_KEY = dynamic("aws-ssm", {
-            path = "chuspace-app-master-key"
-        })
-        REGION = "Ireland",
-        RACK_ENV =  "production",
-        RAILS_ENV = "production",
-        RAILS_LOG_TO_STDOUT = "1",
-        RAILS_SERVE_STATIC_FILES = "1",
-        BOOTSNAP_CACHE_DIR =  "tmp/bootsnap-cache",
-        EXECJS_RUNTIME = "Node"
-    }
 }
 
 runner {
@@ -39,6 +23,24 @@ runner {
 }
 
 app "web" {
+    config {
+        env = {
+            DATABASE_URL = dynamic("aws-ssm", {
+                path = "chuspace-primary-db-connection-string"
+            })
+            RAILS_MASTER_KEY = dynamic("aws-ssm", {
+                path = "chuspace-app-master-key"
+            })
+            REGION = "Ireland",
+            RACK_ENV =  "production",
+            RAILS_ENV = "production",
+            RAILS_LOG_TO_STDOUT = "1",
+            RAILS_SERVE_STATIC_FILES = "1",
+            BOOTSNAP_CACHE_DIR =  "tmp/bootsnap-cache",
+            EXECJS_RUNTIME = "Node"
+        }
+    }
+
     build {
         use "pack" {
             builder     = "heroku/buildpacks:20"
