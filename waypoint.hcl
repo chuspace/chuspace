@@ -1,31 +1,24 @@
 project = "chuspace"
 
-variable "database_url" {
-  type    = string
-  default = dynamic("aws-ssm", {
-    path = "chuspace-primary-db-connection-string"
-  })
-}
-
-variable "rails_master_key" {
-  type    = string
-  default = dynamic("aws-ssm", {
-    path = "chuspace-app-master-key"
-  })
-}
-
 config {
     runner {
         env =  {
             RAILS_MASTER_KEY = "foobar"
             RAILS_ENV = "production"
             RACK_ENV = "production"
+            DATABASE_URL = dynamic("aws-ssm", {
+                path = "chuspace-primary-db-connection-string"
+            })
         }
     }
 
     env = {
-        DATABASE_URL = var.database_url
-        RAILS_MASTER_KEY = var.rails_master_key
+        DATABASE_URL = dynamic("aws-ssm", {
+            path = "chuspace-primary-db-connection-string"
+        })
+        RAILS_MASTER_KEY = dynamic("aws-ssm", {
+            path = "chuspace-app-master-key"
+        })
         REGION = "Ireland",
         RACK_ENV =  "production",
         RAILS_ENV = "production",
