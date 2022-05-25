@@ -1,4 +1,4 @@
-project = "chuspace"
+project = "chuspace-app"
 
 variable "database_url" {
   type    = string
@@ -29,7 +29,12 @@ config {
 }
 
 runner {
-    enabled = true
+  enabled = true
+
+  data_source "git" {
+    url  = "https://github.com/chuspace/chuspace.git"
+    path = ""
+  }
 }
 
 app "web" {
