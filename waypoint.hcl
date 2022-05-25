@@ -3,12 +3,8 @@ project = "chuspace"
 config {
     runner {
         env =  {
-            RAILS_MASTER_KEY = "foobar"
             RAILS_ENV = "production"
             RACK_ENV = "production"
-            DATABASE_URL = dynamic("aws-ssm", {
-                path = "chuspace-primary-db-connection-string"
-            })
         }
     }
 }
