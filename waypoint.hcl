@@ -36,7 +36,7 @@ app "web" {
     build {
         use "pack" {
             builder     = "heroku/buildpacks:20"
-            disable_entrypoint = true
+            disable_entrypoint = false
         }
 
         registry {
@@ -63,5 +63,4 @@ app "web" {
     url {
         auto_hostname = false
     }
-
 }
