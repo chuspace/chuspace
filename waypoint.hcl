@@ -15,17 +15,26 @@ variable "rails_master_key" {
 }
 
 config {
-  env = {
-    DATABASE_URL = var.database_url
-    RAILS_MASTER_KEY = var.rails_master_key
-    REGION = "Ireland",
-    RACK_ENV =  "production",
-    RAILS_ENV = "production",
-    RAILS_LOG_TO_STDOUT = "1",
-    RAILS_SERVE_STATIC_FILES = "1",
-    BOOTSNAP_CACHE_DIR =  "tmp/bootsnap-cache",
-    EXECJS_RUNTIME = "Node"
-  }
+    runner {
+        env =  {
+            DATABASE_URL = config.env.DATABASE_URL
+            RAILS_MASTER_KEY = config.env.RAILS_MASTER_KEY
+            RAILS_ENV = config.env.RAILS_ENV
+            RACK_ENV = config.env.RACK_ENV
+        }
+    }
+
+    env = {
+        DATABASE_URL = var.database_url
+        RAILS_MASTER_KEY = var.rails_master_key
+        REGION = "Ireland",
+        RACK_ENV =  "production",
+        RAILS_ENV = "production",
+        RAILS_LOG_TO_STDOUT = "1",
+        RAILS_SERVE_STATIC_FILES = "1",
+        BOOTSNAP_CACHE_DIR =  "tmp/bootsnap-cache",
+        EXECJS_RUNTIME = "Node"
+    }
 }
 
 runner {
