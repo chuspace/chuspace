@@ -3,7 +3,7 @@ FROM ruby:3.1.2-buster as development
 ENV RAILS_ENV development
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -\
-  && apt-get update -qq && apt-get install -qq --no-install-recommends nodejs postgresql-client
+  && apt-get update -qq && apt-get install -qq --no-install-recommends nodejs postgresql-client \
   && apt-get upgrade -qq \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*\
