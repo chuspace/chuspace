@@ -17,10 +17,10 @@ variable "rails_master_key" {
 config {
     runner {
         env =  {
-            DATABASE_URL = config.env.DATABASE_URL
-            RAILS_MASTER_KEY = config.env.RAILS_MASTER_KEY
-            RAILS_ENV = config.env.RAILS_ENV
-            RACK_ENV = config.env.RACK_ENV
+            DATABASE_URL = var.DATABASE_URL
+            RAILS_MASTER_KEY = var.RAILS_MASTER_KEY
+            RAILS_ENV = "production"
+            RACK_ENV = "production"
         }
     }
 
