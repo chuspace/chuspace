@@ -1,4 +1,4 @@
-project = "chuspace-app"
+project = "chuspace"
 
 variable "database_url" {
   type    = string
@@ -47,7 +47,7 @@ app "web" {
         registry {
             use "aws-ecr" {
                 region     = "eu-west-1"
-                repository = "chuspace-app"
+                repository = "chuspace"
                 tag        = "latest"
             }
         }
