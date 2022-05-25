@@ -2,9 +2,12 @@ FROM ruby:3.1.2-buster as development
 
 ENV RAILS_ENV development
 
-# install system dependencies
-RUN apt-get update && apt-get install -y nodejs npm postgresql-client
-RUN npm install -g yarn
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -\
+  && apt-get update -qq && apt-get install -qq --no-install-recommends nodejs postgresql-client
+  && apt-get upgrade -qq \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*\
+  && npm install -g yarn@1
 
 # set working directory
 WORKDIR /usr/src/app
