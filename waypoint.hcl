@@ -42,7 +42,7 @@ app "web" {
         registry {
             use "aws-ecr" {
                 region     = "eu-west-1"
-                repository = "chuspace"
+                repository = "chuspace-app"
                 tag        = "latest"
             }
         }
