@@ -17,7 +17,7 @@ services:
       - database
   web:
     annotations:
-      - service.beta.kubernetes.io/aws-load-balancer-type: alb
+      - aws-load-balancer-type/value=alb
     build: .
     ports:
       - 3000
