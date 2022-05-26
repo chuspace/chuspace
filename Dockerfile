@@ -23,6 +23,7 @@ RUN apk del gmp-dev libstdc++ \
     tzdata \
     libxslt-dev \
     libxml2-dev \
+    postgresql-dev \
     git \
     yarn
 
