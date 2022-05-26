@@ -14,9 +14,9 @@ services:
     command: bundle exec good_job start
     scale:
       count: 1-3
-        targets:
-          cpu: 70
-          memory: 90
+      targets:
+        cpu: 70
+        memory: 90
     resources:
       - database
   web:
