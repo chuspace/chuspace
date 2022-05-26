@@ -39,10 +39,10 @@ RUN bundle check || (bundle install --without development test --jobs=4 --retry=
 COPY package.json yarn.lock ./
 RUN yarn install --check-files --frozen-lockfile
 
-RUN bundle exec rails assets:precompile
-
 COPY . .
 
-CMD ["rails", "server", "-b", "0.0.0.0"]
+RUN bundle exec rake assets:precompile
+
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
 
 EXPOSE 3000
