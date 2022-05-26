@@ -19,7 +19,15 @@ RUN apk del gmp-dev libstdc++ \
     nodejs \
     npm \
     libffi-dev \
-    git \
+    build-essential \
+    zlib1g-dev \
+    libssl-dev \
+    libreadline-dev \
+    git-core \
+    curl \
+    locales \
+    libsqlite3-dev \
+    tzdata \
     yarn
 
 # set working directory
