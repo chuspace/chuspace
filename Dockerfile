@@ -1,6 +1,5 @@
 FROM ruby:3.1.2-buster as development
 
-ARG DEBIAN_FRONTEND=noninteractive
 ARG SECRET_KEY_BASE
 ARG RAILS_MASTER_KEY
 ARG DATABASE_URL
@@ -10,7 +9,7 @@ ENV RAILS_SERVE_STATIC_FILES true
 ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -\
-  && apt-get update -y && apt-get install -y nodejs postgresql-client \
+  && apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -yq nodejs postgresql-client \
   && npm install -g yarn@1
 
 # set working directory
