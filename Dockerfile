@@ -39,7 +39,7 @@ RUN bundle check || (bundle install --without development test --jobs=4 --retry=
 COPY package.json yarn.lock ./
 RUN yarn install --check-files --frozen-lockfile
 
-RUN bundle execc rails assets:precompile
+RUN bundle exec rails assets:precompile
 
 COPY . .
 
