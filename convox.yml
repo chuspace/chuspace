@@ -10,6 +10,7 @@ services:
       - database
   web:
     build: .
+    domain: chuspace.com,www.chuspace.com
     port: 3000
     resources:
       - database
