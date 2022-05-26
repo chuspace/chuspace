@@ -3,6 +3,11 @@ resources:
     type: postgres
 
 services:
+  worker:
+    build: .
+    command: bundle exec good_job start
+    resources:
+      - database
   web:
     build: .
     port: 3000
