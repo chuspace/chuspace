@@ -10,8 +10,8 @@ ENV RAILS_SERVE_STATIC_FILES true
 ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -\
-  && apt-get update -qq && apt-get install -qq --no-install-recommends gcc g++ make nodejs postgresql-client \
-  && apt-get upgrade -qq \
+  && apt-get update -y && apt-get install -y gcc g++ make nodejs postgresql-client \
+  && apt-get upgrade -y \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*\
   && npm install -g yarn@1
