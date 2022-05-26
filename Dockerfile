@@ -1,6 +1,13 @@
 FROM ruby:3.1.2-buster as development
 
-ENV RAILS_ENV development
+ARG DEBIAN_FRONTEND=noninteractive
+ARG SECRET_KEY_BASE
+ARG RAILS_MASTER_KEY
+ARG DATABASE_URL
+ENV NODE_ENV production
+ENV RAILS_ENV production
+ENV RAILS_SERVE_STATIC_FILES true
+ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -\
   && apt-get update -qq && apt-get install -qq --no-install-recommends gcc g++ make nodejs postgresql-client \
@@ -14,27 +21,16 @@ WORKDIR /usr/src/app
 
 # bundle install
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle check || (bundle install --without development test --jobs=4 --retry=3 && bundle clean)
 
 # yarn install
 COPY package.json yarn.lock ./
-RUN yarn install --check-files
+RUN yarn install --check-files --frozen-lockfile
 
-# copy the rest of the app
+RUN bundle execc rails assets:precompile
+
 COPY . .
 
 CMD ["rails", "server", "-b", "0.0.0.0"]
 
 EXPOSE 3000
-
-from development as production
-
-ARG SECRET_KEY_BASE
-ARG RAILS_MASTER_KEY
-ARG DATABASE_URL
-
-ENV NODE_ENV production
-ENV RAILS_ENV production
-ENV RAILS_SERVE_STATIC_FILES true
-
-RUN rake assets:precompile
