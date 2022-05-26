@@ -55,11 +55,6 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
 
-  puts 'env'
-  puts ENV['RAILS_MASTER_KEY']
-  puts Rails.application.credentials.inspect
-  puts Rails.env
-
   config.action_mailer.smtp_settings = {
     address: 'smtp.eu.sparkpostmail.com',
     port: 587,
