@@ -18,6 +18,7 @@ RUN apk del gmp-dev libstdc++ \
     libstdc++ \
     nodejs \
     npm \
+    git \
     yarn
 
 # set working directory
