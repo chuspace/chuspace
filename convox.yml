@@ -1,11 +1,10 @@
 balancers:
   other:
-    annotations:
-      - service.beta.kubernetes.io/aws-load-balancer-type=alb
-    service: web
-    ports:
-      80: 3000
-      443: 3000
+    ingress:
+      service: web
+      ports:
+        80: 3000
+        443: 3000
 
 resources:
   database:
