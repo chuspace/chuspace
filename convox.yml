@@ -2,6 +2,7 @@ balancers:
   ingress:
     annotations:
       - kubernetes.io/ingress-class=alb
+      - nginx.ingress.kubernetes.io/ssl-redirect="true"
     service: web
     ports:
       80: 3000
