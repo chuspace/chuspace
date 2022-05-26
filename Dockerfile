@@ -25,7 +25,8 @@ WORKDIR /usr/src/app
 
 # bundle install
 COPY Gemfile Gemfile.lock ./
-RUN bundle install --without development test --jobs=4 --retry=3
+RUN gem install bundler
+RUN bundle check || (bundle install --without development test --jobs=4 --retry=3 && bundle clean)
 
 # yarn install
 COPY package.json yarn.lock ./
