@@ -1,4 +1,4 @@
-FROM ruby:3.1.2-buster as development
+FROM ruby:3.1-alpine
 
 ARG SECRET_KEY_BASE
 ARG RAILS_MASTER_KEY
@@ -8,9 +8,17 @@ ENV RAILS_ENV production
 ENV RAILS_SERVE_STATIC_FILES true
 ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -\
-  && apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -yq nodejs postgresql-client \
-  && npm install -g yarn@1
+ARG REFRESHED_AT
+ENV REFRESHED_AT $REFRESHED_AT
+
+RUN apk del gmp-dev libstdc++ \
+  && apk -U upgrade \
+  && apk add --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ --no-cache \
+    gmp-dev \
+    libstdc++ \
+    nodejs \
+    npm \
+    yarn
 
 # set working directory
 WORKDIR /usr/src/app
