@@ -46,7 +46,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true unless ENV['SKIP_FORCE_SSL']
+  # config.force_ssl = true
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
@@ -58,6 +58,7 @@ Rails.application.configure do
   puts 'env'
   puts ENV['RAILS_MASTER_KEY']
   puts Rails.application.credentials.inspect
+  puts Rails.env
 
   config.action_mailer.smtp_settings = {
     address: 'smtp.eu.sparkpostmail.com',
