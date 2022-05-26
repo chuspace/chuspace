@@ -42,7 +42,7 @@ RUN yarn install --check-files --frozen-lockfile
 COPY . .
 
 RUN bundle exec rake assets:precompile
-RUN bundle exec rake db:create
+RUN bundle exec rake db:create db:migrate db:seed
 
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
 
