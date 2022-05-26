@@ -1,147 +1,103 @@
 # frozen_string_literal: true
 
 namespace :terraform do
-  resources = %w[app aurora cache database database_replica security_group vpc].freeze
+  resources = %w[instances databases security_groups vpcs].freeze
 
-  namespace :app do
+  namespace :instances do
     task :create do
-      Rake.application.invoke_task('terraform:run[app, create]')
+      Rake.application.invoke_task('terraform:run[instances, create]')
     end
 
     task :plan do
-      Rake.application.invoke_task('terraform:run[app, plan]')
+      Rake.application.invoke_task('terraform:run[instances, plan]')
     end
 
     task :destroy do
-      Rake.application.invoke_task('terraform:run[app, destroy]')
+      Rake.application.invoke_task('terraform:run[instances, destroy]')
     end
 
     task :output do
-      Rake.application.invoke_task('terraform:output[app]')
+      Rake.application.invoke_task('terraform:output[instances]')
     end
 
     task :ip do
-      Rake.application.invoke_task('terraform:output[app, public_elastic_ip]')
+      Rake.application.invoke_task('terraform:output[instances, public_elastic_ip]')
     end
   end
 
-  namespace :aurora do
+  namespace :databases do
     task :create do
-      Rake.application.invoke_task('terraform:run[aurora, create]')
+      Rake.application.invoke_task('terraform:run[databases, create]')
     end
 
     task :plan do
-      Rake.application.invoke_task('terraform:run[aurora, plan]')
+      Rake.application.invoke_task('terraform:run[databases, plan]')
     end
 
     task :destroy do
-      Rake.application.invoke_task('terraform:run[aurora, destroy]')
+      Rake.application.invoke_task('terraform:run[databases, destroy]')
     end
 
     task :output do
-      Rake.application.invoke_task('terraform:output[aurora]')
+      Rake.application.invoke_task('terraform:output[databases]')
     end
 
     task :endpoint do
-      Rake.application.invoke_task('terraform:output[aurora, endpoint]')
+      Rake.application.invoke_task('terraform:output[databases, endpoint]')
     end
   end
 
-  namespace :database do
+  namespace :global_accelerators do
     task :create do
-      Rake.application.invoke_task('terraform:run[database, create]')
+      Rake.application.invoke_task('terraform:run[global_accelerators, create]')
     end
 
     task :plan do
-      Rake.application.invoke_task('terraform:run[database, plan]')
+      Rake.application.invoke_task('terraform:run[global_accelerators, plan]')
     end
 
     task :destroy do
-      Rake.application.invoke_task('terraform:run[database, destroy]')
+      Rake.application.invoke_task('terraform:run[global_accelerators, destroy]')
     end
 
     task :output do
-      Rake.application.invoke_task('terraform:output[database]')
-    end
-
-    task :endpoint do
-      Rake.application.invoke_task('terraform:output[database_replica, endpoint]')
+      Rake.application.invoke_task('terraform:output[global_accelerators]')
     end
   end
 
-  namespace :database_replica do
+  namespace :security_groups do
     task :create do
-      Rake.application.invoke_task('terraform:run[database_replica, create]')
+      Rake.application.invoke_task('terraform:run[security_groups, create]')
     end
 
     task :plan do
-      Rake.application.invoke_task('terraform:run[database_replica, plan]')
+      Rake.application.invoke_task('terraform:run[security_groups, plan]')
     end
 
     task :destroy do
-      Rake.application.invoke_task('terraform:run[database_replica, destroy]')
+      Rake.application.invoke_task('terraform:run[security_groups, destroy]')
     end
 
     task :output do
-      Rake.application.invoke_task('terraform:output[database_replica]')
-    end
-
-    task :endpoint do
-      Rake.application.invoke_task('terraform:output[database_replica, endpoint]')
+      Rake.application.invoke_task('terraform:output[security_groups]')
     end
   end
 
-  namespace :global_accelerator do
+  namespace :vpcs do
     task :create do
-      Rake.application.invoke_task('terraform:run[database, create]')
+      Rake.application.invoke_task('terraform:run[vpcs, create]')
     end
 
     task :plan do
-      Rake.application.invoke_task('terraform:run[database, plan]')
+      Rake.application.invoke_task('terraform:run[vpcs, plan]')
     end
 
     task :destroy do
-      Rake.application.invoke_task('terraform:run[database, destroy]')
+      Rake.application.invoke_task('terraform:run[vpcs, destroy]')
     end
 
     task :output do
-      Rake.application.invoke_task('terraform:output[database]')
-    end
-  end
-
-  namespace :security_group do
-    task :create do
-      Rake.application.invoke_task('terraform:run[security_group, create]')
-    end
-
-    task :plan do
-      Rake.application.invoke_task('terraform:run[security_group, plan]')
-    end
-
-    task :destroy do
-      Rake.application.invoke_task('terraform:run[security_group, destroy]')
-    end
-
-    task :output do
-      Rake.application.invoke_task('terraform:output[security_group]')
-    end
-  end
-
-  namespace :vpc do
-    task :create do
-      Rake.application.invoke_task('terraform:run[vpc, create]')
-    end
-
-    task :plan do
-      Rake.application.invoke_task('terraform:run[vpc, plan]')
-    end
-
-    task :destroy do
-      Rake.application.invoke_task('terraform:run[vpc, destroy]')
-    end
-
-    task :output do
-      Rake.application.invoke_task('terraform:output[vpc]')
+      Rake.application.invoke_task('terraform:output[vpcs]')
     end
   end
 

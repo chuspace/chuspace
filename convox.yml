@@ -2,8 +2,7 @@ balancers:
   other:
     service: web
     ports:
-      443: 3000
-      80: 3000
+      443: https:3000
 
 resources:
   database:
