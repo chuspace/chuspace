@@ -16,6 +16,7 @@ services:
       - database
   web:
     build: .
-    port: 3000
+    ports:
+      - 3000
     resources:
       - database
