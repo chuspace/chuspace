@@ -13,7 +13,6 @@ services:
     build: .
     sticky: true
     domain: chuspace.com
-    ports:
-      - 3000
+    port: https:3000
     resources:
       - database
