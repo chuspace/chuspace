@@ -1,8 +1,5 @@
 balancers:
   ingress:
-    annotations:
-      - alb.ingress.kubernetes.io/certificate-arn=arn:aws:acm:eu-west-1:869307293297:certificate/6aa35291-8cfd-498b-b161-293d350419d9
-      - alb.ingress.kubernetes.io/ssl-redirect=443
     service: web
     ports:
       80: 3000
@@ -20,12 +17,6 @@ services:
     resources:
       - database
   web:
-    annotations:
-      - nginx.ingress.kubernetes.io/use-forwarded-headers=true
-      - nginx.ingress.kubernetes.io/enable-real-ip=true
-      - nginx.ingress.kubernetes.io/compute-full-forwarded-for=true
-      - nginx.ingress.kubernetes.io/use-proxy-protocol=true
-      - nginx.ingress.kubernetes.io/server-tokens=chuspace
     build: .
     sticky: true
     domain: chuspace.com
