@@ -266,7 +266,6 @@ GEM
       mini_mime (>= 0.1.1)
     marcel (1.0.2)
     matrix (0.4.2)
-    maxminddb (0.1.22)
     meta-tags (2.16.0)
       actionpack (>= 3.2.0, < 7.1)
     method_source (1.0.0)
@@ -535,7 +534,6 @@ DEPENDENCIES
   image_processing
   inline_svg
   jwt
-  maxminddb
   meta-tags
   mini_mime
   minitest
@@ -579,3 +577,6 @@ DEPENDENCIES
 
 RUBY VERSION
    ruby 3.1.2p20
+
+BUNDLED WITH
+   2.3.7

@@ -118,7 +118,6 @@ gem 'anyway_config'
 
 # Analytics
 gem 'ahoy_matey'
-gem 'maxminddb'
 
 # Votable
 gem 'acts_as_votable'
