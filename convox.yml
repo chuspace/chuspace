@@ -1,6 +1,8 @@
 resources:
   database:
     type: postgres
+  polyscale:
+    type: postgres
 
 services:
   worker:
@@ -9,6 +11,7 @@ services:
     command: bundle exec good_job start
     resources:
       - database
+      - polyscale
   web:
     build: .
     domain: chuspace.com
@@ -25,3 +28,4 @@ services:
     port: 3000
     resources:
       - database
+      - polyscale
