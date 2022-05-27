@@ -2,7 +2,9 @@ balancers:
   ingress:
     annotations:
       - kubernetes.io/ingress.class=alb
+      - alb.ingress.kubernetes.io/scheme=internet-facing
     service: web
+    class: alb
     ports:
       80: 3000
       443: 3000
