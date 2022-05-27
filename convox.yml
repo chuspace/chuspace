@@ -25,6 +25,7 @@ services:
       - nginx.ingress.kubernetes.io/compute-full-forwarded-for=true
       - nginx.ingress.kubernetes.io/use-proxy-protocol=true
       - nginx.ingress.kubernetes.io/server-tokens=chuspace
+      - nginx.ingress.kubernetes.io/ssl-redirect=false
     build: .
     sticky: true
     domain: chuspace.com
