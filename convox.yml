@@ -21,6 +21,8 @@ services:
     sticky: true
     domain: chuspace.com
     port: 3000
+    tls:
+      redirect: true
     ports:
       - 3000
     resources:
