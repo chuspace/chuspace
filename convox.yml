@@ -3,6 +3,13 @@ balancers:
     annotations:
       - kubernetes.io/ingress.class=alb
       - alb.ingress.kubernetes.io/scheme=internet-facing
+      - nginx.ingress.kubernetes.io/use-forwarded-headers=true
+      - nginx.ingress.kubernetes.io/enable-real-ip=true
+      - nginx.ingress.kubernetes.io/compute-full-forwarded-for=true
+      - nginx.ingress.kubernetes.io/use-proxy-protocol=true
+      - nginx.ingress.kubernetes.io/server-tokens=chuspace
+      - nginx.ingress.kubernetes.io/ssl-redirect=true
+      - nginx.ingress.kubernetes.io/force-ssl-redirect=true
     service: web
     class: alb
     ports:
@@ -35,5 +42,7 @@ services:
     port: 3000
     ports:
       - 3000
+    tls:
+      redirect: true
     resources:
       - database
