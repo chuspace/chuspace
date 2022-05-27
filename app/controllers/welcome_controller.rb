@@ -3,4 +3,8 @@
 class WelcomeController < ApplicationController
   skip_verify_authorized
   layout 'marketing'
+
+  def index
+    expires_in 24.hours, public: true
+  end
 end
