@@ -1,5 +1,9 @@
 balancers:
   ingress:
+    annotations:
+      - nginx.ingress.kubernetes.io/ssl-redirect=true
+      - nginx.ingress.kubernetes.io/use-forwarded-headers=true
+      - nginx.ingress.kubernetes.io/enable-real-ip=true
     service: web
     ports:
       80: 3000
