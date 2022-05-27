@@ -1,11 +1,12 @@
 balancers:
   ingress:
     annotations:
-      - nginx.ingress.kubernetes.io/ssl-redirect=true
-      - nginx.ingress.kubernetes.io/force-ssl-redirect=true
       - nginx.ingress.kubernetes.io/use-forwarded-headers=true
       - nginx.ingress.kubernetes.io/enable-real-ip=true
+      - nginx.ingress.kubernetes.io/compute-full-forwarded-for=true
       - nginx.ingress.kubernetes.io/use-proxy-protocol=true
+      - nginx.ingress.kubernetes.io/server-tokens=chuspace
+      - nginx.ingress.kubernetes.io/configuration-snippet="if ($http_x_forwarded_proto = 'http') { return 301 https://$host$request_uri; }"
     service: web
     ports:
       80: 3000
@@ -30,5 +31,3 @@ services:
       - 3000
     resources:
       - database
-    tls:
-      redirect: true
