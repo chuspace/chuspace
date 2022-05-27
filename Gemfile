@@ -126,10 +126,8 @@ gem 'acts_as_votable'
 # View component
 gem 'view_component'
 
-group :production do
-  # Resource monitoring
-  gem 'easymon'
-end
+# Resource monitoring
+gem 'easymon'
 
 # Deployment
 gem 'tomo'
