@@ -1,16 +1,8 @@
 balancers:
   ingress:
     annotations:
-      - kubernetes.io/ingress.class=alb
-      - alb.ingress.kubernetes.io/scheme=internet-facing
-      - service.beta.kubernetes.io/aws-load-balancer-type=
-      - nginx.ingress.kubernetes.io/use-forwarded-headers=true
-      - nginx.ingress.kubernetes.io/enable-real-ip=true
-      - nginx.ingress.kubernetes.io/compute-full-forwarded-for=true
-      - nginx.ingress.kubernetes.io/use-proxy-protocol=true
-      - nginx.ingress.kubernetes.io/server-tokens=chuspace
-      - nginx.ingress.kubernetes.io/ssl-redirect=true
-      - nginx.ingress.kubernetes.io/force-ssl-redirect=true
+      - service.beta.kubernetes.io/aws-load-balancer-ssl-ports=https
+      - service.beta.kubernetes.io/aws-load-balancer-backend-protocol=ssl
     service: web
     class: alb
     ports:
@@ -29,13 +21,18 @@ services:
     resources:
       - database
   web:
+    annotations:
+      - nginx.ingress.kubernetes.io/use-forwarded-headers=true
+      - nginx.ingress.kubernetes.io/enable-real-ip=true
+      - nginx.ingress.kubernetes.io/compute-full-forwarded-for=true
+      - nginx.ingress.kubernetes.io/use-proxy-protocol=true
+      - nginx.ingress.kubernetes.io/server-tokens=chuspace
+      - nginx.ingress.kubernetes.io/backend-protocol=HTTPS
     build: .
     sticky: true
     domain: chuspace.com
     port: 3000
     ports:
       - 3000
-    tls:
-      redirect: true
     resources:
       - database
