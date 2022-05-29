@@ -13,6 +13,8 @@ module Git
     attribute :clone_url, :string
     attribute :temp_clone_token, :string
     attribute :default_branch, :string
+    attribute :license_key, :string
+    attribute :license_name, :string
     attribute :adapter, ApplicationAdapter
 
     def clone_path_with_token

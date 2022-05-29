@@ -101,6 +101,8 @@ class ApplicationAdapter
         clone_url: response.clone_url,
         temp_clone_token: response.temp_clone_token,
         default_branch: response.default_branch,
+        license_key: response.license.key,
+        license_name: response.license.name,
         adapter: self
       )
     else
