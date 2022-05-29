@@ -1,8 +1,0 @@
-<%= turbo_frame_tag(publication) do %>
-  <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
-    <%= content_tag :p, 'Set who can see your publication contents', class: 'text-secondary text-sm mb-4' %>
-
-    <%= form.input :visibility, as: :select, collection: Publication.visibilities %>
-    <%= form.button :submit, 'Save', class: "mt-8 btn btn-primary" %>
-  <% end %>
-<% end %>

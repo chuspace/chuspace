@@ -1,10 +1,12 @@
 <%= turbo_frame_tag(publication) do %>
   <%= simple_form_for(publication, url: url, html: { class: 'relative', data: { target: 'auto-refresh-form.form', "turbo-frame": '_top' } }) do |form| %>
-    <%= content_tag :p, 'Map your publication contents', class: 'text-secondary text-sm mb-4' %>
+    <%= content_tag :p, 'Set your publication content settings', class: 'text-secondary text-sm mb-4' %>
 
     <%= form.simple_fields_for :content do |content_form| %>
       <%= content_form.input :auto_publish, as: :boolean, wrapper_html: { class: 'sm:w-1/4' } %>
     <% end %>
+
+    <div class='border-b border-base-200 my-4'></div>
 
     <autocomplete-extras data-tags data-items='<%= publication.topic_list %>'>
       <auto-complete
