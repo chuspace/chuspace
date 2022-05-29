@@ -21,7 +21,7 @@
         <% end %>
         <span class='mx-4'>&#183;</span>
         <% if @post.markdown_doc.snippets? %>
-          <%= link_to publication_post_snippets_path(@post.fetch_publication, @post), title: 'Download code snippets', target: "_blank" do %>
+          <%= link_to publication_post_snippets_path(@post.publication, @post), title: 'Download code snippets', target: "_blank" do %>
             <%= inline_svg_tag('icons/download', class: 'w-4 h-4 hover:text-primary fill-current') %>
           <% end %>
         <% end %>
