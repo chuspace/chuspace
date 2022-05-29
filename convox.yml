@@ -9,6 +9,10 @@ services:
     agent: true
     build: .
     command: bundle exec good_job start
+    scale:
+      count: 3
+      cpu: 256
+      memory: 512
     resources:
       - database
       - memcache
@@ -20,6 +24,10 @@ services:
       redirect: true
     termination:
       grace: 60
+    scale:
+      count: 3
+      cpu: 256
+      memory: 512
     health:
       grace: 10
       interval: 30
