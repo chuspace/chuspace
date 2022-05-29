@@ -14,7 +14,7 @@ class OauthsController < ApplicationController
         identity.user
       elsif user = User.find_by(email: auth_hash.info.email)
         existing_provider = user.identities&.first&.provider&.titleize || provider_name
-        redirect_to redirect_location_for(:user) || root_path, notice: t('oauths.create.failure')
+        redirect_to redirect_location_for(:user) || root_path, notice: t('oauths.create.failure', existing_provider: existing_provider)
         return
       else
         User.create(user_atts)

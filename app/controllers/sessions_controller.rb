@@ -6,13 +6,8 @@ class SessionsController < ApplicationController
   include SessionRedirect
   layout 'marketing'
 
-  def index
-    expires_in 24.hours, public: true
-  end
-
   def email
     @user = User.new(email: params[:email])
-    expires_in 24.hours, public: true
   end
 
   def create
