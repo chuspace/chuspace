@@ -5,7 +5,7 @@ class Identity < ApplicationRecord
 
   has_secure_token :magic_auth_token
 
-  belongs_to :user
+  belongs_to :user, touch: true
 
   encrypts :uid, deterministic: true, downcase: true
 

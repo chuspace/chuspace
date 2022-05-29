@@ -1,8 +1,23 @@
 <head>
   <%= render 'layouts/meta' %>
 
-  <link rel="dns-prefetch" href="//secure.gravatar.com" />
-  <link rel="preconnect" href="//secure.gravatar.com" />
+  <%= display_meta_tags(
+    site: ChuspaceConfig.new.app[:name],
+    title: 'Blogging platform for programmers and teams',
+    description: 'Collaborative blogging platform for programmers and teams',
+    icon: '/favicon.png',
+    og: {
+      title: :title,
+      site_name: :site,
+      description: :description
+    }
+  )
+  %>
+
+  <% if Current.request_authenticated? %>
+    <link rel="dns-prefetch" href="//secure.gravatar.com" />
+    <link rel="preconnect" href="//secure.gravatar.com" />
+  <% end %>
 
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/chuspace-icon-192.png" />

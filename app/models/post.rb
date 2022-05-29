@@ -13,7 +13,7 @@ class Post < ApplicationRecord
 
   validates :title, :permalink, :blob_path, :body, :blob_sha, :commit_sha, :visibility, presence: true
   validates :blob_path, uniqueness: { scope: :publication_id }, markdown: true
-  validates :permalink, uniqueness: { scope: :permalink }
+  validates :permalink, uniqueness: { scope: :publication_id }
 
   before_validation :set_visibility
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  mount Easymon::Engine => "/heartbeat"
+  mount Easymon::Engine => '/heartbeat'
 
   root to: 'home#index', constraints: RootConstraint.new, as: :authenticated_root
   root to: 'welcome#index'

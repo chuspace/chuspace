@@ -19,6 +19,9 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      memcached:
+        image: memcached:latest
+
     env:
       RAILS_ENV: test
 
@@ -59,6 +62,7 @@ jobs:
       - name: Preparing database
         env:
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
+          MEMCACHE_URL: localhost:11211
           DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@localhost:5432/chuspace_test
         run: bin/rails db:prepare
 
@@ -71,6 +75,7 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
+          MEMCACHE_URL: localhost:11211
           DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@localhost:5432/chuspace_test
         run: bin/rails assets:precompile
 
@@ -78,6 +83,7 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
+          MEMCACHE_URL: localhost:11211
           DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@localhost:5432/chuspace_test
         run: bin/rails test:all
 

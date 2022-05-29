@@ -1,8 +1,8 @@
 resources:
   database:
     type: postgres
-  polyscale:
-    type: postgres
+  memcache:
+    type: memcached
 
 services:
   worker:
@@ -11,7 +11,7 @@ services:
     command: bundle exec good_job start
     resources:
       - database
-      - polyscale
+      - memcache
   web:
     build: .
     domain: chuspace.com
@@ -28,4 +28,4 @@ services:
     port: 3000
     resources:
       - database
-      - polyscale
+      - memcache

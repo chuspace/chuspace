@@ -11,11 +11,9 @@ module FindPost
 
   def find_post
     @post = @publication.posts.friendly.find(params[:post_permalink])
-
-    if params[:publication_permalink] != @publication.permalink
+    if params[:post_permalink] != @post.permalink
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@post), status: :moved_permanently
     end
-
-    add_breadcrumb(@post.permalink, publication_path(@post))
+    add_breadcrumb(@post.permalink, post_publication_path(@publication, @post))
   end
 end

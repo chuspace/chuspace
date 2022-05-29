@@ -29,6 +29,10 @@ gem 'wicked'
 gem 'active_storage_validations'
 gem 'rubyzip'
 
+# Fragment caching
+gem 'dalli'
+gem 'connection_pool'
+
 # Sign web tokens
 gem 'alba'
 gem 'jwt'

@@ -42,6 +42,15 @@ module Chuspace
     # Serve SVG
     config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
 
+    # Setup global redis cache store
+    config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHE_URL'), {
+      expires_in: 6.hours.to_i,
+      namespace: "chuspace-#{Rails.env}-#{ENV['APP_VERSION']}",
+      pool_size: 5,
+      failover: false,
+      pool_timeout: 5
+    }
+
     # Autoload paths
     config.anyway_config.autoload_static_config_path = 'app/configs'
     overrides = "#{root}/app/overrides"

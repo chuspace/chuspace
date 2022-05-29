@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <html lang='en' class='h-full'>
-  <%= render 'layouts/head' %>
+  <head>
+    <%= render 'layouts/meta' %>
+
+    <% if Current.request_authenticated? %>
+      <link rel="dns-prefetch" href="//secure.gravatar.com" />
+      <link rel="preconnect" href="//secure.gravatar.com" />
+    <% end %>
+
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/chuspace-icon-192.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/chuspace-icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/chuspace-icon-192.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/chuspace-icon-192.png" />
+
+    <%= javascript_pack_tag 'application', defer: true, 'data-turbo-track': 'reload' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+
+    <% cache([@publication, @post, 'head:og']) do %>
+      <%= display_meta_tags(
+        site: ChuspaceConfig.new.app[:name],
+        title: 'Blogging platform for programmers and teams',
+        description: 'Collaborative blogging platform for programmers and teams',
+        icon: '/favicon.png',
+        og: {
+          title: :title,
+          site_name: :site,
+          description: :description
+        },
+        **@post.to_meta_tags
+      ) %>
+    <% end %>
+  </head>
+
   <body class='w-full max-w-full'>
     <%= render 'layouts/flash' %>
     <% cache([Current.request_authenticated? ? Current.user : 'guest', 'header', @publication, @post]) do %>
@@ -20,10 +52,8 @@
       <% end %>
     <% end %>
 
-    <% cache([@publication, @post]) do %>
-      <main class="container mt-24">
-        <%= yield %>
-      </main>
-    <% end %>
+    <main class="container mt-24">
+      <%= yield %>
+    </main>
   </body>
 </html>

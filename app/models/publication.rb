@@ -21,7 +21,7 @@ class Publication < ApplicationRecord
   has_many :readme_images, ->(publication) { where(draft_blob_path: publication.repository.readme_path) }, class_name: 'Image', dependent: :destroy, inverse_of: :publication
   has_one  :repository, dependent: :destroy, inverse_of: :publication, required: true
 
-  belongs_to :owner, class_name: 'User'
+  belongs_to :owner, class_name: 'User', touch: true
   belongs_to :git_provider
 
   before_save  :set_permalink_to_owner_username, if: :personal?
@@ -29,6 +29,7 @@ class Publication < ApplicationRecord
 
   validates :name, presence: true, length: { in: 1..80 }
   validates :name, :visibility, presence: true
+  validates :permalink, uniqueness: true
   validate  :one_personal_publication_per_owner, on: :create
 
   acts_as_taggable_on :topics
