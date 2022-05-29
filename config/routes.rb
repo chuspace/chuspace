@@ -2,6 +2,10 @@
 
 Rails.application.routes.draw do
   mount Easymon::Engine => '/heartbeat'
+  match '/404', to: 'errors#not_found', via: :all
+  match '/422', to: 'errors#unprocessible_entity', via: :all
+  match '/406', to: 'errors#unacceptable', via: :all
+  match '/500', to: 'errors#internal_server_error', via: :all
 
   root to: 'home#index', constraints: RootConstraint.new, as: :authenticated_root
   root to: 'welcome#index'

@@ -2,8 +2,13 @@
 
 FriendlyId.defaults do |config|
   config.use :reserved
-  config.reserved_words = %w(new edit index session login logout users admin
-    stylesheets assets javascripts images)
+  config.reserved_words = %w(
+    new chu chuspace gaurav gauravtiwari parul purge
+    publications publication admin blog blogs
+    terms privacy superuser self chu-space
+    edit index session login logout users admin
+    stylesheets assets javascripts images
+  )
 
   config.treat_reserved_as_conflict = false
   config.use :slugged

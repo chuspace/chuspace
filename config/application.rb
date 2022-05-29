@@ -51,6 +51,9 @@ module Chuspace
       pool_timeout: 5
     }
 
+    # Custom error pages
+    config.exceptions_app = self.routes
+
     # Autoload paths
     config.anyway_config.autoload_static_config_path = 'app/configs'
     overrides = "#{root}/app/overrides"
