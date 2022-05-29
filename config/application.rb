@@ -43,7 +43,7 @@ module Chuspace
     config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
 
     # Setup global redis cache store
-    config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHE_URL'), {
+    config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHE_URL', 'localhost:11211'), {
       expires_in: 6.hours.to_i,
       namespace: "chuspace-#{Rails.env}-#{ENV['APP_VERSION']}",
       pool_size: 5,
