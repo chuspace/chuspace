@@ -3,7 +3,7 @@
 FriendlyId.defaults do |config|
   config.use :reserved
   config.reserved_words = %w(
-    new chu chuspace gaurav gauravtiwari parul purge
+    new chu chuspace purge
     publications publication admin blog blogs
     terms privacy superuser self chu-space
     edit index session login logout users admin
