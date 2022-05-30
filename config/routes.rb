@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  mount Easymon::Engine => '/heartbeat'
+  if Rails.env.production?
+    mount Easymon::Engine => '/heartbeat'
+  end
+
   match '/404', to: 'errors#not_found', via: :all
   match '/422', to: 'errors#unprocessible_entity', via: :all
   match '/406', to: 'errors#unacceptable', via: :all
