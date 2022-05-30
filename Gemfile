@@ -131,19 +131,9 @@ gem 'acts_as_votable'
 # View component
 gem 'view_component'
 
-group :production do
-  # Resource monitoring
-  gem 'easymon'
-
-  #  Telemetry
-  gem 'opentelemetry-sdk'
-  gem 'opentelemetry-exporter-otlp'
-  gem 'opentelemetry-instrumentation-rails'
-  gem 'opentelemetry-instrumentation-active_job'
-  gem 'opentelemetry-instrumentation-faraday'
-  gem 'opentelemetry-instrumentation-dalli'
-  gem 'opentelemetry-instrumentation-pg'
-end
+# Monitoring
+gem 'skylight'
+gem 'easymon'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
