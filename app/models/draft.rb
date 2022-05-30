@@ -35,11 +35,13 @@ class Draft < Git::Blob
   end
 
   def publish(author:)
+    db_publication = Publication.find(publication.id)
+
     if post.present?
       post.update(author: author, **to_post_attributes)
       post
     else
-      publication.posts.create(author: author, **to_post_attributes)
+      db_publication.posts.create(author: author, **to_post_attributes)
     end
   end
 
