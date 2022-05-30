@@ -136,6 +136,10 @@ gem 'view_component'
 gem 'skylight'
 gem 'easymon'
 
+group :production do
+  gem 'cloudflare-rails'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
