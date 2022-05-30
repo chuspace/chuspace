@@ -43,6 +43,66 @@
     {
       "warning_type": "Redirect",
       "warning_code": 18,
+      "fingerprint": "41ffe3a141cc11f214c9aa522f550085fb53d5fe8458b0aea5ad8bc91a8a053e",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/concerns/find_post.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(RedirectUrl.new(:path => request.path, :params => (params)).for(Post.friendly_fetch!(params[:post_permalink])), :status => :moved_permanently)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "FindPost",
+        "method": "find_post"
+      },
+      "user_input": "RedirectUrl.new(:path => request.path, :params => (params)).for(Post.friendly_fetch!(params[:post_permalink]))",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "424d150e7e92294203049a80370da1d3c1da2a2b8e48483621c84b9cde1bdff1",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/concerns/find_user.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(RedirectUrl.new(:path => request.path, :params => (params)).for(User.friendly_fetch!(params[:user_username])), :status => :moved_permanently)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "FindUser",
+        "method": "find_user"
+      },
+      "user_input": "RedirectUrl.new(:path => request.path, :params => (params)).for(User.friendly_fetch!(params[:user_username]))",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "50cd5e2e5e8345efde9c02e780e82039cd3ebefc463e34784cceb6c147491f12",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/posts_controller.rb",
+      "line": 21,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(RedirectUrl.new(:path => request.path, :params => (params)).for(Post.friendly_fetch!(params[:permalink])), :status => :moved_permanently)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PostsController",
+        "method": "find_post"
+      },
+      "user_input": "RedirectUrl.new(:path => request.path, :params => (params)).for(Post.friendly_fetch!(params[:permalink]))",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
       "fingerprint": "5426b770fe6b3918ed93f3f9cfbe8fa0f11f4e88455b61d43a3f0531f7d3e1c9",
       "check_name": "Redirect",
       "message": "Possible unprotected redirect",
@@ -75,7 +135,7 @@
           "type": "controller",
           "class": "Publications::SettingsController",
           "method": "show",
-          "line": 18,
+          "line": 15,
           "file": "app/controllers/publications/settings_controller.rb",
           "rendered": {
             "name": "publications/settings/show",
@@ -98,7 +158,7 @@
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "app/models/git/repository.rb",
-      "line": 35,
+      "line": 37,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`rm -rf #{tmp_clone_path.to_s}`",
       "render_path": null,
@@ -112,13 +172,33 @@
       "note": ""
     },
     {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "83a108672fe4707583bc19272f153bd0b403d93c74e3ca497a623b35b57da4b6",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/publications_controller.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(RedirectUrl.new(:path => request.path, :params => (params)).for(Publication.friendly_fetch!(params[:permalink])), :status => :moved_permanently)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PublicationsController",
+        "method": "show"
+      },
+      "user_input": "RedirectUrl.new(:path => request.path, :params => (params)).for(Publication.friendly_fetch!(params[:permalink]))",
+      "confidence": "High",
+      "note": ""
+    },
+    {
       "warning_type": "Command Injection",
       "warning_code": 14,
       "fingerprint": "8cece95300cdfa44a5d8888c6c6c71b3618727078cbc38dd6613a871077d7c58",
       "check_name": "Execute",
       "message": "Possible command injection",
       "file": "app/models/git/repository.rb",
-      "line": 23,
+      "line": 25,
       "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
       "code": "`git clone #{clone_path_with_token} #{tmp_clone_path.to_s}`",
       "render_path": null,
@@ -249,7 +329,7 @@
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
       "file": "app/controllers/publications/people_controller.rb",
-      "line": 57,
+      "line": 54,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:membership).permit(:role)",
       "render_path": null,
@@ -260,6 +340,46 @@
       },
       "user_input": ":role",
       "confidence": "Medium",
+      "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "c7f809055e7517fac1256f033ec26b702f0cf2e347b0d96fd0fdfd513575de04",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/concerns/find_publication.rb",
+      "line": 15,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(RedirectUrl.new(:path => request.path, :params => (params)).for(Publication.friendly_fetch!(params[:publication_permalink])), :status => :moved_permanently)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "FindPublication",
+        "method": "find_publication"
+      },
+      "user_input": "RedirectUrl.new(:path => request.path, :params => (params)).for(Publication.friendly_fetch!(params[:publication_permalink]))",
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "ca67a85335123fa0f48e1dfa8afd30969c148531f298b1e7cc5cc08da36a1861",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/users_controller.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(RedirectUrl.new(:path => request.path, :params => (params)).for(User.friendly_fetch!(params[:username])), :status => :moved_permanently)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "UsersController",
+        "method": "find_user"
+      },
+      "user_input": "RedirectUrl.new(:path => request.path, :params => (params)).for(User.friendly_fetch!(params[:username]))",
+      "confidence": "High",
       "note": ""
     },
     {
@@ -283,6 +403,6 @@
       "note": ""
     }
   ],
-  "updated": "2022-05-20 17:12:26 +0100",
+  "updated": "2022-05-30 14:09:05 +0100",
   "brakeman_version": "5.2.2"
 }
