@@ -5,8 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin')
 const { merge } = require('@rails/webpacker')
 
 webpackConfig.optimization.minimizer = webpackConfig.optimization.minimizer.filter(
-  (plugin) =>
-    plugin.constructor && plugin.constructor.name === 'CssMinimizerPlugin'
+  (plugin) => plugin.constructor && plugin.constructor.name === 'CssMinimizerPlugin'
 )
 
 const productionConfig = {
@@ -17,23 +16,23 @@ const productionConfig = {
         terserOptions: {
           keep_classnames: /Element$/,
           parse: {
-            ecma: 8
+            ecma: 8,
           },
           compress: {
             ecma: 5,
             warnings: false,
-            comparisons: false
+            comparisons: false,
           },
           mangle: { safari10: true },
           output: {
             ecma: 5,
             comments: false,
-            ascii_only: true
-          }
-        }
-      })
-    ]
-  }
+            ascii_only: true,
+          },
+        },
+      }),
+    ],
+  },
 }
 
 module.exports = merge(webpackConfig, productionConfig)

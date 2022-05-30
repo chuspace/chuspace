@@ -11,13 +11,7 @@ export default class AlertNotificationElement extends HTMLElement {
   }
 
   hide = () =>
-    this.element.classList.add(
-      'transition-all',
-      'duration-500',
-      'ease-in-out',
-      '-translate-y-full',
-      'transform'
-    )
+    this.element.classList.add('transition-all', 'duration-500', 'ease-in-out', '-translate-y-full', 'transform')
 
   preventDefault = (event) => event.preventDefault()
 }
