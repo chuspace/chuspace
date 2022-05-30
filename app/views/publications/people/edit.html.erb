@@ -4,7 +4,7 @@
       <div class="modal-box">
         <h1 class='text-base font-normal mb-8'>Change <%= @membership.user.first_name %>'s role</h1>
         <%= link_to publication_people_path(@publication), class: 'absolute right-0 top-0 mt-8 mr-8', 'data-action': 'click:dialog-opener#close' do %>
-          <%= inline_svg_tag('icons/x', class: 'w-4 h-4 fill-current') %>
+          <%= inline_svg_tag('icons/x.svg', class: 'w-4 h-4 fill-current') %>
         <% end %>
 
         <%= render 'form', membership: @membership %>
