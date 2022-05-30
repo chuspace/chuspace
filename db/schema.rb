@@ -254,6 +254,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_22_142540) do
     t.index ['searchable_type', 'searchable_id'], name: 'index_pg_search_documents_on_searchable'
   end
 
+  create_table 'post_routes', force: :cascade do |t|
+    t.bigint 'post_id', null: false
+    t.text 'route'
+    t.boolean 'current', default: false, null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['post_id', 'route'], name: 'index_post_routes_on_post_id_and_route', unique: true
+    t.index ['post_id'], name: 'index_post_routes_on_post_id'
+  end
+
   create_table 'posts', force: :cascade do |t|
     t.citext 'permalink', null: false
     t.text 'title', null: false
@@ -283,6 +293,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_22_142540) do
     t.index ['publication_id', 'blob_path'], name: 'index_posts_on_publication_id_and_blob_path', unique: true
     t.index ['publication_id', 'permalink'], name: 'index_posts_on_publication_id_and_permalink', unique: true
     t.index ['publication_id'], name: 'index_posts_on_publication_id'
+  end
+
+  create_table 'publication_routes', force: :cascade do |t|
+    t.bigint 'publication_id', null: false
+    t.text 'route'
+    t.boolean 'current', default: false, null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['publication_id', 'route'], name: 'index_publication_routes_on_publication_id_and_route', unique: true
+    t.index ['publication_id'], name: 'index_publication_routes_on_publication_id'
   end
 
   create_table 'publications', force: :cascade do |t|
@@ -390,6 +410,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_22_142540) do
     t.index ['name'], name: 'index_tags_on_name', unique: true
   end
 
+  create_table 'user_routes', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.text 'route'
+    t.boolean 'current', default: false, null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['user_id', 'route'], name: 'index_user_routes_on_user_id_and_route', unique: true
+    t.index ['user_id'], name: 'index_user_routes_on_user_id'
+  end
+
   create_table 'users', force: :cascade do |t|
     t.string 'first_name', null: false
     t.string 'last_name'
@@ -433,8 +463,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_22_142540) do
   add_foreign_key 'invites', 'users', column: 'sender_id'
   add_foreign_key 'memberships', 'publications'
   add_foreign_key 'memberships', 'users'
+  add_foreign_key 'post_routes', 'posts'
   add_foreign_key 'posts', 'publications'
   add_foreign_key 'posts', 'users', column: 'author_id'
+  add_foreign_key 'publication_routes', 'publications'
   add_foreign_key 'publications', 'git_providers'
   add_foreign_key 'publications', 'users', column: 'owner_id'
   add_foreign_key 'publishings', 'posts'
@@ -444,4 +476,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_22_142540) do
   add_foreign_key 'revisions', 'posts'
   add_foreign_key 'revisions', 'publications'
   add_foreign_key 'revisions', 'users', column: 'author_id'
+  add_foreign_key 'user_routes', 'users'
 end

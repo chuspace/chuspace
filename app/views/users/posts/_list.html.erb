@@ -5,8 +5,8 @@
 
   <% card.actions do %>
     <% if Current.request_authenticated? && allowed_to?(:edit?, user) %>
-      <% if user.personal_publication.present? %>
-        <%= link_to publication_new_draft_path(user.personal_publication) do %>
+      <% if user.fetch_personal_publication.present? %>
+        <%= link_to publication_new_draft_path(user.fetch_personal_publication) do %>
           <%= inline_svg_tag 'icons/plus.svg', class: 'fill-current w-4 h-4' %>
         <% end %>
       <% else %>
@@ -18,9 +18,9 @@
   <% end %>
 
   <% card.body do %>
-    <% if user.personal_publication.present? %>
-      <% if user.personal_publication&.posts&.any? %>
-        <%= render 'posts/list', posts: user.personal_publication.posts %>
+    <% if user.fetch_personal_publication.present? %>
+      <% if user.fetch_personal_publication&.posts&.any? %>
+        <%= render 'posts/list', posts: user.fetch_personal_publication.posts %>
       <% else %>
         <%= render Placeholder::Component.new do |placeholder| %>
           <%= placeholder.text do %>

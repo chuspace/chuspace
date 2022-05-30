@@ -10,7 +10,7 @@ module FindPost
   private
 
   def find_post
-    @post = @publication.posts.friendly.find(params[:post_permalink])
+    @post = Post.friendly_fetch!(params[:post_permalink])
     if params[:post_permalink] != @post.permalink
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@post), status: :moved_permanently
     end

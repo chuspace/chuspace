@@ -31,7 +31,7 @@ module Authentication
   private
 
   def authenticate
-    identity = Identity.find_by(id: cookies.encrypted[:identity_id])
+    identity = Identity.fetch_by_id(cookies.encrypted[:identity_id])
     signout if identity.blank?
 
     Current.identity = identity

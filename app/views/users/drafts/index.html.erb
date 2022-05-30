@@ -4,8 +4,8 @@
   <% end %>
 
   <% card.actions do %>
-    <% if @user.personal_publication %>
-      <%= link_to publication_new_draft_path(@user.personal_publication) do %>
+    <% if @user.fetch_personal_publication %>
+      <%= link_to publication_new_draft_path(@user.fetch_personal_publication) do %>
         <%= inline_svg_tag 'icons/plus.svg', class: 'fill-current w-4 h-4' %>
       <% end %>
     <% else %>
@@ -16,7 +16,7 @@
   <% end %>
 
   <% card.body do %>
-    <% if @user.personal_publication.present? %>
+    <% if @user.fetch_personal_publication.present? %>
       <% path = params[:path].blank? ? user_drafts_path(@user) : nested_user_drafts_path(@user, path: params[:path]) %>
       <%= turbo_frame_tag dom_id(@user, :drafts), src: path, lazy: true do %>
         <%= render 'shared/card_loader', count: 5 %>

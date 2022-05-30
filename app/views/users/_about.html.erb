@@ -5,8 +5,8 @@
 
   <% card.actions do %>
     <% if Current.request_authenticated? && allowed_to?(:edit?, @user) %>
-      <% if @user.personal_publication.present? %>
-        <%= link_to publication_edit_draft_path(@user.personal_publication, path: @user.personal_publication.repository.readme_path) do %>
+      <% if @user.fetch_personal_publication.present? %>
+        <%= link_to publication_edit_draft_path(@user.fetch_personal_publication, path: @user.fetch_personal_publication.fetch_repository.readme_path) do %>
           <%= inline_svg_tag 'icons/pencil.svg', class: 'fill-current w-3 h-3' %>
         <% end %>
       <% else %>
@@ -18,8 +18,8 @@
   <% end %>
 
   <% card.body do %>
-    <% if @user.personal_publication.present? %>
-      <%= content_tag :article, @user.personal_publication.readme_html.html_safe, class: 'chu-editor chu-editor-sm pt-4' %>
+    <% if @user.fetch_personal_publication.present? %>
+      <%= content_tag :article, @user.fetch_personal_publication.readme_html.html_safe, class: 'chu-editor chu-editor-sm pt-4' %>
     <% else %>
       <%= render Placeholder::Component.new do |placeholder| %>
         <%= placeholder.text do %>

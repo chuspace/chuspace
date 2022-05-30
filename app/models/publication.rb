@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Publication < ApplicationRecord
+  include IdentityCache
   extend FriendlyId
   include PgSearch::Model
-  include Iconable, Metatagable
+  include Iconable, Metatagable, CachedSlugs
   include AttrJson::Record
   include AttrJson::Record::QueryScopes
   include AttrJson::NestedAttributes
@@ -21,8 +22,14 @@ class Publication < ApplicationRecord
   has_many :readme_images, ->(publication) { where(draft_blob_path: publication.repository.readme_path) }, class_name: 'Image', dependent: :destroy, inverse_of: :publication
   has_one  :repository, dependent: :destroy, inverse_of: :publication, required: true
 
+  cache_has_many :posts, embed: true
+
+  cache_has_one :repository, embed: true
+
   belongs_to :owner, class_name: 'User', touch: true
   belongs_to :git_provider
+
+  cache_belongs_to :owner
 
   before_save  :set_permalink_to_owner_username, if: :personal?
   after_create :create_owning_membership

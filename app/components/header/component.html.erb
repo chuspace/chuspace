@@ -41,7 +41,7 @@
               </li>
               <div class='divider my-1 h-0'></div>
               <li>
-                <%= helpers.tab_link_to 'Write', publication_new_draft_path(Current.user.personal_publication), class: 'link link-hover', role: 'menuitem', tabindex: '-1' if Current.user.personal_publication.present? %>
+                <%= helpers.tab_link_to 'Write', publication_new_draft_path(Current.user.fetch_personal_publication), class: 'link link-hover', role: 'menuitem', tabindex: '-1' if Current.user.fetch_personal_publication.present? %>
               </li>
               <li>
                 <%= helpers.tab_link_to 'Settings', setting_path(id: UserSetting::DEFAULT_PAGE), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  include Breadcrumbable
-
   layout 'user'
 
   before_action :find_user
@@ -11,10 +9,9 @@ class UsersController < ApplicationController
   private
 
   def find_user
-    @user = User.friendly.find(params[:username])
+    @user = User.friendly_fetch!(params[:username])
     if params[:username] != @user.username
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@user), status: :moved_permanently
     end
-    add_breadcrumb(@user.username, user_path(@user))
   end
 end

@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class Post < ApplicationRecord
+  include IdentityCache
   extend FriendlyId
-  include ReadingTime, Metatagable
+  include ReadingTime, Metatagable, CachedSlugs
 
   belongs_to :publication, touch: true
   belongs_to :author, class_name: 'User', touch: true
@@ -10,6 +11,9 @@ class Post < ApplicationRecord
   has_many   :publishings, dependent: :delete_all, inverse_of: :post
   has_many   :images, ->(post) { where(draft_blob_path: post.blob_path) }, through: :publication, dependent: :delete_all, source: :images
   has_one    :featured_image, ->(post) { where(draft_blob_path: post.blob_path, featured: true) }, through: :publication, class_name: 'Image', source: :images
+
+  cache_belongs_to :publication
+  cache_belongs_to :author
 
   validates :title, :permalink, :blob_path, :body, :blob_sha, :commit_sha, :visibility, presence: true
   validates :blob_path, uniqueness: { scope: :publication_id }, markdown: true

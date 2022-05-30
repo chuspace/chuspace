@@ -16,8 +16,7 @@ class PostsController < ApplicationController
   end
 
   def find_post
-    @post = Post.friendly.find(params[:permalink])
-
+    @post = Post.friendly_fetch!(params[:permalink])
     if params[:permalink] != @post.permalink
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@post), status: :moved_permanently
     end

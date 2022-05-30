@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Repository < ApplicationRecord
+  include IdentityCache
+
   belongs_to :publication
   belongs_to :git_provider
   has_many   :readme_images, ->(repository) { where(draft_blob_path: repository.readme_path) }, through: :publication, dependent: :delete_all, source: :images

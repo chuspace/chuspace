@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  include Avatarable, Trackable
+  include IdentityCache
+  include Avatarable, Trackable, CachedSlugs
   include PgSearch::Model
   extend FriendlyId
 
-  multisearchable against: %i[first_name last_name username email]
+  multisearchable against: %i[first_name last_name username]
   pg_search_scope :search,
-                  against: %i[first_name last_name username email],
+                  against: %i[first_name last_name username],
                   using: {
                     tsearch: { prefix: true, negation: true }
                   }
 
-  friendly_id :username, use: :history, slug_column: :username
+  friendly_id :username, use: %i[slugged history], slug_column: :username
 
   has_person_name
 
@@ -23,7 +24,12 @@ class User < ApplicationRecord
   has_many :owning_publications, class_name: 'Publication', foreign_key: :owner_id, dependent: :destroy, inverse_of: :owner
   has_one  :personal_publication, -> { where(personal: true) }, class_name: 'Publication', foreign_key: :owner_id, inverse_of: :owner
   has_many :posts, foreign_key: :author_id, dependent: :destroy, inverse_of: :author
-  has_many :git_providers, dependent: :destroy
+  has_many :git_providers, dependent: :destroy, inverse_of: :user
+
+  cache_has_many :owning_publications, embed: true
+  cache_has_many :posts, embed: true
+
+  cache_has_one :personal_publication, embed: true
 
   validates :email, :username, :first_name, :name, presence: true
   validates :username, uniqueness: true, length: { in: 1..39 }, format: { with: /\A^[a-z0-9]+(?:-[a-z0-9]+)*$\z/i }

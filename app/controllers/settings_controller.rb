@@ -21,6 +21,7 @@ class SettingsController < ApplicationController
   end
 
   def update
+    @user = User.find(Current.user.id)
     authorize! @user, to: :edit?
 
     if @user.update(user_params)

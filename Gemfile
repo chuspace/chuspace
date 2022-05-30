@@ -30,6 +30,8 @@ gem 'active_storage_validations'
 gem 'rubyzip'
 
 # Fragment caching
+gem 'identity_cache'
+gem 'cityhash'
 gem 'dalli'
 gem 'connection_pool'
 
