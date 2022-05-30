@@ -3,11 +3,11 @@
 FriendlyId.defaults do |config|
   config.use :reserved
   config.reserved_words = %w(
-    new chu chuspace purge
-    publications publication admin blog blogs
-    terms privacy superuser self chu-space
+    new publications publication admin blog blogs
     edit index session login logout users admin
-    stylesheets assets javascripts images
+    git_providers users oauths topics posts errors
+    welcome hello stylesheets assets javascripts images
+    privacy terms home settings webhooks drafts
   )
 
   config.treat_reserved_as_conflict = false
