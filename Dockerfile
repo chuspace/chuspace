@@ -18,6 +18,7 @@ RUN apk del gmp-dev libstdc++ \
     libstdc++ \
     nodejs \
     npm \
+    vips-dev \
     libffi-dev \
     build-base \
     tzdata \
