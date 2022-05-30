@@ -31,7 +31,7 @@ module Git
             path: path,
             content: content,
             message: message,
-            author: author
+            author: author.git_attrs
           )
 
           blob_attributes = response.content.to_h.slice(*Git::Blob.new.attributes.keys)
@@ -59,7 +59,7 @@ module Git
             content: content,
             message: message,
             sha: id,
-            author: author
+            author: author.git_attrs
           )
 
           blob_attributes = response.content.to_h.slice(*Git::Blob.new.attributes.keys)
@@ -89,7 +89,7 @@ module Git
           path: path,
           id: sha,
           message: message,
-          author: author
+          author: author.git_attrs
         )
 
         self
