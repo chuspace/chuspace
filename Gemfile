@@ -140,12 +140,10 @@ group :production do
   gem 'opentelemetry-instrumentation-action_pack'
   gem 'opentelemetry-instrumentation-action_view'
   gem 'opentelemetry-instrumentation-active_job'
-  gem 'opentelemetry-instrumentation-active_model_serializers'
   gem 'opentelemetry-instrumentation-active_record'
   gem 'opentelemetry-instrumentation-faraday'
   gem 'opentelemetry-instrumentation-dalli'
   gem 'opentelemetry-instrumentation-pg'
-  gem 'opentelemetry-instrumentation-memcached'
 end
 
 group :development, :test do

@@ -343,9 +343,6 @@ GEM
     opentelemetry-instrumentation-active_job (0.2.0)
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-base (~> 0.20.0)
-    opentelemetry-instrumentation-active_model_serializers (0.18.5)
-      opentelemetry-api (~> 1.0)
-      opentelemetry-instrumentation-base (~> 0.20.0)
     opentelemetry-instrumentation-active_record (0.3.0)
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-base (~> 0.20.0)
@@ -363,7 +360,6 @@ GEM
       opentelemetry-api (~> 1.0)
       opentelemetry-common (~> 0.19.3)
       opentelemetry-instrumentation-base (~> 0.20.0)
-    opentelemetry-instrumentation-memcached (9001.0)
     opentelemetry-instrumentation-pg (0.20.0)
       opentelemetry-api (~> 1.0)
       opentelemetry-instrumentation-base (~> 0.20.0)
@@ -615,11 +611,9 @@ DEPENDENCIES
   opentelemetry-instrumentation-action_pack
   opentelemetry-instrumentation-action_view
   opentelemetry-instrumentation-active_job
-  opentelemetry-instrumentation-active_model_serializers
   opentelemetry-instrumentation-active_record
   opentelemetry-instrumentation-dalli
   opentelemetry-instrumentation-faraday
-  opentelemetry-instrumentation-memcached
   opentelemetry-instrumentation-pg
   opentelemetry-instrumentation-rails
   opentelemetry-sdk
