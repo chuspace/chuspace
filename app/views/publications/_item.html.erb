@@ -25,12 +25,14 @@
     <% end %>
   </div>
 
-  <%= link_to(
-      'Write',
-      publication_new_draft_path(publication),
-      class: 'btn btn-primary btn-outline btn-sm',
-      data: { 'turbo-frame': :_top },
-      title: "Write a new post",
-    )
-  %>
+  <% if Current.request_authenticated? && allowed_to?(:write?, publication) %>
+    <%= link_to(
+        'Write',
+        publication_new_draft_path(publication),
+        class: 'btn btn-primary btn-outline btn-sm',
+        data: { 'turbo-frame': :_top },
+        title: "Write a new post",
+      )
+    %>
+  <% end %>
 </div>
