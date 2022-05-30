@@ -4,13 +4,14 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    COOKIE_DOMAINS = Rails.env.production? ? %w[chuspace.com] : %[localhost]
     before_action :authenticate
     helper_method :signed_in?
   end
 
   def signin(identity)
     cookies.encrypted[:identity_id] = {
-      value: identity.id, expires: 1.year.from_now, secure: Rails.env.production?
+      value: identity.id, expires: 1.year.from_now, domain: COOKIE_DOMAINS, secure: Rails.env.production?
     }
 
     identity.user.update_tracked_fields!(request)
