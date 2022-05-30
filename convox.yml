@@ -36,3 +36,9 @@ services:
     resources:
       - database
       - memcache
+
+  timers:
+    session:
+      command: bin/rails db:sessions:trim
+      schedule: '0 1 * * *'
+      service: worker

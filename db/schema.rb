@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_22_142540) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_30_201018) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'citext'
   enable_extension 'hstore'
@@ -373,6 +373,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_22_142540) do
     t.index ['publication_id'], name: 'index_revisions_on_publication_id'
   end
 
+  create_table 'sessions', force: :cascade do |t|
+    t.string 'session_id', null: false
+    t.bigint 'identity_id'
+    t.text 'data'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['identity_id'], name: 'index_sessions_on_identity_id'
+    t.index ['session_id'], name: 'index_sessions_on_session_id', unique: true
+    t.index ['updated_at'], name: 'index_sessions_on_updated_at'
+  end
+
   create_table 'taggings', id: :serial, force: :cascade do |t|
     t.integer 'tag_id'
     t.string 'taggable_type'
@@ -476,5 +487,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_22_142540) do
   add_foreign_key 'revisions', 'posts'
   add_foreign_key 'revisions', 'publications'
   add_foreign_key 'revisions', 'users', column: 'author_id'
+  add_foreign_key 'sessions', 'identities'
   add_foreign_key 'user_routes', 'users'
 end

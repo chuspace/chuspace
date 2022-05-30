@@ -58,6 +58,12 @@ GEM
     activerecord (7.0.3)
       activemodel (= 7.0.3)
       activesupport (= 7.0.3)
+    activerecord-session_store (2.0.0)
+      actionpack (>= 5.2.4.1)
+      activerecord (>= 5.2.4.1)
+      multi_json (~> 1.11, >= 1.11.2)
+      rack (>= 2.0.8, < 3)
+      railties (>= 5.2.4.1)
     activestorage (7.0.3)
       actionpack (= 7.0.3)
       activejob (= 7.0.3)
@@ -503,6 +509,7 @@ DEPENDENCIES
   activejob (~> 7.x)
   activemodel (~> 7.x)
   activerecord (~> 7.x)
+  activerecord-session_store
   activestorage (~> 7.x)
   activesupport (~> 7.x)
   acts-as-taggable-on!
