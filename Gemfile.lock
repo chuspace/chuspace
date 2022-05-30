@@ -608,10 +608,7 @@ DEPENDENCIES
   omniauth-oauth2
   omniauth-rails_csrf_protection
   opentelemetry-exporter-otlp
-  opentelemetry-instrumentation-action_pack
-  opentelemetry-instrumentation-action_view
   opentelemetry-instrumentation-active_job
-  opentelemetry-instrumentation-active_record
   opentelemetry-instrumentation-dalli
   opentelemetry-instrumentation-faraday
   opentelemetry-instrumentation-pg

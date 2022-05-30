@@ -2,15 +2,15 @@
 
 if Rails.env.production?
   require 'opentelemetry/sdk'
+  require 'opentelemetry/exporter/otlp'
+  require 'opentelemetry/instrumentation/rails'
+  require 'opentelemetry/instrumentation/faraday'
+  require 'opentelemetry/instrumentation/dalli'
+  require 'opentelemetry/instrumentation/pg'
+  require 'opentelemetry/instrumentation/active_job'
 
   OpenTelemetry::SDK.configure do |telemetry|
-    telemetry.use 'OpenTelemetry::Instrumentation::Rails'
-    telemetry.use 'OpenTelemetry::Instrumentation::ActionPack'
-    telemetry.use 'OpenTelemetry::Instrumentation::ActionView'
-    telemetry.use 'OpenTelemetry::Instrumentation::ActiveJob'
-    telemetry.use 'OpenTelemetry::Instrumentation::ActiveRecord'
-    telemetry.use 'OpenTelemetry::Instrumentation::Faraday'
-    telemetry.use 'OpenTelemetry::Instrumentation::Dalli'
-    telemetry.use 'OpenTelemetry::Instrumentation::PG'
+    telemetry.service_name = ENV.fetch('APP_NAME', 'chuspace')
+    telemetry.use_all({ 'OpenTelemetry::Instrumentation::ActionView' => { enabled: false } })
   end
 end
