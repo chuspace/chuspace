@@ -4,6 +4,8 @@ module Publications
   class AssetsController < BaseController
     include ActiveStorage::Streaming, SetPublicationRoot
     before_action :set_assets_root_path, :set_asset_path
+    skip_before_action :authenticate!, only: :show
+    skip_verify_authorized only: :show
 
     def index
       authorize! @publication, to: :write?
@@ -16,7 +18,6 @@ module Publications
     end
 
     def show
-      authorize! @publication, to: :show?
       data = @publication.images.find_by(blob_path: params[:path])&.image&.download || @publication.repository.raw(path: params[:path])
       send_data data, disposition: :inline, filename: File.basename(params[:path])
     end
