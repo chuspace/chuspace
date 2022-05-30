@@ -38,8 +38,9 @@ class Draft < Git::Blob
     db_publication = Publication.find(publication.id)
 
     if post.present?
-      post.update(author: author, **to_post_attributes)
-      post
+      db_post = Post.find(post.id)
+      db_post.update(author: author, **to_post_attributes)
+      db_post
     else
       db_publication.posts.create(author: author, **to_post_attributes)
     end
