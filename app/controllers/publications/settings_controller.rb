@@ -15,6 +15,7 @@ module Publications
     end
 
     def update
+      @publication = Publication.find(@publication.id)
       authorize! @publication, to: :edit?
       @publication.update(publication_params)
       redirect_to publication_setting_path(@publication, id: params[:id])
