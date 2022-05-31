@@ -2,10 +2,7 @@
 
 module Connect
   class BaseController < ApplicationController
-    prepend_before_action :authenticate!
-
-    before_action :find_git_provider
-    before_action :build_publication
+    before_action :authenticate!, :find_git_provider, :build_publication
 
     def new
       authorize! @publication

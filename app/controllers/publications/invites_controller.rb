@@ -3,9 +3,7 @@
 module Publications
   class InvitesController < BaseController
     skip_before_action :authenticate!, only: :accept
-    before_action :authenticate, only: :accept
-
-    skip_verify_authorized only: :accept, if: -> { Current.user.blank? }
+    skip_verify_authorized only: :accept, unless: :signed_in?
 
     def index
       authorize! @publication, to: :invite?

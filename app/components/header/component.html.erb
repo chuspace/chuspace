@@ -2,7 +2,7 @@
   <nav class='container flex justify-between items-center'>
     <div class='flex-1 flex items-center'>
       <%= link_to root_path, class: 'pt-1 pb-2' do %>
-        <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= Current.request_authenticated? ? 'Chu' : 'Chuspace' %></span>
+        <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= helpers.signed_in? ? 'Chu' : 'Chuspace' %></span>
         <%= content_tag :span, 'axiom', class: 'text-xs text-secondary font-sans' %>
       <% end %>
 
@@ -10,7 +10,7 @@
     </div>
 
     <div class='flex items-center py-2'>
-      <% if Current.request_authenticated? %>
+      <% if helpers.signed_in? %>
         <%= before_user_dropdown %>
 
         <div class='flex items-center'>

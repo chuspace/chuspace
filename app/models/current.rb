@@ -9,8 +9,4 @@ class Current < ActiveSupport::CurrentAttributes
 
     super
   end
-
-  def request_authenticated?
-    (identity && user).present?
-  end
 end

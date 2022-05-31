@@ -35,6 +35,12 @@ module Authentication
   end
 
   def authenticate!
-    redirect_to sessions_path, notice: 'You need to login again!' unless authenticate
+    unless authenticate
+      flash.now[:notice] = 'You need to login again!'
+      respond_to do |format|
+        format.html { redirect_to sessions_path }
+        format.turbo_stream
+      end
+    end
   end
 end

@@ -3,7 +3,7 @@
   <head>
     <%= render 'layouts/meta' %>
 
-    <% if Current.request_authenticated? %>
+    <% if signed_in? %>
       <link rel="dns-prefetch" href="//secure.gravatar.com" />
       <link rel="preconnect" href="//secure.gravatar.com" />
     <% end %>
@@ -43,7 +43,7 @@
 
       <%= header.before_user_dropdown do %>
         <div class='mr-8'>
-          <% if Current.request_authenticated? && allowed_to?(:edit?, @post) %>
+          <% if signed_in? && allowed_to?(:edit?, @post) %>
             <%= link_to 'Edit', publication_edit_draft_path(@post.publication, path: @post.relative_path), class: 'btn btn-primary btn-xs' %>
           <% end %>
         </div>

@@ -137,10 +137,12 @@ en:
       personal_publication: Your personal publication content is attached to your
         profile
   sessions:
-    already_signedin: Already signed in
+    already_signedin: Already signed in!
     create:
       failure: User with email not found
       success: Please check your email
+    destroy:
+      success: Succefully signed out!
     email:
       intro: You will recieve a magic link in your email to sign in
       welcome: Sign in

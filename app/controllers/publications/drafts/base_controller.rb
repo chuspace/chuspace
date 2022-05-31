@@ -7,8 +7,7 @@ module Publications
       include FindPublication
       include SetPublicationRoot
 
-      prepend_before_action :authenticate!
-      before_action :find_draft
+      before_action :authenticate!, :find_draft
 
       layout 'editor'
 

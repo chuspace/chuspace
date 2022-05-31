@@ -25,7 +25,7 @@
     <% end %>
   </div>
 
-  <% if Current.request_authenticated? && allowed_to?(:write?, publication) %>
+  <% if signed_in? && allowed_to?(:write?, publication) %>
     <%= link_to(
         'Write',
         publication_new_draft_path(publication),

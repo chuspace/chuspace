@@ -14,7 +14,7 @@
   )
   %>
 
-  <% if Current.request_authenticated? %>
+  <% if signed_in? %>
     <link rel="dns-prefetch" href="//secure.gravatar.com" />
     <link rel="preconnect" href="//secure.gravatar.com" />
   <% end %>

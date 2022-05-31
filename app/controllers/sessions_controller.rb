@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
       end
 
       respond_to do |format|
-        format.html { render :email }
+        format.html { redirect_to email_sessions_path, error: t('sessions.create.failure') }
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@user, partial: 'sessions/form', locals: { user: @user }) }
       end
     end
@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
 
   def destroy
     signout
-    redirect_to root_path
+    redirect_to root_path, notice: t('sessions.destroy.success')
   end
 
   private

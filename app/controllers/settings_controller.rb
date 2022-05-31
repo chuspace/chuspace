@@ -2,8 +2,7 @@
 
 class SettingsController < ApplicationController
   include Breadcrumbable
-  prepend_before_action :authenticate!
-  before_action :set_user
+  before_action :authenticate!, :set_user
 
   def index
     authorize! @user, to: :edit?

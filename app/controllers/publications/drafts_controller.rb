@@ -4,7 +4,6 @@ module Publications
   class DraftsController < BaseController
     include SetPublicationRoot
 
-    prepend_before_action :authenticate!
     before_action :build_draft, only: %i[index new create]
     before_action :find_draft, only: %w[update edit destroy]
 

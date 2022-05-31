@@ -4,7 +4,7 @@
   <% end %>
 
   <% card.actions do %>
-    <% if Current.request_authenticated? && allowed_to?(:edit?, @user) %>
+    <% if signed_in? && allowed_to?(:edit?, @user) %>
       <% if @user.fetch_personal_publication.present? %>
         <%= link_to publication_edit_draft_path(@user.fetch_personal_publication, path: @user.fetch_personal_publication.fetch_repository.readme_path) do %>
           <%= inline_svg_tag 'icons/pencil.svg', class: 'fill-current w-3 h-3' %>
@@ -23,11 +23,11 @@
     <% else %>
       <%= render Placeholder::Component.new do |placeholder| %>
         <%= placeholder.text do %>
-          <%= tag.p Current.request_authenticated? && allowed_to?(:edit?, @user) ? t('.placeholder') : t('.no_readme') %>
+          <%= tag.p signed_in? && allowed_to?(:edit?, @user) ? t('.placeholder') : t('.no_readme') %>
         <% end %>
 
         <%= placeholder.cta do %>
-          <%= link_to t('shared.publications.connect_personal'), connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2', title: t('shared.publications.connect_personal') if Current.request_authenticated? && allowed_to?(:edit?, @user) %>
+          <%= link_to t('shared.publications.connect_personal'), connect_personal_publications_path, class: 'btn btn-primary btn-sm ml-2', title: t('shared.publications.connect_personal') if signed_in? && allowed_to?(:edit?, @user) %>
         <% end %>
       <% end %>
     <% end %>
