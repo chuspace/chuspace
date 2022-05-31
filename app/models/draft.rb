@@ -15,8 +15,8 @@ class Draft < Git::Blob
 
   delegate :repository, to: :publication
 
-  after_create :clear_local_content, :store_repository_readme
-  after_update :clear_local_content, :store_repository_readme
+  after_create :clear_local_content, :store_repository_readme, :touch_publication
+  after_update :clear_local_content, :store_repository_readme, :touch_publication
 
   def body
     parsed.content
@@ -108,5 +108,9 @@ class Draft < Git::Blob
 
   def store_repository_readme
     repository.update(readme: decoded_content) if readme?
+  end
+
+  def touch_publication
+    Publication.where(id: publication.id).touch_all
   end
 end

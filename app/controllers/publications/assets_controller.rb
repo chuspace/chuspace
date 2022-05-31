@@ -19,6 +19,7 @@ module Publications
 
     def show
       data = @publication.images.find_by(blob_path: params[:path])&.image&.download || @publication.repository.raw(path: params[:path])
+      fresh_when(@publication, public: true)
       send_data data, disposition: :inline, filename: File.basename(params[:path])
     end
 
