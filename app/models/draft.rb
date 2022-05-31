@@ -92,6 +92,9 @@ class Draft < Git::Blob
       blob_path: path,
       blob_sha: id,
       body: body,
+      unlisted: unlisted,
+      visibility: visibility,
+      canonical_url: canonical_url,
       commit_sha: commits.first&.id || commits.first&.sha
     }
   end

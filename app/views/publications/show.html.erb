@@ -36,8 +36,8 @@
           <% end %>
 
           <% card.body do %>
-            <% if @publication.posts.any? %>
-              <%= render 'posts/list', posts: @publication.posts %>
+            <% if @publication.posts.published.any? %>
+              <%= render 'posts/list', posts: @publication.posts.published.newest %>
             <% else %>
               <%= render 'shared/placeholder', content: 'No published posts in this publication' %>
             <% end %>

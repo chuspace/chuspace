@@ -6,7 +6,7 @@ class HomeController < ApplicationController
 
   def index
     @user = Current.user
-    @posts = Post.includes(:topics, :author, :publication).newest.limit(20)
+    @posts = Post.includes(:topics, :author, :publication).published.newest.limit(20)
     @publications = Publication.all.limit(5).except_personal
   end
 end

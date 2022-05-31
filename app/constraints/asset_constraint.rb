@@ -2,6 +2,6 @@
 
 class AssetConstraint
   def matches?(request)
-    request.params[:publication_permalink] && ImageValidator.valid?(name_or_path: request.params[:path])
+    request.params[:publication_permalink] && request.params[:path].present?
   end
 end

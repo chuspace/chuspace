@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_30_201018) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_31_155033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'citext'
   enable_extension 'hstore'
@@ -286,13 +286,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_30_201018) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.enum 'visibility', default: 'public', enum_type: 'post_visibility_enum_type'
+    t.boolean 'unlisted', default: false
+    t.boolean 'featured', default: false
     t.index ['author_id'], name: 'index_posts_on_author_id'
     t.index ['blob_path'], name: 'index_posts_on_blob_path'
     t.index ['date'], name: 'index_posts_on_date'
+    t.index ['featured'], name: 'index_posts_on_featured'
     t.index ['permalink'], name: 'index_posts_on_permalink'
     t.index ['publication_id', 'blob_path'], name: 'index_posts_on_publication_id_and_blob_path', unique: true
     t.index ['publication_id', 'permalink'], name: 'index_posts_on_publication_id_and_permalink', unique: true
     t.index ['publication_id'], name: 'index_posts_on_publication_id'
+    t.index ['unlisted'], name: 'index_posts_on_unlisted'
+    t.index ['visibility'], name: 'index_posts_on_visibility'
   end
 
   create_table 'publication_routes', force: :cascade do |t|
@@ -322,6 +327,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_30_201018) do
     t.index ['owner_id'], name: 'index_publications_on_owner_id'
     t.index ['permalink', 'owner_id'], name: 'index_publications_on_permalink_and_owner_id', unique: true
     t.index ['personal'], name: 'index_publications_on_personal'
+    t.index ['visibility'], name: 'index_publications_on_visibility'
   end
 
   create_table 'publishings', force: :cascade do |t|
@@ -381,7 +387,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_30_201018) do
     t.datetime 'updated_at', null: false
     t.index ['identity_id'], name: 'index_sessions_on_identity_id'
     t.index ['session_id'], name: 'index_sessions_on_session_id', unique: true
-    t.index ['updated_at'], name: 'index_sessions_on_updated_at'
   end
 
   create_table 'taggings', id: :serial, force: :cascade do |t|

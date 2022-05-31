@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'down/http'
+
 module Publications
   class AssetsController < BaseController
     include ActiveStorage::Streaming, SetPublicationRoot
@@ -18,7 +20,13 @@ module Publications
     end
 
     def show
-      data = @publication.images.find_by(blob_path: params[:path])&.image&.download || @publication.repository.raw(path: params[:path])
+      data = if URI.parse(params[:path]).absolute?
+        Down::Http.open(params[:path]).read
+      else
+        @publication.images.find_by(blob_path: params[:path])&.image&.download ||
+          @publication.repository.raw(path: params[:path])
+      end
+
       fresh_when(@publication, public: true)
       send_data data, disposition: :inline, filename: File.basename(params[:path])
     end

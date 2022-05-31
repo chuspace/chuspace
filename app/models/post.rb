@@ -33,6 +33,8 @@ class Post < ApplicationRecord
 
   scope :newest, -> { order(id: :desc) }
   scope :oldest, -> { order(:id) }
+  scope :with_past_date, -> { where('date <= ?', Date.today) }
+  scope :published, -> { where(unlisted: false).public_visibility.with_past_date }
 
   delegate :repository, to: :publication
 

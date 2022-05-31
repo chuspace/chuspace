@@ -22,7 +22,13 @@ module Drafts
     end
 
     def date
-      front_matter.dig(publication.front_matter.date)
+      front_matter_date = front_matter.dig(publication.front_matter.date)
+
+      if front_matter_date && front_matter_date < Date.today
+        Date.today
+      else
+        front_matter_date
+      end
     end
 
     def summary
@@ -35,6 +41,14 @@ module Drafts
 
     def topics
       front_matter.dig(publication.front_matter.topics)
+    end
+
+    def unlisted
+      front_matter.dig(:unlisted)
+    end
+
+    def visibility
+      front_matter.dig(:visibility)
     end
   end
 end

@@ -22,11 +22,9 @@ export default class ImageView extends BaseView {
 
   renderElement = () => {
     const fileName = this.node.attrs.src.split('/').pop()
-    const src = isUrl(this.node.attrs.src)
-      ? this.node.attrs.src
-      : `${this.imageLoadPath}?${queryString.stringify({
-          path: this.node.attrs.src,
-        })}`
+    const src = `${this.imageLoadPath}?${queryString.stringify({
+      path: this.node.attrs.src,
+    })}`
 
     render(
       html`
