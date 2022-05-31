@@ -1,7 +1,7 @@
 <section class='lg:w-2/3 pb-24 mx-auto w-full chu-editor editable'>
   <chu-editor
       imageUploadPath='<%= publication_create_assets_path(@publication) %>'
-      imageLoadPath='<%= publication_asset_path(@publication) %>'
+      imageLoadPath='<%= publication_asset_url(@publication, host: ENV.fetch('IMAGE_CDN_HOST')) %>'
       autoSavePath='<%= publication_autosave_draft_path(@publication, @draft) %>'
       startingContent='<%= @draft.decoded_content %>'
       editable
