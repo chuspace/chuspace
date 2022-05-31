@@ -19,8 +19,8 @@
             <%= inline_svg_tag "icons/#{provider}.svg", class: "w-4 h-4 fill-current hover:text-primary cursor-pointer#{index == 0 ? '' : ' ml-4'}" %>
           <% end %>
         <% end %>
-        <span class='mx-4'>&#183;</span>
         <% if @post.markdown_doc.snippets? %>
+          <span class='mx-4'>&#183;</span>
           <%= link_to publication_post_snippets_path(@post.publication, @post), title: 'Download code snippets', target: "_blank" do %>
             <%= inline_svg_tag('icons/download.svg', class: 'w-4 h-4 hover:text-primary fill-current') %>
           <% end %>
