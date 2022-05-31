@@ -18,7 +18,7 @@ module Authentication
   end
 
   def signout
-    session.clear
+    session.delete(:identity_id)
   end
 
   def signed_in?
@@ -35,12 +35,8 @@ module Authentication
   end
 
   def authenticate!
-    unless authenticate
-      flash.now[:notice] = 'You need to login again!'
-      respond_to do |format|
-        format.html { redirect_to sessions_path }
-        format.turbo_stream
-      end
+    unless signed_in?
+      redirect_to sessions_path, notice: 'You need to sign in'
     end
   end
 end

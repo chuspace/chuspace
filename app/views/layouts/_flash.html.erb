@@ -1,12 +1,10 @@
 <% flash.each do |type, msg| %>
   <alert-notification>
     <div data-target='alert-notification.element' class="alert alert-<%= type %> absolute top-0 w-full z-20 rounded-none justify-center">
-      <div>
-        <%= msg %>
-        <%= link_to '#', data: { action: 'click:alert-notification#preventDefault' }, title: 'Close alert bar', class: 'flex-none' do %>
-          <%= inline_svg_tag 'icons/x.svg', class: 'w-4 h-4 fill-current', data: { action: 'click:alert-notification#hide' } %>
-        <% end %>
-      </div>
+      <%= content_tag :p, msg %>
+      <%= link_to '#', data: { action: 'click:alert-notification#preventDefault' }, title: 'Close alert bar', class: 'flex-end' do %>
+        <%= inline_svg_tag 'icons/x.svg', class: 'w-4 h-4 fill-current', data: { action: 'click:alert-notification#hide' } %>
+      <% end %>
     </div>
   </alert-notification>
 <% end %>

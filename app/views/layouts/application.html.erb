@@ -4,11 +4,9 @@
   <body class="flex flex-col h-full">
     <%= render 'layouts/flash' %>
     <%= render(Header::Component.new) %>
-
     <main class="container flex-1 pt-24">
       <%= yield %>
     </main>
-
     <div class='container mx-auto flex-shrink-0'>
       <%= render 'layouts/footer' %>
     </div>
