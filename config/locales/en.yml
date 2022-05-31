@@ -67,12 +67,12 @@ en:
   magic_logins:
     index:
       expired: Your magic auth token is expired
-      success: Successfully signed in
+      success: Successfully signed in!
   oauths:
     create:
       failure: An account with this email already exists. Please sign in with that
         account before connecting your %{existing_provider} account.
-      success: Successfully logged in
+      success: Successfully signed in!
   posts:
     list:
       empty: |
