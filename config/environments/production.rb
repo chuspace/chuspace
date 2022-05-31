@@ -36,7 +36,7 @@ Rails.application.configure do
   config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  # config.asset_host = "http://assets.example.com"
+  config.asset_host = ENV.fetch('ASSET_HOST', 'https://chuspace.com')
   config.action_mailer.default_url_options = { host: 'chuspace.com', protocol: 'https' }
   config.default_url_options = { host: 'chuspace.com' }
   Rails.application.routes.default_url_options[:host] = 'chuspace.com'
