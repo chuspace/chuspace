@@ -4,7 +4,7 @@
     site: ChuspaceConfig.new.app[:name],
     title: 'Blogging platform for programmers and teams',
     description: 'Collaborative blogging platform for programmers and teams',
-    icon: '/favicon.png',
+    icon: asset_cdn_url('favicon.png'),
     og: {
       title: :title,
       site_name: :site,
@@ -18,11 +18,11 @@
     <link rel="preconnect" href="//secure.gravatar.com" />
   <% end %>
 
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="apple-touch-icon" href="/chuspace-icon-192.png" />
-  <link rel="apple-touch-icon" sizes="152x152" href="/chuspace-icon-192.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/chuspace-icon-192.png" />
-  <link rel="apple-touch-icon" sizes="167x167" href="/chuspace-icon-192.png" />
+  <link rel="icon" type="image/png" href="<%= asset_cdn_url('favicon.png') %>" />
+  <link rel="apple-touch-icon" href="<%= asset_cdn_url('chuspace-icon-192.png') %>" />
+  <link rel="apple-touch-icon" sizes="152x152" href="<%= asset_cdn_url('chuspace-icon-192.png') %>" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<%= asset_cdn_url('chuspace-icon-192.png') %>" />
+  <link rel="apple-touch-icon" sizes="167x167" href="<%= asset_cdn_url('chuspace-icon-192.png') %>" />
 
   <%= javascript_pack_tag 'application', defer: true, 'data-turbo-track': 'reload' %>
   <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>

@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  def asset_cdn_url(path)
+    "#{ENV['ASSET_HOST']}/#{path}"
+  end
+
   def logo
     signed_in? ? 'Chu' : 'Chuspace'
   end
