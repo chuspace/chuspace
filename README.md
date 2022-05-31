@@ -41,12 +41,6 @@ brew install redis
 brew services start redis
 ```
 
-Install the Heroku CLI
-
-```
-brew tap heroku/brew && brew install heroku
-```
-
 Then run the following
 
 ```bash
@@ -61,3 +55,9 @@ bundle exec rails db:drop db:create db:migrate db:seed
 Visit http://localhost:3000
 
 You can now create an account using Github, Gitlab, Bitbucket or Email.
+
+## Deployment
+
+```bash
+convox rack params set proxy_protocol=true node_capacity_type=spot node_type=c5.large
+```
