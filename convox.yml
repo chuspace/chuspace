@@ -19,11 +19,16 @@ services:
       - database-replica
       - redis
   web:
+    annotations:
+      - nginx.ingress.kubernetes.io/use-forwarded-headers=true
+      - nginx.ingress.kubernetes.io/auth-tls-verify-client=on
+      - nginx.ingress.kubernetes.io/auth-tls-secret=default/chuspace.com
+      - nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream=true
     build: .
     sticky: true
     tls:
       redirect: true
-    domain: chuspace.com
+    domain: ${HOST}
     termination:
       grace: 60
     scale:
