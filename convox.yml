@@ -29,6 +29,7 @@ services:
     sticky: true
     tls:
       redirect: true
+    domain: chuspace.com,www.chuspace.com
     termination:
       grace: 60
     scale:
