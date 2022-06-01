@@ -44,7 +44,7 @@ class Kv < ApplicationRecord
 
   class << self
     def delete(key)
-      find_by(key: key).destroy
+      find_by(key: key)&.destroy
     end
 
     def get(key)

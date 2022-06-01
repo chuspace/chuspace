@@ -20,8 +20,8 @@ class CreatePosts < ActiveRecord::Migration[7.0]
 
       t.datetime :date, null: false, index: true
 
-      t.boolean :unlisted, default: false
-      t.boolean :featured, default: false
+      t.boolean :unlisted, default: false, null: false
+      t.boolean :featured, default: false, null: false
 
       # Votes
       t.integer :cached_votes_total, default: 0

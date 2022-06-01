@@ -1,4 +1,4 @@
-<div class='sm:fixed top-0 sm:mt-24 sm:w-1/4 h-full overflow-y-scroll'>
+<div class='sm:fixed top-0 sm:mt-24 h-full overflow-y-scroll'>
   <%= render(Avatar::Component.new(avatar: user.avatar, gravatar: user.gravatar_url(variant: :profile), fallback: user.name.initials, variant: :profile)) %>
   <h3 class='mt-4 leading-none'><%= user.name %></h3>
   <h6 class='text-secondary'><%= user.username %></h6>

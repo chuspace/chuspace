@@ -20,7 +20,7 @@
   <% card.body do %>
     <% if user.personal_publication.present? %>
       <% if user.personal_publication&.posts&.any? %>
-        <%= render 'posts/list', posts: user.personal_publication.published.newest %>
+        <%= render 'posts/list', posts: user.personal_publication.posts.published.newest %>
       <% else %>
         <%= render Placeholder::Component.new do |placeholder| %>
           <%= placeholder.text do %>

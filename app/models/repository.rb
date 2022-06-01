@@ -5,13 +5,13 @@ class Repository < ApplicationRecord
   belongs_to :git_provider
   has_many   :readme_images, ->(repository) { where(draft_blob_path: repository.readme_path) }, through: :publication, dependent: :delete_all, source: :images
 
-  validates :full_name, :default_ref, :posts_folder, :assets_folder, presence: true
+  validates :full_name, :default_ref, :posts_folder, :readme_path, :assets_folder, presence: true
   validates :full_name, uniqueness: true
   validates :readme_path, markdown: true
 
   delegate :name, :description, :html_url, :owner, :default_branch, to: :git
 
-  after_create_commit -> { CacheRepositoryReadmeJob.perform_later(repository: self) }
+  after_commit -> { CacheRepositoryReadmeJob.perform_later(repository: self) }, if: :readme_path_previously_changed?
 
   def assets_folders
     [assets_folder].freeze

@@ -29,8 +29,10 @@ class Post < ApplicationRecord
 
   scope :newest, -> { order(id: :desc) }
   scope :oldest, -> { order(:id) }
-  scope :with_past_date, -> { where('date <= ?', Date.today) }
-  scope :published, -> { where(unlisted: false).public_visibility.with_past_date }
+  scope :unlisted, -> { where(unlisted: true) }
+  scope :featured, -> { where(featured: true) }
+  scope :with_past_date, -> { where('date IS NULL OR date <= ?', Date.today) }
+  scope :published, -> { where.not(unlisted: true).public_visibility.with_past_date }
 
   delegate :repository, to: :publication
 
@@ -76,5 +78,9 @@ class Post < ApplicationRecord
 
   def set_visibility
     self.visibility ||= publication.visibility
+  end
+
+  def should_generate_new_friendly_id?
+    new_record? || title_changed?
   end
 end

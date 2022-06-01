@@ -44,11 +44,11 @@ module Drafts
     end
 
     def unlisted
-      front_matter.dig(:unlisted)
+      front_matter.dig(:unlisted) || false
     end
 
     def visibility
-      front_matter.dig(:visibility)
+      front_matter.dig(:visibility) || :public
     end
   end
 end

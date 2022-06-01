@@ -3,7 +3,7 @@
     <% @users.each do |user| %>
       <%= content_tag :li, role: 'option', class: 'block', 'data-autocomplete-value': user.username, 'aria-disabled': @publication.members.include?(user) do  %>
         <div class='flex items-center' data-action='click:autocomplete-reset#select'>
-          <%= image_tag user.avatar_url, class: 'w-4 h-4 mask mask-circle mr-2'  %>
+          <%= render(Avatar::Component.new(avatar: user.avatar, gravatar: user.gravatar_url, fallback: user.name.initials, variant: :icon)) %>
           <div class='flex-1' data-action='click:autocomplete-reset#select'>
             <%= user.name %>
             <span class='text-sm text-grey'><%= user.username %></span>

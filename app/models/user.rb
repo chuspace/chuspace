@@ -6,7 +6,7 @@ class User < ApplicationRecord
   include AlgoliaSearch
 
   algoliasearch per_environment: true do
-    attribute :first_name, :last_name
+    attribute :first_name, :last_name, :username
   end
 
   friendly_id :username, use: %i[slugged history], slug_column: :username

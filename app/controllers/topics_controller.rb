@@ -4,7 +4,7 @@ class TopicsController < ApplicationController
   skip_verify_authorized
 
   def index
-    @topics = ActsAsTaggableOn::Tag.search(params[:q]).limit(10)
+    @topics = ActsAsTaggableOn::Tag.search(params[:q], { hitsPerPage: 10, page: 1 })
   end
 
   def show

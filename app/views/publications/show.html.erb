@@ -9,7 +9,7 @@
         <% end %>
 
         <% card.actions do %>
-          <% if signed_in? && allowed_to?(:edit?, @publication) %>
+          <% if signed_in? && allowed_to?(:write?, @publication) %>
             <%= link_to publication_edit_draft_path(@publication, path: @publication.repository.readme_path), title: 'Edit readme' do %>
               <%= inline_svg_tag 'icons/pencil.svg', class: 'fill-current w-3 h-3' %>
             <% end %>
