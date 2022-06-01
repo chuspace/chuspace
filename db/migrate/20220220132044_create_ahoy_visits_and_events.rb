@@ -48,18 +48,17 @@ class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[7.0]
       t.datetime :started_at
     end
 
-    add_index :ahoy_visits, :visit_token, unique: true, algorithm: :concurrently
+    add_index :ahoy_visits, :visit_token, unique: true, algorithm: :default
 
     create_table :ahoy_events do |t|
       t.references :visit
       t.references :user
 
       t.string :name
-      t.jsonb :properties
+      t.json :properties
       t.datetime :time
     end
 
-    add_index :ahoy_events, [:name, :time], algorithm: :concurrently
-    add_index :ahoy_events, :properties, using: :gin, opclass: :jsonb_path_ops, algorithm: :concurrently
+    add_index :ahoy_events, [:name, :time], algorithm: :default
   end
 end

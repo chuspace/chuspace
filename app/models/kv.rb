@@ -21,13 +21,11 @@ class Kv < ApplicationRecord
   after_create -> { Kv.expired.delete_all }
 
   def set_value=(value)
-    write_attribute(:value, value)
-    self.assign_attributes(Kv.set(key, value, data_type: data_type, expires_in: expires_in))
+    update(value: value)
   end
 
   def unset_value
-    write_attribute(:value, nil)
-    self.assign_attributes(Kv.set(key, nil, data_type: data_type, expires_in: expires_in))
+    update(value: nil)
   end
 
   def clear
@@ -54,7 +52,7 @@ class Kv < ApplicationRecord
     end
 
     def set(key, value, **options)
-      upsert({ key: key, value: value, **options }, returning: %i[id key value default expires_in], unique_by: :index_kvs_on_key).last
+      upsert({ key: key, value: value, **options }).last
     end
   end
 end

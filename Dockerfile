@@ -23,11 +23,12 @@ RUN apk del gmp-dev libstdc++ \
     npm \
     vips-dev \
     libffi-dev \
+    ca-certificates \
     build-base \
     tzdata \
     libxslt-dev \
     libxml2-dev \
-    postgresql-dev \
+    default-libmysqlclient-dev \
     git \
     yarn
 

@@ -10,6 +10,7 @@ FactoryBot.define do
     body { '# Post on Rails' }
     summary { 'Post on Rails' }
     date { Date.today }
+    visibility { :public }
 
     f.sequence(:title) { |n| "Post #{n}" }
 

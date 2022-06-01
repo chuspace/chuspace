@@ -7,20 +7,29 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
-        image: postgres:14.1
-        ports: ['5432:5432']
-        env:
-          POSTGRES_DB: chuspace_test
-          POSTGRES_USER: chuspace_test
-          POSTGRES_PASSWORD: chuspace_actions_test
+      redis:
+        image: redis:latest
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      memcached:
-        image: memcached:latest
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_USERNAME: chuspace_test
+          MYSQL_PASSWORD: chuspace_actions_test
+          MYSQL_ROOT_PASSWORD: chuspace_actions_test
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: 3306
+          MYSQL_DATABASE: chuspace_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     env:
       RAILS_ENV: test
@@ -61,9 +70,9 @@ jobs:
 
       - name: Preparing database
         env:
+          REDIS_URL: redis://localhost:6379
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
-          MEMCACHE_URL: localhost:11211
-          DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@localhost:5432/chuspace_test
+          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@localhost:3306/chuspace_test
         run: bin/rails db:prepare
 
       - name: Setup codeclimate test reporter
@@ -73,18 +82,17 @@ jobs:
 
       - name: Compile assets
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          REDIS_URL: redis://localhost:6379
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
-          MEMCACHE_URL: localhost:11211
-          DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@localhost:5432/chuspace_test
+          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@localhost:3306/chuspace_test
         run: bin/rails assets:precompile
 
       - name: Run tests
         env:
+          REDIS_URL: redis://localhost:6379
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
-          MEMCACHE_URL: localhost:11211
-          DATABASE_URL: postgres://chuspace_test:chuspace_actions_test@localhost:5432/chuspace_test
+          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@localhost:3306/chuspace_test
         run: bin/rails test:all
 
       - name: Upload coverage

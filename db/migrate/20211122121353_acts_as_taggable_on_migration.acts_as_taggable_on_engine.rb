@@ -40,8 +40,8 @@ ActsAsTaggableOnMigration.class_eval do
       t.datetime :created_at
     end
 
-    add_index :taggings, :tag_id, algorithm: :concurrently
-    add_index :taggings, [:taggable_id, :taggable_type, :context], algorithm: :concurrently
+    add_index :taggings, :tag_id, algorithm: :default
+    add_index :taggings, [:taggable_id, :taggable_type, :context], algorithm: :default
   end
 
   def self.down

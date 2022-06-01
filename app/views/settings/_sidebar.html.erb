@@ -2,7 +2,7 @@
   <ul class='card bordered side-menu'>
     <li class="border-b last:border-b-0 border-base-200">
       <%= tab_link_to t("users.settings.actions.profile"), setting_path(id: UserSetting::DEFAULT_PAGE), class: 'px-4 py-3 block', dir: :vertical, active_condition: :inclusive %>
-      <%= tab_link_to t("users.settings.actions.publication"), publication_setting_path(user.fetch_personal_publication, id: :profile), class: 'px-4 py-3 block', dir: :vertical, active_condition: :inclusive if user.fetch_personal_publication.present? %>
+      <%= tab_link_to t("users.settings.actions.publication"), publication_setting_path(user.personal_publication, id: :profile), class: 'px-4 py-3 block', dir: :vertical, active_condition: :inclusive if user.personal_publication.present? %>
     </li>
   </ul>
 </aside>

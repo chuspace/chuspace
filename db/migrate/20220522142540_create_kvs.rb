@@ -8,12 +8,12 @@ class CreateKvs < ActiveRecord::Migration[7.0]
       t.string :key, null: false
       t.text :value
       t.text :default
-      t.text :data_type, null: false, default: :string
+      t.string :data_type, null: false, default: :string
 
       t.datetime :expires_in
     end
 
-    add_index :kvs, :key, unique: true, algorithm: :concurrently
-    add_index :kvs, :expires_in, algorithm: :concurrently
+    add_index :kvs, :key, unique: true, algorithm: :default
+    add_index :kvs, :expires_in, algorithm: :default
   end
 end

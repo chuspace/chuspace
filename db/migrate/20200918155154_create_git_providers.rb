@@ -23,7 +23,7 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
 
       t.references :user, null: false, foreign_key: true
 
-      t.jsonb :client_options, default: {}, null: false
+      t.json :client_options, null: false
 
       t.datetime :user_access_token_expires_at
       t.datetime :machine_access_token_expires_at
@@ -31,8 +31,8 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_column :git_providers, :name, :git_provider_enum_type, null: false
-    add_index :git_providers, %i[app_installation_id name], unique: true, name: :one_installation_per_provider, algorithm: :concurrently
-    add_index :git_providers, %i[user_id name], unique: true, name: :one_provider_per_user, algorithm: :concurrently
+    add_column :git_providers, :name, "ENUM(#{GitStorageConfig.defaults.keys.map { |provider| "'#{provider}'" }.join(',') })", null: false
+    add_index :git_providers, %i[app_installation_id name], unique: true, name: :one_installation_per_provider, algorithm: :default
+    add_index :git_providers, %i[user_id name], unique: true, name: :one_provider_per_user, algorithm: :default
   end
 end

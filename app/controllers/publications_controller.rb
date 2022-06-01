@@ -8,7 +8,7 @@ class PublicationsController < ApplicationController
   end
 
   def show
-    @publication = Publication.friendly_fetch!(params[:permalink])
+    @publication = Publication.friendly.find(params[:permalink])
     if params[:permalink] != @publication.permalink
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@publication), status: :moved_permanently
     end

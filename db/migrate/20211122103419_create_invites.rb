@@ -7,19 +7,19 @@ class CreateInvites < ActiveRecord::Migration[7.0]
     create_table :invites do |t|
       t.references :sender, null: false, foreign_key: { to_table: :users }
       t.references :publication, null: false, foreign_key: true
-      t.citext :identifier, null: false
-      t.text :code
+      t.string :identifier, null: false
+      t.string :code
 
       t.timestamps
     end
 
-    add_column :invites, :role, :membership_role_enum_type, null: false, default: :writer
-    add_column :invites, :status, :invite_status_enum_type, null: false, default: :pending
+    add_column :invites, :role, "ENUM(#{RolesConfig.to_enum.keys.map { |role| "'#{role}'" }.join(',') }) DEFAULT 'writer'", null: false
+    add_column :invites, :status, "ENUM('pending', 'expired', 'joined') DEFAULT 'pending'", null: false
 
-    add_index :invites, :code, algorithm: :concurrently, unique: true
-    add_index :invites, %i[identifier publication_id], unique: true, algorithm: :concurrently
-    add_index :invites, :identifier, algorithm: :concurrently
-    add_index :invites, :role, algorithm: :concurrently
-    add_index :invites, :status, algorithm: :concurrently
+    add_index :invites, :code, algorithm: :default, unique: true
+    add_index :invites, %i[identifier publication_id], unique: true, algorithm: :default
+    add_index :invites, :identifier, algorithm: :default
+    add_index :invites, :role, algorithm: :default
+    add_index :invites, :status, algorithm: :default
   end
 end

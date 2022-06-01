@@ -16,8 +16,8 @@ class ActsAsVotableMigration < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :votes, [:voter_id, :voter_type, :vote_scope], algorithm: :concurrently
-    add_index :votes, [:votable_id, :votable_type, :vote_scope], algorithm: :concurrently
+    add_index :votes, [:voter_id, :voter_type, :vote_scope], algorithm: :default
+    add_index :votes, [:votable_id, :votable_type, :vote_scope], algorithm: :default
   end
 
   def self.down

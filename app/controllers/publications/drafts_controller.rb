@@ -41,7 +41,6 @@ module Publications
       authorize! @draft
 
       if @draft.delete(**commit_params)
-        @draft.stale.clear
         redirect_to find_publication_drafts_root_path, notice: 'Successfully deleted'
       else
         redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
@@ -52,8 +51,6 @@ module Publications
       authorize! @draft, to: :commit?
 
       if @draft.update(**commit_params)
-        @draft.stale.clear
-
         if @publication.content.auto_publish && @draft.publishable? && post = @draft.publish(author: Current.user)
           redirect_to publication_post_path(@publication, post), notice: 'Succesfully committed and published!'
         else

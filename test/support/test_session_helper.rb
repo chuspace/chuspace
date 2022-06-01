@@ -4,12 +4,10 @@ module TestSessionHelper
   extend ActiveSupport::Concern
 
   def signin(identity:)
-    cookies_jar = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
-    cookies_jar.encrypted[:identity_id] = { value: identity.id }
-    cookies[:identity_id] = cookies_jar[:identity_id]
+    get magic_logins_path, params: { token: identity.magic_auth_token }
   end
 
-  def signout
-    cookies.delete(:identity_id)
+  def signout(identity:)
+    delete magic_login_path, params: { id: identity.id }
   end
 end

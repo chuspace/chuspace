@@ -1,8 +1,6 @@
 resources:
   database:
     type: postgres
-  memcache:
-    type: memcached
 
 services:
   worker:
@@ -11,10 +9,9 @@ services:
       count: 2
       cpu: 256
       memory: 512
-    command: bundle exec good_job start
+    command: bundle exec sidekiq -C config/sidekiq.yml
     resources:
       - database
-      - memcache
   web:
     build: .
     domain: chuspace.com
@@ -35,7 +32,6 @@ services:
     port: 3000
     resources:
       - database
-      - memcache
   timers:
     session:
       command: bin/rails db:sessions:trim

@@ -5,20 +5,23 @@ class CreatePosts < ActiveRecord::Migration[7.0]
 
   def change
     create_table :posts do |t|
-      t.citext :permalink, null: false
+      t.string :permalink, null: false
 
       t.text :title, null: false
       t.text :summary
       t.text :body, null: false
-      t.text :blob_path, null: false
-      t.text :blob_sha, null: false
-      t.text :commit_sha, null: false
-      t.text :canonical_url
+      t.string :blob_path, null: false
+      t.string :blob_sha, null: false
+      t.string :commit_sha, null: false
+      t.string :canonical_url
 
       t.references :publication, null: false, foreign_key: true
       t.references :author, foreign_key: { to_table: :users }, null: false
 
       t.datetime :date, null: false, index: true
+
+      t.boolean :unlisted, default: false
+      t.boolean :featured, default: false
 
       # Votes
       t.integer :cached_votes_total, default: 0
@@ -33,12 +36,15 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :posts, %i[publication_id blob_path], unique: true, algorithm: :concurrently
-    add_index :posts, %i[publication_id permalink], unique: true, algorithm: :concurrently
+    add_index :posts, %i[publication_id blob_path], unique: true, algorithm: :default
+    add_index :posts, %i[publication_id permalink], unique: true, algorithm: :default
 
-    add_index :posts, :blob_path, algorithm: :concurrently
-    add_index :posts, :permalink, algorithm: :concurrently
+    add_column :posts, :visibility, "ENUM(#{PublicationConfig.new.visibility.keys.map { |visibility| "'#{visibility}'" }.join(',') }) DEFAULT 'public'", index: { algorithm: :default }
 
-    add_column :posts, :visibility, :post_visibility_enum_type, index: { algorithm: :concurrently }, default: :public
+    add_index :posts, :blob_path, algorithm: :default
+    add_index :posts, :permalink, algorithm: :default
+    add_index :posts, :unlisted, algorithm: :default
+    add_index :posts, :featured, algorithm: :default
+    add_index :posts, :visibility, algorithm: :default
   end
 end

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AddSessionsTable < ActiveRecord::Migration[7.0]
+  disable_ddl_transaction!
+
   def change
     create_table :sessions do |t|
       t.string :session_id, null: false
@@ -9,7 +11,6 @@ class AddSessionsTable < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :sessions, :session_id, unique: true
-    add_index :sessions, :updated_at
+    add_index :sessions, :session_id, unique: true, algorithm: :default, algorithm: :default
   end
 end

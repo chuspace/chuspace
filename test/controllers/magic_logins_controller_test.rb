@@ -13,11 +13,11 @@ class MagicLoginsControllerTest < ActionDispatch::IntegrationTest
     get magic_logins_path, params: { token: @auth_token }
     follow_redirect!
     assert_equal 200, status
-    assert_equal 'Successfully signed in', flash[:notice]
+    assert_equal 'Successfully signed in!', flash[:notice]
 
     # Retry login
     get magic_logins_path, params: { token: @auth_token }
-    assert_equal 'Already signed in', flash[:notice]
+    assert_equal 'Already signed in!', flash[:notice]
   end
 
   def test_expired_magic_login

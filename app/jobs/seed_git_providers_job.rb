@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SeedGitProvidersJob < ApplicationJob
+  queue_as :critical
+
   def perform(user:)
     data = GitStorageConfig.new.to_h.map do |key, config|
       {
@@ -11,6 +13,6 @@ class SeedGitProvidersJob < ApplicationJob
       }
     end
 
-    GitProvider.upsert_all(data, returning: false, unique_by: :one_provider_per_user)
+    GitProvider.upsert_all(data)
   end
 end

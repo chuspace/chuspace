@@ -34,22 +34,16 @@ module Chuspace
     StrongMigrations.start_after = 20220413144339
 
     # Active Job
-    config.active_job.queue_adapter = :good_job
+    config.active_job.queue_adapter = :sidekiq
 
     # Ziet
     Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
 
+    # Mailers default queue
+    config.action_mailer.deliver_later_queue_name = 'critical'
+
     # Serve SVG
     config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']
-
-    # Setup global redis cache store
-    config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHE_URL', 'localhost:11211'), {
-      expires_in: 6.hours.to_i,
-      namespace: "chuspace-#{Rails.env}-#{ENV['APP_VERSION']}",
-      pool_size: 5,
-      failover: false,
-      pool_timeout: 5
-    }
 
     # Custom error pages
     config.exceptions_app = self.routes

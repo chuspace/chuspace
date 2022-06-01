@@ -6,25 +6,26 @@ class CreatePublications < ActiveRecord::Migration[6.1]
   def change
     create_table :publications do |t|
       t.string :name, null: false
-      t.citext :permalink, null: false
+      t.string :permalink, null: false
 
       t.text :description
-      t.text :canonical_url
-      t.text :twitter_handle
+      t.string :canonical_url
+      t.string :twitter_handle
 
       t.references :owner, null: false, foreign_key: { to_table: :users }
       t.references :git_provider, null: false, foreign_key: true
 
       t.boolean :personal, default: false, null: false
 
-      t.jsonb :settings, null: false, default: {}
+      t.json :settings, null: false
 
       t.timestamps
     end
 
-    add_index :publications, :personal, algorithm: :concurrently
-    add_index :publications, %i[permalink owner_id], algorithm: :concurrently, unique: true
+    add_column :publications, :visibility, "ENUM(#{PublicationConfig.new.visibility.keys.map { |visibility| "'#{visibility}'" }.join(',') }) DEFAULT 'public'", index: { algorithm: :default }, null: false
 
-    add_column :publications, :visibility, :publication_visibility_enum_type, index: { algorithm: :concurrently }, null: false, default: :public
+    add_index :publications, :personal, algorithm: :default
+    add_index :publications, :visibility, algorithm: :default
+    add_index :publications, %i[permalink owner_id], algorithm: :default, unique: true
   end
 end

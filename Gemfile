@@ -18,23 +18,17 @@ gem 'sprockets-rails'
 gem 'activerecord-session_store'
 
 # Use postgresql as the database for Active Record
-gem 'pg', '>= 1.x'
+gem 'mysql2'
 gem 'strong_migrations'
 gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
 gem 'name_of_person'
-gem 'good_job'
+gem 'sidekiq'
+gem 'redis-namespace'
 gem 'mini_mime'
-gem 'wicked'
 gem 'active_storage_validations'
 gem 'rubyzip'
-
-# Fragment caching
-gem 'identity_cache'
-gem 'cityhash'
-gem 'dalli'
-gem 'connection_pool'
 
 # Sign web tokens
 gem 'alba'
@@ -77,7 +71,7 @@ gem 'aasm'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 # Full-text search
-gem 'pg_search'
+gem 'algoliasearch-rails'
 
 # Turblinks
 gem 'turbo-rails'

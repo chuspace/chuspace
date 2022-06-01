@@ -2,6 +2,7 @@
 
 Rails.application.routes.draw do
   mount Easymon::Engine => '/heartbeat'
+  mount Sidekiq::Web => "/internal/#{Time.now.strftime("%Y%m%d")}/jobs"
 
   match '/404', to: 'errors#not_found', via: :all
   match '/422', to: 'errors#unprocessible_entity', via: :all

@@ -7,8 +7,8 @@ class CreateUsers < ActiveRecord::Migration[6.0]
     create_table :users do |t|
       t.string :first_name, null: false
       t.string :last_name
-      t.citext :username, null: false
-      t.citext :email, null: false
+      t.string :username, null: false
+      t.string :email, null: false
 
       # Store readme
       t.text :readme
@@ -20,13 +20,13 @@ class CreateUsers < ActiveRecord::Migration[6.0]
       t.bigint :sign_in_count, default: 0
       t.datetime :current_sign_in_at
       t.datetime :last_sign_in_at
-      t.inet :current_sign_in_ip
-      t.inet :last_sign_in_ip
+      t.string :current_sign_in_ip
+      t.string :last_sign_in_ip
 
       t.timestamps null: false
     end
 
-    add_index :users, :username, algorithm: :concurrently, unique: true
-    add_index :users, :email, algorithm: :concurrently, unique: true
+    add_index :users, :username, algorithm: :default, unique: true
+    add_index :users, :email, algorithm: :default, unique: true
   end
 end

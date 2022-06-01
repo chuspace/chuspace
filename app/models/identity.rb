@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
 class Identity < ApplicationRecord
-  include IdentityCache
-
   MAGIC_AUTH_TOKEN_LIFE = 30
 
   has_secure_token :magic_auth_token
 
   belongs_to :user, touch: true
-
-  cache_belongs_to :user
 
   encrypts :uid, deterministic: true, downcase: true
 

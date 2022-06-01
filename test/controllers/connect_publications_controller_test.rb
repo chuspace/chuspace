@@ -14,7 +14,7 @@ class ConnectPublicationsControllerTest < ActionDispatch::IntegrationTest
   def test_public_connect_home
     get connect_root_path
     assert_equal 302, status
-    assert_equal 'You need to login again!', flash[:notice]
+    assert_equal 'You need to sign in', flash[:notice]
   end
 
   def test_private_connect_home

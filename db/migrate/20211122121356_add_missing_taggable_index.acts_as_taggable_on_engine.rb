@@ -10,7 +10,7 @@ AddMissingTaggableIndex.class_eval do
   disable_ddl_transaction!
 
   def self.up
-    add_index :taggings, [:taggable_id, :taggable_type, :context], algorithm: :concurrently
+    add_index :taggings, [:taggable_id, :taggable_type, :context], algorithm: :default
   end
 
   def self.down

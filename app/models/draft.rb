@@ -107,6 +107,7 @@ class Draft < Git::Blob
 
   def clear_local_content
     local_content.clear
+    stale.clear
   end
 
   def store_repository_readme

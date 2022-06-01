@@ -9,10 +9,13 @@ module Publications
         authorize! @draft, to: :publish?
         @post = @draft.publish(author: Current.user)
 
-        if @post.save
+        if @post
           redirect_to publication_post_path(@publication, @post), notice: 'Successfully published'
         else
-          redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Something went wrong!'
+          respond_to do |format|
+            format.turbo_stream
+            format.html { redirect_to publication_edit_draft_path(@publication, @draft) }
+          end
         end
       end
     end

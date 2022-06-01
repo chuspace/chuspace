@@ -27,7 +27,9 @@ class PublicationConfig < ApplicationConfig
     },
     visibility: {
       private: 'private',
-      public: 'public'
+      public: 'public',
+      member: 'member',
+      internal: 'internal'
     }
   )
 

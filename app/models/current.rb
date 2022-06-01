@@ -5,7 +5,7 @@ class Current < ActiveSupport::CurrentAttributes
   attribute :request_id, :user_agent, :ip_address
 
   def identity=(identity)
-    self.user = identity&.fetch_user
+    self.user = identity&.user
 
     super
   end

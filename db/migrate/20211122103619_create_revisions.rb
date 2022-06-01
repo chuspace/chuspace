@@ -4,8 +4,6 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
   disable_ddl_transaction!
 
   def change
-    create_enum :revision_status_enum_type, PublicationConfig.new.revision[:statuses].keys
-
     create_table :revisions do |t|
       t.references :publication, null: false, foreign_key: true
       t.references :post, null: false, foreign_key: true
@@ -18,14 +16,14 @@ class CreateRevisions < ActiveRecord::Migration[7.0]
       t.integer :pos_to, null: false
       t.integer :widget_pos, null: false
 
-      t.jsonb :node, null: false, default: {}
+      t.json :node, null: false
 
       t.bigint :number, default: 1, null: false
 
       t.timestamps
     end
 
-    add_column :revisions, :status, :revision_status_enum_type, null: false, default: PublicationConfig.new.revision[:default_status]
-    add_index :revisions, %i[publication_id post_id number], unique: true, algorithm: :concurrently
+    add_column :revisions, :status, "ENUM(#{PublicationConfig.new.revision[:statuses].keys.map { |status| "'#{status}'" }.join(',') }) DEFAULT '#{PublicationConfig.new.revision[:default_status]}'", null: false
+    add_index :revisions, %i[publication_id post_id number], unique: true, algorithm: :default
   end
 end

@@ -28,7 +28,7 @@ module Authentication
   private
 
   def authenticate
-    identity = Identity.fetch_by_id(session[:identity_id])
+    identity = Identity.find_by(id: session[:identity_id])
     signout if identity.blank?
 
     Current.identity = identity

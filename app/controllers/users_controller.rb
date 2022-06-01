@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   private
 
   def find_user
-    @user = User.friendly_fetch!(params[:username])
+    @user = User.friendly.find(params[:username])
     if params[:username] != @user.username
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@user), status: :moved_permanently
     end
