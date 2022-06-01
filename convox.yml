@@ -1,6 +1,10 @@
 resources:
   database:
-    type: postgres
+    type: mysql
+  database_replica:
+    type: mysql
+  redis:
+    type: redis
 
 services:
   worker:
@@ -12,6 +16,8 @@ services:
     command: bundle exec sidekiq -C config/sidekiq.yml
     resources:
       - database
+      - database_replica
+      - redis
   web:
     build: .
     domain: chuspace.com
@@ -23,7 +29,7 @@ services:
     scale:
       count: 2
       cpu: 256
-      memory: 1024
+      memory: 512
     health:
       grace: 10
       interval: 30
@@ -32,6 +38,8 @@ services:
     port: 3000
     resources:
       - database
+      - database_replica
+      - redis
   timers:
     session:
       command: bin/rails db:sessions:trim
