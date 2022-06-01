@@ -11,9 +11,9 @@ connection_options = { url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/1') }
 connection_options[:password] = ENV['REDIS_AUTH'] if ENV['REDIS_AUTH'].present?
 
 Sidekiq.configure_server do |config|
-  config.redis = connection_options.merge(namespace: 'sidekiq-server')
+  config.redis = connection_options
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = connection_options.merge(namespace: 'sidekiq-client')
+  config.redis = connection_options
 end
