@@ -5,7 +5,7 @@ require_relative '../../app/models/server_side_session.rb'
 Rails.application.config.session_store(
   :active_record_store,
   domain: :all,
-  secure: Rails.env.produdction?,
+  secure: Rails.env.production?,
   serializer: :json,
   key: '_chuspace_app_global_session'
 )
