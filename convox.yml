@@ -1,7 +1,7 @@
 resources:
   database:
     type: mysql
-  database_replica:
+  database-replica:
     type: mysql
   redis:
     type: redis
@@ -16,7 +16,7 @@ services:
     command: bundle exec sidekiq -C config/sidekiq.yml
     resources:
       - database
-      - database_replica
+      - database-replica
       - redis
   web:
     build: .
@@ -38,7 +38,7 @@ services:
     port: 3000
     resources:
       - database
-      - database_replica
+      - database-replica
       - redis
   timers:
     session:
