@@ -23,12 +23,12 @@ production:
     <<: *default
     ssl_mode: verify_identity
     sslca: '/etc/ssl/cert.pem'
-    url: <%= ENV['DATABASE_URL'] %>
+    url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace') %>
     database_tasks: false
   primary_replica:
     <<: *default
     ssl_mode: verify_identity
     sslca: '/etc/ssl/cert.pem'
-    url: <%= ENV['REPLICA_DATABASE_URL'] %>
+    url: <%= ENV.fetch('REPLICA_DATABASE_URL', 'mysql2://localhost:3306/chuspace') %>
     replica: true
     database_tasks: false
