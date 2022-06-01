@@ -16,8 +16,6 @@ gem 'activestorage', '~> 7.x'
 gem 'railties', '~> 7.x'
 gem 'sprockets-rails'
 gem 'activerecord-session_store'
-
-# Use postgresql as the database for Active Record
 gem 'mysql2'
 gem 'strong_migrations'
 gem 'friendly_id'
