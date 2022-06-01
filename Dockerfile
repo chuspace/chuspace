@@ -27,7 +27,6 @@ RUN apk del gmp-dev libstdc++ \
     vips-dev \
     libffi-dev \
     bash \
-    ca-certificates \
     build-base \
     tzdata \
     libxslt-dev \
