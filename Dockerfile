@@ -23,6 +23,7 @@ RUN apk del gmp-dev libstdc++ \
     npm \
     vips-dev \
     libffi-dev \
+    bash \
     ca-certificates \
     build-base \
     tzdata \
