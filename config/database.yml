@@ -18,7 +18,7 @@ development:
 test:
   <<: *default
   database: chuspace_test
-  url: mysql2://localhost:3306/chuspace_test
+  url: <%= ENV['PLATNETSCALE'] ? ENV.fetch('DATABASE_URL') : 'mysql2://localhost:3306/chuspace_test' %>
 
 production:
   <<: *default
