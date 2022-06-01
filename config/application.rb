@@ -25,6 +25,9 @@ module Chuspace
       g.assets false
       g.helper false
       g.stylesheets false
+      g.orm :active_record
+      active_record_options = g.options[:active_record] || { active_record: {} }
+      g.options[:active_record] = active_record_options.merge(primary_key_type: :bigint)
     end
 
     # config.time_zone = "Central Time (US & Canada)"

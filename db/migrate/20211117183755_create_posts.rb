@@ -15,8 +15,8 @@ class CreatePosts < ActiveRecord::Migration[7.0]
       t.string :commit_sha, null: false
       t.string :canonical_url
 
-      t.references :publication, null: false, foreign_key: true
-      t.references :author, foreign_key: { to_table: :users }, null: false
+      t.belongs_to :publication, null: false, type: :bigint
+      t.belongs_to :author, null: false, type: :bigint
 
       t.datetime :date, null: false, index: true
 

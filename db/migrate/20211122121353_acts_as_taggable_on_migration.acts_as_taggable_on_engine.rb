@@ -26,12 +26,12 @@ ActsAsTaggableOnMigration.class_eval do
     end
 
     create_table :taggings do |t|
-      t.references :tag
+      t.belongs_to :tag, type: :bigint
 
       # You should make sure that the column created is
       # long enough to store the required class names.
-      t.references :taggable, polymorphic: true
-      t.references :tagger, polymorphic: true
+      t.belongs_to :taggable, polymorphic: true, type: :bigint
+      t.belongs_to :tagger, polymorphic: true, type: :bigint
 
       # Limit is created to prevent MySQL error on index
       # length for MyISAM table type: http://bit.ly/vgW2Ql

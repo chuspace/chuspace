@@ -21,7 +21,7 @@ class CreateGitProviders < ActiveRecord::Migration[7.0]
       t.boolean :enabled, null: false, default: true
       t.boolean :self_managed, null: false, default: false
 
-      t.references :user, null: false, foreign_key: true
+      t.belongs_to :user, null: false, type: :bigint
 
       t.json :client_options, null: false
 

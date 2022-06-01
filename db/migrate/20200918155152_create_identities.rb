@@ -11,7 +11,7 @@ class CreateIdentities < ActiveRecord::Migration[6.1]
       t.string :magic_auth_token, null: false
       t.datetime :magic_auth_token_expires_at
 
-      t.references :user, null: false, foreign_key: true
+      t.belongs_to :user, null: false, type: :bigint
       t.timestamps
     end
 

@@ -12,8 +12,8 @@ class CreatePublications < ActiveRecord::Migration[6.1]
       t.string :canonical_url
       t.string :twitter_handle
 
-      t.references :owner, null: false, foreign_key: { to_table: :users }
-      t.references :git_provider, null: false, foreign_key: true
+      t.belongs_to :owner, null: false, type: :bigint
+      t.belongs_to :git_provider, null: false, type: :bigint
 
       t.boolean :personal, default: false, null: false
 

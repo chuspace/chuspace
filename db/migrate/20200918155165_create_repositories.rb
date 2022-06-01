@@ -6,8 +6,8 @@ class CreateRepositories < ActiveRecord::Migration[7.0]
       t.string :full_name, null: false
       t.string :default_ref, default: 'HEAD', null: false
 
-      t.references :publication, null: false, foreign_key: true
-      t.references :git_provider, null: false, foreign_key: true
+      t.belongs_to :publication, null: false, type: :bigint
+      t.belongs_to :git_provider, null: false, type: :bigint
 
       # Content
       t.string :webhook_id

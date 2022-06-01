@@ -12,16 +12,23 @@ default: &default
 
 development:
   <<: *default
-  database: chuspace_development
-  url: 'mysql2://localhost:3306/chuspace_development'
+  url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace_development') %>
 
 test:
   <<: *default
-  database: chuspace_test
   url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace_test') %>
 
 production:
-  <<: *default
-  ssl_mode: verify_identity
-  sslca: '/etc/ssl/cert.pem'
-  url: <%= ENV['DATABASE_URL'] %>
+  primary:
+    <<: *default
+    ssl_mode: verify_identity
+    sslca: '/etc/ssl/cert.pem'
+    url: <%= ENV['DATABASE_URL'] %>
+    database_tasks: false
+  primary_replica:
+    <<: *default
+    ssl_mode: verify_identity
+    sslca: '/etc/ssl/cert.pem'
+    url: <%= ENV['REPLICA_DATABASE_URL'] %>
+    replica: true
+    database_tasks: false

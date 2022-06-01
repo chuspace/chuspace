@@ -12,7 +12,7 @@ class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[7.0]
       # simply remove any you don't want
 
       # user
-      t.references :user
+      t.belongs_to :user, type: :bigint
 
       # standard
       t.string :ip
@@ -51,8 +51,8 @@ class CreateAhoyVisitsAndEvents < ActiveRecord::Migration[7.0]
     add_index :ahoy_visits, :visit_token, unique: true, algorithm: :default
 
     create_table :ahoy_events do |t|
-      t.references :visit
-      t.references :user
+      t.belongs_to :visit, type: :bigint
+      t.belongs_to :user, type: :bigint
 
       t.string :name
       t.json :properties

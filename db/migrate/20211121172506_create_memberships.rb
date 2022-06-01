@@ -5,8 +5,8 @@ class CreateMemberships < ActiveRecord::Migration[7.0]
 
   def change
     create_table :memberships do |t|
-      t.references :publication, null: false, foreign_key: true
-      t.references :user, null: false, foreign_key: true
+      t.belongs_to :publication, null: false, type: :bigint
+      t.belongs_to :user, null: false, type: :bigint
 
       t.timestamps
     end

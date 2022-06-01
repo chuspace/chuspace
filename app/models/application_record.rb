@@ -2,6 +2,7 @@
 
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
+  connects_to database: { writing: :primary, reading: Rails.env.production? ? :primary_replica : :primary }
 
   def valid_attributes?(*attributes)
     errors.clear
