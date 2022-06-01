@@ -50,6 +50,7 @@ RUN yarn install --check-files --frozen-lockfile
 
 COPY . .
 
+RUN echo $DATABASE_URL
 RUN bundle exec rake assets:precompile
 
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
