@@ -32,7 +32,7 @@ RUN apk del gmp-dev libstdc++ \
     tzdata \
     libxslt-dev \
     libxml2-dev \
-    default-libmysqlclient-dev \
+    mariadb-dev \
     git \
     yarn
 
