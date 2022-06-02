@@ -19,6 +19,8 @@ services:
       - database-replica
       - redis
   web:
+    annotations:
+      - nginx.ingress.kubernetes.io/use-forwarded-headers=true
     build: .
     domain: chuspace.com
     termination:
