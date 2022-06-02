@@ -23,6 +23,8 @@ services:
       - nginx.ingress.kubernetes.io/use-forwarded-headers=true
       - nginx.ingress.kubernetes.io/use-proxy-protocol=true
       - nginx.ingress.kubernetes.io/backend-protocol=http
+      - nginx.ingress.kubernetes.io/proxy-add-original-uri-header=true
+      - nginx.ingress.kubernetes.io/server-tokens=chuspace
     build: .
     domain: chuspace.com
     termination:

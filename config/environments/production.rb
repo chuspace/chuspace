@@ -39,8 +39,6 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'chuspace.com', protocol: 'https' }
   config.default_url_options = { host: 'chuspace.com' }
   Rails.application.routes.default_url_options[:host] = 'chuspace.com'
-
-  config.action_controller.forgery_protection_origin_check = false
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
@@ -49,7 +47,8 @@ Rails.application.configure do
   config.active_storage.service = :amazon
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = false
+  config.force_ssl = true
+  config.ssl_options = { redirect: { exclude: -> request { /heartbeat/.match?(request.path) } } }
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
