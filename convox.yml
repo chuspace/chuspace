@@ -19,8 +19,6 @@ services:
       - redis
   web:
     build: .
-    tls:
-      redirect: true
     termination:
       grace: 60
     scale:
