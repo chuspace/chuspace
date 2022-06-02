@@ -5,7 +5,6 @@ resources:
     type: mysql
   redis:
     type: redis
-
 services:
   worker:
     build: .
@@ -22,7 +21,6 @@ services:
     build: .
     tls:
       redirect: true
-    domain: chuspace.com
     termination:
       grace: 60
     scale:
