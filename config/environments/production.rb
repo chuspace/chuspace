@@ -40,6 +40,7 @@ Rails.application.configure do
   config.default_url_options = { host: 'chuspace.com' }
   Rails.application.routes.default_url_options[:host] = 'chuspace.com'
 
+  config.action_controller.forgery_protection_origin_check = false
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
