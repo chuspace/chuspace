@@ -359,9 +359,6 @@ GEM
     rainbow (3.1.1)
     rake (13.0.6)
     redis (4.6.0)
-    redis-session-store (0.11.4)
-      actionpack (>= 3, < 8)
-      redis (>= 3, < 5)
     regexp_parser (2.5.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
@@ -552,7 +549,6 @@ DEPENDENCIES
   rack-proxy
   rails-controller-testing
   railties (~> 7.x)
-  redis-session-store
   rubocop
   rubocop-performance
   rubocop-rails
