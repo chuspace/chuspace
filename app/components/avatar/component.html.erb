@@ -3,7 +3,7 @@
     <lazy-image
       class='<%= class_name %>'
       rounded
-      src='<%= avatar.variable? ? avatar.variant(variant).processed.url : avatar.url %>'
+      src='<%= rails_public_blob_url(avatar.variant(variant)) %>'
       title='<%= fallback %>'>
     </lazy-image>
   </div>

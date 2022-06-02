@@ -4,6 +4,20 @@ Rails.application.routes.draw do
   mount Easymon::Engine => '/heartbeat'
   mount Sidekiq::Web => "/internal/#{Time.now.strftime("%Y%m%d")}/jobs"
 
+  direct :rails_public_blob do |blob|
+    if Rails.env.development? || Rails.env.test?
+      route =
+        if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
+          :rails_representation
+        else
+          :rails_blob
+        end
+      route_for(route, blob)
+    else
+      File.join(ENV.fetch('AVATARS_CDN_HOST', 'https://chuspace.com'), blob.key)
+    end
+  end
+
   match '/404', to: 'errors#not_found', via: :all
   match '/422', to: 'errors#unprocessible_entity', via: :all
   match '/406', to: 'errors#unacceptable', via: :all
