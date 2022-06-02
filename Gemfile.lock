@@ -58,12 +58,6 @@ GEM
     activerecord (7.0.3)
       activemodel (= 7.0.3)
       activesupport (= 7.0.3)
-    activerecord-session_store (2.0.0)
-      actionpack (>= 5.2.4.1)
-      activerecord (>= 5.2.4.1)
-      multi_json (~> 1.11, >= 1.11.2)
-      rack (>= 2.0.8, < 3)
-      railties (>= 5.2.4.1)
     activestorage (7.0.3)
       actionpack (= 7.0.3)
       activejob (= 7.0.3)
@@ -365,6 +359,9 @@ GEM
     rainbow (3.1.1)
     rake (13.0.6)
     redis (4.6.0)
+    redis-session-store (0.11.4)
+      actionpack (>= 3, < 8)
+      redis (>= 3, < 5)
     regexp_parser (2.5.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
@@ -497,7 +494,6 @@ DEPENDENCIES
   activejob (~> 7.x)
   activemodel (~> 7.x)
   activerecord (~> 7.x)
-  activerecord-session_store
   activestorage (~> 7.x)
   activesupport (~> 7.x)
   acts-as-taggable-on!
@@ -556,6 +552,7 @@ DEPENDENCIES
   rack-proxy
   rails-controller-testing
   railties (~> 7.x)
+  redis-session-store
   rubocop
   rubocop-performance
   rubocop-rails
