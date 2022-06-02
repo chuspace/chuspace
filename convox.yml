@@ -22,6 +22,7 @@ services:
     annotations:
       - nginx.ingress.kubernetes.io/use-forwarded-headers=true
       - nginx.ingress.kubernetes.io/use-proxy-protocol=true
+      - nginx.ingress.kubernetes.io/backend-protocol=http
     build: .
     domain: chuspace.com
     termination:
