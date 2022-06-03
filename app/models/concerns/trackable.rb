@@ -17,7 +17,9 @@ module Trackable
   end
 
   def update_tracked_fields!(request)
-    set_tracked_fields(request)
-    self.save!
+    ActiveRecord::Base.connected_to(role: :writing) do
+      set_tracked_fields(request)
+      self.save!
+    end
   end
 end

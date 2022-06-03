@@ -106,15 +106,16 @@ class GithubAdapter < ApplicationAdapter
 
   def update_blob(path:, content:, author:, sha:, message: nil)
     message ||= "Update #{path}"
-    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}",
-{ content: content, message: message, sha: sha, author: author }).content)
+    blob_from_response(put("repos/#{repo_fullname}/contents/#{path}", { content: content, message: message, sha: sha, author: author }).content)
   end
 
   # Github app endpoints
   def refresh_app_installation_token
-    execute_as(:app) do
-      response = post "app/installations/#{git_provider.app_installation_id}/access_tokens"
-      git_provider.update(machine_access_token: response.token, machine_access_token_expires_at: response.expires_at)
+    ActiveRecord::Base.connected_to(role: :writing) do
+      execute_as(:app) do
+        response = post "app/installations/#{git_provider.app_installation_id}/access_tokens"
+        git_provider.update(machine_access_token: response.token, machine_access_token_expires_at: response.expires_at)
+      end
     end
   end
 
@@ -164,6 +165,7 @@ class GithubAdapter < ApplicationAdapter
       exp: 10.minutes.from_now.to_i,
       iss: Rails.application.credentials.github_storage[:app_id],
     }
+
     key = OpenSSL::PKey::RSA.new(Rails.application.credentials.github_storage[:private_key])
     JWT.encode(payload, key, 'RS256')
   end
