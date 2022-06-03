@@ -2,6 +2,7 @@
 
 class RootConstraint
   def matches?(request)
-    Identity.exists?(id: request.session[:identity_id])
+    cookies = ActionDispatch::Cookies::CookieJar.build(request, request.cookies)
+    Identity.exists?(id: cookies.encrypted[:identity])
   end
 end

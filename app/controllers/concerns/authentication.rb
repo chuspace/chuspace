@@ -4,12 +4,16 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    COOKIE_DOMAINS = Rails.env.production? ? %w[chuspace.com] : %w[localhost test.host]
     before_action :authenticate
     helper_method :signed_in?
   end
 
   def signin(identity)
-    session[:identity_id] = identity.id
+    cookies.encrypted[:identity] = {
+      value: identity.id, expires: 1.year.from_now, domain: COOKIE_DOMAINS, secure: Rails.env.production?
+    }
+
     identity.user.update_tracked_fields!(request)
     identity.update(magic_auth_token_expires_at: Time.now)
     identity.regenerate_magic_auth_token
@@ -18,7 +22,7 @@ module Authentication
   end
 
   def signout
-    session.delete(:identity_id)
+    cookies.delete(:identity)
   end
 
   def signed_in?
@@ -28,7 +32,7 @@ module Authentication
   private
 
   def authenticate
-    identity = Identity.find_by(id: session[:identity_id])
+    identity = Identity.find_by(id: cookies.encrypted[:identity])
     signout if identity.blank?
 
     Current.identity = identity
