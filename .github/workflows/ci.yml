@@ -72,7 +72,7 @@ jobs:
         env:
           REDIS_URL: redis://localhost:6379
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
-          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@localhost:3306/chuspace_test
+          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test
         run: bin/rails db:prepare
 
       - name: Setup codeclimate test reporter
@@ -84,7 +84,7 @@ jobs:
         env:
           REDIS_URL: redis://localhost:6379
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
-          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@localhost:3306/chuspace_test
+          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test
         run: bin/rails assets:precompile
 
       - name: Run tests
@@ -92,7 +92,7 @@ jobs:
           REDIS_URL: redis://localhost:6379
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
-          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@localhost:3306/chuspace_test
+          DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test
         run: bin/rails test:all
 
       - name: Upload coverage
