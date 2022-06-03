@@ -47,6 +47,10 @@ module Drafts
       front_matter.dig(:unlisted) || false
     end
 
+    def permalink
+      front_matter.dig(:permalink)
+    end
+
     def visibility
       front_matter.dig(:visibility) || :public
     end

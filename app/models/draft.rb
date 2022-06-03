@@ -95,6 +95,7 @@ class Draft < Git::Blob
       unlisted: unlisted,
       visibility: visibility,
       canonical_url: canonical_url,
+      permalink: permalink,
       commit_sha: commits.first&.id || commits.first&.sha
     }
   end
@@ -111,7 +112,7 @@ class Draft < Git::Blob
   end
 
   def store_repository_readme
-    repository.update(readme: decoded_content) if readme?
+    repository.update(readme: body) if readme?
   end
 
   def touch_publication

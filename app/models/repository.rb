@@ -31,7 +31,7 @@ class Repository < ApplicationRecord
   end
 
   def cache_readme!
-    update(readme: readme_draft.decoded_content)
+    update(readme: readme_draft.body)
   end
 
   def cache_readme_images!
@@ -134,7 +134,7 @@ class Repository < ApplicationRecord
   end
 
   def readme_doc
-    MarkdownDoc.new(content: readme || readme_draft.decoded_content)
+    MarkdownDoc.new(content: readme || readme_draft.body)
   end
 
   def readme_draft
