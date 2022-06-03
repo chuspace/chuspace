@@ -11,7 +11,7 @@ class Repository < ApplicationRecord
   delegate :name, :description, :html_url, :owner, :default_branch, to: :git
 
   after_create_commit -> { CacheRepositoryReadmeJob.perform_later(repository: self) }
-  after_commit -> { CacheRepositoryReadmeJob.perform_later(repository: self) }, if: :readme_path_previously_changed?
+  after_update -> { CacheRepositoryReadmeJob.perform_later(repository: self) }, if: :readme_path_previously_changed?
 
   def assets_folders
     [assets_folder].freeze
