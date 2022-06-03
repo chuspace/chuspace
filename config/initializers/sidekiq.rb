@@ -7,7 +7,7 @@ Sidekiq::Web.use(Rack::Auth::Basic) do |username, password|
     password == Rails.application.credentials.sidekiq.dig(:password)
 end
 
-connection_options = { url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/1') }
+connection_options = { url: ENV.fetch('REDIS_URL', 'redis://localhost:6379/1'), ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE } }
 connection_options[:password] = ENV['REDIS_AUTH'] if ENV['REDIS_AUTH'].present?
 
 Sidekiq.configure_server do |config|
