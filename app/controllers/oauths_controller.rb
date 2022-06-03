@@ -7,26 +7,28 @@ class OauthsController < ApplicationController
   include SessionRedirect
 
   def create
-    Identity.transaction do
-      identity = Identity.find_by(provider: provider, uid: auth_hash.uid)
+    ActiveRecord::Base.connected_to(role: :writing) do
+      Identity.transaction do
+        identity = Identity.find_by(provider: provider, uid: auth_hash.uid)
 
-      user = if identity.present?
-        identity.user
-      elsif user = User.find_by(email: auth_hash.info.email)
-        existing_provider = user.identities&.first&.provider&.titleize || provider_name
-        redirect_to redirect_location_for(:user) || root_path, notice: t('oauths.create.failure', existing_provider: existing_provider)
-        return
-      else
-        User.create(user_atts)
+        user = if identity.present?
+          identity.user
+        elsif user = User.find_by(email: auth_hash.info.email)
+          existing_provider = user.identities&.first&.provider&.titleize || provider_name
+          redirect_to redirect_location_for(:user) || root_path, notice: t('oauths.create.failure', existing_provider: existing_provider)
+          return
+        else
+          User.create(user_atts)
+        end
+
+        if identity.present?
+          identity.update(identity_attrs)
+        else
+          identity = user.identities.create(identity_attrs)
+        end
+
+        signin(identity) unless signed_in?
       end
-
-      if identity.present?
-        identity.update(identity_attrs)
-      else
-        identity = user.identities.create(identity_attrs)
-      end
-
-      signin(identity) unless signed_in?
     end
 
     redirect_to redirect_location_for(:user) || root_path, notice: t('oauths.create.success')
