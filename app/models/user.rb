@@ -48,10 +48,6 @@ class User < ApplicationRecord
     self.username = username
   end
 
-  def should_generate_new_friendly_id?
-    username.blank? || username_changed?
-  end
-
   def resolve_friendly_id_conflict(candidates)
     self.username = username
   end

@@ -82,10 +82,6 @@ class Publication < ApplicationRecord
     self.permalink = owner.username
   end
 
-  def should_generate_new_friendly_id?
-    name.blank? || name_changed?
-  end
-
   def one_personal_publication_per_owner
     errors.add(:personal, :one_personal_publication_allowed) if personal? && owner.publications.personal.any?
   end

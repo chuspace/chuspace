@@ -26,6 +26,7 @@ module Publications
     def publication_params
       params.require(:publication).permit(
         :name,
+        :permalink,
         :description,
         :icon,
         :visibility,
