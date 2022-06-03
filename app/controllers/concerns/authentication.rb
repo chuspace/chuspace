@@ -14,9 +14,11 @@ module Authentication
       value: identity.id, expires: 1.year.from_now, domain: COOKIE_DOMAINS, secure: Rails.env.production?
     }
 
-    identity.user.update_tracked_fields!(request)
-    identity.update(magic_auth_token_expires_at: Time.now)
-    identity.regenerate_magic_auth_token
+    ActiveRecord::Base.connected_to(role: :writing) do
+      identity.user.update_tracked_fields!(request)
+      identity.update(magic_auth_token_expires_at: Time.now)
+      identity.regenerate_magic_auth_token
+    end
 
     authenticate
   end
