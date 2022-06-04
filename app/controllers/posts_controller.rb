@@ -9,6 +9,10 @@ class PostsController < ApplicationController
 
   layout 'post'
 
+  def show
+    fresh_when(etag: @post, last_modified: [Current.identity&.updated_at, @post.updated_at].compact.max)
+  end
+
   private
 
   def track_action
@@ -17,6 +21,7 @@ class PostsController < ApplicationController
 
   def find_post
     @post = Post.friendly.find(params[:permalink])
+
     if params[:permalink] != @post.permalink
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@post), status: :moved_permanently
     end

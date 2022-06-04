@@ -14,6 +14,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActionPolicy::Unauthorized, with: :user_not_authorized
 
+  etag { Current.identity.try :updated_at }
+
   private
 
   def user_not_authorized(exception)
