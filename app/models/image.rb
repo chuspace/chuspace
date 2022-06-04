@@ -19,7 +19,7 @@ class Image < ApplicationRecord
   def cdn_image_url(variant: :post)
     if image.attached?
       if image.variable?
-        Rails.application.routes.url_helpers.rails_public_blob_url(image.variant(variant))
+        Rails.application.routes.url_helpers.rails_public_blob_url(image.variant(variant).blob)
       else
         Rails.application.routes.url_helpers.rails_public_blob_url(image)
       end

@@ -1,38 +1,6 @@
 <!DOCTYPE html>
 <html lang='en' class='h-full'>
-  <head>
-    <%= render 'layouts/meta' %>
-
-    <% if signed_in? %>
-      <link rel="dns-prefetch" href="//secure.gravatar.com" />
-      <link rel="preconnect" href="//secure.gravatar.com" />
-    <% end %>
-
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/chuspace-icon-192.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/chuspace-icon-192.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/chuspace-icon-192.png" />
-    <link rel="apple-touch-icon" sizes="167x167" href="/chuspace-icon-192.png" />
-
-    <%= javascript_pack_tag 'application', defer: true, 'data-turbo-track': 'reload' %>
-    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
-
-    <% cache([@publication, @post, 'head:og']) do %>
-      <%= display_meta_tags(
-        site: ChuspaceConfig.new.app[:name],
-        title: 'Blogging platform for programmers and teams',
-        description: 'Collaborative blogging platform for programmers and teams',
-        icon: '/favicon.png',
-        og: {
-          title: :title,
-          site_name: :site,
-          description: :description
-        },
-        **@post.to_meta_tags
-      ) %>
-    <% end %>
-  </head>
-
+  <%= render 'layouts/head' %>
   <body class='w-full max-w-full'>
     <%= render 'layouts/flash' %>
     <%= render(Header::Component.new) do |header| %>
@@ -40,7 +8,6 @@
         <span class='mx-4 text-secondary'>|</span>
         <%= link_to @post.publication.name, publication_path(@post.publication), class: 'link text-secondary hover:text-primary link-hover text-sm' %>
       <% end %>
-
       <%= header.before_user_dropdown do %>
         <div class='mr-8'>
           <% if signed_in? && allowed_to?(:edit?, @post) %>
@@ -49,7 +16,6 @@
         </div>
       <% end %>
     <% end %>
-
     <main class="container mt-24">
       <%= yield %>
     </main>

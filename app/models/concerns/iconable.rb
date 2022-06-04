@@ -24,7 +24,7 @@ module Iconable
   def cdn_icon_url(variant: :mini)
     if icon.attached?
       if icon.variable?
-        Rails.application.routes.url_helpers.rails_public_blob_url(icon.variant(variant))
+        Rails.application.routes.url_helpers.rails_public_blob_url(icon.variant(variant).blob)
       else
         Rails.application.routes.url_helpers(icon)
       end

@@ -31,7 +31,7 @@ module Avatarable
   def cdn_avatar_url(variant: :mini)
     if avatar.attached?
       if avatar.variable?
-        Rails.application.routes.url_helpers.rails_public_blob_url(avatar.variant(variant))
+        Rails.application.routes.url_helpers.rails_public_blob_url(avatar.variant(variant).blob)
       else
         Rails.application.routes.url_helpers(avatar)
       end
