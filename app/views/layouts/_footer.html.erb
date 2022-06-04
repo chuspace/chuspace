@@ -3,16 +3,15 @@
     <ul class='flex-1 text-xs'>
       <li>© <%= Time.current.year %> <strong class='text-secondary'>Chuspace</strong></li>
     </ul>
-
     <ul class='flex items-center'>
       <li class='mr-4'>
-        <strong><%= link_to 'Privacy', 'https://chuspace.com/self/privacy-policy', class: 'underline' %></strong>
+        <strong><%= link_to 'Privacy', '/self/privacy-policy', class: 'underline' %></strong>
       </li>
       <li class='mr-4'>
-        <strong><%= link_to 'Terms', 'https://chuspace.com/self/terms-and-conditions', class: 'underline' %></strong>
+        <strong><%= link_to 'Terms', '/self/terms-and-conditions', class: 'underline' %></strong>
       </li>
       <li>
-        <strong><%= link_to 'Contact', '#', class: 'underline' %></strong>
+        <strong><%= link_to 'Contact', '/self', class: 'underline' %></strong>
       </li>
     </ul>
   </div>
