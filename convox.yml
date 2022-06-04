@@ -29,9 +29,9 @@ services:
     termination:
       grace: 60
     scale:
-      count: 2
+      count: 4
       cpu: 256
-      memory: 512
+      memory: 1024
     health:
       grace: 10
       interval: 30
