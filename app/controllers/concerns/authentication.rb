@@ -4,13 +4,14 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    COOKIE_DOMAINS = Rails.env.production? ? %w[chuspace.com] : %w[localhost test.host]
     before_action :authenticate
     helper_method :signed_in?
   end
 
   def signin(identity)
     cookies.encrypted[:identity] = {
-      value: identity.id, expires: 1.year.from_now, secure: Rails.env.production?
+      value: identity.id, expires: 1.year.from_now, domain: COOKIE_DOMAINS, secure: Rails.env.production?
     }
 
     ActiveRecord::Base.connected_to(role: :writing) do
@@ -23,7 +24,7 @@ module Authentication
   end
 
   def signout
-    cookies.delete(:identity)
+    cookies.delete(:identity, domain: COOKIE_DOMAINS)
   end
 
   def signed_in?
