@@ -2,7 +2,6 @@
 
 Rails.application.routes.draw do
   mount Easymon::Engine => '/heartbeat'
-  mount Sidekiq::Web => "/internal/#{Time.now.strftime("%Y%m%d")}/jobs"
 
   direct :rails_public_blob do |blob|
     if Rails.env.development? || Rails.env.test?

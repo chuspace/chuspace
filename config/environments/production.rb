@@ -7,7 +7,13 @@ Rails.application.configure do
 
   # Code is not reloaded between requests.
   config.cache_classes = true
-  config.cache_store = :memory_store, { size: 16.megabytes }
+  config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHE_URL', 'localhost:11211'), {
+    expires_in: 6.hours.to_i,
+    namespace: "chuspace-#{Rails.env}-#{ENV.fetch('APP_VERSION', 'axiom')}",
+    pool_size: 5,
+    failover: false,
+    pool_timeout: 5
+  }
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
@@ -58,16 +64,10 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
 
-  config.action_mailer.smtp_settings = {
-    address: 'smtp.eu.sparkpostmail.com',
-    port: 587,
-    enable_starttls_auto: true,
-    user_name: 'SMTP_Injection',
-    password: Rails.application.credentials.sparkpost[:api_key],
-    authentication: 'login'
-  }
+  config.action_mailer.delivery_method = :ses
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
+  config.active_job.queue_adapter = :amazon_sqs_async
   config.active_job.queue_name_prefix = ''
   config.action_mailer.perform_caching = false
 

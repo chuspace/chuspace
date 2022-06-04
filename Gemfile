@@ -21,10 +21,13 @@ gem 'friendly_id'
 gem 'babosa'
 gem 'action_policy'
 gem 'name_of_person'
-gem 'sidekiq'
 gem 'mini_mime'
 gem 'active_storage_validations'
 gem 'rubyzip'
+
+# Fragment caching
+gem 'dalli'
+gem 'connection_pool'
 
 # Sign web tokens
 gem 'alba'
@@ -44,7 +47,6 @@ gem 'acts-as-taggable-on', github: 'mbleigh/acts-as-taggable-on'
 gem 'simple_form'
 
 # Emails
-gem 'aws-ses', require: 'aws/ses'
 gem 'aws-sdk-rails'
 gem 'aws-sdk-s3'
 

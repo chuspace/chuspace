@@ -3,8 +3,8 @@ resources:
     type: mysql
   database-replica:
     type: mysql
-  redis:
-    type: redis
+  memcached:
+    type: memcached
 
 services:
   worker:
@@ -13,11 +13,11 @@ services:
       count: 2
       cpu: 256
       memory: 512
-    command: bundle exec sidekiq -C config/sidekiq.yml
+    command: bundle exec aws_sqs_active_job --queue default
     resources:
       - database
       - database-replica
-      - redis
+      - memcached
   web:
     annotations:
       - nginx.ingress.kubernetes.io/use-forwarded-headers=true
@@ -42,9 +42,4 @@ services:
     resources:
       - database
       - database-replica
-      - redis
-  timers:
-    session:
-      command: bin/rails db:sessions:trim
-      schedule: '0 1 * * *'
-      service: worker
+      - memcached

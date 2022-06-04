@@ -124,11 +124,6 @@ GEM
     aws-sdk-sqs (1.51.1)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-ses (0.7.1)
-      builder
-      mail (> 2.2.5)
-      mime-types
-      xml-simple
     aws-sessionstore-dynamodb (2.0.1)
       aws-sdk-dynamodb (~> 1)
       rack (~> 2)
@@ -177,6 +172,7 @@ GEM
       term-ansicolor
       thor
     crass (1.0.6)
+    dalli (3.2.1)
     database_consistency (1.1.15)
       activerecord (>= 3.2)
     device_detector (1.0.7)
@@ -406,10 +402,6 @@ GEM
       sentry-ruby-core (= 5.3.1)
     sentry-ruby-core (5.3.1)
       concurrent-ruby
-    sidekiq (6.4.2)
-      connection_pool (>= 2.2.2)
-      rack (~> 2.0)
-      redis (>= 4.2.0)
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
@@ -471,8 +463,6 @@ GEM
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
     websocket (1.2.9)
-    xml-simple (1.1.9)
-      rexml
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.5.4)
@@ -504,7 +494,6 @@ DEPENDENCIES
   awesome_print
   aws-sdk-rails
   aws-sdk-s3
-  aws-ses
   babosa
   bootsnap (>= 1.1.0)
   brakeman
@@ -513,7 +502,9 @@ DEPENDENCIES
   capybara
   cloudflare-rails
   commonmarker
+  connection_pool
   coveralls
+  dalli
   database_consistency
   diffy
   dotenv-rails
@@ -557,7 +548,6 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails
   sentry-ruby
-  sidekiq
   simple_form
   simplecov
   simplecov_json_formatter

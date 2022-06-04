@@ -30,20 +30,14 @@ module Chuspace
       g.options[:active_record] = active_record_options.merge(primary_key_type: :bigint)
     end
 
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
-
     config.active_record.encryption.extend_queries = true
     StrongMigrations.start_after = 20220413144339
-
-    # Active Job
-    config.active_job.queue_adapter = :sidekiq
 
     # Ziet
     Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
 
     # Mailers default queue
-    config.action_mailer.deliver_later_queue_name = 'critical'
+    config.action_mailer.deliver_later_queue_name = 'default'
 
     # Serve SVG
     config.active_storage.content_types_to_serve_as_binary -= ['image/svg+xml']

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationJob < ActiveJob::Base
-  queue_as :low
+  queue_as :default
   retry_on ActiveRecord::Deadlocked
   discard_on ActiveJob::DeserializationError
 end

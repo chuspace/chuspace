@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class SeedGitProvidersJob < ApplicationJob
-  queue_as :critical
-
   def perform(user:)
     data = GitStorageConfig.new.to_h.map do |key, config|
       {
