@@ -7,7 +7,7 @@ Rails.application.configure do
 
   # Code is not reloaded between requests.
   config.cache_classes = true
-  config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHE_URL', 'localhost:11211'), {
+  config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHED_URL', 'localhost:11211'), {
     expires_in: 6.hours.to_i,
     namespace: "chuspace-#{Rails.env}-#{ENV.fetch('APP_VERSION', 'axiom')}",
     pool_size: 5,
