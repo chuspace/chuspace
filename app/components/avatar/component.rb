@@ -3,11 +3,8 @@
 module Avatar
   class Component < ApplicationComponent
     CLASSNAMES = {
-      icon: {
-        classname: 'w-8 h-8 rounded-full'
-      },
       mini: {
-        classname: 'w-16 h-16 rounded-full text-xl'
+        classname: 'w-8 h-8 rounded-full'
       },
       thumb: {
         classname: 'w-24 h-24 rounded-full text-3xl'
@@ -20,7 +17,7 @@ module Avatar
     validates :variant, inclusion: { in: CLASSNAMES.keys, message: '%{value} is not a valid size' }
     attr_reader :avatar, :fallback, :gravatar, :variant, :uploader
 
-    def initialize(avatar:, fallback:, gravatar: nil, variant: :icon, uploader: false)
+    def initialize(avatar:, fallback:, gravatar: nil, variant: :mini, uploader: false)
       @avatar   = avatar
       @gravatar = gravatar
       @fallback = fallback

@@ -11,10 +11,19 @@ class Image < ApplicationRecord
   after_create :attach_image
 
   has_one_attached :image do |attachable|
-    attachable.variant :post, resize_to_fit: [800, 300]
-    attachable.variant :list, resize_to_fit: [250, 150]
-    attachable.variant :icon, resize_to_fit: [64, 64]
-    attachable.variant :social, resize_to_fit: [600, 315]
+    attachable.variant :post, resize_to_fit: [1600, 600]
+    attachable.variant :list, resize_to_fit: [500, 300]
+    attachable.variant :social, resize_to_fit: [1200, 630]
+  end
+
+  def cdn_image_url(variant: :post)
+    if image.attached?
+      if image.variable?
+        Rails.application.routes.url_helpers.rails_public_blob_url(image.variant(variant))
+      else
+        Rails.application.routes.url_helpers.rails_public_blob_url(image)
+      end
+    end
   end
 
   private

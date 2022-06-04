@@ -1,7 +1,7 @@
 <div class='flex items-center'>
   <details class="dropdown dropdown-end">
     <summary tabindex="0" class="cursor-pointer">
-      <%= render(Avatar::Component.new(avatar: Current.user.avatar, gravatar: Current.user.gravatar_url, fallback: Current.user.name.initials, variant: :icon)) %>
+      <%= render(Avatar::Component.new(avatar: Current.user.avatar, gravatar: Current.user.gravatar_url, fallback: Current.user.name.initials)) %>
     </summary>
     <details-menu tabindex="0" class="shadow menu dropdown-content bg-base-300 rounded-box w-52 z-50">
       <li>

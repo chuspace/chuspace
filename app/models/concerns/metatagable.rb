@@ -62,8 +62,8 @@ module Metatagable
 
   def og_image_url
     @og_image_url ||= case self
-                      when Publication then icon.variable? ? icon.variant(:profile)&.processed&.url : icon.url
-                      when Post then featured_image&.image&.variable? ? featured_image&.image&.variant(:social)&.processed&.url : featured_image&.image&.url
+                      when Publication then cdn_icon_url(variant: :profile)
+                      when Post then featured_image&.cdn_image_url(variant: :social)
     end
   end
 
