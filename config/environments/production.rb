@@ -2,9 +2,12 @@
 
 require 'active_support/core_ext/integer/time'
 
-Rails.application.configure do
-  # Settings specified here will take precedence over those in config/application.rb.
+Aws.config.update(
+  region: Rails.application.credentials.dig(:aws, :region),
+  credentials: Aws::Credentials.new(Rails.application.credentials.dig(:aws, :access_key_id), Rails.application.credentials.dig(:aws, :secret_access_key))
+)
 
+Rails.application.configure do
   # Code is not reloaded between requests.
   config.cache_classes = true
   config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHED_URL', 'localhost:11211'), {
