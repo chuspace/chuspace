@@ -5,6 +5,6 @@
   <tr><td><p><%= link_to t('.cta_login'), magic_logins_url(token: @identity.magic_auth_token) %></p></td></tr>
   <tr><td><p><%= t('user_mailer.magic_login_email.direct_url') %>: <%= link_to magic_logins_url(token: @identity.magic_auth_token), magic_logins_url(token: @identity.magic_auth_token) %></p></td></tr>
 <% else %>
-  <tr><td><p><%= link_to t('.cta_visit'), root_url %></p></td></tr>
+  <tr><td><p>Click to <%= link_to t('.cta_visit'), root_url %></p></td></tr>
 <% end %>
 <tr><td ><p><%= t('.outro').html_safe %></p></td></tr>
