@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   include SetCurrentRequestDetails
   include SetSentryContext
   include Redirectable
+  include TurboCacheControl
   include ActiveStorage::SetCurrent
 
   after_action :verify_authorized
