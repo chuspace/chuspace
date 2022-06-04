@@ -6,6 +6,5 @@ if Rails.env.production?
     config.max_messages       = 10
     config.visibility_timeout = 60
     config.shutdown_timeout   = 10
-    config.client             = Aws::SQS::Client.new(region: Rails.application.credentials.dig(:aws, :region))
   end
 end
