@@ -1,2 +1,2 @@
 queues:
-  default: <%= Rails.application.credentials.dig(:aws, :sqs_url) %>
+  default: <%= Rails.application.credentials.dig(:aws, :sqs_standard_url) %>

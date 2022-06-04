@@ -17,7 +17,6 @@ services:
     resources:
       - database
       - database-replica
-      - memcached
   web:
     annotations:
       - nginx.ingress.kubernetes.io/use-forwarded-headers=true

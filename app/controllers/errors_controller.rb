@@ -9,7 +9,7 @@ class ErrorsController < ApplicationController
 
   def internal_server_error
     exception = request.env['action_dispatch.exception']
-    Sentry.capture_exception(exception, request.env) if exception
+    Sentry.capture_exception(exception) if exception
     render(status: 500)
   end
 
