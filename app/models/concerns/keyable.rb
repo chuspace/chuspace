@@ -38,13 +38,14 @@ module Keyable
       ivar_symbol = :"@#{name}_#{method}"
       type = method.to_s.sub('kv_', '')
 
-      ActiveRecord::Base.connected_to(role: :writing) do
-        define_method(name) do
-          if instance_variable_defined?(ivar_symbol)
-            instance_variable_get(ivar_symbol)
-          else
-            evaluated_key = kv_key_evaluated(key) || kv_key_for_attribute(name)
-            expires_in = expires_in ? Time.current + expires_in : nil
+      define_method(name) do
+        if instance_variable_defined?(ivar_symbol)
+          instance_variable_get(ivar_symbol)
+        else
+          evaluated_key = kv_key_evaluated(key) || kv_key_for_attribute(name)
+          expires_in = expires_in ? Time.current + expires_in : nil
+
+          ActiveRecord::Base.connected_to(role: :writing) do
             instance_variable_set(ivar_symbol, Kv.find_by(key: evaluated_key) || Kv.new(Kv.set(evaluated_key, nil, data_type: type, expires_in: expires_in, default: default)))
           end
         end

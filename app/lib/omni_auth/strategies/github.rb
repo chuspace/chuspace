@@ -48,7 +48,7 @@ module OmniAuth
       end
 
       def email
-        (email_access_allowed?) ? primary_email : raw_info['email']
+        primary_email
       end
 
       def scope
@@ -62,16 +62,8 @@ module OmniAuth
 
       # The new /user/emails API - http://developer.github.com/v3/users/emails/#future-response
       def emails
-        return [] unless email_access_allowed?
         access_token.options[:mode] = :header
         @emails ||= access_token.get('user/emails', headers: { 'Accept' => 'application/vnd.github.v3' }).parsed
-      end
-
-      def email_access_allowed?
-        return false unless options['scope']
-        email_scopes = ['user', 'user:email']
-        scopes = options['scope'].split(',')
-        (scopes & email_scopes).any?
       end
 
       def callback_url
