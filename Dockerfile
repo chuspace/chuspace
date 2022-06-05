@@ -47,10 +47,13 @@ RUN bundle check || (bundle install --without development test --jobs=4 --retry=
 
 # yarn install
 COPY package.json yarn.lock ./
+RUN rm -rf node_modules
 RUN yarn install --check-files --frozen-lockfile
 
 COPY . .
 
+RUN rm -rf public/packs
+RUN rm -rf public/assets
 RUN bundle exec rake assets:precompile
 
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
