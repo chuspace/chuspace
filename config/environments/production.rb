@@ -67,16 +67,8 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
 
-  # config.action_mailer.delivery_method = :ses
-
-  config.action_mailer.smtp_settings = {
-    address: 'smtp.eu.sparkpostmail.com',
-    port: 587,
-    enable_starttls_auto: true,
-    user_name: 'SMTP_Injection',
-    password: Rails.application.credentials.sparkpost.dig(:api_key),
-    authentication: 'login'
-  }
+  # Use AWS SES
+  config.action_mailer.delivery_method = :ses
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   config.active_job.queue_adapter = :amazon_sqs_async
