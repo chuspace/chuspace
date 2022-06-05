@@ -1,7 +1,7 @@
 module.exports = {
   mode: 'jit',
   // These paths are just examples, customize them to match your project structure
-  purge: [
+  content: [
     './app/views/**/*.*.erb',
     './app/components/**/*.html.erb',
     './app/components/**/*.rb',
