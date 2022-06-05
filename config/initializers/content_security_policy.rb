@@ -8,7 +8,8 @@ Rails.application.configure do
     policy.object_src  :none
     policy.script_src  :self, :https, 'https://assets.chuspace.com', :unsafe_inline
     policy.style_src   :self, :https, 'https://assets.chuspace.com', :unsafe_inline, :unsafe_eval
-    policy.connect_src :self, :https, 'http://localhost:3035', 'ws://localhost:3035'
+
+    policy.connect_src :self, :https, 'http://localhost:3035', 'ws://localhost:3035' if Rails.env.development?
   end
 
   # Generate session nonces for permitted importmap and inline scripts

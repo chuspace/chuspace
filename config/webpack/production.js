@@ -10,6 +10,16 @@ webpackConfig.optimization.minimizer = webpackConfig.optimization.minimizer.filt
 
 const productionConfig = {
   optimization: {
+    // usedExports: false,
+    // chunkIds: 'named',
+
+    concatenateModules: false,
+    // flagIncludedChunks: false,
+    // mangleExports: false,
+    // mergeDuplicateChunks: false,
+    // removeAvailableModules: false,
+    // usedExports: false,
+    // minimize: false,
     minimizer: [
       new TerserPlugin({
         parallel: Number.parseInt(process.env.WEBPACKER_PARALLEL, 10) || true,

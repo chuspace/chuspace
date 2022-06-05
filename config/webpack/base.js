@@ -5,9 +5,9 @@ const globImporter = require('node-sass-glob-importer')
 sassRule.use[3] = Object.assign({}, sassRule.use[3], {
   options: {
     sassOptions: {
-      importer: globImporter()
-    }
-  }
+      importer: globImporter(),
+    },
+  },
 })
 
 const appWebpackConfig = {
@@ -15,34 +15,43 @@ const appWebpackConfig = {
   stats: 'minimal',
   devtool: 'none',
   performance: {
-    hints: false
+    hints: false,
   },
   resolve: {
     fallback: {
-      assert: false
-    }
+      assert: false,
+    },
   },
   module: {
-    rules: [sassRule]
+    rules: [sassRule],
   },
   optimization: {
+    concatenateModules: false,
+    // usedExports: false,
+    // chunkIds: 'named',
+    // flagIncludedChunks: false,
+    // mangleExports: false,
+    // mergeDuplicateChunks: false,
+    // removeAvailableModules: false,
+    // usedExports: false,
+    // minimize: false,
     splitChunks: {
       cacheGroups: {
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
-          chunks: 'all'
-        }
-      }
-    }
-  }
+          chunks: 'all',
+        },
+      },
+    },
+  },
 }
 
 module.exports = mergeWithRules({
   module: {
     rules: {
       test: 'match',
-      use: 'replace'
-    }
-  }
+      use: 'replace',
+    },
+  },
 })(appWebpackConfig, webpackConfig)
