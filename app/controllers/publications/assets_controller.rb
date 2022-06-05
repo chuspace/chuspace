@@ -27,7 +27,6 @@ module Publications
           @publication.repository.raw(path: params[:path])
       end
 
-      fresh_when(@publication)
       send_data data, disposition: :inline, filename: File.basename(params[:path])
     end
 

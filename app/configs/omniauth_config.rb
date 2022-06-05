@@ -11,7 +11,7 @@ class OmniauthConfig < ApplicationConfig
         options: {
           name: 'github_auth',
           callback_path: '/auth/github/callback',
-          scope: 'user'
+          scope: 'read:user user:email'
         }
       },
       gitlab: {
