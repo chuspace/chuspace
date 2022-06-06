@@ -32,7 +32,7 @@ class PublicationHtmlRenderer < CommonMarker::HtmlRenderer
 
   def image(node)
     out('<lazy-image')
-    out(' src="', escape_href(Rails.application.routes.url_helpers.publication_asset_url(publication, path: node.url, host: ENV.fetch('IMAGE_CDN_HOST'))), '"')
+    out(' src="', escape_href(Rails.application.routes.url_helpers.publication_asset_path(publication, path: node.url), '"')
     out(' filename="', escape_href(File.basename(node.url)), '"')
     plain { out(' alt="', :children, '"') }
     out(' title="', escape_html(node.title), '"') if node.title && !node.title.empty?
