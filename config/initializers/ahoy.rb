@@ -10,6 +10,6 @@ Ahoy.geocode = false
 Ahoy.job_queue = :default
 Ahoy.visit_duration = 24.hours
 Safely.report_exception_method = ->(exception) { Sentry.capture_exception(exception) }
-Ahoy.server_side_visits = false
+Ahoy.server_side_visits = :when_needed
 Ahoy.cookies = false
 Ahoy.mask_ips = true

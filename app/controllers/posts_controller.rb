@@ -16,7 +16,9 @@ class PostsController < ApplicationController
   private
 
   def track_action
-    ahoy.track 'Viewed post', request.path_parameters.merge(post_id: @post.id, publication_id: @publication.id)
+    ActiveRecord::Base.connected_to(role: :writing) do
+      ahoy.track 'Viewed post', request.path_parameters.merge(post_id: @post.id, publication_id: @publication.id)
+    end
   end
 
   def find_post
