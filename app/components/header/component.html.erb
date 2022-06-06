@@ -53,6 +53,7 @@
           </details>
         </div>
       <% else %>
+        <%= link_to 'Hello world', '/self/hello-world', class: 'link link-content text-sm ml-8' %>
         <%= link_to 'Sign up', signups_path, class: 'link link-content text-sm ml-8' %>
         <%= link_to 'Sign in', sessions_path, class: 'link link-content text-sm ml-8' %>
       <% end %>
