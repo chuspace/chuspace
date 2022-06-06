@@ -214,7 +214,7 @@ export default class ChuEditor extends LitElement {
         statusElement.textContent = 'Saved'
       }
     },
-    500,
+    2000,
     { maxWait: 2000 }
   )
 
