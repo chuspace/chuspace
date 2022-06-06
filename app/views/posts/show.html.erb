@@ -14,7 +14,7 @@
           <%= render 'topics', post: @post %>
         <% end %>
       </div>
-      <span class='mx-4'>&#183;</span>
+      <span class='mx-4 hidden sm:block'>&#183;</span>
       <div class="mt-4 sm:mt-0 flex items-center text-secondary text-xs">
         <% %w[facebook twitter email linkedin].each_with_index do |provider, index| %>
           <%= link_to social_share_url(post: @post, provider: provider), target: :_blank do %>
