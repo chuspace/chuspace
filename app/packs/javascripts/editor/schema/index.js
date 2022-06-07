@@ -42,10 +42,6 @@ export default class SchemaManager {
       )
     }
 
-    if (editor.excludeFrontmatter) {
-      this.elements = this.elements.filter((element) => element.name !== 'front_matter')
-    }
-
     this.elements.forEach((element) => {
       element.bindEditor(editor)
       element.init()

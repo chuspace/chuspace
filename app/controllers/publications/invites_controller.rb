@@ -49,20 +49,18 @@ module Publications
       authorize! @invite, to: :create?
       @invite.send_email
 
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@invite), partial: 'invite', locals: { invite: @invite }) }
-        format.html do
-          redirect_to publication_invites_path(@publication), notice: @invite.errors.full_messages.to_sentence
-        end
-      end
+      redirect_to publication_invites_path(@publication), notice: t('publications.invites.create.notice')
     end
 
     def destroy
       @invite = @publication.invites.find_by(code: params[:id])
       authorize! @invite, to: :destroy?
-      @invite.destroy
-
-      redirect_to publication_invites_path(@publication), notice: @invite.errors.full_messages.to_sentence || t('publications.invites.destroy.notice')
+      
+      if @invite.destroy
+        redirect_to publication_invites_path(@publication), notice: t('publications.invites.destroy.notice')
+      else 
+        redirect_to publication_invites_path(@publication), notice: @invite.errors.full_messages.to_sentence
+      end
     end
 
     def accept
@@ -70,26 +68,26 @@ module Publications
 
       Invite.transaction do
         if @invite
-          if Current.user.blank?
+          if @invite.recipient.blank?
             store_location_for(:user, accept_publication_invites_path(@publication, invite_token: @invite.code))
-
-            if @invite.recipient.blank?
-              redirect_to email_signups_path(email: @invite.recipient_email)
-            else
-              redirect_to email_sessions_path(email: @invite.recipient.email)
-            end
+            redirect_to email_signups_path(email: @invite.recipient_email)
           else
-            @invite = @publication.invites.find_by_code(params[:invite_token])
+            signin(@invite.recipient.identities.email.first) unless signed_in?
             authorize! @invite
-
-            @publication.memberships.create(role: @invite.role, user: @invite.recipient)
-            @invite.destroy
-            signin(@invite.recipient.identities.email.first)
-
-            redirect_to(
-              publication_people_path(@publication),
-              notice: t('publications.invites.accept.notice', publication: @publication.name, role: @invite.role)
-            )
+            
+            if @invite.joined? 
+              redirect_to(
+                publication_people_path(@publication),
+                notice: t('publications.invites.accept.joined', publication: @publication.name, role: @invite.role)
+              )
+            else
+              @invite.accept!
+            
+              redirect_to(
+                publication_people_path(@publication),
+                notice: t('publications.invites.accept.notice', publication: @publication.name, role: @invite.role)
+              )
+            end
           end
         else
           redirect_to publication_path(@publication), alert: t('publications.invites.accept.not_found')

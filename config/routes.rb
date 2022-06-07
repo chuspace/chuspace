@@ -102,7 +102,6 @@ Rails.application.routes.draw do
 
     resources :people, path: 'people', module: :publications do
       collection { get :autocomplete }
-      resources :actions, only: :index, module: :people
     end
 
     resources :invites, only: %i[index new create destroy], module: :publications do

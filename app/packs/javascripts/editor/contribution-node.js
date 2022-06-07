@@ -42,8 +42,7 @@ export default class ContributionNodeEditor extends LitElement {
 
   constructor() {
     super()
-
-    this.excludeFrontmatter = true
+    
     this.mode = 'contribution'
     this.editable = true
     this.open = false

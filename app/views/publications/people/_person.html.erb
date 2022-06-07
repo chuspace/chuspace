@@ -10,12 +10,35 @@
           <%= link_to(user_path(membership.user), 'data-turbo-frame': :_top, class: 'link link-primary link-hover') do %>
             <%= content_tag :h5, membership.user.name %>
           <% end %>
-          <%= content_tag :p, membership.user.username, class: 'text-sm text-secondary' %>
+          <%= tag.span membership.user.username, class: 'text-sm text-secondary' %>
+          <span class='mx-2'>&#183;</span>
+          <%= tag.span membership.role, class: 'text-sm text-secondary' %>
         </div>
       </div>
     </div>
 
-    <%= tag.span membership.role %>
-    <%= turbo_frame_tag dom_id(membership, :actions), class: 'btn btn-sm btn-primary btn-outline loading ml-4', src: publication_person_actions_path(@publication, membership), loading: :lazy %>
+    <% if allowed_to?(:edit?, membership) %>
+      <details class='dropdown dropdown-end'>
+        <summary class='ml-4'>
+          <div class='flex items-center' data-menu-button>
+            <%= inline_svg_tag('icons/gear.svg', class: 'w-4 h-4 fill-current') %>
+          </div>
+        </summary>
+        <details-menu
+          role="menu"
+          tabindex="0"
+          class="p-2 shadow menu dropdown-content absolute z-10 bg-base-300 rounded-box w-52"
+        >
+          <% if allowed_to?(:edit?, membership) %>
+            <li><%= link_to 'Change role', edit_publication_person_path(publication, membership), 'data-turbo-frame': dom_id(membership, :popup) %></li>
+            <% if allowed_to?(:destroy?, membership) %>
+              <li><%= button_to 'Remove', publication_person_path(publication, membership), method: :delete, class: 'text-error', form: { 'data-turbo-confirm': "Are you sure?" }, 'data-turbo-frame': :_top %></li>
+            <% end %>
+          <% end %>
+        </details-menu>
+      </details>
+    <% end %>
   </div>
 <% end %>
+
+<%= turbo_frame_tag dom_id(membership, :popup) %>

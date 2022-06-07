@@ -21,7 +21,7 @@
 
         <% card.body do %>
           <% if @memberships.any? %>
-            <%= render partial: 'person', collection: @memberships, as: :membership %>
+            <%= render partial: 'person', collection: @memberships, as: :membership, locals: { publication: @publication } %>
           <% else %>
             <%= render 'shared/placeholder', content: 'No members' %>
           <% end %>

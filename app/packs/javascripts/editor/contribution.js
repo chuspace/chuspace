@@ -55,7 +55,6 @@ export default class ContributionEditor extends LitElement {
     this.autoFocus = false
     this.editable = false
     this.contribution = true
-    this.excludeFrontmatter = true
     this.contributions = []
     this.uncommittedContributions = new Map()
   }

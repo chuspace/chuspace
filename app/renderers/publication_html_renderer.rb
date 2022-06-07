@@ -4,7 +4,7 @@ class PublicationHtmlRenderer < CommonMarker::HtmlRenderer
   attr_reader :publication
 
   def initialize(publication:)
-    super(options: %i[UNSAFE DEFAULT], extensions: %i[tagfilter])
+    super(options: %i[DEFAULT], extensions: %i[tagfilter])
 
     @headers = 1
     @code_blocks = 1
