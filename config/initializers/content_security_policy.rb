@@ -6,7 +6,7 @@ Rails.application.configure do
     policy.font_src    :self, :https, :data
     policy.img_src     :self, :https, :data, 'https://images.chuspace.com', 'https://secure.gravatar.com', 'http://secure.gravatar.com', '*.s3.amazonaws.com'
     policy.object_src  :none
-    policy.script_src  :self, :https, 'https://assets.chuspace.com', :unsafe_inline
+    policy.script_src  :self, :https, 'https://assets.chuspace.com', 'https://viewer.chuspace.com', :unsafe_inline
     policy.style_src   :self, :https, 'https://assets.chuspace.com', :unsafe_inline, :unsafe_eval
 
     policy.connect_src :self, :https, 'http://localhost:3035', 'ws://localhost:3035' if Rails.env.development?
