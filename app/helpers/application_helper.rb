@@ -29,13 +29,17 @@ module ApplicationHelper
   end
 
   def tab_link_to(title, path, options = {})
+    active_link_to(title, path, options.merge(role: 'tab', tabindex: '-1'))
+  end
+
+  def active_link_to(title, path, options = {})
     active_condition = options.delete(:active_condition) || :exact
 
     active = is_active_link?(path, active_condition)
     class_name = options.delete(:class) || ''
     class_name += ' active' if active
 
-    link_to title, path, class: class_name, role: 'tab', 'aria-selected': active, tabindex: '-1', **options
+    link_to title, path, class: class_name, 'aria-selected': active, **options
   end
 
   def user_menu

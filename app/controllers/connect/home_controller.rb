@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 module Connect
-  class HomeController < BaseController
+  class HomeController < ApplicationController
+    skip_verify_authorized
+    
     def index
-      authorize! @publication, to: :new?
     end
   end
 end

@@ -21,10 +21,12 @@
         </p>
 
         <div class='card-actions mt-4'>
-          <% if Current.user.personal_publication.present? %>
+          <% if signed_in? && Current.user.personal_publication.present? %>
             <%= link_to t('.actions.personal.connected'), '', class: 'btn btn-info btn-disabled' %>
-          <% else %>
+          <% elsif signed_in? %>
             <%= link_to t('.actions.personal.cta', name: Current.user.username), connect_personal_publications_path, class: 'btn btn-primary' %>
+          <% else %>
+            <%= link_to t('.actions.personal.cta_guest'), connect_personal_publications_path, class: 'btn btn-primary' %>
           <% end %>
         </div>
       </div>

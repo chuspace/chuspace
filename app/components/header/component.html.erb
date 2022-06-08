@@ -2,7 +2,7 @@
   <nav class='container flex justify-between items-center'>
     <div class='flex-1 flex items-center'>
       <%= link_to root_path, class: 'pt-1 pb-2' do %>
-        <span class='font-bold text-3xl lowercase inline-block font-monospace'><%= helpers.signed_in? ? 'Chu' : 'Chuspace' %></span>
+        <span class='font-bold sm:text-3xl shrink-0 text-xl lowercase inline-block font-monospace'><%= helpers.signed_in? ? 'Chu' : 'Chuspace' %></span>
         <%= content_tag :span, 'axiom', class: 'text-xs text-secondary font-sans' %>
       <% end %>
 
@@ -53,9 +53,8 @@
           </details>
         </div>
       <% else %>
-        <%= link_to 'Hello world', '/self/hello-world', class: 'link link-content text-sm ml-8' %>
-        <%= link_to 'Sign up', signups_path, class: 'link link-content text-sm ml-8' %>
-        <%= link_to 'Sign in', sessions_path, class: 'link link-content text-sm ml-8' %>
+        <%= helpers.active_link_to 'Sign up', signups_path, class: 'link link-content text-sm ml-8' %>
+        <%= helpers.active_link_to 'Sign in', sessions_path, class: 'link link-content text-sm ml-8' %>
       <% end %>
     </div>
   </nav>
