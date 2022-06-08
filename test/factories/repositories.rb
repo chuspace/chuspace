@@ -5,12 +5,15 @@ FactoryBot.define do
     publication
     git_provider
 
-    full_name { 'chuspace/blog' }
-    posts_folder { 'src/pages/posts' }
-    assets_folder { 'public/assets/blog' }
+    full_name { 'chuspace/test-blog' }
+    posts_folder { '_posts' }
+    assets_folder { '_posts' }
+    readme_path { 'README.md' }
+
+    readme { 'Inital readme content!' }
 
     trait :personal  do
-      full_name { 'gauravtiwari/blog' }
+      full_name { 'chuspace/personal-test-blog' }
     end
   end
 end

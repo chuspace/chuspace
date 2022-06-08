@@ -92,8 +92,10 @@ en:
         locked: Document editing locked by %{name}
     invites:
       accept:
-        not_found: Invitation not found
-        notice: Invite accepted successfully!
+        not_found: Invitation is either accepted or not found!
+        notice: Successfully joined %{publication} publication as %{role}!
+        joined: Already joined %{publication} publication as %{role}!
+        signup: Please signup to accept invite!
       create:
         error: Invite failed!
         notice: Invite sent successfully!

@@ -6,14 +6,14 @@ class Invite < ApplicationRecord
 
   validates :identifier, :role, presence: true
   validates :identifier, presence: true, email: true, if: -> { recipient.blank? }
-  validate  :check_if_recipient_can_be_invited
+  validate  :check_if_recipient_can_be_invited, on: :create
 
   validates_uniqueness_of :identifier, scope: :publication_id, message: 'Already invited'
   validates_uniqueness_of :code
 
-  after_create :send_email
+  after_create_commit :send_email
 
-  enum status: { pending: 'pending', accepted: 'accepted', expired: 'expired' }
+  enum status: { pending: 'pending', joined: 'joined', expired: 'expired' }
   enum role: RolesConfig.invitable_enum
 
   has_secure_token :code
@@ -33,6 +33,12 @@ class Invite < ApplicationRecord
   def send_email(resend: false)
     user.regenerate_code if resend
     UserMailer.with(invitation: self).invite_email.deliver_later
+  end
+
+  def accept!
+    joined!
+    regenerate_code
+    publication.memberships.create(role: role, user: recipient)
   end
 
   def to_param

@@ -49,7 +49,6 @@ export default class ChuEditor extends LitElement {
   static properties = {
     autoSavePath: { type: String },
     autoFocus: { type: Boolean },
-    excludeFrontmatter: { type: Boolean },
     imageUploadPath: { type: String },
     imageLoadPath: { type: String },
     editable: { type: Boolean },
@@ -74,8 +73,6 @@ export default class ChuEditor extends LitElement {
     super()
 
     this.autoFocus = false
-
-    this.excludeFrontmatter = false
     this.mode = 'default'
     this.editable = false
   }

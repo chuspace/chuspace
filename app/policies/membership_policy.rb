@@ -11,4 +11,8 @@ class MembershipPolicy < ApplicationPolicy
   def edit?
     publication.memberships.admins.exists?(user: user)
   end
+
+  def destroy?
+    !record.owner?
+  end
 end

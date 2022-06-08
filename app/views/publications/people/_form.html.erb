@@ -1,6 +1,6 @@
 <%= turbo_frame_tag dom_id(membership, :form) do %>
   <%= simple_form_for membership, url: publication_person_path(membership.publication, membership), html: { 'data-turbo-frame': :_top } do |f| %>
-    <%= f.input :role, collection: invitable_roles_collection, label_method: :second, value_method: :first, required: true %>
+    <%= f.input :role, collection: invitable_roles_collection, label_method: :second, value_method: :first, required: true, selected: membership.role %>
     <div class='mt-8'>
       <%= f.submit 'Change', class: 'btn btn-primary btn-sm' %>
     </div>

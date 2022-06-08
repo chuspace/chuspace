@@ -12,14 +12,10 @@
         <span class='mx-2'>&#183;</span>
         <span class='text-secondary'>
           Updated
-          <relative-time datetime="<%= @post.updated_at %>">
+          <relative-time datetime="<%= @post.updated_at.to_datetime %>">
             <%= @post.date.strftime("%d %b %Y") %>
           </relative-time>
         </span>
-        <% if @post.topics.any? %>
-          <span class='mx-2'>&#183;</span>
-          <%= render 'topics', post: @post %>
-        <% end %>
       </div>
       <span class='mx-4 hidden sm:block'>&#183;</span>
       <div class="mt-4 sm:mt-0 flex items-center text-secondary text-xs">
@@ -42,5 +38,7 @@
       <%= content_tag :h2, @post.summary, class: 'summary mb-0' %>
       <%= content_tag :article, @post.body_html.html_safe, class: 'pt-4 pb-16' %>
     </div>
+    
+    <%= render 'topics', post: @post if @post.topics.any? %>
   </div>
 <% end %>
