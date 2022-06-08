@@ -1,3 +1,5 @@
+import 'core-js/es'
+
 import '@github/details-menu-element'
 import '@github/auto-complete-element'
 import '@github/tab-container-element'
@@ -5,21 +7,24 @@ import '@github/auto-check-element'
 import '@github/include-fragment-element'
 import '@github/clipboard-copy-element'
 import '@github/image-crop-element'
-import '@github/time-elements'
 import 'details-element-polyfill'
-import 'core-js/es'
+
 import 'regenerator-runtime/runtime'
 import 'lazysizes/plugins/blur-up/ls.blur-up'
 import 'lazysizes/plugins/parent-fit/ls.parent-fit'
 import 'lazysizes/plugins/respimg/ls.respimg'
-import '@hotwired/turbo-rails'
+
 import 'dialog-polyfill/dialog-polyfill.css'
 import '@github/g-emoji-element'
 import 'editor'
 import 'editor/styles.sass'
 
+import '@hotwired/turbo-rails'
+import '@github/time-elements'
+
 import autosize from '@github/textarea-autosize'
 import lazySizes from 'lazysizes'
+
 
 if (!('object-fit' in document.createElement('a').style)) {
   import('lazysizes/plugins/object-fit/ls.object-fit')

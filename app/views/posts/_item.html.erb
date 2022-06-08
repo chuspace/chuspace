@@ -23,7 +23,7 @@
       <span class='mx-2'>&#183;</span>
       <span class='text-secondary'>
         Updated
-        <relative-time datetime="<%= post.updated_at %>">
+        <relative-time datetime="<%= post.updated_at.to_datetime %>">
           <%= post.date.strftime("%d %b %Y") %>
         </relative-time>
       </span>
