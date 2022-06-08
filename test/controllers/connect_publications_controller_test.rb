@@ -13,15 +13,6 @@ class ConnectPublicationsControllerTest < ActionDispatch::IntegrationTest
 
   def test_public_connect_home
     get connect_root_path
-    assert_equal 302, status
-    assert_equal 'You need to sign in', flash[:notice]
-  end
-
-  def test_private_connect_home
-    signin(identity: @identity)
-
-    get connect_root_path
     assert_equal 200, status
-    assert_template 'connect/home/index'
   end
 end
