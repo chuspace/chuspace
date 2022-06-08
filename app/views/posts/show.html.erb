@@ -9,6 +9,13 @@
         <%= tag.time do %>
           <%= @post.reading_time %> min read
         <% end %>
+        <span class='mx-2'>&#183;</span>
+        <span class='text-secondary'>
+          Updated
+          <relative-time datetime="<%= @post.updated_at %>">
+            <%= @post.date.strftime("%d %b %Y") %>
+          </relative-time>
+        </span>
         <% if @post.topics.any? %>
           <span class='mx-2'>&#183;</span>
           <%= render 'topics', post: @post %>

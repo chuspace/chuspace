@@ -20,6 +20,13 @@
       <% end %>
       <span class='mx-2'>&#183;</span>
       <%= tag.time post.date.strftime("%d %b %Y"), class: 'text-secondary' %>
+      <span class='mx-2'>&#183;</span>
+      <span class='text-secondary'>
+        Updated
+        <relative-time datetime="<%= post.updated_at %>">
+          <%= post.date.strftime("%d %b %Y") %>
+        </relative-time>
+      </span>
 
       <% if post.topics.any? %>
         <span class='mx-2'>&#183;</span>

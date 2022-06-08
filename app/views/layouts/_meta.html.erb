@@ -8,3 +8,7 @@
 <meta name="theme-color" content="#000000" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="turbo-cache-control" content="no-cache" />
+
+<% if Rails.env.production? %>
+  <script src="https://viewer.chuspace.com/script.js" data-site="<%= ENV["FATHOM_SITE_ID"] %>" defer></script>
+<% end %>
