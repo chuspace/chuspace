@@ -8,17 +8,14 @@ import '@github/include-fragment-element'
 import '@github/clipboard-copy-element'
 import '@github/image-crop-element'
 import 'details-element-polyfill'
-
 import 'regenerator-runtime/runtime'
 import 'lazysizes/plugins/blur-up/ls.blur-up'
 import 'lazysizes/plugins/parent-fit/ls.parent-fit'
 import 'lazysizes/plugins/respimg/ls.respimg'
-
 import 'dialog-polyfill/dialog-polyfill.css'
 import '@github/g-emoji-element'
 import 'editor'
 import 'editor/styles.sass'
-
 import '@hotwired/turbo-rails'
 import '@github/time-elements'
 
