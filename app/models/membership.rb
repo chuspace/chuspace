@@ -5,7 +5,7 @@ class Membership < ApplicationRecord
   belongs_to :user
 
   validates :publication_id, uniqueness: { scope: :user_id }
-  
+
   enum role: RolesConfig.to_enum
 
   DEFAULT_ROLE = :writer

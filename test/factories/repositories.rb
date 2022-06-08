@@ -10,6 +10,8 @@ FactoryBot.define do
     assets_folder { '_posts' }
     readme_path { 'README.md' }
 
+    readme { 'Inital readme content!' }
+
     trait :personal  do
       full_name { 'chuspace/personal-test-blog' }
     end

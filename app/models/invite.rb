@@ -35,7 +35,7 @@ class Invite < ApplicationRecord
     UserMailer.with(invitation: self).invite_email.deliver_later
   end
 
-  def accept! 
+  def accept!
     joined!
     regenerate_code
     publication.memberships.create(role: role, user: recipient)
