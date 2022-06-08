@@ -51,8 +51,18 @@ module Publications
       authorize! @draft, to: :commit?
 
       if @draft.update(**commit_params)
-        if @publication.content.auto_publish && @draft.publishable? && post = @draft.publish(author: Current.user)
-          redirect_to publication_post_path(@publication, post), notice: 'Succesfully committed and published!'
+        if @publication.content.auto_publish && @draft.publishable?
+          @post = @draft.post ||  @publication.posts.build(author: Current.user)
+          @post.assign_attributes(@draft.to_post_attributes)
+
+          if @post.save
+            redirect_to publication_post_path(@publication, @post), notice: 'Succesfully committed and published!'
+          else
+            respond_to do |format|
+              format.html { publication_edit_draft_path(@publication, @draft) }
+              format.turbo_stream { render turbo_stream: turbo_stream.replace(@draft, partial: 'edit_form', locals: { draft: @draft, publication: @publication }) }
+            end
+          end
         else
           redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully committed!'
         end

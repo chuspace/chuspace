@@ -3,13 +3,12 @@
 class PublicationConfig < ApplicationConfig
   attr_config(
     front_matter: {
-      keys: %i[title summary date topics canonical_url published],
+      keys: %i[title summary date topics canonical_url],
       title: :title,
       summary: :summary,
       date: :date,
       topics: :topics,
-      canonical_url: :canonical_url,
-      published: :published
+      canonical_url: :canonical_url
     },
     repo: {
       readme_path: 'README.md'

@@ -27,7 +27,7 @@ module Drafts
       if front_matter_date && front_matter_date < Date.today
         Date.today
       else
-        front_matter_date
+        front_matter_date || Date.today
       end
     end
 

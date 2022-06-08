@@ -3,7 +3,7 @@
 module Connect
   class HomeController < ApplicationController
     skip_verify_authorized
-    
+
     def index
     end
   end

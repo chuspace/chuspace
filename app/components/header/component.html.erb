@@ -47,7 +47,7 @@
                 <%= helpers.tab_link_to 'Settings', setting_path(id: UserSetting::DEFAULT_PAGE), class: 'link link-hover', role: 'menuitem', tabindex: '-1' %>
               </li>
               <li>
-                <%= button_to 'Sign out', session_path(Current.user), class: 'text-current', form: { role: 'menuitem', tabindex: '-1' }, method: :delete, remote: true %>
+                <%= button_to 'Sign out', session_path(Current.user), class: 'text-current', form: { role: 'menuitem', tabindex: '-1' }, method: :delete, data: { turbo: false } %>
               </li>
             </details-menu>
           </details>
