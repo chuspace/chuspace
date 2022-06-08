@@ -73,7 +73,7 @@ class Draft < Git::Blob
 
   def to_post_attributes
     {
-      date: date || Date.today,
+      date: date,
       title: title,
       summary: summary,
       topic_list: topics,

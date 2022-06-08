@@ -63,7 +63,7 @@ module Publications
               format.turbo_stream { render turbo_stream: turbo_stream.replace(@draft, partial: 'edit_form', locals: { draft: @draft, publication: @publication }) }
             end
           end
-        else 
+        else
           redirect_to publication_edit_draft_path(@publication, @draft), notice: 'Succesfully committed!'
         end
       else

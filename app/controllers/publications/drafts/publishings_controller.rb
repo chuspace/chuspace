@@ -9,7 +9,7 @@ module Publications
         authorize! @draft, to: :publish?
         @post = @draft.post ||  @publication.posts.build(author: Current.user)
         @post.assign_attributes(@draft.to_post_attributes)
-    
+
         if @post.save
           redirect_to publication_post_path(@publication, @post), notice: 'Successfully published!'
         else
