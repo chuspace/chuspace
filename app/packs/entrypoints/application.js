@@ -1,11 +1,8 @@
 import 'core-js/es'
-
 import '@github/details-menu-element'
 import '@github/auto-complete-element'
-import '@github/tab-container-element'
 import '@github/auto-check-element'
 import '@github/include-fragment-element'
-import '@github/clipboard-copy-element'
 import '@github/image-crop-element'
 import 'details-element-polyfill'
 import 'regenerator-runtime/runtime'
