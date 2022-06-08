@@ -1,7 +1,11 @@
 <%= turbo_frame_tag dom_id(draft, :actions) do %>
   <% if allowed_to?(:action?, draft) %>
-    <nav class='fixed bottom-0 h-14 z-10 bg-base-200 w-full'>
+    <nav class='fixed bottom-0 shadow-xl h-14 z-10 bg-base-300 w-full'>
       <div class='container flex items-center justify-end h-full'>
+        <% if @post&.errors&.present? %>
+          <%= tag.span @post.errors.full_messages.to_sentence, class: 'text-error text-xs mr-4' %>
+        <% end %>
+
         <%= content_tag :div, @draft.status, id: 'draft-status', class: 'text-secondary text-xs mr-4' %>
         <% if allowed_to?(:commit?, draft) %>
           <%= turbo_frame_tag(dom_id(draft, :new_commit)) do %>

@@ -7,13 +7,14 @@ module Publications
 
       def create
         authorize! @draft, to: :publish?
-        @post = @draft.publish(author: Current.user)
-
-        if @post
-          redirect_to publication_post_path(@publication, @post), notice: 'Successfully published'
+        @post = @draft.post ||  @publication.posts.build(author: Current.user)
+        @post.assign_attributes(@draft.to_post_attributes)
+    
+        if @post.save
+          redirect_to publication_post_path(@publication, @post), notice: 'Successfully published!'
         else
           respond_to do |format|
-            format.turbo_stream
+            format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@draft, :actions), partial: 'publications/drafts/actions', locals: { draft: @draft, publication: @publication }) }
             format.html { redirect_to publication_edit_draft_path(@publication, @draft) }
           end
         end

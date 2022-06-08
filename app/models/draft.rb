@@ -31,19 +31,7 @@ class Draft < Git::Blob
   end
 
   def publishable?
-    post&.blob_sha != sha && !readme?
-  end
-
-  def publish(author:)
-    db_publication = Publication.find(publication.id)
-
-    if post.present?
-      db_post = Post.find(post.id)
-      db_post.update(author: author, **to_post_attributes)
-      db_post
-    else
-      db_publication.posts.create(author: author, **to_post_attributes)
-    end
+    post&.blob_sha != sha && !readme? && !stale?
   end
 
   def persisted?
