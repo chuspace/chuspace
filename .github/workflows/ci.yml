@@ -7,17 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      redis:
-        image: redis:latest
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
       mysql:
         image: mysql:latest
         env:
-          MYSQL_USERNAME: chuspace_test
+          MYSQL_USER: chuspace_test
           MYSQL_PASSWORD: chuspace_actions_test
           MYSQL_ROOT_PASSWORD: chuspace_actions_test
           MYSQL_HOST: 127.0.0.1
@@ -70,7 +63,6 @@ jobs:
 
       - name: Preparing database
         env:
-          REDIS_URL: redis://localhost:6379
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
           DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test
         run: bin/rails db:prepare
@@ -82,14 +74,12 @@ jobs:
 
       - name: Compile assets
         env:
-          REDIS_URL: redis://localhost:6379
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
           DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test
         run: bin/rails assets:precompile
 
       - name: Run tests
         env:
-          REDIS_URL: redis://localhost:6379
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
           DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test

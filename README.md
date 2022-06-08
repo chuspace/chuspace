@@ -33,14 +33,6 @@ Chuspace is built on the popular Ruby on Rails framework and is by design a mono
 
 ## Getting started
 
-Install Redis
-
-```
-brew update
-brew install redis
-brew services start redis
-```
-
 Then run the following
 
 ```bash
