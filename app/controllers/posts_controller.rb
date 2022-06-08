@@ -9,10 +9,6 @@ class PostsController < ApplicationController
 
   layout 'post'
 
-  def show
-    fresh_when(etag: @post, last_modified: [Current.identity&.updated_at, @post.updated_at].compact.max)
-  end
-
   private
 
   def track_action

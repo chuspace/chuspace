@@ -6,10 +6,6 @@ class UsersController < ApplicationController
   before_action :find_user
   skip_verify_authorized only: :show
 
-  def show
-    fresh_when(etag: @user, last_modified: [Current.identity&.updated_at, @user.updated_at].compact.max)
-  end
-
   private
 
   def find_user
