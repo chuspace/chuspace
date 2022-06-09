@@ -12,6 +12,7 @@ module Publications
 
         respond_to do |format|
           format.turbo_stream
+          format.html { redirect_to publication_edit_draft_path(@publication, @draft) }
         end
       end
 
