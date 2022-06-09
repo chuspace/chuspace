@@ -10,7 +10,9 @@ module Publications
         @draft.local_content.set_value = commit_params[:content]
         @draft.stale.set_value = commit_params[:stale]
 
-        render turbo_stream: turbo_stream.replace(helpers.dom_id(@draft, :actions), partial: 'publications/drafts/actions', locals: { draft: @draft, publication: @publication })
+        respond_to do |format|
+          format.turbo_stream
+        end
       end
 
       private

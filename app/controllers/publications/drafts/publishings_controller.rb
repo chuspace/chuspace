@@ -6,7 +6,7 @@ module Publications
       layout false
 
       def create
-        authorize! @draft, to: :publish?
+        authorize! @draft, to: params[:republish] ? :republish? : :publish? 
         @post = @draft.post ||  @publication.posts.build(author: Current.user)
         @post.assign_attributes(@draft.to_post_attributes)
 

@@ -198,10 +198,11 @@ export default class ChuEditor extends LitElement {
 
       const stale = Fragment.from(this.startingDoc).findDiffStart(Fragment.from(this.state.doc))
       const response = await patch(this.autoSavePath, {
+        responseKind: 'turbo-stream',
         body: JSON.stringify({
           draft: {
             content: stale ? this.content : null,
-            stale,
+            stale: !!stale,
           },
         }),
       })
