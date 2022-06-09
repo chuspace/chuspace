@@ -1,15 +1,15 @@
-<header class='header z-10 fixed top-0 bg-base-100 h-14 w-full max-w-full'>
+<header class='header z-10 fixed top-0 bg-base-100 py-2 shadow-xl w-full max-w-full'>
   <nav class='container flex justify-between items-center'>
     <div class='flex-1 flex items-center'>
-      <%= link_to root_path, class: 'pt-1 pb-2' do %>
+      <%= link_to root_path do %>
         <span class='font-bold sm:text-3xl shrink-0 text-xl lowercase inline-block font-monospace'><%= helpers.signed_in? ? 'Chu' : 'Chuspace' %></span>
-        <%= content_tag :span, 'axiom', class: 'text-xs text-secondary font-sans' %>
+        <%= content_tag :span, 'axiom', class: 'text-xs text-secondary font-sans sm:inline hidden' %>
       <% end %>
 
       <%= after_logo_contents %>
     </div>
 
-    <div class='flex items-center py-2'>
+    <div class='flex items-center'>
       <% if helpers.signed_in? %>
         <%= before_user_dropdown %>
 

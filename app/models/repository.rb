@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Repository < ApplicationRecord
-  belongs_to :publication
+  belongs_to :publication, touch: true
   belongs_to :git_provider
 
   validates :full_name, :default_ref, :posts_folder, :readme_path, :assets_folder, presence: true

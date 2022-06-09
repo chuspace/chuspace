@@ -1,0 +1,21 @@
+<%= turbo_frame_tag dom_id(draft, :post_actions) do %>
+  <% if allowed_to?(:edit?, draft) %>
+    <div class='flex items-center'>
+      <%= content_tag :div, nil, id: 'chu-editor-status', class: 'text-secondary text-xs mr-4' %>
+      <% if draft.post %>
+        <%= link_to 'View post', publication_post_path(publication, draft.post), class: 'btn btn-primary btn-xs mr-4', 'data-turbo-frame': :'_top' %>
+        <% if allowed_to?(:republish?, draft) %>
+          <%= button_to publication_publish_draft_path(publication, draft, republish: true), class: 'btn btn-warning btn-xs turbo-btn mr-4', 'data-turbo-frame': :'_top' do %>
+            <div class="idle">Republish</div>
+            <div class="loading">
+              <div class='flex items-center'>
+                <div class='spinner on-button'></div>
+                <span class='ml-2'>Publishing</span>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
