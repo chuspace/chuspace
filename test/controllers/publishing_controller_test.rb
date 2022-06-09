@@ -19,6 +19,8 @@ class PublishingControllerTest < ActionDispatch::IntegrationTest
     assert_template 'sessions/index'
 
     signin(identity: identity)
+
+    # First publish
     post publication_publish_draft_path(publication, draft)
     follow_redirect!
     assert_equal 200, status
@@ -28,7 +30,7 @@ class PublishingControllerTest < ActionDispatch::IntegrationTest
     # Subsequent publish should raise
     assert_raise(ActiveRecord::RecordNotFound) { post publication_publish_draft_path(publication, draft) }
 
-    # Republishing should should raise
+    # Republishing should not raise
     assert_nothing_raised { post publication_publish_draft_path(publication, draft, republish: true) }
   end
 end
