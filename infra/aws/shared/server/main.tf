@@ -74,7 +74,7 @@ resource "aws_lb" "app" {
   }
 }
 
-resource "aws_lb_listener" "app_listener" {
+resource "aws_lb_listener" "app_https_listener" {
   load_balancer_arn = aws_lb.app.id
   port              = 443
   protocol          = "HTTPS"
@@ -92,12 +92,34 @@ resource "aws_lb_listener" "app_listener" {
   }
 }
 
+resource "aws_lb_listener" "app_http_listener" {
+  load_balancer_arn = aws_lb.app.id
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
 resource "aws_lb_target_group" "app_lb_target" {
   name              = "chuspace-app-target"
   port              = 3000
   protocol          = "HTTP"
   vpc_id            = var.vpc_id
   protocol_version  = "HTTP2"
+
+  stickiness {
+    enabled     = true
+    cookie_name = "_chuspace_session"
+    type        = "app_cookie"
+  }
 
   health_check {
     port      = 3000

@@ -19,13 +19,15 @@ class ApplicationController < ActionController::Base
   private
 
   def track_ahoy_visit
-    defer = Ahoy.server_side_visits != true
+    MaybeLater.run do
+      defer = Ahoy.server_side_visits != true
 
-    ActiveRecord::Base.connected_to(role: :writing) do
-      if defer && !Ahoy.cookies
-        # avoid calling new_visit?, which triggers a database call
-      elsif ahoy.new_visit?
-        ahoy.track_visit(defer: defer)
+      ActiveRecord::Base.connected_to(role: :writing) do
+        if defer && !Ahoy.cookies
+          # avoid calling new_visit?, which triggers a database call
+        elsif ahoy.new_visit?
+          ahoy.track_visit(defer: defer)
+        end
       end
     end
   end

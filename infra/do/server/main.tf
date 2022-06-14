@@ -36,8 +36,13 @@ resource "digitalocean_loadbalancer" "chuspace_app" {
   name                     = "${var.name}-${var.region}-loadbalancer"
   region                   = var.region
   redirect_http_to_https   = true
-  enable_proxy_protocol    = true
   enable_backend_keepalive = true
+
+  sticky_sessions {
+    type = "cookies"
+    cookie_name = "_chuspace_session"
+    cookie_ttl_seconds = "34650"
+  }
 
   forwarding_rule {
     entry_port        = 443
@@ -51,7 +56,7 @@ resource "digitalocean_loadbalancer" "chuspace_app" {
     port                   = 3000
     protocol               = "http"
     path                   = "/heartbeat"
-    check_interval_seconds = 30
+    check_interval_seconds = 10
   }
 
   droplet_ids = digitalocean_droplet.chuspace_app.*.id
@@ -74,19 +79,19 @@ resource "digitalocean_firewall" "web" {
 
   inbound_rule {
     protocol         = "tcp"
-    port_range       = "443"
+    port_range       = "3000"
     source_load_balancer_uids = [digitalocean_loadbalancer.chuspace_app.id]
   }
 
   outbound_rule {
     protocol              = "tcp"
-    port_range            = "53"
+    port_range            = "1-65535"
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 
   outbound_rule {
     protocol              = "udp"
-    port_range            = "53"
+    port_range            = "1-65535"
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 

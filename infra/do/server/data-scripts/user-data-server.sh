@@ -10,7 +10,7 @@ sudo locale-gen en_US.UTF-8
 sudo adduser --disabled-password deployer < /dev/null
 sudo mkdir -p /home/deployer/.ssh
 
-sudo cp /home/ubuntu/.ssh/authorized_keys /home/deployer/.ssh
+sudo cp /root/.ssh/authorized_keys /home/deployer/.ssh
 sudo chown -R deployer:deployer /home/deployer/.ssh
 sudo chmod 600 /home/deployer/.ssh/authorized_keys
 sudo mkdir -p /var/www

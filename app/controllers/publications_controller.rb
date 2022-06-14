@@ -19,8 +19,10 @@ class PublicationsController < ApplicationController
   private
 
   def track_action
-    ActiveRecord::Base.connected_to(role: :writing) do
-      ahoy.track 'view:publication', request.path_parameters.merge(publication_id: @publication.id)
+    MaybeLater.run do
+      ActiveRecord::Base.connected_to(role: :writing) do
+        ahoy.track 'view:publication', request.path_parameters.merge(publication_id: @publication.id)
+      end
     end
   end
 end

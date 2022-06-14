@@ -24,6 +24,7 @@ gem 'name_of_person'
 gem 'mini_mime'
 gem 'active_storage_validations'
 gem 'rubyzip'
+gem 'maybe_later'
 
 # Fragment caching
 gem 'dalli'
