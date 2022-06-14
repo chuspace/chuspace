@@ -161,6 +161,9 @@ group :development do
   gem 'pry-rails'
 
   gem 'database_consistency', require: false
+
+  # Deployment
+  gem 'tomo'
 end
 
 group :test do

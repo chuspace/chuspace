@@ -5,8 +5,8 @@
     <%= render 'layouts/flash' %>
     <%= render(Header::Component.new) do |header| %>
       <%= header.after_logo_contents do %>
-        <span class='mx-4 text-secondary'>|</span>
-        <%= link_to @post.publication.name, publication_path(@post.publication), class: 'link text-secondary hover:text-primary link-hover text-sm' %>
+        <span class='mx-4 text-secondary sm:block hidden'>|</span>
+        <%= link_to @post.publication.name, publication_path(@post.publication), class: 'link text-secondary hover:text-primary sm:block hidden link-hover text-sm' %>
       <% end %>
       <%= header.before_user_dropdown do %>
         <div class='mr-8'>
