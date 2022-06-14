@@ -9,6 +9,7 @@ plugin 'rails'
 plugin 'nodenv'
 plugin 'puma'
 plugin 'rbenv'
+plugin "aws_sqs"
 plugin './plugins/yarn.rb'
 
 set application: 'chuspace'
@@ -110,6 +111,7 @@ setup do
   run 'bundler:install'
   run 'yarn:install'
   run 'bundler:install'
+  run "aws_sqs:setup_systemd"
   run 'puma:setup_systemd'
 end
 
@@ -122,6 +124,7 @@ deploy do
   run 'yarn:install'
   run 'rails:assets_precompile'
   run 'core:symlink_current'
+  run "aws_sqs:restart"
   run 'puma:restart'
   run 'puma:check_active'
   run 'core:clean_releases'

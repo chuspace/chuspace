@@ -2,8 +2,8 @@
 
 namespace :terraform do
   task :run, [:command] do |t, args|
-    command  = args[:command].to_sym
-    resource_path = Rails.root.join("infra")
+    command = args[:command].to_sym
+    resource_path = Rails.root.join('infra')
 
     case command.to_sym
     when :plan then  system "cd #{resource_path} && terraform init -upgrade && terraform plan"

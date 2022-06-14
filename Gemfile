@@ -164,6 +164,7 @@ group :development do
 
   # Deployment
   gem 'tomo'
+  gem 'tomo-plugin-aws_sqs', '~> 1.0'
 end
 
 group :test do
