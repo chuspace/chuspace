@@ -1,0 +1,10 @@
+chuspace-ami-key
+chuspace-ami-key.pub
+*.key
+.terraform
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+ignore*
+*.pem
+.DS_Store

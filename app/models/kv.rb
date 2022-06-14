@@ -21,11 +21,11 @@ class Kv < ApplicationRecord
   after_create -> { Kv.expired.delete_all }
 
   def set_value=(value)
-    update(value: value)
+    update!(value: value)
   end
 
   def unset_value
-    update(value: nil)
+    update!(value: nil)
   end
 
   def clear

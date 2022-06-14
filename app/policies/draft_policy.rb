@@ -25,4 +25,8 @@ class DraftPolicy < ApplicationPolicy
   def publish?
     publication.memberships.publishers.exists?(user: user) && record.publishable?
   end
+
+  def republish?
+    publication.memberships.publishers.exists?(user: user) && record.post.present? && !record.stale?
+  end
 end
