@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   include ActiveStorage::SetCurrent
 
   after_action :verify_authorized
+  skip_before_action :track_ahoy_visit
 
   delegate :t, to: :I18n
 
@@ -17,20 +18,6 @@ class ApplicationController < ActionController::Base
   etag { Current.identity.try :updated_at }
 
   private
-
-  def track_ahoy_visit
-    MaybeLater.run do
-      defer = Ahoy.server_side_visits != true
-
-      ActiveRecord::Base.connected_to(role: :writing) do
-        if defer && !Ahoy.cookies
-          # avoid calling new_visit?, which triggers a database call
-        elsif ahoy.new_visit?
-          ahoy.track_visit(defer: defer)
-        end
-      end
-    end
-  end
 
   def user_not_authorized(exception)
     policy_name = exception.policy.class.to_s.underscore

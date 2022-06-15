@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   include Breadcrumbable, FindPublication
 
   before_action :find_post, only: %i[show update destroy edit]
-  after_action :track_action, only: :show
+  # after_action :track_action, only: :show
   skip_verify_authorized only: :show
 
   layout 'post'

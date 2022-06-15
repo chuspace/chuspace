@@ -2,7 +2,7 @@
 
 class PublicationsController < ApplicationController
   before_action :authenticate!, only: :new
-  after_action :track_action, only: :show
+  # after_action :track_action, only: :show
 
   skip_verify_authorized except: :new
 
