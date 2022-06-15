@@ -34,8 +34,7 @@ class GitProvider < ApplicationRecord
   end
 
   def revoke!
-    update(app_installation_id: nil, user_access_token: nil, machine_access_token: nil,
-user_access_token_expires_at: nil)
+    update(app_installation_id: nil, user_access_token: nil, machine_access_token: nil, user_access_token_expires_at: nil)
   end
 
   def to_param
