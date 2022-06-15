@@ -13,7 +13,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
-  create_table 'action_text_rich_texts', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'action_text_rich_texts', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.text 'body', size: :long
     t.string 'record_type', null: false
@@ -23,7 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['record_type', 'record_id', 'name'], name: 'index_action_text_rich_texts_uniqueness', unique: true
   end
 
-  create_table 'active_storage_attachments', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'active_storage_attachments', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
     t.bigint 'record_id', null: false
@@ -34,7 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['record_type', 'record_id', 'name', 'blob_id'], name: 'index_active_storage_attachments_uniqueness', unique: true
   end
 
-  create_table 'active_storage_blobs', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'active_storage_blobs', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'key', null: false
     t.string 'filename', null: false
     t.string 'content_type'
@@ -47,14 +47,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['key'], name: 'index_active_storage_blobs_on_key', unique: true
   end
 
-  create_table 'active_storage_variant_records', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'active_storage_variant_records', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.bigint 'blob_id', null: false
     t.string 'variation_digest', null: false
     t.index ['blob_id', 'variation_digest'], name: 'index_active_storage_variant_records_uniqueness', unique: true
     t.index ['id'], name: 'index_active_storage_variant_records_on_id'
   end
 
-  create_table 'ahoy_events', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'ahoy_events', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.bigint 'visit_id'
     t.bigint 'user_id'
     t.string 'name'
@@ -66,7 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['visit_id'], name: 'index_ahoy_events_on_visit_id'
   end
 
-  create_table 'ahoy_visits', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'ahoy_visits', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'visit_token'
     t.string 'visitor_token'
     t.bigint 'user_id'
@@ -97,7 +97,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['visit_token'], name: 'index_ahoy_visits_on_visit_token', unique: true
   end
 
-  create_table 'friendly_id_slugs', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'friendly_id_slugs', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'slug', null: false
     t.bigint 'sluggable_id', null: false
     t.string 'sluggable_type', limit: 50
@@ -109,7 +109,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['sluggable_type', 'sluggable_id'], name: 'index_friendly_id_slugs_on_sluggable_type_and_sluggable_id'
   end
 
-  create_table 'git_providers', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'git_providers', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'label', null: false
     t.text 'machine_access_token'
     t.text 'user_access_token'
@@ -135,7 +135,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['user_id'], name: 'index_git_providers_on_user_id'
   end
 
-  create_table 'identities', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'identities', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'uid', null: false
     t.string 'magic_auth_token', null: false
     t.datetime 'magic_auth_token_expires_at', precision: nil
@@ -150,7 +150,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['user_id'], name: 'index_identities_on_user_id'
   end
 
-  create_table 'images', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'images', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name'
     t.string 'blob_path'
     t.string 'draft_blob_path'
@@ -167,7 +167,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['publication_id'], name: 'index_images_on_publication_id'
   end
 
-  create_table 'invites', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'invites', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.bigint 'sender_id', null: false
     t.bigint 'publication_id', null: false
     t.string 'identifier', null: false
@@ -186,7 +186,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['status'], name: 'index_invites_on_status'
   end
 
-  create_table 'kvs', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'kvs', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'key', null: false
     t.text 'value'
     t.text 'default'
@@ -197,7 +197,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['key'], name: 'index_kvs_on_key', unique: true
   end
 
-  create_table 'memberships', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'memberships', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.bigint 'publication_id', null: false
     t.bigint 'user_id', null: false
     t.datetime 'created_at', null: false
@@ -209,7 +209,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['user_id'], name: 'index_memberships_on_user_id'
   end
 
-  create_table 'posts', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'posts', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'permalink', null: false
     t.text 'title', null: false
     t.text 'summary'
@@ -248,7 +248,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['visibility'], name: 'index_posts_on_visibility'
   end
 
-  create_table 'publications', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'publications', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'permalink', null: false
     t.text 'description'
@@ -270,7 +270,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['visibility'], name: 'index_publications_on_visibility'
   end
 
-  create_table 'publishings', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'publishings', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.bigint 'post_id', null: false
     t.bigint 'author_id', null: false
     t.string 'commit_sha', null: false
@@ -283,7 +283,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['post_id'], name: 'index_publishings_on_post_id'
   end
 
-  create_table 'repositories', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'repositories', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'full_name', null: false
     t.string 'default_ref', default: 'HEAD', null: false
     t.bigint 'publication_id', null: false
@@ -302,7 +302,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['publication_id'], name: 'index_repositories_on_publication_id'
   end
 
-  create_table 'revisions', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'revisions', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.bigint 'publication_id', null: false
     t.bigint 'post_id', null: false
     t.bigint 'author_id', null: false
@@ -323,7 +323,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['publication_id'], name: 'index_revisions_on_publication_id'
   end
 
-  create_table 'taggings', id: :integer, charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'taggings', id: :integer, charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.bigint 'tag_id'
     t.string 'taggable_type'
     t.bigint 'taggable_id'
@@ -345,7 +345,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['tenant'], name: 'index_taggings_on_tenant'
   end
 
-  create_table 'tags', id: :integer, charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'tags', id: :integer, charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name', collation: 'utf8_bin'
     t.string 'display_name'
     t.string 'created_by'
@@ -362,7 +362,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['name'], name: 'index_tags_on_name', unique: true
   end
 
-  create_table 'users', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'users', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'first_name', null: false
     t.string 'last_name'
     t.string 'username', null: false
@@ -381,7 +381,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_15_105533) do
     t.index ['username'], name: 'index_users_on_username', unique: true
   end
 
-  create_table 'votes', charset: 'utf8mb4', collation: 'utf8mb4_unicode_ci', force: :cascade do |t|
+  create_table 'votes', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'votable_type'
     t.bigint 'votable_id'
     t.string 'voter_type'

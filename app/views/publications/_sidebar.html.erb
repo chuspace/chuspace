@@ -5,8 +5,8 @@
     <% end %>
 
     <% card.actions do %>
-      <% if signed_in? && allowed_to?(:invite?, @publication) %>
-        <%= link_to new_publication_invite_path(publication), 'data-turbo-frame': dom_id(@invite, :popup) do %>
+      <% if signed_in? && allowed_to?(:invite?, publication) %>
+        <%= link_to new_publication_invite_path(publication), 'data-turbo-frame': dom_id(invite, :popup) do %>
           <%= inline_svg_tag 'icons/plus.svg', class: 'fill-current w-4 h-4' %>
         <% end %>
         <%= turbo_frame_tag dom_id(@invite, :popup) %>
