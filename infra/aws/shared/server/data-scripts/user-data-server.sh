@@ -18,3 +18,5 @@ sudo chown deployer:deployer /var/www
 sudo loginctl enable-linger deployer
 sudo systemctl restart memcached
 
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/debian/amd64/latest/amazon-cloudwatch-agent.deb
+sudo apt install ./amazon-cloudwatch-agent.deb
