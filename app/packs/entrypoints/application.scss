@@ -108,11 +108,6 @@
   }
 }
 
-:root {
-  --animation-btn: 0;
-  --animation-input: 0;
-}
-
 auto-complete {
   ul {
     @apply hidden;
@@ -256,4 +251,9 @@ dialog::backdrop {
   border-right-color: transparent;
   border-bottom-color: transparent;
   border-left-color: transparent;
+}
+
+:root {
+  --animation-btn: 0;
+  --animation-input: 0;
 }
