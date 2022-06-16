@@ -5,7 +5,7 @@ module Authentication
 
   included do
     COOKIE_DOMAINS = Rails.env.production? ? %w[chuspace.com] : %w[localhost test.host]
-    before_action :authenticate
+    before_action :authenticate, if: -> { cookies.encrypted[:identity].present? }
     helper_method :signed_in?
   end
 
