@@ -27,14 +27,3 @@ module "us_sfo_servers" {
   instance_type        = "s-1vcpu-2gb-intel"
   server_count         = 2
 }
-
-module "us_tor_servers" {
-  source = "../server"
-
-  region = "tor1"
-  name   = "chuspace-app"
-
-  do_token             = var.do_token
-  instance_type        = "s-1vcpu-2gb-intel"
-  server_count         = 2
-}

@@ -50,20 +50,20 @@ environment :eu_west do
   end
 end
 
-environment :eu_north do
-  json["aws_eu_north_servers"]["value"].each do |ip_address|
-    host "deployer@#{ip_address}"
-  end
-end
-
-environment :ap_east do
-  json["aws_apac_east_servers"]["value"].each do |ip_address|
+environment :eu_central do
+  json["aws_eu_central_servers"]["value"].each do |ip_address|
     host "deployer@#{ip_address}"
   end
 end
 
 environment :ap_south do
   json["aws_apac_south_servers"]["value"].each do |ip_address|
+    host "deployer@#{ip_address}"
+  end
+end
+
+environment :ap_southeast do
+  json["aws_apac_southeast_servers"]["value"].each do |ip_address|
     host "deployer@#{ip_address}"
   end
 end
@@ -80,11 +80,11 @@ environment :us_west do
   end
 end
 
-environment :canada do
-  json["do_us_tor_servers"]["value"].each do |ip_address|
-    host "deployer@#{ip_address}"
-  end
-end
+# environment :canada do
+#   json["do_us_tor_servers"]["value"].each do |ip_address|
+#     host "deployer@#{ip_address}"
+#   end
+# end
 
 set linked_dirs: %w[
   .yarn/cache

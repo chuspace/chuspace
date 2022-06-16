@@ -7,6 +7,7 @@ terraform {
   }
 }
 
+# AWS
 module "aws_apac" {
   source = "./aws/apac"
 }
@@ -15,12 +16,8 @@ module "aws_eu" {
   source = "./aws/eu"
 }
 
+# DO
 module "do_us" {
   source = "./do/us"
-  do_token = var.do_token
-}
-
-module "do_apac" {
-  source = "./do/apac"
   do_token = var.do_token
 }

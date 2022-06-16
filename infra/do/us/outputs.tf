@@ -14,12 +14,3 @@ output "us_sfo_servers_lb_address" {
   value = module.us_sfo_servers.app_lb_address
 }
 
-output "us_tor_servers" {
-  value = module.us_tor_servers.server_ips
-}
-
-output "us_tor_servers_lb_address" {
-  value = module.us_tor_servers.app_lb_address
-}
-
-
