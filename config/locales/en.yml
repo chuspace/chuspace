@@ -177,7 +177,7 @@ en:
     identities:
       login_with: Click to sign in with %{provider}
     login_prompt: Click to go to sign in page
-    pitch: Integrated blogging platform for programmers and teams
+    pitch: Bringing independent programming blogs together
     private_beta: Chuspace is in private beta. Please wait for an invite!
     publications:
       connect: Connect publication
@@ -261,6 +261,5 @@ en:
     index:
       heading: Read Write Collaborate
       intro: |
-        Chuspace is a collaborative blogging platform for programmers and teams.
-        Publish straight from your git repository hosted on Github.
-        Works with any static site framework that supports markdown
+        Chuspace connects independent programming blogs hosted on GitHub so everyone can discover and maintain blogs through revisions.
+        Publish straight from your git repository hosted on Github. Works with any static site framework that supports markdown.
