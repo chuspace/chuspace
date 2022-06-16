@@ -259,7 +259,7 @@ en:
         settings: Settings
   welcome:
     index:
-      heading: Read Write Collaborate
+      heading: Read Write Contribute
       intro: |
         Chuspace connects independent programming blogs hosted on GitHub so everyone can discover and maintain blogs through revisions.
         Publish straight from your git repository hosted on Github. Works with any static site framework that supports markdown.
