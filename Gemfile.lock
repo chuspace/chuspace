@@ -365,6 +365,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
+    rollbar (3.3.0)
     rubocop (1.30.0)
       parallel (~> 1.10)
       parser (>= 3.1.0.0)
@@ -397,14 +398,6 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     semantic_range (3.0.0)
-    sentry-rails (5.3.1)
-      railties (>= 5.0)
-      sentry-ruby-core (~> 5.3.1)
-    sentry-ruby (5.3.1)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
-      sentry-ruby-core (= 5.3.1)
-    sentry-ruby-core (5.3.1)
-      concurrent-ruby
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
@@ -547,14 +540,13 @@ DEPENDENCIES
   rack-proxy
   rails-controller-testing
   railties (~> 7.x)
+  rollbar
   rubocop
   rubocop-performance
   rubocop-rails
   rubyzip
   sawyer!
   selenium-webdriver
-  sentry-rails
-  sentry-ruby
   simple_form
   simplecov
   simplecov_json_formatter

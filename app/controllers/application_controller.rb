@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   include ParamsSanitizer
   include Authentication
   include SetCurrentRequestDetails
-  include SetSentryContext
   include Redirectable
   include ActiveStorage::SetCurrent
 

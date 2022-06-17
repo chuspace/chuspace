@@ -124,11 +124,11 @@ Rails.application.configure do
   config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   ActiveSupport::Notifications.subscribe 'database_selector.active_record.read_from_primary' do |name, started, finished, unique_id, data|
-    config.logger.tagged('CHUSPACE_DB_PRIMARY') { config.logger.info "#{name} Received! (started: #{started}, finished: #{finished}, Duration: #{(finished - started).in_milliseconds}ms)" }
+    config.logger.tagged("CHUSPACE_DB_PRIMARY:#{ENV['APP_REGION']}") { config.logger.info "#{name} Received! (started: #{started}, finished: #{finished}, Duration: #{(finished - started).in_milliseconds}ms)" }
   end
 
   ActiveSupport::Notifications.subscribe 'database_selector.active_record.read_from_replica' do |name, started, finished, unique_id, data|
-    config.logger.tagged('CHUSPACE_DB_REPLICA') { config.logger.info "#{name} Received! (started: #{started}, finished: #{finished}, Duration: #{(finished - started).in_milliseconds}ms)" }
+    config.logger.tagged("CHUSPACE_DB_PRIMARY:#{ENV['APP_REGION']}") { config.logger.info "#{name} Received! (started: #{started}, finished: #{finished}, Duration: #{(finished - started).in_milliseconds}ms)" }
   end
 
   # Inserts middleware to perform automatic shard swapping. The `shard_selector` hash

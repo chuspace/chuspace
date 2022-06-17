@@ -107,8 +107,7 @@ gem 'diffy'
 gem 'meta-tags'
 
 # Error tracking
-gem 'sentry-ruby'
-gem 'sentry-rails'
+gem 'rollbar'
 
 # SVG
 gem 'inline_svg'
