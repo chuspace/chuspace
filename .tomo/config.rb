@@ -68,6 +68,12 @@ environment :ap_southeast do
   end
 end
 
+environment :ap_southeast_sgp do
+  json["do_apac_sgp_servers"]["value"].each do |ip_address|
+    host "deployer@#{ip_address}"
+  end
+end
+
 environment :us_east do
   json["do_us_nyc_servers"]["value"].each do |ip_address|
     host "deployer@#{ip_address}"
@@ -79,12 +85,6 @@ environment :us_west do
     host "deployer@#{ip_address}"
   end
 end
-
-# environment :canada do
-#   json["do_us_tor_servers"]["value"].each do |ip_address|
-#     host "deployer@#{ip_address}"
-#   end
-# end
 
 set linked_dirs: %w[
   .yarn/cache

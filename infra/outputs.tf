@@ -55,6 +55,16 @@ output "do_us_sfo_servers_lb_address" {
   value = "http://${module.do_us.us_sfo_servers_lb_address}"
 }
 
+# Asia
+
+output "do_apac_sgp_servers" {
+  value = module.do_apac.apac_sgp_servers
+}
+
+output "do_apac_sgp_servers_lb_address" {
+  value = "http://${module.do_apac.apac_sgp_servers_lb_address}"
+}
+
 
 
 
