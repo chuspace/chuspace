@@ -90,7 +90,7 @@ Rails.application.configure do
   config.log_formatter      = ::Logger::Formatter.new
   config.lograge.enabled    = true
   config.lograge.formatter  = Lograge::Formatters::Json.new
-  config.logger             = Logdna::Ruby.new(Rails.application.credentials.mezmo.dig(:key), OPTIONS)
+  config.logger             = Logdna::Ruby.new(Rails.application.credentials.mezmo.dig(:key))
   config.lograge.custom_options = lambda do |event|
     {
       region: ENV.fetch('APP_REGION'),
