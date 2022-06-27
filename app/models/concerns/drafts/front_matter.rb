@@ -22,7 +22,7 @@ module Drafts
     end
 
     def date
-      front_matter_date = front_matter.dig(publication.front_matter.date)
+      front_matter_date = front_matter.dig(publication.front_matter.date)&.to_date
 
       if front_matter_date && front_matter_date < Date.today
         Date.today
