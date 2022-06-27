@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     super
 
     payload[:host] = request.host
-    paylod[:x_forwarded_for] = request.env['HTTP_X_FORWARDED_FOR']
+    payload[:x_forwarded_for] = request.env['HTTP_X_FORWARDED_FOR']
   end
 
   private
