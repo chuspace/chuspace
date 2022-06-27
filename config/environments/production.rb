@@ -102,7 +102,7 @@ Rails.application.configure do
       remote_ip: event.payload[:remote_ip],
       ip: event.payload[:ip],
       x_forwarded_for: event.payload[:x_forwarded_for],
-      params: event.payload[:params].except(*exceptions).to_json,
+      params: event.payload[:params].to_json,
       exception: event.payload[:exception]&.first,
       exception_message: "#{event.payload[:exception]&.last}",
       exception_backtrace: event.payload[:exception_object]&.backtrace&.join(",")
