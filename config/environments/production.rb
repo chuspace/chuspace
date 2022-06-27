@@ -87,16 +87,26 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
-
-  # Use a different logger for distributed setups.
-  # require "syslog/logger"
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
-
-  if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  config.log_formatter      = ::Logger::Formatter.new
+  config.lograge.enabled    = true
+  config.lograge.formatter  = Lograge::Formatters::Json.new
+  config.logger             = Logdna::Ruby.new(Rails.application.credentials.mezmo.dig(:key), OPTIONS)
+  config.lograge.custom_options = lambda do |event|
+    {
+      region: ENV.fetch('APP_REGION'),
+      host: event.payload[:host],
+      rails_env: Rails.env,
+      process_id: Process.pid,
+      request_id: event.payload[:headers]['action_dispatch.request_id'],
+      request_time: Time.now,
+      remote_ip: event.payload[:remote_ip],
+      ip: event.payload[:ip],
+      x_forwarded_for: event.payload[:x_forwarded_for],
+      params: event.payload[:params].except(*exceptions).to_json,
+      exception: event.payload[:exception]&.first,
+      exception_message: "#{event.payload[:exception]&.last}",
+      exception_backtrace: event.payload[:exception_object]&.backtrace&.join(",")
+    }
   end
 
   # Do not dump schema after migrations.
@@ -119,16 +129,16 @@ Rails.application.configure do
   # DatabaseSelector middleware is designed as such you can define your own
   # strategy for connection switching and pass that into the middleware through
   # these configuration options.
-  config.active_record.database_selector = { delay: 1.second }
+  config.active_record.database_selector = { delay: 2.seconds }
   config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   ActiveSupport::Notifications.subscribe 'database_selector.active_record.read_from_primary' do |name, started, finished, unique_id, data|
-    config.logger.tagged("CHUSPACE_DB_PRIMARY:#{ENV['APP_REGION']}") { config.logger.info "#{name} Received! (started: #{started}, finished: #{finished}, Duration: #{(finished - started).in_milliseconds}ms)" }
+    config.logger.info "#{name} Received! (started: #{started}, finished: #{finished}, Duration: #{(finished - started).in_milliseconds}ms)"
   end
 
   ActiveSupport::Notifications.subscribe 'database_selector.active_record.read_from_replica' do |name, started, finished, unique_id, data|
-    config.logger.tagged("CHUSPACE_DB_PRIMARY:#{ENV['APP_REGION']}") { config.logger.info "#{name} Received! (started: #{started}, finished: #{finished}, Duration: #{(finished - started).in_milliseconds}ms)" }
+    config.logger.info "#{name} Received! (started: #{started}, finished: #{finished}, Duration: #{(finished - started).in_milliseconds}ms)"
   end
 
   # Inserts middleware to perform automatic shard swapping. The `shard_selector` hash

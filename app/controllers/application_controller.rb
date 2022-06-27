@@ -15,6 +15,13 @@ class ApplicationController < ActionController::Base
 
   etag { Current.identity.try :updated_at }
 
+  def append_info_to_payload(payload)
+    super
+
+    payload[:host] = request.host
+    paylod[:x_forwarded_for] = request.env['HTTP_X_FORWARDED_FOR']
+  end
+
   private
 
   def track_ahoy_visit

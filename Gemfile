@@ -130,6 +130,8 @@ gem 'easymon'
 
 group :production do
   gem 'cloudflare-rails'
+  gem 'lograge'
+  gem 'logdna'
 end
 
 group :development, :test do

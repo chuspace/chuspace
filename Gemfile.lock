@@ -254,6 +254,15 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
+    logdna (1.5.0)
+      concurrent-ruby (~> 1.0)
+      json (~> 2.0)
+      require_all (~> 1.4)
+    lograge (0.12.0)
+      actionpack (>= 4)
+      activesupport (>= 4)
+      railties (>= 4)
+      request_store (~> 1.0)
     loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -359,6 +368,9 @@ GEM
     rake (13.0.6)
     redis (4.6.0)
     regexp_parser (2.5.0)
+    request_store (1.5.1)
+      rack (>= 1.4)
+    require_all (1.5.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -523,6 +535,8 @@ DEPENDENCIES
   image_processing
   inline_svg
   jwt
+  logdna
+  lograge
   maybe_later
   meta-tags
   mini_mime
