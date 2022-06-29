@@ -87,7 +87,7 @@ Rails.application.configure do
   config.logger             = Logdna::Ruby.new(Rails.application.credentials.mezmo.dig(:key))
   config.lograge.custom_options = lambda do |event|
     {
-      region: ENV.fetch('APP_REGION'),
+      region: ENV.fetch('APP_REGION', 'LOCAL'),
       host: event.payload[:host],
       rails_env: Rails.env,
       process_id: Process.pid,
