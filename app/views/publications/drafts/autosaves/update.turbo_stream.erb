@@ -1,7 +1,7 @@
 <%= turbo_stream.replace(dom_id(@draft, :actions)) do %>
-	<%= render 'publications/drafts/actions', draft: @draft, publication: @publication %>
+  <%= render 'publications/drafts/actions', draft: @draft, publication: @publication %>
 <% end %>
 
 <%= turbo_stream.replace(dom_id(@draft, :post_actions)) do %>
-	<%= render 'publications/drafts/post_actions', draft: @draft, publication: @publication %>
+  <%= render 'publications/drafts/post_actions', draft: @draft, publication: @publication %>
 <% end %>
