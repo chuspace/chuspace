@@ -4,7 +4,7 @@ module Avatar
   class Component < ApplicationComponent
     CLASSNAMES = {
       mini: {
-        classname: 'w-8 h-8 rounded-full'
+        classname: 'w-8 h-8 rounded-full text-sm'
       },
       thumb: {
         classname: 'w-24 h-24 rounded-full text-3xl'

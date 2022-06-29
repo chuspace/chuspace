@@ -10,13 +10,7 @@ Aws.config.update(
 Rails.application.configure do
   # Code is not reloaded between requests.
   config.cache_classes = true
-  config.cache_store = :mem_cache_store, ENV.fetch('MEMCACHED_URL', 'localhost:11211'), {
-    expires_in: 6.hours.to_i,
-    namespace: "chuspace-#{Rails.env}-#{ENV.fetch('APP_VERSION', 'axiom')}",
-    pool_size: 5,
-    failover: false,
-    pool_timeout: 5
-  }
+  config.cache_store = :null_store
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
@@ -25,7 +19,7 @@ Rails.application.configure do
 
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
-  config.action_controller.perform_caching = true
+  config.action_controller.perform_caching = false
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
   # or in config/master.key. This key is used to decrypt credentials (and other encrypted files).

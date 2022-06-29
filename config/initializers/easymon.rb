@@ -13,9 +13,3 @@ ActiveRecord::Base.connected_to(role: :writing) do
     :critical
   )
 end
-
-Easymon::Repository.add(
-  'memcached',
-  Easymon::MemcachedCheck.new(Rails.cache),
-  :critical
-)

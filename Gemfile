@@ -26,10 +26,6 @@ gem 'active_storage_validations'
 gem 'rubyzip'
 gem 'maybe_later'
 
-# Fragment caching
-gem 'dalli'
-gem 'connection_pool'
-
 # Sign web tokens
 gem 'alba'
 gem 'jwt'

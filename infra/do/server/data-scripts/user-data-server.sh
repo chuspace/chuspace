@@ -4,7 +4,7 @@ set -e
 
 sudo apt-get -y update
 sudo apt-get -y install build-essential zlib1g-dev libssl-dev libreadline-dev ca-certificates \
-                   git-core curl locales libmysqlclient-dev libsqlite3-dev tzdata memcached libmemcached-tools
+                   git-core curl locales libmysqlclient-dev libsqlite3-dev tzdata
 sudo locale-gen en_US.UTF-8
 
 sudo adduser --disabled-password deployer < /dev/null
@@ -16,4 +16,3 @@ sudo chmod 600 /home/deployer/.ssh/authorized_keys
 sudo mkdir -p /var/www
 sudo chown deployer:deployer /var/www
 sudo loginctl enable-linger deployer
-sudo systemctl restart memcached
