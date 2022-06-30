@@ -1,5 +1,7 @@
 chuspace-ami-key
 chuspace-ami-key.pub
+portainer-server-ssh-key
+portainer-server-ssh-key.pub
 *.key
 .terraform
 *.tfstate
