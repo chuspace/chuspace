@@ -5,11 +5,6 @@ ENV NODE_ENV 'production'
 ENV RAILS_ENV 'production'
 ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
 
-RUN --mount=type=secret,id=RAILS_MASTER_KEY \
-    --mount=type=secret,id=DATABASE_URL \
-    export RAILS_MASTER_KEY=$(cat /run/secrets/RAILS_MASTER_KEY) && \
-    export DATABASE_URL=$(cat /run/secrets/DATABASE_URL) && \
-
 ARG REFRESHED_AT
 ENV REFRESHED_AT $REFRESHED_AT
 
@@ -46,4 +41,8 @@ RUN yarn install --check-files --frozen-lockfile
 
 COPY . .
 
-RUN bundle exec rake assets:precompile
+RUN --mount=type=secret,id=RAILS_MASTER_KEY \
+    --mount=type=secret,id=DATABASE_URL \
+    export RAILS_MASTER_KEY=$(cat /run/secrets/RAILS_MASTER_KEY) && \
+    export DATABASE_URL=$(cat /run/secrets/DATABASE_URL) && \
+    bundle exec rake assets:precompile
