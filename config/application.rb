@@ -45,6 +45,7 @@ module Chuspace
     # Custom error pages
     config.exceptions_app = self.routes
 
+    # Configure maybe_later
     config.invoke_even_if_server_is_unsupported = true
 
     # Autoload paths
