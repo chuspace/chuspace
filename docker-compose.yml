@@ -1,14 +1,18 @@
 version: "3.9"
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
     volumes:
       - .:/usr/src/app
     ports:
       - "3000:3000"
   worker:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     command: bash -c "bundle exec aws_sqs_active_job --queue default"
     volumes:
       - .:/usr/src/app
