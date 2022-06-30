@@ -11,9 +11,6 @@ ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
 
 ARG SECRET_KEY_BASE
 ARG RAILS_MASTER_KEY
-ARG DATABASE_URL
-ARG MEMCACHED_URL
-ARG DATABASE_REPLICA_URL
 
 ARG REFRESHED_AT
 ENV REFRESHED_AT $REFRESHED_AT
@@ -51,10 +48,4 @@ RUN yarn install --check-files --frozen-lockfile
 
 COPY . .
 
-RUN rm -rf public/packs
-RUN rm -rf public/assets
 RUN bundle exec rake assets:precompile
-
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
-
-EXPOSE 3000
