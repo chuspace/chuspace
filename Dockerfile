@@ -37,7 +37,7 @@ RUN apk del gmp-dev libstdc++ \
     yarn
 
 # set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # bundle install
 COPY Gemfile Gemfile.lock ./
