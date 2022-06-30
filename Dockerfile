@@ -1,16 +1,14 @@
 FROM ruby:3.1-alpine
 
-ARG APP_NAME
-ARG APP_REGION
-ARG ASSET_HOST
-ARG AVATARS_CDN_HOST
 ARG RAILS_SERVE_STATIC_FILES 'yes'
 ENV NODE_ENV 'production'
 ENV RAILS_ENV 'production'
 ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
 
-ARG SECRET_KEY_BASE
-ARG RAILS_MASTER_KEY
+RUN --mount=type=secret,id=RAILS_MASTER_KEY \
+    --mount=type=secret,id=DATABASE_URL \
+    export RAILS_MASTER_KEY=$(cat /run/secrets/RAILS_MASTER_KEY) && \
+    export DATABASE_URL=$(cat /run/secrets/DATABASE_URL) && \
 
 ARG REFRESHED_AT
 ENV REFRESHED_AT $REFRESHED_AT
