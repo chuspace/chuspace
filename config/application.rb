@@ -45,6 +45,8 @@ module Chuspace
     # Custom error pages
     config.exceptions_app = self.routes
 
+    config.invoke_even_if_server_is_unsupported = true
+
     # Autoload paths
     config.anyway_config.autoload_static_config_path = 'app/configs'
     overrides = "#{root}/app/overrides"
