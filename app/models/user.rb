@@ -5,7 +5,7 @@ class User < ApplicationRecord
   extend FriendlyId
   include AlgoliaSearch
 
-  algoliasearch per_environment: true do
+  algoliasearch per_environment: true, disable_indexing: Rails.env.test? do
     attribute :first_name, :last_name, :username
   end
 

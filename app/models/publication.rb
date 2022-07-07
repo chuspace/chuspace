@@ -8,7 +8,7 @@ class Publication < ApplicationRecord
   include AttrJson::NestedAttributes
   include AlgoliaSearch
 
-  algoliasearch per_environment: true do
+  algoliasearch per_environment: true, disable_indexing: Rails.env.test? do
     attribute :name
   end
 

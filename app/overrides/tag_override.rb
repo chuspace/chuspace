@@ -7,7 +7,7 @@ module TagOverride
 
     base.include AlgoliaSearch
 
-    base.algoliasearch per_environment: true do
+    base.algoliasearch per_environment: true, disable_indexing: Rails.env.test? do
       attribute :name, :description, :short_description
     end
 
