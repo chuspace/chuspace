@@ -1,15 +1,15 @@
 FROM ruby:3.1-alpine
 
-ARG REFRESHED_AT
-
 ENV LANG=C.UTF-8 \
   BUNDLE_JOBS=4 \
   BUNDLE_RETRY=3 \
   RAILS_ENV=production \
   NODE_ENV=production \
   BOOTSNAP_CACHE_DIR='tmp/bootsnap-cache' \
-  RAILS_SERVE_STATIC_FILES='yes' \
-  REFRESHED_AT $REFRESHED_AT
+  RAILS_SERVE_STATIC_FILES='yes'
+
+ARG REFRESHED_AT
+ENV REFRESHED_AT $REFRESHED_AT
 
 RUN apk del gmp-dev libstdc++ \
   && apk -U upgrade \
@@ -34,21 +34,21 @@ WORKDIR /usr/src/app
 
 # bundle install
 COPY Gemfile Gemfile.lock ./
-RUN gem install bundler
-RUN bundle check || (bundle install --without development test --jobs=4 --retry=3)
+RUN gem install bundler && bundle check || (bundle install --without development test --jobs=4 --retry=3)
 
 # yarn install
 COPY package.json yarn.lock ./
-RUN rm -rf node_modules
-RUN yarn install --check-files --frozen-lockfile
+RUN rm -rf node_modules && yarn install --check-files --frozen-lockfile
 
 COPY . .
 
-ARG SECRET_KEY_BASE=fakekeyforassets
-ARG RAILS_MASTER_KEY=fakemasterkey
-ARG DATABASE_URL=mysql2://localhost:3306/chuspace
+ARG SECRET_KEY_BASE=fakekeyforassets \
+    RAILS_MASTER_KEY=fakemasterkey \
+    DATABASE_URL=mysql2://localhost:3306/chuspace
 
 RUN bin/rails assets:clobber && bundle exec rails assets:precompile
+
+ENTRYPOINT ["./entrypoint.sh"]
 
 EXPOSE 3000
 
