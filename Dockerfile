@@ -63,6 +63,18 @@ RUN bin/rails assets:clobber && bin/rails assets:precompile \
   && rm -rf /app/.bundle/ruby/*/cache \
   && rm -rf /app/node_modules
 
+RUN  rm -rf config/credentials/production.yml.enc && \
+     mv config/credentials/production.yml.enc.backup ./config/credentials/production.yml.enc
+
+RUN apk del gmp-dev \
+    libstdc++ \
+    nodejs \
+    npm \
+    libffi-dev \
+    build-base \
+    git \
+    yarn
+
 USER deploy
 
 ENV RACK_ENV=production
