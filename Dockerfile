@@ -49,9 +49,9 @@ COPY --chown=deploy:deploy . .
 
 ARG SECRET_KEY_BASE=fakekeyforassets
 
-RUN  mv config/credentials/production.yml.enc config/credentials/production.yml.enc.backup \
-     mv config/credentials/production.sample.yml.enc config/credentials/production.yml.enc \
-     mv config/production.sample.key config/production.key
+RUN  mv config/credentials/production.yml.enc ./config/credentials/production.yml.enc.backup && \
+     mv config/credentials/production.sample.yml.enc ./config/credentials/production.yml.enc && \
+     mv config/credentials/production.sample.key ./config/credentials/production.key
 
 RUN bin/rails assets:clobber && bin/rails assets:precompile \
   && yarn cache clean \
@@ -59,8 +59,9 @@ RUN bin/rails assets:clobber && bin/rails assets:precompile \
   && rm -rf $BUNDLE_PATH/*.gem \
   && find $BUNDLE_PATH/ruby -name "*.c" -delete \
   && find $BUNDLE_PATH/ruby -name "*.o" -delete \
-  && find $BUNDLE_PATH/ruby -name ".git"  -type d -prune -execdir rm -rf {} + \
-  && rm -rf /usr/local/bundle/ruby/*/cache
+  && find $BUNDLE_PATH/ruby -name ".git"  -type d -prune -exec rm -rf {} + \
+  && rm -rf /app/.bundle/ruby/*/cache \
+  && rm -rf /app/node_modules
 
 USER deploy
 
