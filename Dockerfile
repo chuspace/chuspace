@@ -1,12 +1,15 @@
 FROM ruby:3.1-alpine
 
-ARG RAILS_SERVE_STATIC_FILES 'yes'
-ENV NODE_ENV 'production'
-ENV RAILS_ENV 'production'
-ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
-
 ARG REFRESHED_AT
-ENV REFRESHED_AT $REFRESHED_AT
+
+ENV LANG=C.UTF-8 \
+  BUNDLE_JOBS=4 \
+  BUNDLE_RETRY=3 \
+  RAILS_ENV=production \
+  NODE_ENV=production \
+  BOOTSNAP_CACHE_DIR='tmp/bootsnap-cache' \
+  RAILS_SERVE_STATIC_FILES='yes' \
+  REFRESHED_AT $REFRESHED_AT
 
 RUN apk del gmp-dev libstdc++ \
   && apk -U upgrade \
@@ -27,7 +30,7 @@ RUN apk del gmp-dev libstdc++ \
     yarn
 
 # set working directory
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # bundle install
 COPY Gemfile Gemfile.lock ./
@@ -41,8 +44,12 @@ RUN yarn install --check-files --frozen-lockfile
 
 COPY . .
 
-RUN --mount=type=secret,id=RAILS_MASTER_KEY \
-    --mount=type=secret,id=DATABASE_URL \
-    export RAILS_MASTER_KEY=$(cat /run/secrets/RAILS_MASTER_KEY) && \
-    export DATABASE_URL=$(cat /run/secrets/DATABASE_URL) && \
-    bundle exec rake assets:precompile
+ARG SECRET_KEY_BASE=fakekeyforassets
+ARG RAILS_MASTER_KEY=fakemasterkey
+ARG DATABASE_URL=mysql2://localhost:3306/chuspace
+
+RUN bin/rails assets:clobber && bundle exec rails assets:precompile
+
+EXPOSE 3000
+
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
