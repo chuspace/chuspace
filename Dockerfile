@@ -11,7 +11,7 @@ ENV LANG=C.UTF-8 \
   RAILS_ROOT=$WORK_ROOT/www/ \
   GEM_HOME=$WORK_ROOT/bundle \
   BUNDLE_BIN=$GEM_HOME/gems/bin \
-  PATH=$GEM_HOME/bin:$BUNDLE_BIN:$PATH
+  PATH=$GEM_HOME/bin:$BUNDLE_BIN:$PATH \
   ASSET_HOST=https://assets.chuspace.com
 
 ARG REFRESHED_AT
