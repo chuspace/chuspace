@@ -6,9 +6,12 @@ ENV LANG=C.UTF-8 \
   RAILS_ENV=production \
   NODE_ENV=production \
   BOOTSNAP_CACHE_DIR='tmp/bootsnap-cache' \
-  RAILS_SERVE_STATIC_FILES='yes'
-
-RUN addgroup -S deploy && adduser -S deploy -G deploy
+  RAILS_SERVE_STATIC_FILES='yes' \
+  WORK_ROOT=/var \
+  RAILS_ROOT=$WORK_ROOT/www/ \
+  GEM_HOME=$WORK_ROOT/bundle \
+  BUNDLE_BIN=$GEM_HOME/gems/bin \
+  PATH=$GEM_HOME/bin:$BUNDLE_BIN:$PATH
 
 ARG REFRESHED_AT
 ENV REFRESHED_AT $REFRESHED_AT
@@ -32,14 +35,14 @@ RUN apk del gmp-dev libstdc++ \
     yarn
 
 # set working directory
-WORKDIR /app
+WORKDIR $RAILS_ROOT
 
 # bundle and yarn install
-COPY --chown=deploy:deploy Gemfile Gemfile.lock package.json yarn.lock ./
+COPY Gemfile Gemfile.lock package.json yarn.lock ./
 RUN gem install bundler && bundle check || bundle install --without development test
 RUN rm -rf node_modules && yarn install --check-files --frozen-lockfile
 
-COPY --chown=deploy:deploy . .
+COPY . $RAILS_ROOT
 
 ARG SECRET_KEY_BASE=fakekeyforassets
 
@@ -60,8 +63,6 @@ RUN apk del gmp-dev \
     build-base \
     git \
     yarn
-
-USER deploy
 
 ENV RACK_ENV=production
 ENV RAILS_LOG_TO_STDOUT=enabled
