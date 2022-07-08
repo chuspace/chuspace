@@ -5,6 +5,7 @@ ENV LANG=C.UTF-8 \
   BUNDLE_RETRY=3 \
   RAILS_ENV=production \
   NODE_ENV=production \
+  RAILS_LOG_TO_STDOUT=enabled \
   BOOTSNAP_CACHE_DIR='tmp/bootsnap-cache' \
   RAILS_SERVE_STATIC_FILES='yes' \
   WORK_ROOT=/var \
@@ -64,7 +65,3 @@ RUN apk del gmp-dev \
     build-base \
     git \
     yarn
-
-ENV RACK_ENV=production
-ENV RAILS_LOG_TO_STDOUT=enabled
-ENV RAILS_SERVE_STATIC_FILES=enabled
