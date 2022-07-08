@@ -53,15 +53,7 @@ RUN  mv config/credentials/production.yml.enc ./config/credentials/production.ym
      mv config/credentials/production.sample.yml.enc ./config/credentials/production.yml.enc && \
      mv config/credentials/production.sample.key ./config/credentials/production.key
 
-RUN bin/rails assets:clobber && bin/rails assets:precompile \
-  && yarn cache clean \
-  && (rm -rf /tmp/* || true) \
-  && rm -rf $BUNDLE_PATH/*.gem \
-  && find $BUNDLE_PATH/ruby -name "*.c" -delete \
-  && find $BUNDLE_PATH/ruby -name "*.o" -delete \
-  && find $BUNDLE_PATH/ruby -name ".git"  -type d -prune -exec rm -rf {} + \
-  && rm -rf /app/.bundle/ruby/*/cache \
-  && rm -rf /app/node_modules
+RUN bin/rails assets:clobber && bin/rails assets:precompile && yarn cache clean
 
 RUN  rm -rf config/credentials/production.yml.enc && \
      mv config/credentials/production.yml.enc.backup ./config/credentials/production.yml.enc
