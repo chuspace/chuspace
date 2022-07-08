@@ -6,13 +6,7 @@ ENV LANG=C.UTF-8 \
   RAILS_ENV=production \
   NODE_ENV=production \
   BOOTSNAP_CACHE_DIR='tmp/bootsnap-cache' \
-  RAILS_SERVE_STATIC_FILES='yes' \
-  GEM_HOME=/app/.bundle \
-  BUNDLE_PATH=$GEM_HOME \
-  BUNDLE_BIN=/app/.bundle/bin \
-  BUNDLE_JOBS=4 \
-  BUNDLE_RETRY=3 \
-  PATH=/app/bin:$PATH
+  RAILS_SERVE_STATIC_FILES='yes'
 
 RUN addgroup -S deploy && adduser -S deploy -G deploy
 
@@ -42,7 +36,7 @@ WORKDIR /app
 
 # bundle and yarn install
 COPY --chown=deploy:deploy Gemfile Gemfile.lock package.json yarn.lock ./
-RUN gem install bundler && bundle check || (bundle config set --local without 'development test' && bundle install)
+RUN gem install bundler && bundle check || bundle install --without development test
 RUN rm -rf node_modules && yarn install --check-files --frozen-lockfile
 
 COPY --chown=deploy:deploy . .
