@@ -12,11 +12,29 @@ provider "digitalocean" {
 }
 
 data "digitalocean_ssh_key" "chuspace_app" {
-  name = "chuspace_app"
+  name = "chuspace_docker_app_ssh_key"
 }
 
 data "digitalocean_certificate" "chuspace_app" {
   name = "chuspace.com"
+}
+
+data "template_file" "docker_compose" {
+  template = file("${path.module}/data-scripts/docker-compose.yml")
+}
+
+data "template_file" "user_data_server" {
+  template = file("${path.module}/data-scripts/user-data-server.sh.tpl")
+
+  vars = {
+    docker_compose          = data.template_file.docker_compose.rendered
+    weave_cloud_token       = var.weave_cloud_token
+    docker_access_token     = var.docker_access_token
+    aws_access_key_id       = var.aws_access_key_id
+    aws_secret_access_key   = var.aws_secret_access_key
+    aws_region              = var.aws_region
+    aws_ssm_secret_key_name = var.aws_ssm_secret_key_name
+  }
 }
 
 resource "digitalocean_droplet" "chuspace_app" {
@@ -25,7 +43,7 @@ resource "digitalocean_droplet" "chuspace_app" {
   name        = "${var.name}-${var.region}-${count.index}"
   region      = var.region
   size        = var.instance_type
-  user_data   = file("${path.module}/data-scripts/user-data-server.sh")
+  user_data   = data.template_file.user_data_server.rendered
 
   ssh_keys = [
     data.digitalocean_ssh_key.chuspace_app.id
@@ -60,10 +78,6 @@ resource "digitalocean_loadbalancer" "chuspace_app" {
   }
 
   droplet_ids = digitalocean_droplet.chuspace_app.*.id
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "digitalocean_firewall" "web" {
@@ -98,9 +112,5 @@ resource "digitalocean_firewall" "web" {
   outbound_rule {
     protocol              = "icmp"
     destination_addresses = ["0.0.0.0/0", "::/0"]
-  }
-
-  lifecycle {
-    prevent_destroy = true
   }
 }

@@ -3,16 +3,10 @@ variable "region" {
   type        = string
 }
 
-variable "name" {
-  description = "Used to name various infrastructure components"
-  type        = string
-  default     = "chuspace-app"
-}
-
 variable "vpc_name" {
   description = "Name of VPC"
   type        = string
-  default     = "chuspace-app-vpc"
+  default     = "chuspace-docker-app-vpc"
 }
 
 variable "vpc_cidr" {
@@ -36,6 +30,7 @@ variable "vpc_tags" {
   type        = map(string)
   default = {
     Environment = "production"
+    App         = "chuspace-docker-app"
   }
 }
 

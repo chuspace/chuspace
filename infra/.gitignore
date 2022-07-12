@@ -1,7 +1,5 @@
-chuspace-ami-key
-chuspace-ami-key.pub
-portainer-server-ssh-key
-portainer-server-ssh-key.pub
+chuspace-ami-key*
+chuspace-docker-app-ssh-key*
 *.key
 .terraform
 *.tfstate
@@ -10,3 +8,4 @@ portainer-server-ssh-key.pub
 ignore*
 *.pem
 .DS_Store
+aws-credentials

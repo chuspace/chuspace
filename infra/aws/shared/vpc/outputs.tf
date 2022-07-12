@@ -10,10 +10,6 @@ output "public_subnets" {
   value = module.vpc.public_subnets
 }
 
-output "app_sg_id" {
-  value = aws_security_group.app_sg.id
-}
-
-output "iam_instance_profile_name" {
-  value = aws_iam_instance_profile.instance_profile.name
+output "sg_id" {
+  value = aws_security_group.sg.id
 }

@@ -8,8 +8,22 @@ data "aws_acm_certificate" "chuspace" {
   most_recent = true
 }
 
+data "template_file" "docker_compose" {
+  template = file("${path.module}/data-scripts/docker-compose.yml")
+}
+
 data "template_file" "user_data_server" {
-  template = file("${path.module}/data-scripts/user-data-server.sh")
+  template = file("${path.module}/data-scripts/user-data-server.sh.tpl")
+
+  vars = {
+    docker_compose          = data.template_file.docker_compose.rendered
+    weave_cloud_token       = var.weave_cloud_token
+    docker_access_token     = var.docker_access_token
+    aws_access_key_id       = var.aws_access_key_id
+    aws_secret_access_key   = var.aws_secret_access_key
+    aws_region              = var.aws_region
+    aws_ssm_secret_key_name = var.aws_ssm_secret_key_name
+  }
 }
 
 data "aws_ami" "ubuntu" {
@@ -22,18 +36,18 @@ data "aws_ami" "ubuntu" {
   owners      = ["099720109477"]
 }
 
-resource "aws_key_pair" "deployer" {
-  key_name   = "chuspace-app-deployer-key"
-  public_key = file("${path.module}/data-scripts/chuspace-ami-key.pub")
+resource "aws_key_pair" "ssh" {
+  key_name   = "chuspace-docker-app-ssh-key"
+  public_key = file("${path.module}/data-scripts/chuspace-docker-app-ssh-key.pub")
 }
 
-resource "aws_instance" "server" {
+resource "aws_instance" "app" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [var.server_security_group_id]
   count                  = var.server_count
   subnet_id              = var.public_subnets[0]
-  key_name               = aws_key_pair.deployer.key_name
+  key_name               = aws_key_pair.ssh.key_name
 
   tags = merge(
     {
@@ -48,7 +62,6 @@ resource "aws_instance" "server" {
   }
 
   user_data            = data.template_file.user_data_server.rendered
-  iam_instance_profile = var.iam_instance_profile_name
 
   metadata_options {
     http_endpoint          = "enabled"
@@ -56,7 +69,7 @@ resource "aws_instance" "server" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    create_before_destroy = true
   }
 }
 
@@ -68,10 +81,6 @@ resource "aws_lb" "app" {
   security_groups            = [var.server_security_group_id]
   subnets                    = var.public_subnets
   enable_http2               = true
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "aws_lb_listener" "app_https_listener" {
@@ -109,7 +118,7 @@ resource "aws_lb_listener" "app_http_listener" {
 }
 
 resource "aws_lb_target_group" "app_lb_target" {
-  name              = "chuspace-app-target"
+  name              = "chuspace-docker-app-target"
   port              = 3000
   protocol          = "HTTP"
   vpc_id            = var.vpc_id
@@ -130,8 +139,7 @@ resource "aws_lb_target_group" "app_lb_target" {
 resource "aws_lb_target_group_attachment" "app_lb_target_attachment" {
   count               = var.server_count
   target_group_arn    = aws_lb_target_group.app_lb_target.arn
-  target_id           = element(split(",", join(",", aws_instance.server.*.id)), count.index)
+  target_id           = element(split(",", join(",", aws_instance.app.*.id)), count.index)
   port                = 3000
 }
-
 

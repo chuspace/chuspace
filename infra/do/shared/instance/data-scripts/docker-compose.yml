@@ -1,0 +1,29 @@
+version: "3"
+services:
+  web:
+    image: chuspace2/app:main
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+  worker:
+    image: chuspace2/app:main
+    command: bundle exec aws_sqs_active_job --queue default
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9000:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+
+volumes:
+  prometheus-data:

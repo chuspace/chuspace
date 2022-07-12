@@ -3,8 +3,9 @@ variable "region" {
   default     = "eu-west-1"
 }
 
-variable "do_token" {
-  description = "DO access token"
+variable "server_count" {
+  description = "The number of servers to provision."
+  default     = "3"
 }
 
 variable "weave_cloud_token" {
@@ -21,5 +22,13 @@ variable "aws_access_key_id" {
 
 variable "aws_secret_access_key" {
   description = "Aws access key secret for fetching secrets"
+}
+
+variable "aws_region" {
+  description = "Aws region to fetch secrets from"
+}
+
+variable "aws_ssm_secret_key_name" {
+  description = "Aws secret manager key name"
 }
 
