@@ -13,7 +13,7 @@ class PublishingControllerTest < ActionDispatch::IntegrationTest
     publication  = create(:publication, owner: user, git_provider: git_provider)
     draft        ||= publication.repository.drafts.first
 
-    post publication_publish_draft_path(publication, draft)
+    post publication_publish_draft_path(publication, draft), params: { publishing: { description: 'Added a new version' } }
     assert_equal 302, status
     follow_redirect!
     assert_template 'sessions/index'
@@ -28,9 +28,9 @@ class PublishingControllerTest < ActionDispatch::IntegrationTest
     assert_equal draft.path, Post.last.blob_path
 
     # Subsequent publish should raise
-    assert_raise(ActiveRecord::RecordNotFound) { post publication_publish_draft_path(publication, draft) }
+    assert_raise(ActiveRecord::RecordNotFound) { post publication_publish_draft_path(publication, draft), params: { publishing: { description: 'Added a new version' } } }
 
     # Republishing should not raise
-    assert_nothing_raised { post publication_publish_draft_path(publication, draft, republish: true) }
+    assert_nothing_raised { post publication_publish_draft_path(publication, draft, republish: true), params: { publishing: { description: 'Republish' } } }
   end
 end
