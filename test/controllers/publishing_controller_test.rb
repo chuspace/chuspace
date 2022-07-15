@@ -21,7 +21,7 @@ class PublishingControllerTest < ActionDispatch::IntegrationTest
     signin(identity: identity)
 
     # First publish
-    post publication_publish_draft_path(publication, draft), params: { description: 'Added a new version' }
+    post publication_publish_draft_path(publication, draft), params: { publishing: { description: 'Added a new version' } }
     follow_redirect!
     assert_equal 200, status
     assert_equal 'Successfully published!', flash[:notice]
