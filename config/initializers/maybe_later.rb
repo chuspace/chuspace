@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 MaybeLater.config do |config|
     # Will be called if a block passed to MaybeLater.run raises an error
     config.on_error = ->(exception) { Rollbar.error(exception) }

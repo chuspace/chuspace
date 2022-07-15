@@ -3,7 +3,7 @@
 <% cache([@publication, @post]) do %>
   <div class='sm:w-2/3 mx-auto w-full'>
     <nav class='flex items-start'>
-      <%= render(Avatar::Component.new(avatar: @post.author.avatar, fallback: @post.author.name.initials, variant: :mini)) %>
+      <%= render(Avatar::Component.new(avatar: @post.author.avatar, gravatar: @post.author.gravatar_url, fallback: @post.author.name.initials, variant: :mini)) %>
       <div>
         <div class='flex items-center text-secondary text-sm'>
           <%= link_to @post.author.first_name, user_path(@post.author), class: 'ml-2 link link-hover link-primary' %>

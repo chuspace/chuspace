@@ -14,6 +14,6 @@ module FindPost
     if params[:post_permalink] != @post.permalink
       redirect_to RedirectUrl.new(path: request.path, params: params).for(@post), status: :moved_permanently
     end
-    add_breadcrumb(@post.permalink, post_publication_path(@publication, @post))
+    add_breadcrumb(@post.permalink, publication_post_path(@publication, @post))
   end
 end

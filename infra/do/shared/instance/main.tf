@@ -48,6 +48,10 @@ resource "digitalocean_droplet" "chuspace_app" {
   ssh_keys = [
     data.digitalocean_ssh_key.chuspace_app.id
   ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "digitalocean_loadbalancer" "chuspace_app" {

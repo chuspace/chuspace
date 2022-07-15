@@ -251,6 +251,21 @@ drop-image {
   @apply overflow-hidden h-screen;
 }
 
+dialog-opener {
+  height: 100vh;
+  &:after {
+    content: '';
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
 dialog {
   color: inherit;
 }

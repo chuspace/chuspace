@@ -1,0 +1,31 @@
+<%= turbo_frame_tag(dom_id(@draft, :new_publishing)) do %>
+  <div class="modal modal-open bg-base-200 h-screen sm:w-1/3 w-full right-0 left-auto" data-target='dialog-opener.dialog'>
+    <div class="modal-box h-full w-full max-h-full pt-24 rounded-none bg-base-200">
+      <%= simple_form_for @publishing, url: publication_publish_draft_path(@publication, @draft), html: { 'data-turbo-frame': '_top', class: 'w-full' } do |form| %>
+        <h3>Publish new edition</h3>
+        <p class='text-secondary text-sm'>Creates a new version of the post and republishes on the platform.</p>
+
+        <div class="form-control mt-8">
+          <%= form.input :description, label: false, input_html: { value: nil }, placeholder: "What's changed?" %>
+          <div class='mt-8 font-mono'>
+            <label class='text-sm block'>Publisher: <%= content_tag :span, Current.user.name, class: 'font-bold' %></label>
+          </div>
+        </div>
+
+        <div class="modal-action">
+          <%= form.button :button, class: 'btn btn-primary btn-sm turbo-btn' do %>
+            <div class="idle">Publish</div>
+            <div class="loading">
+              <div class='flex items-center'>
+                <div class='spinner on-button'></div>
+                <span class='ml-2'>publishing</span>
+              </div>
+            </div>
+          <% end %>
+
+          <%= link_to 'Cancel', publication_edit_draft_path(@publication, @draft), class: "btn btn-error btn-sm", data: { 'turbo-frame': :_top } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

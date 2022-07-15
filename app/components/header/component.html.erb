@@ -10,9 +10,9 @@
     </div>
 
     <div class='flex items-center'>
-      <% if helpers.signed_in? %>
-        <%= before_user_dropdown %>
+      <%= before_user_dropdown %>
 
+      <% if helpers.signed_in? %>
         <div class='flex items-center'>
           <details class="dropdown dropdown-end">
             <summary tabindex="0" class="cursor-pointer" id='header-user-dropdown'>
@@ -53,7 +53,7 @@
           </details>
         </div>
       <% else %>
-        <%= helpers.active_link_to 'Sign up', signups_path, class: 'link link-content text-sm ml-8' %>
+        <%= helpers.active_link_to 'Sign up', signups_path, class: 'link link-content text-sm' %>
         <%= helpers.active_link_to 'Sign in', sessions_path, class: 'link link-content text-sm ml-8' %>
       <% end %>
     </div>

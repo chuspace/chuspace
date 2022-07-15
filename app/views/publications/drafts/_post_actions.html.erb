@@ -1,4 +1,4 @@
-<%= turbo_frame_tag dom_id(draft, :post_actions) do %>
+<%= turbo_frame_tag dom_id(draft, :draft_actions) do %>
   <% if allowed_to?(:edit?, draft) %>
     <div class='flex items-center'>
       <%= content_tag :div, nil, id: 'chu-editor-status', class: 'text-secondary text-xs mr-4' %>
@@ -10,7 +10,7 @@
             <div class="loading">
               <div class='flex items-center'>
                 <div class='spinner on-button'></div>
-                <span class='ml-2'>Publishing</span>
+                <span class='ml-2'>Republishing</span>
               </div>
             </div>
           <% end %>

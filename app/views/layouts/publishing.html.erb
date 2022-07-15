@@ -6,20 +6,17 @@
     <%= render(Header::Component.new) do |header| %>
       <%= header.after_logo_contents do %>
         <span class='mx-4 text-secondary sm:block hidden'>|</span>
-        <%= link_to @post.publication.name, publication_path(@post.publication), class: 'link text-secondary hover:text-primary sm:block hidden link-hover text-sm' %>
+        <%= link_to @publication.name, publication_path(@publication), class: 'link text-secondary hover:text-primary sm:block hidden link-hover text-sm' %>
+        <span class='mx-4 text-secondary sm:block hidden'>|</span>
+        <span class='text-secondary text-sm'>version #<%= @publishing.version %></span>
       <% end %>
       <%= header.before_user_dropdown do %>
         <%= turbo_frame_tag(dom_id(@post, :publishings)) do %>
-          <%= link_to publication_post_publishings_path(@post.publication, @post) do %>
+          <%= link_to publication_post_publishings_path(@publication, @post) do %>
             <%= inline_svg_tag 'icons/versions.svg', class: 'w-4 h-4 mr-8 cursor-pointer fill-current' %>
           <% end %>
         <% end %>
-
-        <div class='mr-8'>
-          <% if signed_in? && allowed_to?(:edit?, @post) %>
-            <%= link_to 'Edit', publication_edit_draft_path(@post.publication, path: @post.relative_path), class: 'btn btn-primary btn-xs' %>
-          <% end %>
-        </div>
+        <%= link_to 'Current version', publication_post_path(@publication, @post), class: 'btn btn-primary btn-xs mr-8' %>
       <% end %>
     <% end %>
     <main class="container mt-24">

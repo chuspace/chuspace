@@ -1,0 +1,33 @@
+<div class='sm:w-2/3 mx-auto w-full'>
+  <nav class='flex items-start'>
+    <%= render(Avatar::Component.new(avatar: @publishing.author.avatar, gravatar: @publishing.author.gravatar_url, fallback: @publishing.author.name.initials, variant: :mini)) %>
+    <div>
+      <div class='flex items-center text-secondary text-sm'>
+        <%= link_to @publishing.author.first_name, user_path(@publishing.author), class: 'ml-2 link link-hover link-primary' %>
+        <% unless @publication.personal? %>
+          <%= tag.span class: 'ml-1' do %>
+            in <%= link_to @publication.name, publication_path(@publication), class: 'link link-hover link-primary' %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class='sm:flex items-center text-secondary text-xs ml-2 mt-1'>
+        <span class='text-secondary'>
+          Published
+          <relative-time datetime="<%= @publishing.created_at.to_datetime %>">
+            <%= @publishing.created_at.strftime("%d %b %Y") %>
+          </relative-time>
+        </span>
+      </div>
+    </div>
+  </nav>
+
+  <div class='pt-4 pb-16'>
+    <div class='chu-editor mt-4'>
+      <%= content_tag :h1, @publishing.title, class: 'title' %>
+      <%= content_tag :h2, @publishing.summary, class: 'summary mb-0' %>
+      <%= content_tag :article, @publishing.body_html.html_safe %>
+    </div>
+  </div>
+</div>
+

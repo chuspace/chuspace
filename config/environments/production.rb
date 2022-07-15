@@ -99,7 +99,7 @@ Rails.application.configure do
       params: event.payload[:params].to_json,
       exception: event.payload[:exception]&.first,
       exception_message: "#{event.payload[:exception]&.last}",
-      exception_backtrace: event.payload[:exception_object]&.backtrace&.join(",")
+      exception_backtrace: event.payload[:exception_object]&.backtrace&.join(',')
     }
   end
 

@@ -8,7 +8,7 @@ export default class DialogOpenerElement extends HTMLElement {
 
   connectedCallback() {
     if (this.dialog.classList.contains('modal-open')) {
-      document.body.classList.add('overflow-hidden')
+      document.body.classList.add('dialog-open')
     }
 
     document.onkeydown = (event) => {
@@ -30,6 +30,6 @@ export default class DialogOpenerElement extends HTMLElement {
   close = (e: MouseEvent) => {
     e.preventDefault()
     this.dialog.classList.remove('modal-open')
-    document.body.classList.remove('overflow-hidden')
+    document.body.classList.remove('dialog-open')
   }
 }
