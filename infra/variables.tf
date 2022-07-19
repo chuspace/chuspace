@@ -23,3 +23,11 @@ variable "aws_secret_access_key" {
   description = "Aws access key secret for fetching secrets"
 }
 
+variable "docker_swarm_token" {
+  description = "Docker swarm token"
+}
+
+variable "docker_swarm_address" {
+  description = "Docker swarm address"
+}
+

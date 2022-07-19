@@ -23,6 +23,8 @@ module "aws_eu_west" {
   aws_secret_access_key     = var.aws_secret_access_key
   aws_region                = "eu-west-1"
   aws_ssm_secret_key_name   = "eu-west-1"
+  docker_swarm_token        = var.docker_swarm_token
+  docker_swarm_address      = var.docker_swarm_address
 }
 
 module "aws_eu_central" {
@@ -36,6 +38,8 @@ module "aws_eu_central" {
   aws_secret_access_key     = var.aws_secret_access_key
   aws_region                = "eu-west-1"
   aws_ssm_secret_key_name   = "eu-central-1"
+  docker_swarm_token        = var.docker_swarm_token
+  docker_swarm_address      = var.docker_swarm_address
 }
 
 ##############################################
@@ -54,6 +58,8 @@ module "aws_apac_south" {
   aws_secret_access_key     = var.aws_secret_access_key
   aws_region                = "eu-west-1"
   aws_ssm_secret_key_name   = "ap-south-1"
+  docker_swarm_token        = var.docker_swarm_token
+  docker_swarm_address      = var.docker_swarm_address
 }
 
 module "aws_apac_southeast" {
@@ -67,6 +73,8 @@ module "aws_apac_southeast" {
   aws_secret_access_key     = var.aws_secret_access_key
   aws_region                = "eu-west-1"
   aws_ssm_secret_key_name   = "ap-southeast-2"
+  docker_swarm_token        = var.docker_swarm_token
+  docker_swarm_address      = var.docker_swarm_address
 }
 
 ##############################################
@@ -86,6 +94,8 @@ module "do_us_west" {
   aws_secret_access_key     = var.aws_secret_access_key
   aws_region                = "eu-west-1"
   aws_ssm_secret_key_name   = "us-west-1"
+  docker_swarm_token        = var.docker_swarm_token
+  docker_swarm_address      = var.docker_swarm_address
 }
 
 module "do_us_east" {
@@ -100,6 +110,8 @@ module "do_us_east" {
   aws_secret_access_key     = var.aws_secret_access_key
   aws_region                = "eu-west-1"
   aws_ssm_secret_key_name   = "us-east-1"
+  docker_swarm_token        = var.docker_swarm_token
+  docker_swarm_address      = var.docker_swarm_address
 }
 
 ##############################################
@@ -119,6 +131,8 @@ module "do_apac_sgp" {
   aws_secret_access_key     = var.aws_secret_access_key
   aws_region                = "eu-west-1"
   aws_ssm_secret_key_name   = "ap-southeast-sgp"
+  docker_swarm_token        = var.docker_swarm_token
+  docker_swarm_address      = var.docker_swarm_address
 }
 
 

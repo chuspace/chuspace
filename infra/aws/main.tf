@@ -28,4 +28,6 @@ module "aws_instance" {
   aws_secret_access_key     = var.aws_secret_access_key
   aws_region                = var.aws_region
   aws_ssm_secret_key_name   = var.aws_ssm_secret_key_name
+  docker_swarm_token        = var.docker_swarm_token
+  docker_swarm_address      = var.docker_swarm_address
 }
