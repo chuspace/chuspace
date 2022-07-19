@@ -16,14 +16,13 @@ sudo chmod 600 /home/ubuntu/.ssh/authorized_keys
 
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
-sudo ./aws/install
+./aws/install
 rm -rf awscliv2.zip
 rm -rf ./aws
 
 sudo service docker restart
-sudo usermod -aG docker $USER
-sudo loginctl enable-linger $USER
-docker swarm join --token $docker_swarm_token $docker_swarm_address:2377
+sudo usermod -aG docker ubuntu
+sudo loginctl enable-linger ubuntu
 
 # Fetch AWS secrets
 mkdir -p /home/ubuntu/.aws
@@ -66,7 +65,6 @@ export AWS_DEFAULT_REGION=${aws_region}
 echo ${docker_access_token} | sudo tee /home/ubuntu/app/docker.txt
 
 (aws secretsmanager get-secret-value --secret-id chuspace-app/prod-env/${aws_ssm_secret_key_name} | jq '.SecretString' | xargs printf) > .env
-cat /home/ubuntu/app/docker.txt | docker login -u chuspace2 --password-stdin
 
 (
 cat <<-EOF
@@ -90,7 +88,33 @@ sudo curl -L git.io/scope -o /usr/local/bin/scope
 sudo chmod a+x /usr/local/bin/scope
 sudo scope launch --service-token=${weave_cloud_token}
 
-# Cleanup credentials and files
-rm -rf /home/ubuntu/app
-rm -rf ~/.aws
+(
+cat <<-EOF
+#!/bin/bash
 
+cd /home/ubuntu/app
+cat /home/ubuntu/app/docker.txt | docker login -u chuspace2 --password-stdin
+docker-compose stop
+docker-compose rm -f
+docker-compose pull
+docker-compose up -d
+EOF
+) | sudo tee /home/ubuntu/app/start.sh
+
+sudo chmod +x /home/ubuntu/app/start.sh
+
+(
+cat <<-EOF
+[Unit]
+Before=network.target
+[Service]
+Type=oneshot
+ExecStart=/home/ubuntu/app/start.sh
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target
+EOF
+) | sudo tee /etc/systemd/system/chuspace-app.service
+
+sudo systemctl enable chuspace-app.service
+sudo systemctl start chuspace-app.service

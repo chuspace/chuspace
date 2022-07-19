@@ -37,7 +37,7 @@ data "template_file" "user_data_server" {
   }
 }
 
-resource "digitalocean_droplet" "chuspace_app" {
+resource "digitalocean_droplet" "app" {
   count       = var.server_count
   image       = var.image
   name        = "${var.name}-${var.region}-${count.index}"
@@ -54,7 +54,7 @@ resource "digitalocean_droplet" "chuspace_app" {
   }
 }
 
-resource "digitalocean_loadbalancer" "chuspace_app" {
+resource "digitalocean_loadbalancer" "app" {
   name                     = "${var.name}-${var.region}-loadbalancer"
   region                   = var.region
   redirect_http_to_https   = true
@@ -81,13 +81,13 @@ resource "digitalocean_loadbalancer" "chuspace_app" {
     check_interval_seconds = 10
   }
 
-  droplet_ids = digitalocean_droplet.chuspace_app.*.id
+  droplet_ids = digitalocean_droplet.app.*.id
 }
 
 resource "digitalocean_firewall" "web" {
   name = "${var.name}-${var.region}-firewall"
 
-  droplet_ids = digitalocean_droplet.chuspace_app.*.id
+  droplet_ids = digitalocean_droplet.app.*.id
 
   inbound_rule {
     protocol         = "tcp"
@@ -98,7 +98,7 @@ resource "digitalocean_firewall" "web" {
   inbound_rule {
     protocol         = "tcp"
     port_range       = "3000"
-    source_load_balancer_uids = [digitalocean_loadbalancer.chuspace_app.id]
+    source_load_balancer_uids = [digitalocean_loadbalancer.app.id]
   }
 
   outbound_rule {

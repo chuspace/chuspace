@@ -1,7 +1,7 @@
 output "lb_address" {
-  value = digitalocean_loadbalancer.chuspace_app.urn
+  value = digitalocean_loadbalancer.app.urn
 }
 
 output "ips" {
-  value = digitalocean_droplet.chuspace_app.*.ipv4_address
+  value = digitalocean_droplet.app.*.ipv4_address
 }
