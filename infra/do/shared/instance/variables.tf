@@ -51,10 +51,4 @@ variable "aws_ssm_secret_key_name" {
   description = "Aws secret manager key name"
 }
 
-variable "docker_swarm_token" {
-  description = "Docker swarm token"
-}
 
-variable "docker_swarm_address" {
-  description = "Docker swarm address"
-}

@@ -17,7 +17,6 @@ rm -rf ./aws
 sudo service docker restart
 sudo usermod -aG docker $USER
 sudo loginctl enable-linger $USER
-docker swarm join --token $docker_swarm_token $docker_swarm_address:2377
 
 # Fetch AWS secrets
 mkdir -p /home/ubuntu/.aws
