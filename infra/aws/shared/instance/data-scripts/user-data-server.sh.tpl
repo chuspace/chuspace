@@ -34,29 +34,11 @@ mkdir /home/ubuntu/app
 sudo chown ubuntu:ubuntu /home/ubuntu/app
 cd /home/ubuntu/app
 
-mkdir prometheus
-
-(
-cat <<-EOF
-scrape_configs:
-  - job_name: 'chuspace-app-metrics'
-    scrape_interval: 5s
-    static_configs:
-      - targets: ['localhost:8080']
-
-remote_write:
-  - url: https://cloud.weave.works/api/prom/push
-    basic_auth:
-      password: ${weave_cloud_token}
-EOF
-) | sudo tee /home/ubuntu/app/prometheus/prometheus.yml
-
 export AWS_ACCESS_KEY_ID=${aws_access_key_id}
 export AWS_SECRET_ACCESS_KEY=${aws_secret_access_key}
 export AWS_DEFAULT_REGION=${aws_region}
 
 echo ${docker_access_token} | sudo tee /home/ubuntu/app/docker.txt
-
 (aws secretsmanager get-secret-value --secret-id chuspace-app/prod-env/${aws_ssm_secret_key_name} | jq '.SecretString' | xargs printf) > .env
 
 (
@@ -77,9 +59,14 @@ docker-compose up -d
 # Start weave scope for monitoring
 cd /home/ubuntu
 
-sudo curl -L git.io/scope -o /usr/local/bin/scope
-sudo chmod a+x /usr/local/bin/scope
-sudo scope launch --service-token=${weave_cloud_token}
+curl -1sLf \
+  'https://repositories.timber.io/public/vector/cfg/setup/bash.deb.sh' \
+  | sudo -E bash
+
+sudo apt-get install -y  vector=0.22.3-1
+wget -O /etc/vector/vector.toml https://logtail.com/vector-toml/docker/${logtail_token}
+sudo usermod -a -G docker vector
+sudo systemctl restart vector
 
 (
 cat <<-EOF

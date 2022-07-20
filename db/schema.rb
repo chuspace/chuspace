@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_15_144427) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_20_123113) do
   create_table 'action_text_rich_texts', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.text 'body', size: :long
@@ -279,7 +279,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_144427) do
     t.datetime 'updated_at', null: false
     t.integer 'version', default: 1
     t.boolean 'current', default: false
-    t.string 'description', null: false
+    t.string 'description', default: 'Published a new version', null: false
     t.index ['author_id'], name: 'index_publishings_on_author_id'
     t.index ['id'], name: 'index_publishings_on_id'
     t.index ['post_id', 'author_id'], name: 'index_publishings_on_post_id_and_author_id'

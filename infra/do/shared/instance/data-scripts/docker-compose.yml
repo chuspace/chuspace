@@ -16,14 +16,3 @@ services:
       - .:/app
     env_file:
       - .env
-  prometheus:
-    image: prom/prometheus:latest
-    ports:
-      - 9000:9090
-    volumes:
-      - ./prometheus:/etc/prometheus
-      - prometheus-data:/prometheus
-    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
-
-volumes:
-  prometheus-data:
