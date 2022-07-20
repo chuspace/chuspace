@@ -84,7 +84,9 @@ Rails.application.configure do
   config.log_formatter      = ::Logger::Formatter.new
   config.lograge.enabled    = true
   config.lograge.formatter  = Lograge::Formatters::Json.new
-  config.logger             = Logdna::Ruby.new(Rails.application.credentials.mezmo.dig(:key))
+  http_device               = Logtail::LogDevices::HTTP.new(Rails.application.credentials.logtail.dig(:key))
+  config.logger             = Logtail::Logger.new(http_device)
+
   config.lograge.custom_options = lambda do |event|
     {
       region: ENV.fetch('APP_REGION', 'LOCAL'),
