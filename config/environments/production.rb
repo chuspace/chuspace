@@ -84,7 +84,7 @@ Rails.application.configure do
   config.log_formatter      = ::Logger::Formatter.new
   config.lograge.enabled    = true
   config.lograge.formatter  = Lograge::Formatters::Json.new
-  http_device               = Logtail::LogDevices::HTTP.new(Rails.application.credentials.logtail.dig(:key))
+  http_device               = Logtail::LogDevices::HTTP.new(Rails.application.credentials.dig(:logtail, :key))
   config.logger             = Logtail::Logger.new(http_device)
 
   config.lograge.custom_options = lambda do |event|
