@@ -27,8 +27,8 @@ variable "do_token" {
   description = "The DO token"
 }
 
-variable "weave_cloud_token" {
-  description = "Weave cloud token for observability"
+variable "logtail_token" {
+  description = "Logtail token for observability"
 }
 
 variable "docker_access_token" {

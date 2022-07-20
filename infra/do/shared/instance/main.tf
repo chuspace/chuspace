@@ -28,7 +28,7 @@ data "template_file" "user_data_server" {
 
   vars = {
     docker_compose          = data.template_file.docker_compose.rendered
-    weave_cloud_token       = var.weave_cloud_token
+    logtail_token           = var.logtail_token
     docker_access_token     = var.docker_access_token
     aws_access_key_id       = var.aws_access_key_id
     aws_secret_access_key   = var.aws_secret_access_key

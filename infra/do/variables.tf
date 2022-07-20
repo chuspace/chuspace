@@ -12,8 +12,8 @@ variable "server_count" {
   default     = 2
 }
 
-variable "weave_cloud_token" {
-  description = "Weave cloud token for observability"
+variable "logtail_token" {
+  description = "Logtail token for observability"
 }
 
 variable "docker_access_token" {

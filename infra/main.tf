@@ -17,7 +17,7 @@ module "aws_eu_west" {
   region = "eu-west-1"
 
   server_count              = 2
-  weave_cloud_token         = var.weave_cloud_token
+  logtail_token             = var.logtail_token
   docker_access_token       = var.docker_access_token
   aws_access_key_id         = var.aws_access_key_id
   aws_secret_access_key     = var.aws_secret_access_key
@@ -30,7 +30,7 @@ module "aws_eu_central" {
   region = "eu-central-1"
 
   server_count              = 2
-  weave_cloud_token         = var.weave_cloud_token
+  logtail_token             = var.logtail_token
   docker_access_token       = var.docker_access_token
   aws_access_key_id         = var.aws_access_key_id
   aws_secret_access_key     = var.aws_secret_access_key
@@ -48,7 +48,7 @@ module "aws_apac_south" {
   region = "ap-south-1"
 
   server_count              = 2
-  weave_cloud_token         = var.weave_cloud_token
+  logtail_token             = var.logtail_token
   docker_access_token       = var.docker_access_token
   aws_access_key_id         = var.aws_access_key_id
   aws_secret_access_key     = var.aws_secret_access_key
@@ -61,7 +61,7 @@ module "aws_apac_southeast" {
   region = "ap-southeast-2"
 
   server_count              = 2
-  weave_cloud_token         = var.weave_cloud_token
+  logtail_token             = var.logtail_token
   docker_access_token       = var.docker_access_token
   aws_access_key_id         = var.aws_access_key_id
   aws_secret_access_key     = var.aws_secret_access_key
@@ -80,7 +80,7 @@ module "do_us_west" {
 
   server_count              = 2
   do_token                  = var.do_token
-  weave_cloud_token         = var.weave_cloud_token
+  logtail_token             = var.logtail_token
   docker_access_token       = var.docker_access_token
   aws_access_key_id         = var.aws_access_key_id
   aws_secret_access_key     = var.aws_secret_access_key
@@ -94,7 +94,7 @@ module "do_us_east" {
 
   server_count              = 2
   do_token                  = var.do_token
-  weave_cloud_token         = var.weave_cloud_token
+  logtail_token             = var.logtail_token
   docker_access_token       = var.docker_access_token
   aws_access_key_id         = var.aws_access_key_id
   aws_secret_access_key     = var.aws_secret_access_key
@@ -113,7 +113,7 @@ module "do_apac_sgp" {
 
   server_count              = 2
   do_token                  = var.do_token
-  weave_cloud_token         = var.weave_cloud_token
+  logtail_token             = var.logtail_token
   docker_access_token       = var.docker_access_token
   aws_access_key_id         = var.aws_access_key_id
   aws_secret_access_key     = var.aws_secret_access_key

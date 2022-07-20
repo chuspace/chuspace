@@ -19,7 +19,7 @@ namespace :terraform do
     resource_path = Rails.root.join('infra')
     deploy_creds  = Rails.application.credentials.deploy
 
-    vars = "-var='aws_access_key_id=#{deploy_creds.dig(:aws, :access_key_id)}' -var='aws_secret_access_key=#{deploy_creds.dig(:aws, :secret_access_key)}' -var='docker_access_token=#{deploy_creds.dig(:docker, :access_token)}' -var='weave_cloud_token=#{deploy_creds.dig(:weave, :access_token)}' -var='do_token=#{deploy_creds.dig(:do, :access_token)}'"
+    vars = "-var='aws_access_key_id=#{deploy_creds.dig(:aws, :access_key_id)}' -var='aws_secret_access_key=#{deploy_creds.dig(:aws, :secret_access_key)}' -var='docker_access_token=#{deploy_creds.dig(:docker, :access_token)}' -var='logtail_token=#{deploy_creds.dig(:logtail, :access_token)}' -var='do_token=#{deploy_creds.dig(:do, :access_token)}'"
 
     puts "\n"
     puts 'Choose provider'.green
@@ -58,7 +58,7 @@ namespace :terraform do
     resource_path = Rails.root.join('infra')
     deploy_creds  = Rails.application.credentials.deploy
 
-    vars = "-var='aws_access_key_id=#{deploy_creds.dig(:aws, :access_key_id)}' -var='aws_secret_access_key=#{deploy_creds.dig(:aws, :secret_access_key)}' -var='docker_access_token=#{deploy_creds.dig(:docker, :access_token)}' -var='weave_cloud_token=#{deploy_creds.dig(:weave, :access_token)}' -var='do_token=#{deploy_creds.dig(:do, :access_token)}'"
+    vars = "-var='aws_access_key_id=#{deploy_creds.dig(:aws, :access_key_id)}' -var='aws_secret_access_key=#{deploy_creds.dig(:aws, :secret_access_key)}' -var='docker_access_token=#{deploy_creds.dig(:docker, :access_token)}' -var='logtail_token=#{deploy_creds.dig(:logtail, :access_token)}' -var='do_token=#{deploy_creds.dig(:do, :access_token)}'"
     system "cd #{resource_path} && terraform refresh #{vars}"
   end
 end

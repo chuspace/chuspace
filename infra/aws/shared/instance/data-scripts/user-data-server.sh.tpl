@@ -56,7 +56,6 @@ docker-compose rm -f
 docker-compose pull
 docker-compose up -d
 
-# Start weave scope for monitoring
 cd /home/ubuntu
 
 curl -1sLf \
@@ -64,7 +63,7 @@ curl -1sLf \
   | sudo -E bash
 
 sudo apt-get install -y  vector=0.22.3-1
-wget -O /etc/vector/vector.toml https://logtail.com/vector-toml/docker/${logtail_token}
+sudo wget -O /etc/vector/vector.toml https://logtail.com/vector-toml/docker/${logtail_token}
 sudo usermod -a -G docker vector
 sudo systemctl restart vector
 
