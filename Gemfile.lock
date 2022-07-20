@@ -250,6 +250,7 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashie (5.0.0)
+    honeybadger (4.12.1)
     html_tokenizer (0.0.7)
     htmlbeautifier (1.4.2)
     http (5.1.0)
@@ -420,7 +421,6 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.5)
-    rollbar (3.3.1)
     rubocop (1.31.2)
       json (~> 2.3)
       parallel (~> 1.10)
@@ -577,6 +577,7 @@ DEPENDENCIES
   faraday-typhoeus
   friendly_id
   front_matter_parser
+  honeybadger
   htmlbeautifier
   http
   image_processing
@@ -601,7 +602,6 @@ DEPENDENCIES
   rack-proxy
   rails-controller-testing
   railties (~> 7.x)
-  rollbar
   rubocop
   rubocop-performance
   rubocop-rails
