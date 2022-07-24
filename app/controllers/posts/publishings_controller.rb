@@ -11,7 +11,7 @@ module Posts
       @publishings = @post.publishings
 
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace(helpers.dom_id(@draft, :actions), partial: 'publications/drafts/actions', locals: { draft: @draft, publication: @publication }) }
+        format.turbo_stream
         format.html
       end
     end
