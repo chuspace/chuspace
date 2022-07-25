@@ -83,10 +83,6 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter      = ::Logger::Formatter.new
   config.lograge.enabled    = true
-  config.lograge.formatter  = Lograge::Formatters::Json.new
-  http_device               = Logtail::LogDevices::HTTP.new(Rails.application.credentials.dig(:logtail, :key))
-  config.logger             = Logtail::Logger.new(http_device)
-
   config.lograge.custom_options = lambda do |event|
     {
       region: ENV.fetch('APP_REGION', 'LOCAL'),
@@ -104,6 +100,10 @@ Rails.application.configure do
       exception_backtrace: event.payload[:exception_object]&.backtrace&.join(',')
     }
   end
+
+  config.lograge.formatter  = Lograge::Formatters::Json.new
+  http_device               = Logtail::LogDevices::HTTP.new(Rails.application.credentials.dig(:logtail, :key))
+  config.logger             = Logtail::Logger.new(http_device)
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

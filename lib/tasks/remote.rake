@@ -95,10 +95,14 @@ namespace :remote do
   task :deploy_all do
     cmd  = "cd #{resource_path} && terraform apply #{vars}"
 
-    PROVIDERS.values.each do |region|
+    PROVIDERS[:aws].each do |region|
       next if region == PRIMARY_REGION
 
       cmd += " -replace=module.#{region}.module.aws_instance.aws_instance.app[0] -replace=module.#{region}.module.aws_instance.aws_instance.app[1]"
+    end
+
+    PROVIDERS[:do].each do |region|
+      cmd += " -replace=module.#{region}.module.do_instance.digitalocean_droplet.app[0] -replace=module.#{region}.module.do_instance.digitalocean_droplet.app[1]"
     end
 
     system cmd

@@ -97,3 +97,8 @@ EOF
 
 sudo systemctl enable chuspace-app.service
 sudo systemctl start chuspace-app.service
+
+# Add weave scope
+sudo curl -L git.io/scope -o /usr/local/bin/scope
+sudo chmod a+x /usr/local/bin/scope
+scope launch 52.213.227.157
