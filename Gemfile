@@ -161,10 +161,6 @@ group :development do
   gem 'database_consistency', require: false
 
   gem 'colorize'
-
-  # Deployment
-  gem 'tomo'
-  gem 'tomo-plugin-aws_sqs', '~> 1.0'
 end
 
 group :test do

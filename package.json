@@ -86,7 +86,8 @@
     "flow-bin": "^0.182.0",
     "flow-typed": "^3.8.0",
     "prettier": "^2.7.1",
-    "webpack-dev-server": "4.9.3"
+    "webpack-dev-server": "4.9.3",
+    "zx": "^7.0.7"
   },
   "browserslist": [
     "last 1 chrome versions"
