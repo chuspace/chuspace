@@ -114,7 +114,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          secrets: |
-            "RAILS_MASTER_KEY=${{ secrets.CHUSPACE_APP_PROD_MASTER_KEY }}"
-            "DATABASE_URL=mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test"
-

@@ -26,11 +26,8 @@
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
-
-/config/credentials/production.key
-/config/credentials/test.key
-/config/credentials/development.key
+/config/credentials/*.key
+/config/*.key
 
 /public/packs
 /public/packs-test
@@ -45,3 +42,8 @@ yarn-debug.log*
 
 coverage/
 
+
+/config/credentials/production.sample.key
+
+/config/credentials/production.key
+.irb_history

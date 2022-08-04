@@ -48,24 +48,6 @@ EOF
 ) | tee /home/ubuntu/app/docker-compose.yml
 
 sudo chown ubuntu:ubuntu /home/ubuntu/app/docker-compose.yml
-cat /home/ubuntu/app/docker.txt | docker login -u chuspace2 --password-stdin
-
-# Start docker services
-docker-compose stop
-docker-compose rm -f
-docker-compose pull
-docker-compose up -d
-
-cd /home/ubuntu
-
-curl -1sLf \
-  'https://repositories.timber.io/public/vector/cfg/setup/bash.deb.sh' \
-  | sudo -E bash
-
-sudo apt-get install -y  vector=0.22.3-1
-sudo wget -O /etc/vector/vector.toml https://logtail.com/vector-toml/docker/${logtail_token}
-sudo usermod -a -G docker vector
-sudo systemctl restart vector
 
 (
 cat <<-EOF
@@ -77,6 +59,11 @@ docker-compose stop
 docker-compose rm -f
 docker-compose pull
 docker-compose up -d
+
+sudo curl -L git.io/scope -o /usr/local/bin/scope
+sudo chmod a+x /usr/local/bin/scope
+scope stop
+scope launch 34.249.241.36
 EOF
 ) | sudo tee /home/ubuntu/app/start.sh
 
@@ -98,7 +85,13 @@ EOF
 sudo systemctl enable chuspace-app.service
 sudo systemctl start chuspace-app.service
 
-# Add weave scope
-sudo curl -L git.io/scope -o /usr/local/bin/scope
-sudo chmod a+x /usr/local/bin/scope
-scope launch 52.213.227.157
+# Start vector
+curl -1sLf \
+  'https://repositories.timber.io/public/vector/cfg/setup/bash.deb.sh' \
+  | sudo -E bash
+
+sudo apt-get install -y  vector=0.22.3-1
+sudo wget -O /etc/vector/vector.toml https://logtail.com/vector-toml/docker/${logtail_token}
+sudo usermod -a -G docker vector
+sudo systemctl restart vector
+

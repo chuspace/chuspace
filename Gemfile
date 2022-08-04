@@ -103,7 +103,7 @@ gem 'diffy'
 gem 'meta-tags'
 
 # Error tracking
-gem "honeybadger"
+gem 'honeybadger'
 
 # SVG
 gem 'inline_svg'

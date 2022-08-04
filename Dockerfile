@@ -1,4 +1,4 @@
-FROM ruby:3.1-alpine
+FROM ruby:alpine
 
 ENV LANG=C.UTF-8 \
   BUNDLE_JOBS=4 \
@@ -34,7 +34,8 @@ RUN apk del gmp-dev libstdc++ \
     libxml2-dev \
     mariadb-dev \
     git \
-    yarn
+    yarn \
+    ca-certificates
 
 # set working directory
 WORKDIR $RAILS_ROOT
@@ -55,7 +56,8 @@ RUN  mv config/credentials/production.yml.enc ./config/credentials/production.ym
 RUN bin/rails assets:clobber && bin/rails assets:precompile && yarn cache clean
 
 RUN  rm -rf config/credentials/production.yml.enc && \
-     mv config/credentials/production.yml.enc.backup ./config/credentials/production.yml.enc
+     mv config/credentials/production.yml.enc.backup ./config/credentials/production.yml.enc && \
+     mv config/credentials/production.key ./config/credentials/production.sample.key
 
 RUN apk del gmp-dev \
     libstdc++ \

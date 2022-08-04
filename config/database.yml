@@ -21,13 +21,15 @@ test:
 production:
   primary:
     <<: *default
-    ssl_mode: verify_identity
-    sslca: <%= ENV.fetch('SSL_CA_PATH', '/etc/ssl/cert.pem') %>
     url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace') %>
+    ssl_mode: :verify_identity
+    sslca: <%= ENV.fetch('SSL_CA_PATH', '/etc/ssl/cert.pem') %>
+    sslaccept: :strict
   primary_replica:
     <<: *default
-    ssl_mode: verify_identity
+    ssl_mode: :verify_identity
     sslca: <%= ENV.fetch('SSL_CA_PATH', '/etc/ssl/cert.pem') %>
     url: <%= ENV.fetch('DATABASE_REPLICA_URL', 'mysql2://localhost:3306/chuspace') %>
     replica: true
     database_tasks: false
+    sslaccept: :strict

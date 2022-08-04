@@ -4,26 +4,31 @@ PRIMARY_REGION = 'aws_eu_west'
 
 PROVIDERS = {
   aws: %w[
+    all
     aws_eu_west
     aws_eu_central
     aws_apac_south
     aws_apac_southeast
   ],
   do: %w[
+    all
     do_us_west
     do_us_east
     do_apac_sgp
   ]
 }
 
+def vars
+  deploy_creds  = Rails.application.credentials.deploy
+  "-var='aws_access_key_id=#{deploy_creds.dig(:aws, :access_key_id)}' -var='aws_secret_access_key=#{deploy_creds.dig(:aws, :secret_access_key)}' -var='docker_access_token=#{deploy_creds.dig(:docker, :access_token)}' -var='logtail_token=#{deploy_creds.dig(:logtail, :access_token)}' -var='do_token=#{deploy_creds.dig(:do, :access_token)}'"
+end
+
 namespace :remote do
   resource_path = Rails.root.join('infra')
-  deploy_creds  = Rails.application.credentials.deploy
-  vars          = "-var='aws_access_key_id=#{deploy_creds.dig(:aws, :access_key_id)}' -var='aws_secret_access_key=#{deploy_creds.dig(:aws, :secret_access_key)}' -var='docker_access_token=#{deploy_creds.dig(:docker, :access_token)}' -var='logtail_token=#{deploy_creds.dig(:logtail, :access_token)}' -var='do_token=#{deploy_creds.dig(:do, :access_token)}'"
 
   task :db_restore do
     db_dir = Rails.root.join("tmp/backups/backup-#{Time.current.to_i}")
-    system "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:drop db:create"
+    system 'DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:drop db:create'
     system "pscale database dump chuspace-primary main --output #{db_dir}"
 
     Dir["#{db_dir}/**/*.sql"].each do |file|
@@ -47,7 +52,7 @@ namespace :remote do
       tmp_file.read
     else
       json = `cd #{resource_path} && terraform output -json`
-      puts "Caching output".green
+      puts 'Caching output'.green
       File.write(Rails.root.join('tmp/terraform.output'), json)
       json
     end
@@ -70,15 +75,15 @@ namespace :remote do
     regions = case provider
               when 1
                 puts "\n"
-      puts 'Choose AWS region'.green
-      PROVIDERS[:aws]
+                puts 'Choose AWS region'.green
+                PROVIDERS[:aws]
               when 2
                 puts "\n"
-      puts 'Choose DO region'.green
-      ROVIDERS[:do]
-    else
-      puts "\n\n Provider not found!!".red
-      exit 1
+                puts 'Choose DO region'.green
+                PROVIDERS[:do]
+              else
+                puts "\n\n Provider not found!!".red
+                exit 1
     end
 
     puts regions.map.with_index { |region, index| "#{index + 1}.#{region}" }.join("\n")
@@ -89,7 +94,32 @@ namespace :remote do
       exit 1
     end
 
-    system "cd #{resource_path} && terraform apply -replace=module.#{region}.module.aws_instance.aws_instance.app[0] -replace=module.#{region}.module.aws_instance.aws_instance.app[1] #{vars}"
+    cmd = ''
+
+    case region
+    when 'all'
+      case provider
+      when 1
+        PROVIDERS[:aws].each do |region|
+          next if region == PRIMARY_REGION
+
+          cmd += " -replace=module.#{region}.module.aws_instance.aws_instance.app[0] -replace=module.#{region}.module.aws_instance.aws_instance.app[1]"
+        end
+      when 2
+        PROVIDERS[:do].each do |region|
+          cmd += " -replace=module.#{region}.module.do_instance.digitalocean_droplet.app[0] -replace=module.#{region}.module.do_instance.digitalocean_droplet.app[1]"
+        end
+      end
+    else
+      case provider
+      when 1
+        cmd = "cd #{resource_path} && terraform apply -replace=module.#{region}.module.aws_instance.aws_instance.app[0] -replace=module.#{region}.module.aws_instance.aws_instance.app[1] #{vars}"
+      when 2
+        cmd = "cd #{resource_path} && terraform apply -replace=module.#{region}.module.do_instance.digitalocean_droplet.app[0] -replace=module.#{region}.module.do_instance.digitalocean_droplet.app[1] #{vars}"
+      end
+    end
+
+    system cmd
   end
 
   task :deploy_all do
@@ -117,7 +147,6 @@ namespace :remote do
   end
 
   task :output do |t, args|
-    `cd #{resource_path} && terraform output -json`
+    system "cd #{resource_path} && terraform output -json"
   end
 end
-
