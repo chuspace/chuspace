@@ -34,8 +34,7 @@ RUN apk del gmp-dev libstdc++ \
     libxml2-dev \
     mariadb-dev \
     git \
-    yarn \
-    ca-certificates
+    yarn
 
 # set working directory
 WORKDIR $RAILS_ROOT
