@@ -102,9 +102,6 @@ gem 'diffy'
 #  SEO
 gem 'meta-tags'
 
-# Error tracking
-gem 'honeybadger'
-
 # SVG
 gem 'inline_svg'
 
@@ -126,8 +123,6 @@ gem 'easymon'
 
 group :production do
   gem 'cloudflare-rails'
-  gem 'lograge'
-  gem 'logtail-rails'
 end
 
 group :development, :test do
