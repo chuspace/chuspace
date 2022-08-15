@@ -1,4 +1,4 @@
-FROM ruby:alpine:3.1.2
+FROM ruby:alpine-3.1.2
 
 ENV LANG=C.UTF-8 \
   BUNDLE_JOBS=4 \
