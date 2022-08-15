@@ -16,7 +16,7 @@ class Kv < ApplicationRecord
 
   scope :expiring,     -> { where('expires_in IS NOT NULL') }
   scope :non_expiring, -> { where('expires_in IS NULL') }
-  scope :expired,      -> { where('expires_in IS NOT NULL AND expires_in >= ?', Time.current) }
+  scope :expired,      -> { where('expires_in IS NOT NULL AND expires_in <= ?', Time.current) }
 
   after_create -> { Kv.expired.delete_all }
 
@@ -49,6 +49,14 @@ class Kv < ApplicationRecord
 
     def get(key)
       find_by(key: key)&.value
+    end
+
+    def mget(*keys)
+      where(key: keys).map(&:value)
+    end
+
+    def mdel(*keys)
+      where(key: keys).delete_all
     end
 
     def set(key, value, **options)
