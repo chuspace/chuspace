@@ -81,29 +81,10 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter      = ::Logger::Formatter.new
-  config.lograge.enabled    = true
-  config.lograge.custom_options = lambda do |event|
-    {
-      region: ENV.fetch('APP_REGION', 'LOCAL'),
-      host: event.payload[:host],
-      rails_env: Rails.env,
-      process_id: Process.pid,
-      request_id: event.payload[:headers]['action_dispatch.request_id'],
-      request_time: Time.now,
-      remote_ip: event.payload[:remote_ip],
-      ip: event.payload[:ip],
-      x_forwarded_for: event.payload[:x_forwarded_for],
-      params: event.payload[:params].to_json,
-      exception: event.payload[:exception]&.first,
-      exception_message: "#{event.payload[:exception]&.last}",
-      exception_backtrace: event.payload[:exception_object]&.backtrace&.join(',')
-    }
-  end
-
-  config.lograge.formatter  = Lograge::Formatters::Json.new
-  http_device               = Logtail::LogDevices::HTTP.new(Rails.application.credentials.dig(:logtail, :key))
-  config.logger             = Logtail::Logger.new(http_device)
+  config.log_formatter = ::Logger::Formatter.new
+  logger           = ActiveSupport::Logger.new(STDOUT)
+  logger.formatter = config.log_formatter
+  config.logger    = ActiveSupport::TaggedLogging.new(logger)
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

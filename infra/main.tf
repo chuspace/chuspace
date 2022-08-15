@@ -25,6 +25,19 @@ module "aws_eu_west" {
   aws_ssm_secret_key_name   = "eu-west-1"
 }
 
+module "aws_eu_central" {
+  source = "./aws"
+  region = "eu-central-1"
+
+  server_count              = 2
+  logtail_token             = var.logtail_token
+  docker_access_token       = var.docker_access_token
+  aws_access_key_id         = var.aws_access_key_id
+  aws_secret_access_key     = var.aws_secret_access_key
+  aws_region                = "eu-west-1"
+  aws_ssm_secret_key_name   = "eu-central-1"
+}
+
 ##############################################
 # Provider: AWS
 # Region: APAC
