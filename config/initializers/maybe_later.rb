@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 MaybeLater.config do |config|
+    config.on_error = ->(exception) { Honeybadger.notify(exception) }
     # Will run after each `MaybeLater.run {}` block, even if it errors
     config.after_each = -> {}
 

@@ -223,6 +223,7 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashie (5.0.0)
+    honeybadger (4.12.2)
     html_tokenizer (0.0.7)
     htmlbeautifier (1.4.2)
     http (5.1.0)
@@ -511,6 +512,7 @@ DEPENDENCIES
   faraday-retry
   friendly_id
   front_matter_parser
+  honeybadger
   htmlbeautifier
   http
   image_processing

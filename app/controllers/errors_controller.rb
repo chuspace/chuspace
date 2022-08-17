@@ -9,6 +9,7 @@ class ErrorsController < ApplicationController
 
   def internal_server_error
     exception = request.env['action_dispatch.exception']
+    Honeybadger.notify(exception) if exception
     render(status: 500)
   end
 

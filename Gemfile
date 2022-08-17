@@ -121,6 +121,7 @@ gem 'easymon'
 
 group :production do
   gem 'cloudflare-rails'
+  gem 'honeybadger'
 end
 
 group :development, :test do
