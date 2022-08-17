@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'typhoeus'
 require_relative 'middleware/follow_redirects'
 require_relative 'middleware/raise_error'
 require_relative 'middleware/feed_parser'
@@ -180,7 +179,6 @@ module FaradayClient
 
     def faraday_builder
       connection_opts = {
-        parallel_manager: Typhoeus::Hydra.new(max_concurrency: 10),
         headers: {
           accept: default_media_type,
           user_agent: user_agent,
@@ -211,7 +209,7 @@ module FaradayClient
           builder.response :logger, nil, { headers: true, bodies: false }
         end
 
-        builder.adapter :typhoeus, http_version: :httpv2_0
+        builder.adapter :net_http, http_version: :httpv2_0
       end
     end
 

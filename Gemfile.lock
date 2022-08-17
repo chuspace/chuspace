@@ -198,8 +198,6 @@ GEM
       smart_properties
     errbase (0.2.2)
     erubi (1.11.0)
-    ethon (0.15.0)
-      ffi (>= 1.15.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -215,9 +213,6 @@ GEM
     faraday-net_http (3.0.0)
     faraday-retry (2.0.0)
       faraday (~> 2.0)
-    faraday-typhoeus (0.2.1)
-      faraday (~> 2.0)
-      typhoeus (~> 1.4)
     ffi (1.15.5)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -436,8 +431,6 @@ GEM
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
-    typhoeus (1.4.0)
-      ethon (>= 0.9.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -516,7 +509,6 @@ DEPENDENCIES
   faraday
   faraday-http-cache
   faraday-retry
-  faraday-typhoeus
   friendly_id
   front_matter_parser
   htmlbeautifier
@@ -555,7 +547,6 @@ DEPENDENCIES
   sprockets-rails
   strong_migrations
   turbo-rails
-  typhoeus
   view_component
   web-console (>= 3.3.0)
   webdrivers

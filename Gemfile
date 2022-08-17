@@ -88,10 +88,8 @@ gem 'down'
 gem 'http'
 gem 'faraday'
 gem 'faraday-retry'
-gem 'faraday-typhoeus'
 gem 'faraday-http-cache'
 gem 'sawyer', github: 'lostisland/sawyer'
-gem 'typhoeus'
 
 # Image
 gem 'image_processing'
