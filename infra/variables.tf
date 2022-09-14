@@ -3,9 +3,9 @@ variable "region" {
   default     = "eu-west-1"
 }
 
-variable "do_token" {
-  description = "DO access token"
-}
+# variable "do_token" {
+#   description = "DO access token"
+# }
 
 variable "logtail_token" {
   description = "Logtail token for observability"
