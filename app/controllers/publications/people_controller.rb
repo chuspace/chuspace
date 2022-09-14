@@ -43,7 +43,7 @@ module Publications
       authorize! @publication, to: :invite?
 
       @query = params[:q]
-      @users = User.with_attached_avatar.search(@query)
+      @users = UserFilter.new.filter(User.with_attached_avatar, @query)
 
       respond_to { |type| type.html_fragment { render partial: 'publications/people/autocomplete' } }
     end

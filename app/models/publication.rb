@@ -6,11 +6,6 @@ class Publication < ApplicationRecord
   include AttrJson::Record
   include AttrJson::Record::QueryScopes
   include AttrJson::NestedAttributes
-  include AlgoliaSearch
-
-  algoliasearch per_environment: true, disable_indexing: Rails.env.test? do
-    attribute :name
-  end
 
   attr_json_config(default_container_attribute: :settings, default_rails_attribute: true, default_accepts_nested_attributes: { reject_if: :all_blank })
 

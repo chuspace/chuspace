@@ -78,12 +78,6 @@ GEM
       device_detector
       safely_block (>= 0.2.1)
     alba (1.6.0)
-    algoliasearch (1.27.5)
-      httpclient (~> 2.8, >= 2.8.3)
-      json (>= 1.5.1)
-    algoliasearch-rails (1.26.0)
-      algoliasearch (>= 1.26.0, < 2.0.0)
-      json (>= 1.5.1)
     ancestry (4.2.0)
       activerecord (>= 5.2.6)
     anyway_config (2.3.0)
@@ -188,6 +182,8 @@ GEM
       addressable (~> 2.8)
     easymon (1.6.2)
       redis
+    edge_rider (2.1.1)
+      activerecord (>= 3.2)
     erb_lint (0.1.3)
       activesupport
       better_html (~> 1.0.7)
@@ -235,7 +231,6 @@ GEM
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
-    httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -269,6 +264,10 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
+    minidusen (0.10.1)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
+      edge_rider (>= 0.2.5)
     minitest (5.16.2)
     msgpack (1.5.4)
     multi_json (1.15.0)
@@ -482,7 +481,6 @@ DEPENDENCIES
   acts_as_votable
   ahoy_matey
   alba
-  algoliasearch-rails
   ancestry
   anyway_config
   attr_json
@@ -521,6 +519,7 @@ DEPENDENCIES
   maybe_later
   meta-tags
   mini_mime
+  minidusen
   minitest
   mysql2
   name_of_person

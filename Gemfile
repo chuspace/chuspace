@@ -25,6 +25,7 @@ gem 'mini_mime'
 gem 'active_storage_validations'
 gem 'rubyzip'
 gem 'maybe_later'
+gem 'minidusen'
 
 # Sign web tokens
 gem 'alba'
@@ -64,9 +65,6 @@ gem 'aasm'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
-
-# Full-text search
-gem 'algoliasearch-rails'
 
 # Turblinks
 gem 'turbo-rails'

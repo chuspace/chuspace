@@ -5,12 +5,6 @@ module TagOverride
     base.validates :name, presence: true, uniqueness: true
     base.scope :featured, -> { where(featured: true) }
 
-    base.include AlgoliaSearch
-
-    base.algoliasearch per_environment: true, disable_indexing: Rails.env.test? do
-      attribute :name, :description, :short_description
-    end
-
     base.include Iconable
   end
 
