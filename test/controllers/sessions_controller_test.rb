@@ -25,7 +25,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       follow_redirect!
       assert_equal 200, status
 
-      assert_equal 'Please check your email', flash[:notice]
+      assert_equal 'We will send you magic login if your email is in our record', flash[:notice]
       assert_emails 1
 
       mail = ActionMailer::Base.deliveries.last
