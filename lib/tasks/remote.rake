@@ -144,7 +144,7 @@ namespace :remote do
   end
 
   task :deploy_primary do
-    system "cd #{resource_path} && terraform apply #{vars} -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[0] -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[1]"
+    system "cd #{resource_path} && terraform apply #{vars} -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[0] -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[1] -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[2]"
   end
 
   task :refresh do |t, args|

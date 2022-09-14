@@ -11,6 +11,12 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     @identity = @user.identities.email.first
   end
 
+  def test_public_home
+    get '/'
+    assert_equal 200, status
+    assert_template 'home/index'
+  end
+
   def test_authenticated_home
     signin(identity: @identity)
 

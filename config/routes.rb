@@ -22,8 +22,7 @@ Rails.application.routes.draw do
   match '/406', to: 'errors#unacceptable', via: :all
   match '/500', to: 'errors#internal_server_error', via: :all
 
-  root to: 'home#index', constraints: RootConstraint.new, as: :authenticated_root
-  root to: 'welcome#index'
+  root to: 'home#index'
 
   resources :auto_checks, only: :create
   resources :topics, only: %i[index show]
