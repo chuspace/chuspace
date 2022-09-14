@@ -20,8 +20,30 @@
   </div>
 
   <div class='sm:col-span-4 col-span-1 order-first sm:order-2 sm:h-screen max-h-screen'>
-    <% if signed_in? %>
-      <div class='sm:fixed top-0 sm:mt-24 sm:w-1/4 h-full overflow-y-scroll'>
+    <div class='sm:fixed top-0 sm:mt-24 sm:w-1/4 h-full overflow-y-scroll'>
+      <%= render(Card::Component.new) do |card| %>
+        <% card.title do %>
+          <%= t('shared.welcome') %>
+        <% end %>
+        <% card.body do %>
+          <div class='py-4'>
+            <h3 class='font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-focus'>
+              <%= t('shared.tagline') %>
+            </h3>
+            <div class='chu-editor chu-editor-sm'>
+              <p class="mt-4 text-secondary leading-normal">
+                <%= t('shared.intro').html_safe %>
+              </p>
+            </div>
+            <div class='mt-8 flex items-center'>
+              <%= link_to 'Read more', '/self/hello-world', class: 'btn btn-primary btn-sm' %>
+              <%= link_to 'Get started', connect_root_path, class: 'btn btn-outline btn-sm ml-2', 'data-turbo': false %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
+      <div class='mt-8'>
         <%= render(Card::Component.new) do |card| %>
           <% card.title do %>
             <%= t('publications.list.title') %>
@@ -48,29 +70,7 @@
             <% end %>
           <% end %>
         <% end %>
-      <% else %>
-        <%= render(Card::Component.new) do |card| %>
-          <% card.title do %>
-            <%= t('shared.welcome') %>
-          <% end %>
-          <% card.body do %>
-            <div class='py-8'>
-              <h3 class='font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-focus'>
-                <%= t('shared.tagline') %>
-              </h3>
-              <div class='chu-editor chu-editor-sm'>
-                <p class="mt-4 text-secondary leading-normal">
-                  <%= t('shared.intro').html_safe %>
-                </p>
-              </div>
-              <div class='mt-8 flex items-center'>
-                <%= link_to 'Read more', '/self/hello-world', class: 'btn btn-primary btn-sm' %>
-                <%= link_to 'Get started', connect_root_path, class: 'btn btn-outline btn-sm ml-2', 'data-turbo': false %>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
 </section>
