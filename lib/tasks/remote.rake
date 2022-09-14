@@ -138,6 +138,10 @@ namespace :remote do
     system cmd
   end
 
+  task :destroy_all do
+    system "cd #{resource_path} && terraform destroy #{vars}"
+  end
+
   task :deploy_primary do
     system "cd #{resource_path} && terraform apply #{vars} -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[0] -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[1]"
   end
