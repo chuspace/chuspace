@@ -15,10 +15,7 @@ en:
           attributes:
             email:
               blank: A valid email is required
-              identity_taken: No email identity found. You have a %{provider} identity
-                with same email
               invalid: Email is invalid or already taken
-              no_email_identity: No email identity found for this email
               taken: Email is already taken
             name:
               blank: Your full name is required
@@ -141,8 +138,7 @@ en:
   sessions:
     already_signedin: Already signed in!
     create:
-      failure: User with email not found
-      success: Please check your email
+      confirm: We will send you magic login if your email is in our record.
     destroy:
       success: Successfully signed out!
     email:
