@@ -19,16 +19,7 @@ test:
   url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace_test') %>
 
 production:
-  primary:
-    <<: *default
-    url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace') %>
-    ssl_mode: :required
-    sslca: <%= ENV.fetch('SSL_CA_PATH', '/etc/ssl/cert.pem') %>
-
-  primary_replica:
-    <<: *default
-    url: <%= ENV.fetch('DATABASE_REPLICA_URL', 'mysql2://localhost:3306/chuspace') %>
-    ssl_mode: :required
-    sslca: <%= ENV.fetch('SSL_CA_PATH', '/etc/ssl/cert.pem') %>
-    replica: true
-    database_tasks: false
+  <<: *default
+  url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace') %>
+  ssl_mode: :strict
+  sslca: <%= ENV.fetch('SSL_CA_PATH', '/etc/ssl/cert.pem') %>

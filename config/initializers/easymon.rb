@@ -1,15 +1,7 @@
 # frozen_string_literal: true
 
 Easymon::Repository.add(
-  'application-database-replica',
+  'application-database',
   Easymon::ActiveRecordCheck.new(ActiveRecord::Base),
   :critical
 )
-
-ActiveRecord::Base.connected_to(role: :writing) do
-  Easymon::Repository.add(
-    'application-database',
-    Easymon::ActiveRecordCheck.new(ActiveRecord::Base),
-    :critical
-  )
-end

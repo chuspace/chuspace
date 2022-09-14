@@ -1,19 +1,19 @@
-FROM ruby:3.1.2-alpine
+FROM ruby:3.1-alpine
 
-ENV LANG=C.UTF-8 \
-  BUNDLE_JOBS=4 \
-  BUNDLE_RETRY=3 \
-  RAILS_ENV=production \
-  NODE_ENV=production \
-  RAILS_LOG_TO_STDOUT=enabled \
-  BOOTSNAP_CACHE_DIR='tmp/bootsnap-cache' \
-  RAILS_SERVE_STATIC_FILES='yes' \
-  WORK_ROOT=/var \
-  RAILS_ROOT=$WORK_ROOT/www/ \
-  GEM_HOME=$WORK_ROOT/bundle \
-  BUNDLE_BIN=$GEM_HOME/gems/bin \
-  PATH=$GEM_HOME/bin:$BUNDLE_BIN:$PATH \
-  ASSET_HOST=https://assets.chuspace.com
+ARG APP_NAME
+ARG APP_REGION
+ARG ASSET_HOST
+ARG IMAGE_CDN_HOST
+ARG AVATARS_CDN_HOST
+ARG RAILS_SERVE_STATIC_FILES 'yes'
+ENV NODE_ENV 'production'
+ENV RAILS_ENV 'production'
+ENV BOOTSNAP_CACHE_DIR 'tmp/bootsnap-cache'
+
+ARG SECRET_KEY_BASE
+ARG RAILS_MASTER_KEY
+ARG DATABASE_URL
+ARG DATABASE_REPLICA_URL
 
 ARG REFRESHED_AT
 ENV REFRESHED_AT $REFRESHED_AT
@@ -37,32 +37,21 @@ RUN apk del gmp-dev libstdc++ \
     yarn
 
 # set working directory
-WORKDIR $RAILS_ROOT
+WORKDIR /usr/src/app
 
-# bundle and yarn install
-COPY Gemfile Gemfile.lock package.json yarn.lock ./
-RUN gem install bundler && bundle check || bundle install --without development test
-RUN rm -rf node_modules && yarn install --check-files --frozen-lockfile
+# bundle install
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler
+RUN bundle check || (bundle install --without development test --jobs=4 --retry=3)
 
-COPY . $RAILS_ROOT
+# yarn install
+COPY package.json yarn.lock ./
+RUN yarn install --check-files --frozen-lockfile
 
-ARG SECRET_KEY_BASE=fakekeyforassets
+COPY . .
 
-RUN  mv config/credentials/production.yml.enc ./config/credentials/production.yml.enc.backup && \
-     mv config/credentials/production.sample.yml.enc ./config/credentials/production.yml.enc && \
-     mv config/credentials/production.sample.key ./config/credentials/production.key
+RUN bundle exec rake assets:precompile
 
-RUN bin/rails assets:clobber && bin/rails assets:precompile && yarn cache clean
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
 
-RUN  rm -rf config/credentials/production.yml.enc && \
-     mv config/credentials/production.yml.enc.backup ./config/credentials/production.yml.enc && \
-     mv config/credentials/production.key ./config/credentials/production.sample.key
-
-RUN apk del gmp-dev \
-    libstdc++ \
-    nodejs \
-    npm \
-    libffi-dev \
-    build-base \
-    git \
-    yarn
+EXPOSE 3000
