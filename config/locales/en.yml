@@ -155,7 +155,7 @@ en:
         available: true
         status: Beta
       - title: Any static site framework
-        description: Jekyll . Hugo . Gatsby . 11ty . Bridgetown . any markdown content
+        description: Jekyll • Hugo • Gatsby • 11ty • Bridgetown • any markdown content
         available: true
         status: Beta
       - title: Publish without limits

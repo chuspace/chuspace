@@ -15,7 +15,7 @@ class HomeText < ApplicationSystemTestCase
     visit root_path
 
     assert_selector 'h5', text: 'Posts'
-    assert_selector 'h5', text: 'Welcome to Chuspace'
+    assert_selector 'h3', text: 'Read • Write • Contribute'
   end
 
   test 'Authenticated home' do
@@ -23,6 +23,7 @@ class HomeText < ApplicationSystemTestCase
     visit root_path
     assert_selector 'h5', text: 'Publications'
     find('#header-user-dropdown', visible: :all).click
+    assert_selector 'h3', text: 'Read • Write • Contribute'
     assert_selector '#signed_in', text: "Signed in as #{@user.username}", visible: :all
   end
 end
