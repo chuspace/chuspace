@@ -21,5 +21,6 @@ test:
 production:
   <<: *default
   url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace') %>
-  ssl_mode: :strict
+  ssl_mode: :verify_identity
+  sslaccept: :strict
   sslca: <%= ENV.fetch('SSL_CA_PATH', '/etc/ssl/cert.pem') %>
