@@ -138,7 +138,7 @@ en:
   sessions:
     already_signedin: Already signed in!
     create:
-      confirm: We will send you magic login if your email is in our record.
+      confirm: We will send you magic login if your email is in our record
     destroy:
       success: Successfully signed out!
     email:
