@@ -22,11 +22,8 @@
   <div class='sm:col-span-4 col-span-1 order-first sm:order-2 sm:h-screen max-h-screen'>
     <div class='sm:fixed top-0 sm:mt-24 sm:w-1/4 h-full overflow-y-scroll'>
       <%= render(Card::Component.new) do |card| %>
-        <% card.title do %>
-          <%= t('shared.welcome') %>
-        <% end %>
         <% card.body do %>
-          <div class='py-4'>
+          <div class='p-6 bg-gradient-to-r from-base-200 to-base-300 rounded-md'>
             <h3 class='font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-focus'>
               <%= t('shared.tagline') %>
             </h3>
