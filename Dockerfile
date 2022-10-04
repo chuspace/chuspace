@@ -32,7 +32,10 @@ RUN apk del gmp-dev libstdc++ \
     tzdata \
     libxslt-dev \
     libxml2-dev \
+    gcc \
+    musl-dev \
     mariadb-dev \
+    mariadb-connector-c-dev \
     git \
     yarn
 
