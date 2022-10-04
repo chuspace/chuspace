@@ -114,7 +114,6 @@ gem 'acts_as_votable'
 gem 'view_component'
 
 # Monitoring
-gem 'skylight'
 gem 'easymon'
 
 group :production do
