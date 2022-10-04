@@ -19,7 +19,7 @@ module "aws_instance" {
   public_subnets            = module.aws_vpc.public_subnets
   vpc_id                    =  module.aws_vpc.vpc_id
 
-  instance_type             = "t3.small"
+  instance_type             = "t3.medium"
   server_count              = var.server_count
 
   logtail_token             = var.logtail_token
