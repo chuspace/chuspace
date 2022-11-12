@@ -163,4 +163,4 @@ group :test do
   gem 'webdrivers'
 end
 
-gem "logtail-rails", "~> 0.1.6"
+gem 'logtail-rails', '~> 0.1.6'
