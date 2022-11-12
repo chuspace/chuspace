@@ -1,62 +1,69 @@
 <% set_meta_tags @post %>
 
 <% cache([@publication, @post]) do %>
-  <div class='sm:w-2/3 mx-auto w-full'>
-    <nav class='flex items-start'>
-      <%= render(Avatar::Component.new(avatar: @post.author.avatar, gravatar: @post.author.gravatar_url, fallback: @post.author.name.initials, variant: :mini)) %>
-      <div>
-        <div class='flex items-center text-secondary text-sm'>
-          <%= link_to @post.author.first_name, user_path(@post.author), class: 'ml-2 link link-hover link-primary' %>
-          <% unless @publication.personal? %>
-            <%= tag.span class: 'ml-1' do %>
-              in <%= link_to @publication.name, publication_path(@publication), class: 'link link-hover link-primary' %>
+  <div class='grid grid-cols-3 gap-16'>
+    <div class='col-span-1'>
+      <%= turbo_frame_tag(dom_id(@post, :publishings), src: publication_post_publishings_path(@post.publication, @post), loading: :lazy) do %>
+        <%= render 'shared/card_loader', count: @post.publishings_count %>
+      <% end %>
+    </div>
+    <div class='sm:col-span-2 col-span-1'>
+      <nav class='flex items-start'>
+        <%= render(Avatar::Component.new(avatar: @post.author.avatar, gravatar: @post.author.gravatar_url, fallback: @post.author.name.initials, variant: :mini)) %>
+        <div>
+          <div class='flex items-center text-secondary text-sm'>
+            <%= link_to @post.author.first_name, user_path(@post.author), class: 'ml-2 link link-hover link-primary' %>
+            <% unless @publication.personal? %>
+              <%= tag.span class: 'ml-1' do %>
+                in <%= link_to @publication.name, publication_path(@publication), class: 'link link-hover link-primary' %>
+              <% end %>
             <% end %>
-          <% end %>
-          <%= tag.span 'on', class: 'mx-1 ml-2' %>
-          <%= tag.time @post.date.strftime("%d %b %Y") %>
-        </div>
+            <%= tag.span 'on', class: 'mx-1 ml-2' %>
+            <%= tag.time @post.date.strftime("%d %b %Y") %>
+          </div>
 
-        <div class='sm:flex items-center text-secondary text-xs ml-2 mt-1'>
-          <%= tag.time do %>
-            <%= @post.reading_time %> min read
-          <% end %>
-          <span class='mx-2'>&#183;</span>
-          <span class='text-secondary'>
-            Updated
-            <relative-time datetime="<%= @post.updated_at.to_datetime %>">
-              <%= @post.date.strftime("%d %b %Y") %>
-            </relative-time>
-          </span>
-          <span class='mx-4 hidden sm:block'>&#183;</span>
-          <div class="mt-2 sm:mt-0 flex items-center">
-            <% %w[facebook twitter email linkedin].each_with_index do |provider, index| %>
-              <%= link_to social_share_url(post: @post, provider: provider), target: :_blank do %>
-                <%= inline_svg_tag "icons/#{provider}.svg", class: "w-4 h-4 fill-current hover:text-primary cursor-pointer#{index == 0 ? '' : ' ml-4'}" %>
-              <% end %>
+          <div class='sm:flex items-center text-secondary text-xs ml-2 mt-1'>
+            <%= tag.time do %>
+              <%= @post.reading_time %> min read
             <% end %>
-            <% if @post.markdown_doc.snippets? %>
-              <span class='mx-4'>&#183;</span>
-              <%= link_to publication_post_snippets_path(@post.publication, @post), title: 'Download code snippets', target: "_blank" do %>
-                <%= inline_svg_tag('icons/download.svg', class: 'w-4 h-4 hover:text-primary fill-current') %>
+            <span class='mx-2'>&#183;</span>
+            <span class='text-secondary'>
+              Updated
+              <relative-time datetime="<%= @post.updated_at.to_datetime %>">
+                <%= @post.date.strftime("%d %b %Y") %>
+              </relative-time>
+            </span>
+            <span class='mx-4 hidden sm:block'>&#183;</span>
+            <div class="mt-2 sm:mt-0 flex items-center">
+              <% %w[facebook twitter email linkedin].each_with_index do |provider, index| %>
+                <%= link_to social_share_url(post: @post, provider: provider), target: :_blank do %>
+                  <%= inline_svg_tag "icons/#{provider}.svg", class: "w-4 h-4 fill-current hover:text-primary cursor-pointer#{index == 0 ? '' : ' ml-4'}" %>
+                <% end %>
               <% end %>
-            <% end %>
+              <% if @post.markdown_doc.snippets? %>
+                <span class='mx-4'>&#183;</span>
+                <%= link_to publication_post_snippets_path(@post.publication, @post), title: 'Download code snippets', target: "_blank" do %>
+                  <%= inline_svg_tag('icons/download.svg', class: 'w-4 h-4 hover:text-primary fill-current') %>
+                <% end %>
+              <% end %>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
 
-    <div class='pt-4 pb-16'>
-      <div class='chu-editor mt-4'>
-        <%= content_tag :h1, @post.title, class: 'title' %>
-        <%= content_tag :h2, @post.summary, class: 'summary mb-0' %>
-        <%= content_tag :article, @post.body_html.html_safe %>
-      </div>
-
-      <% if @post.topics.any? %>
-        <div class='py-8'>
-          <%= render 'topics', post: @post %>
+      <div class='pt-4 pb-16'>
+        <div class='chu-editor mt-4'>
+          <%= content_tag :h1, @post.title, class: 'title' %>
+          <%= content_tag :h2, @post.summary, class: 'summary mb-0' %>
+          <%= content_tag :article, @post.body_html.html_safe %>
         </div>
-      <% end %>
+
+        <% if @post.topics.any? %>
+          <div class='py-8'>
+            <%= render 'topics', post: @post %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

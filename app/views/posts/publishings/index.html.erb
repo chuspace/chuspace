@@ -1,35 +1,3 @@
 <%= turbo_frame_tag(dom_id(@post, :publishings)) do %>
-  <dialog-opener>
-    <div class="modal modal-open bg-base-200 h-screen sm:w-1/3 w-full right-0 left-auto" data-target='dialog-opener.dialog'>
-      <div class="h-full w-full max-h-screen overflow-y-scroll bg-base-200">
-        <%= link_to publication_post_path(@publication, @post), data: { 'turbo-frame': :_top } do %>
-          <%= inline_svg_tag 'icons/x.svg', class: 'w-4 h-4 fill-current mr-4 mt-4 float-right' %>
-        <% end %>
-        <h5 class='border-b bg-base-300 border-base-300 py-2 px-8 text-secondary'>Editions</h5>
-
-        <% @publishings.recent.each do |publishing| %>
-          <article class='border-base-300 border-b py-4 px-8 flex'>
-            <div class='flex-1'>
-              <%= link_to publication_post_publishing_path(@publication, @post, publishing), data: { 'turbo-frame': :_top } do %>
-                <%= tag.h3 publishing.description, class: 'link link-content link-hover' %>
-              <% end %>
-
-              <div class='mt-4 text-xs text-secondary'>
-                <%= tag.span publishing.current ? 'current' : "edition ##{publishing.version}" %>
-                <span class='mx-2'>&#183;</span>
-                <%= link_to @post.author.name, user_path(@post.author), class: 'link link-hover link-secondary', data: { 'turbo-frame': :_top } %>
-                <span class='mx-2'>&#183;</span>
-                <span>
-                  Published
-                  <relative-time datetime="<%= publishing.created_at.to_datetime %>">
-                    <%= publishing.created_at.strftime("%d %b %Y") %>
-                  </relative-time>
-                </span>
-              </div>
-            </div>
-          </article>
-        <% end %>
-      </div>
-    </div>
-  </dialog-opener>
+  <%= render 'posts/publishings/list', publishings: @post.publishings %>
 <% end %>

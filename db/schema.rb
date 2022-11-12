@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_20_123113) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_05_050602) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -231,6 +231,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_20_123113) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.column "visibility", "enum('private','public','member','internal')", default: "public"
+    t.bigint "publishings_count", default: 0
     t.index ["author_id"], name: "index_posts_on_author_id"
     t.index ["blob_path"], name: "index_posts_on_blob_path"
     t.index ["date"], name: "index_posts_on_date"

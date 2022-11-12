@@ -4,7 +4,7 @@ class Publishing < ApplicationRecord
   include Drafts::Yaml
   include Drafts::FrontMatter
 
-  belongs_to :post
+  belongs_to :post, counter_cache: true
   belongs_to :author, class_name: 'User'
 
   delegate :publication, to: :post

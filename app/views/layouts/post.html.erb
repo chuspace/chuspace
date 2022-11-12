@@ -9,12 +9,6 @@
         <%= link_to @post.publication.name, publication_path(@post.publication), class: 'link text-secondary hover:text-primary sm:block hidden link-hover text-sm' %>
       <% end %>
       <%= header.before_user_dropdown do %>
-        <%= turbo_frame_tag(dom_id(@post, :publishings)) do %>
-          <%= link_to publication_post_publishings_path(@post.publication, @post) do %>
-            <%= inline_svg_tag 'icons/versions.svg', class: 'w-4 h-4 mr-8 cursor-pointer fill-current' %>
-          <% end %>
-        <% end %>
-
         <div class='mr-8'>
           <% if signed_in? && allowed_to?(:edit?, @post) %>
             <%= link_to 'Edit', publication_edit_draft_path(@post.publication, path: @post.relative_path), class: 'btn btn-primary btn-xs' %>

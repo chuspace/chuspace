@@ -1,0 +1,44 @@
+<%= render(Card::Component.new) do |card| %>
+  <% card.title do %>
+    Revisions
+  <% end %>
+
+  <% card.body do %>
+    <div class="flow-root py-6">
+      <ul role="list" class="-mb-8">
+        <% publishings.recent.each.with_index(1) do |publishing, index| %>
+          <li>
+            <div class="relative pb-8">
+              <% unless publishings.size == index %>
+                <span class="absolute top-5 left-4 -ml-px h-full w-0.5 bg-base-300" aria-hidden="true"></span>
+              <% end %>
+
+              <div class="relative flex items-start space-x-3">
+                <div class="relative">
+                  <%= render(Avatar::Component.new(avatar: publishing.author.avatar, gravatar: publishing.author.gravatar_url, fallback: publishing.author.name.initials)) %>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div>
+                    <div class="text-sm">
+                      <%= link_to publishing.author.name, user_path(publishing.author), class: "font-bold" %>
+                    </div>
+
+                    <%= link_to index == 1 ? publication_post_path(@publication, @post) : publication_post_publishing_path(@publication, @post, publishing), data: { 'turbo-frame': :_top }, class: 'text-xs text-secondary' do %>
+                      Published
+                      <relative-time datetime="<%= publishing.created_at.to_datetime %>" class='link link-content'>
+                        <%= publishing.created_at.strftime("%d %b %Y") %>
+                      </relative-time>
+                    <% end %>
+                  </div>
+                  <div class="mt-2 text-sm text-gray-700">
+                    <p><%= publishing.description %></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>
