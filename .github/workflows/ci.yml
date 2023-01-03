@@ -63,7 +63,7 @@ jobs:
 
       - env:
           RAILS_MASTER_KEY: ${{secrets.RAILS_MASTER_KEY}}
-        run: echo "$RAILS_MASTER_KEY" > config/credentials/production.key
+        run: echo "$RAILS_MASTER_KEY" > config/credentials/test.key
 
       - name: Preparing database
         env:
