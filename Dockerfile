@@ -49,23 +49,4 @@ RUN rm -rf node_modules && yarn install --check-files --frozen-lockfile
 
 COPY . $RAILS_ROOT
 
-ARG SECRET_KEY_BASE=fakekeyforassets
-
-RUN  mv config/credentials/production.yml.enc ./config/credentials/production.yml.enc.backup && \
-     mv config/credentials/production.sample.yml.enc ./config/credentials/production.yml.enc && \
-     mv config/credentials/production.sample.key ./config/credentials/production.key
-
 RUN bin/rails assets:clobber && bin/rails assets:precompile && yarn cache clean
-
-RUN  rm -rf config/credentials/production.yml.enc && \
-     mv config/credentials/production.yml.enc.backup ./config/credentials/production.yml.enc && \
-     mv config/credentials/production.key ./config/credentials/production.sample.key
-
-RUN apk del gmp-dev \
-    libstdc++ \
-    nodejs \
-    npm \
-    libffi-dev \
-    build-base \
-    git \
-    yarn
