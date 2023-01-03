@@ -46,6 +46,10 @@ resource "digitalocean_droplet" "app" {
   lifecycle {
     create_before_destroy = true
   }
+
+  provisioner "local-exec" {
+    command = "./chu production healthcheck"
+  }
 }
 
 resource "digitalocean_loadbalancer" "app" {

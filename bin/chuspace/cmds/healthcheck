@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# Run the production environment
+
+case $ENVIRONMENT in
+  production)
+    until curl -s -f -o /dev/null "https://chuspace.com/heartbeat"
+    do
+      echo 'Production not deployed. Sleeping 5 seconds'
+      sleep 5
+    done
+    ;;
+  *)
+    echo 'Only available in production'
+    ;;
+esac
