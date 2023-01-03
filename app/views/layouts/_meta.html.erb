@@ -9,5 +9,5 @@
 <meta name="turbo-cache-control" content="no-cache" />
 <%= csrf_meta_tags %>
 <% if Rails.env.production? %>
-  <script src="https://viewer.chuspace.com/script.js" data-site="<%= ENV["FATHOM_SITE_ID"] %>" defer></script>
+  <script src="https://viewer.chuspace.com/script.js" data-site="<%= Rails.application.credentials.fathom.fetch(:site_id) %>" defer></script>
 <% end %>

@@ -12,15 +12,15 @@ default: &default
 
 development:
   <<: *default
-  url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace_development') %>
+  url: <%= Rails.application.credentials.database.fetch(:url) { 'mysql2://localhost:3306/chuspace_development' } %>
 
 test:
   <<: *default
-  url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace_test') %>
+  url: <%= Rails.application.credentials.database.fetch(:url) { 'mysql2://localhost:3306/chuspace_test' } %>
 
 production:
   <<: *default
-  url: <%= ENV.fetch('DATABASE_URL', 'mysql2://localhost:3306/chuspace') %>
+  url: <%= Rails.application.credentials.database.fetch(:url) { 'mysql2://localhost:3306/chuspace' } %>
   ssl_mode: :required
   sslaccept: :strict
   sslca: <%= ENV.fetch('SSL_CA_PATH', '/etc/ssl/cert.pem') %>

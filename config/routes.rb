@@ -13,7 +13,7 @@ Rails.application.routes.draw do
         end
       route_for(route, blob)
     else
-      File.join(ENV.fetch('AVATARS_CDN_HOST', 'https://chuspace.com'), blob.key)
+      File.join(Rails.application.credentials.app.fetch('avatar_cdn') { 'https://chuspace.com' }, blob.key)
     end
   end
 
