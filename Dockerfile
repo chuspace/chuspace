@@ -3,6 +3,7 @@ FROM ruby:3.1.3-alpine
 ENV LANG=C.UTF-8
 ENV RAILS_ENV=production
 ENV NODE_ENV=production
+ENV RAILS_SERVE_STATIC_FILES=enabled
 
 RUN apk del gmp-dev libstdc++ \
   && apk -U upgrade \
