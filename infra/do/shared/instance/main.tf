@@ -76,7 +76,7 @@ resource "digitalocean_loadbalancer" "app" {
     port                   = 3000
     protocol               = "http"
     path                   = "/heartbeat"
-    check_interval_seconds = 10
+    check_interval_seconds = 30
   }
 
   droplet_ids = digitalocean_droplet.app.*.id
