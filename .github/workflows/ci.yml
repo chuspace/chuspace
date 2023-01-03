@@ -61,9 +61,12 @@ jobs:
 
       - run: yarn install --frozen-lockfile
 
+      - env:
+          RAILS_MASTER_KEY: ${{secrets.RAILS_MASTER_KEY}}
+        run: echo "$RAILS_MASTER_KEY" > config/credentials/production.key
+
       - name: Preparing database
         env:
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test
         run: bin/rails db:prepare
 
@@ -74,14 +77,12 @@ jobs:
 
       - name: Compile assets
         env:
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test
         run: bin/rails assets:precompile
 
       - name: Run tests
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          RAILS_MASTER_KEY: ${{ secrets.CHUSPACE_APP_TEST_MASTER_KEY }}
           DATABASE_URL: mysql2://chuspace_test:chuspace_actions_test@127.0.0.1:3306/chuspace_test
         run: bin/rails test:all
 
