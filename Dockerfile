@@ -13,7 +13,7 @@ ENV LANG=C.UTF-8 \
   GEM_HOME=$WORK_ROOT/bundle \
   BUNDLE_BIN=$GEM_HOME/gems/bin \
   PATH=$GEM_HOME/bin:$BUNDLE_BIN:$PATH \
-  ASSET_HOST=https://assets.chuspace.com
+  ASSET_HOST=https://assets.chuspace.com \
   RAILS_MASTER_KEY=$RAILS_MASTER_KEY
 
 RUN apk del gmp-dev libstdc++ \
