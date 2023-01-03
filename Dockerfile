@@ -31,4 +31,5 @@ RUN yarn install --check-files --frozen-lockfile
 
 COPY . /src/app
 
-RUN bin/rails assets:clobber && bin/rails assets:precompile && yarn cache clean
+RUN echo $FATHOM_SITE_ID
+RUN bundle exec assets:clobber && bundle exec assets:precompile && yarn cache clean
