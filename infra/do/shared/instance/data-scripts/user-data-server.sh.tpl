@@ -35,14 +35,6 @@ sudo chown ubuntu:ubuntu /home/ubuntu/app/docker-compose.yml
 
 (
 cat <<-EOF
-${app_env}
-EOF
-) | tee /home/ubuntu/app/.env
-
-sudo chown ubuntu:ubuntu /home/ubuntu/app/.env
-
-(
-cat <<-EOF
 #!/bin/bash
 
 cd /home/ubuntu/app

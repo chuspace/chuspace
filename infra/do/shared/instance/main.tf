@@ -22,17 +22,11 @@ data "digitalocean_certificate" "chuspace_app" {
 data "template_file" "docker_compose" {
   template = file("${path.module}/data-scripts/docker-compose.yml")
 }
-
-data "template_file" "app_env" {
-  template = file("${path.module}/data-scripts/.env")
-}
-
 data "template_file" "user_data_server" {
   template = file("${path.module}/data-scripts/user-data-server.sh.tpl")
 
   vars = {
     docker_compose      = data.template_file.docker_compose.rendered
-    app_env             = data.template_file.app_env.rendered
     docker_access_token = var.docker_access_token
   }
 }

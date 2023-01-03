@@ -8,15 +8,11 @@ services:
       - bundle:/app/.bundle
     ports:
       - "3000:3000"
-    env_file:
-      - .env
   worker:
     image: chuspace2/app:main
     command: bundle exec aws_sqs_active_job --queue default
     volumes:
       - .:/app
       - bundle:/app/.bundle
-    env_file:
-      - .env
 volumes:
   bundle:

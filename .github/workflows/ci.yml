@@ -124,7 +124,7 @@ jobs:
 
       - name: Terraform deploy
         run: |
-          terraform init -reconfigure
+          cd infra && terraform init -reconfigure
           bundle exec rails remote:deploy_primary
         env:
           RAILS_ENV: production
