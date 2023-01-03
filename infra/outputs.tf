@@ -4,13 +4,13 @@
 
 
 # EU
-output "aws_eu_west_servers" {
-  value = module.aws_eu_west.servers
-}
+# output "aws_eu_west_servers" {
+#   value = module.aws_eu_west.servers
+# }
 
-output "aws_eu_west_lb_address" {
-  value = module.aws_eu_west.lb_address
-}
+# output "aws_eu_west_lb_address" {
+#   value = module.aws_eu_west.lb_address
+# }
 
 # output "aws_eu_central_servers" {
 #   value = module.aws_eu_central.servers
@@ -62,11 +62,11 @@ output "aws_eu_west_lb_address" {
 
 # # APAC
 
-# output "do_apac_sgp_servers" {
-#   value = module.do_apac_sgp.servers
-# }
+output "do_apac_eu_servers" {
+  value = module.do_apac_eu.servers
+}
 
-# output "do_apac_sgp_lb_address" {
-#   value = module.do_apac_sgp.lb_address
-# }
+output "do_apac_eu_lb_address" {
+  value = module.do_apac_eu.lb_address
+}
 

@@ -1,15 +1,8 @@
 # frozen_string_literal: true
 
-PRIMARY_REGION = 'aws_eu_west'
+PRIMARY_REGION = 'do_apac_eu'
 
 PROVIDERS = {
-  aws: %w[
-    all
-    aws_eu_west
-    aws_eu_central
-    aws_apac_south
-    aws_apac_southeast
-  ],
   do: %w[
     all
     do_us_west
@@ -20,8 +13,7 @@ PROVIDERS = {
 
 def vars
   deploy_creds  = Rails.application.credentials.deploy
-  #  -var='do_token=#{deploy_creds.dig(:do, :access_token)}'
-  "-var='aws_access_key_id=#{deploy_creds.dig(:aws, :access_key_id)}' -var='aws_secret_access_key=#{deploy_creds.dig(:aws, :secret_access_key)}' -var='docker_access_token=#{deploy_creds.dig(:docker, :access_token)}' -var='logtail_token=#{deploy_creds.dig(:logtail, :access_token)}'"
+  "-var='docker_access_token=#{deploy_creds.dig(:docker, :access_token)}' -var='do_token=#{deploy_creds.dig(:do, :access_token)}'"
 end
 
 namespace :remote do
@@ -144,7 +136,7 @@ namespace :remote do
   end
 
   task :deploy_primary do
-    system "cd #{resource_path} && terraform apply #{vars} -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[0] -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[1] -replace=module.#{PRIMARY_REGION}.module.aws_instance.aws_instance.app[2]"
+    system "cd #{resource_path} && terraform apply #{vars} -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[0] -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[1] -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[2]"
   end
 
   task :refresh do |t, args|

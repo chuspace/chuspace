@@ -12,7 +12,7 @@ provider "digitalocean" {
 }
 
 data "digitalocean_ssh_key" "chuspace_app" {
-  name = "chuspace_docker_app_ssh_key"
+  name = "chuspace-deployer-ssh-key"
 }
 
 data "digitalocean_certificate" "chuspace_app" {

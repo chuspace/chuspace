@@ -111,12 +111,9 @@ module "do_apac_eu" {
   source = "./do"
   region = "lon1"
 
-  server_count          = 2
-  do_token              = var.do_token
-  logtail_token         = var.logtail_token
-  docker_access_token   = var.docker_access_token
-  aws_access_key_id     = var.aws_access_key_id
-  aws_secret_access_key = var.aws_secret_access_key
+  server_count        = 2
+  do_token            = var.do_token
+  docker_access_token = var.docker_access_token
 }
 
 
