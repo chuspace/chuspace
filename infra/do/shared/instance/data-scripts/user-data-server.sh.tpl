@@ -14,39 +14,16 @@ sudo cp /root/.ssh/authorized_keys /home/ubuntu/.ssh
 sudo chown -R ubuntu:ubuntu /home/ubuntu/.ssh
 sudo chmod 600 /home/ubuntu/.ssh/authorized_keys
 
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-./aws/install
-rm -rf awscliv2.zip
-rm -rf ./aws
-
 sudo service docker restart
 sudo usermod -aG docker ubuntu
 sudo loginctl enable-linger ubuntu
-
-# Fetch AWS secrets
-mkdir -p /home/ubuntu/.aws
-
-(
-cat <<-EOF
-[default]
-region=${aws_region}
-output=json
-EOF
-) | sudo tee /home/ubuntu/.aws/config
 
 # Fetch credentials and docker image
 mkdir /home/ubuntu/app
 sudo chown ubuntu:ubuntu /home/ubuntu/app
 cd /home/ubuntu/app
 
-export AWS_ACCESS_KEY_ID=${aws_access_key_id}
-export AWS_SECRET_ACCESS_KEY=${aws_secret_access_key}
-export AWS_DEFAULT_REGION=${aws_region}
-
 echo ${docker_access_token} | sudo tee /home/ubuntu/app/docker.txt
-
-(aws secretsmanager get-secret-value --secret-id chuspace-app/prod-env/${aws_ssm_secret_key_name} | jq '.SecretString' | xargs printf) > .env
 
 (
 cat <<-EOF
@@ -58,6 +35,14 @@ sudo chown ubuntu:ubuntu /home/ubuntu/app/docker-compose.yml
 
 (
 cat <<-EOF
+${app_env}
+EOF
+) | tee /home/ubuntu/app/.env
+
+sudo chown ubuntu:ubuntu /home/ubuntu/app/.env
+
+(
+cat <<-EOF
 #!/bin/bash
 
 cd /home/ubuntu/app
@@ -66,11 +51,6 @@ docker-compose stop
 docker-compose rm -f
 docker-compose pull
 docker-compose up -d
-
-sudo curl -L git.io/scope -o /usr/local/bin/scope
-sudo chmod a+x /usr/local/bin/scope
-scope stop
-scope launch 34.249.241.36
 EOF
 ) | sudo tee /home/ubuntu/app/start.sh
 
@@ -91,13 +71,3 @@ EOF
 
 sudo systemctl enable chuspace-app.service
 sudo systemctl start chuspace-app.service
-
-# Start vector
-curl -1sLf \
-  'https://repositories.timber.io/public/vector/cfg/setup/bash.deb.sh' \
-  | sudo -E bash
-
-sudo apt-get install -y  vector=0.22.3-1
-sudo wget -O /etc/vector/vector.toml https://logtail.com/vector-toml/docker/${logtail_token}
-sudo usermod -a -G docker vector
-sudo systemctl restart vector

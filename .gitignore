@@ -47,3 +47,4 @@ coverage/
 
 /config/credentials/production.key
 .irb_history
+.env

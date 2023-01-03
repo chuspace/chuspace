@@ -5,12 +5,12 @@ variable "name" {
 
 variable "region" {
   description = "The DO region to deploy to"
-  default     = "nyc1"
+  default     = "lon1"
 }
 
 variable "image" {
   description = "The OS image to deploy"
-  default     = "ubuntu-20-04-x64"
+  default     = "ubuntu-22-10-x64"
 }
 
 variable "instance_type" {
@@ -26,29 +26,7 @@ variable "server_count" {
 variable "do_token" {
   description = "The DO token"
 }
-
-variable "logtail_token" {
-  description = "Logtail token for observability"
-}
-
 variable "docker_access_token" {
   description = "Docker access token"
 }
-
-variable "aws_access_key_id" {
-  description = "Aws access key id for fetching secrets"
-}
-
-variable "aws_secret_access_key" {
-  description = "Aws access key secret for fetching secrets"
-}
-
-variable "aws_region" {
-  description = "Aws region to fetch secrets from"
-}
-
-variable "aws_ssm_secret_key_name" {
-  description = "Aws secret manager key name"
-}
-
 

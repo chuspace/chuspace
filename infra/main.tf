@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "chuspace-infra-bucket"
-    key            = "state/docker/terraform.tfstate"
-    region         = "eu-west-1"
-    encrypt        = true
+    bucket  = "chuspace-infra-bucket"
+    key     = "state/docker/terraform.tfstate"
+    region  = "eu-west-1"
+    encrypt = true
   }
 }
 
@@ -12,18 +12,18 @@ terraform {
 # Region: EU West
 ##############################################
 
-module "aws_eu_west" {
-  source = "./aws"
-  region = "eu-west-1"
+# module "aws_eu_west" {
+#   source = "./aws"
+#   region = "eu-west-1"
 
-  server_count              = 3
-  logtail_token             = var.logtail_token
-  docker_access_token       = var.docker_access_token
-  aws_access_key_id         = var.aws_access_key_id
-  aws_secret_access_key     = var.aws_secret_access_key
-  aws_region                = "eu-west-1"
-  aws_ssm_secret_key_name   = "eu-west-1"
-}
+#   server_count              = 3
+#   logtail_token             = var.logtail_token
+#   docker_access_token       = var.docker_access_token
+#   aws_access_key_id         = var.aws_access_key_id
+#   aws_secret_access_key     = var.aws_secret_access_key
+#   aws_region                = "eu-west-1"
+#   aws_ssm_secret_key_name   = "eu-west-1"
+# }
 
 # module "aws_eu_central" {
 #   source = "./aws"
@@ -107,19 +107,17 @@ module "aws_eu_west" {
 # Region: APAC
 ##############################################
 
-# module "do_apac_sgp" {
-#   source = "./do"
-#   region = "sgp1"
+module "do_apac_eu" {
+  source = "./do"
+  region = "lon1"
 
-#   server_count              = 2
-#   do_token                  = var.do_token
-#   logtail_token             = var.logtail_token
-#   docker_access_token       = var.docker_access_token
-#   aws_access_key_id         = var.aws_access_key_id
-#   aws_secret_access_key     = var.aws_secret_access_key
-#   aws_region                = "eu-west-1"
-#   aws_ssm_secret_key_name   = "ap-southeast-sgp"
-# }
+  server_count          = 2
+  do_token              = var.do_token
+  logtail_token         = var.logtail_token
+  docker_access_token   = var.docker_access_token
+  aws_access_key_id     = var.aws_access_key_id
+  aws_secret_access_key = var.aws_secret_access_key
+}
 
 
 
