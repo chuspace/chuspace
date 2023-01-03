@@ -9,10 +9,10 @@ SitemapGenerator::Sitemap.public_path = 'public/'
 if Rails.env.production?
   SitemapGenerator::Sitemap.adapter =
     SitemapGenerator::AwsSdkAdapter.new(
-      ENV['AWS_S3_BUCKET'],
+      'sitemaps.chuspace.com',
       aws_access_key_id: Rails.application.credentials.aws[:key],
       aws_secret_access_key: Rails.application.credentials.aws[:secret],
-      aws_region: 'eu-west-2'
+      aws_region: 'eu-west-1'
     )
 
   SitemapGenerator::Sitemap.public_path = 'tmp/'
