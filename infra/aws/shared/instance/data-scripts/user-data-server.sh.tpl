@@ -85,13 +85,4 @@ EOF
 sudo systemctl enable chuspace-app.service
 sudo systemctl start chuspace-app.service
 
-# Start vector
-curl -1sLf \
-  'https://repositories.timber.io/public/vector/cfg/setup/bash.deb.sh' \
-  | sudo -E bash
-
-sudo apt-get install -y  vector=0.22.3-1
-sudo wget -O /etc/vector/vector.toml https://logtail.com/vector-toml/docker/${logtail_token}
-sudo usermod -a -G docker vector
-sudo systemctl restart vector
 

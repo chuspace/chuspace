@@ -121,3 +121,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Terraform deploy
+        run: bundle exec rails remote:deploy_primary
+        env:
+          RAILS_ENV: production

@@ -17,12 +17,7 @@ terraform {
 #   region = "eu-west-1"
 
 #   server_count              = 3
-#   logtail_token             = var.logtail_token
 #   docker_access_token       = var.docker_access_token
-#   aws_access_key_id         = var.aws_access_key_id
-#   aws_secret_access_key     = var.aws_secret_access_key
-#   aws_region                = "eu-west-1"
-#   aws_ssm_secret_key_name   = "eu-west-1"
 # }
 
 # module "aws_eu_central" {
@@ -30,12 +25,7 @@ terraform {
 #   region = "eu-central-1"
 
 #   server_count              = 2
-#   logtail_token             = var.logtail_token
 #   docker_access_token       = var.docker_access_token
-#   aws_access_key_id         = var.aws_access_key_id
-#   aws_secret_access_key     = var.aws_secret_access_key
-#   aws_region                = "eu-west-1"
-#   aws_ssm_secret_key_name   = "eu-central-1"
 # }
 
 ##############################################
@@ -48,12 +38,7 @@ terraform {
 #   region = "ap-south-1"
 
 #   server_count              = 2
-#   logtail_token             = var.logtail_token
 #   docker_access_token       = var.docker_access_token
-#   aws_access_key_id         = var.aws_access_key_id
-#   aws_secret_access_key     = var.aws_secret_access_key
-#   aws_region                = "eu-west-1"
-#   aws_ssm_secret_key_name   = "ap-south-1"
 # }
 
 # module "aws_apac_southeast" {
@@ -61,12 +46,7 @@ terraform {
 #   region = "ap-southeast-2"
 
 #   server_count              = 2
-#   logtail_token             = var.logtail_token
 #   docker_access_token       = var.docker_access_token
-#   aws_access_key_id         = var.aws_access_key_id
-#   aws_secret_access_key     = var.aws_secret_access_key
-#   aws_region                = "eu-west-1"
-#   aws_ssm_secret_key_name   = "ap-southeast-2"
 # }
 
 ##############################################
@@ -80,12 +60,7 @@ terraform {
 
 #   server_count              = 2
 #   do_token                  = var.do_token
-#   logtail_token             = var.logtail_token
 #   docker_access_token       = var.docker_access_token
-#   aws_access_key_id         = var.aws_access_key_id
-#   aws_secret_access_key     = var.aws_secret_access_key
-#   aws_region                = "eu-west-1"
-#   aws_ssm_secret_key_name   = "us-west-1"
 # }
 
 # module "do_us_east" {
@@ -94,12 +69,7 @@ terraform {
 
 #   server_count              = 2
 #   do_token                  = var.do_token
-#   logtail_token             = var.logtail_token
 #   docker_access_token       = var.docker_access_token
-#   aws_access_key_id         = var.aws_access_key_id
-#   aws_secret_access_key     = var.aws_secret_access_key
-#   aws_region                = "eu-west-1"
-#   aws_ssm_secret_key_name   = "us-east-1"
 # }
 
 ##############################################

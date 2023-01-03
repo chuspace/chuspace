@@ -136,7 +136,7 @@ namespace :remote do
   end
 
   task :deploy_primary do
-    system "cd #{resource_path} && terraform apply #{vars} -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[0] -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[1] -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[2]"
+    system "cd #{resource_path} && terraform apply #{vars} -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[0] -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[1] -replace=module.#{PRIMARY_REGION}.module.do_instance.digitalocean_droplet.app[2] -auto-approve"
   end
 
   task :refresh do |t, args|

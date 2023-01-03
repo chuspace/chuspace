@@ -17,7 +17,6 @@ data "template_file" "user_data_server" {
 
   vars = {
     docker_compose          = data.template_file.docker_compose.rendered
-    logtail_token           = var.logtail_token
     docker_access_token     = var.docker_access_token
     aws_access_key_id       = var.aws_access_key_id
     aws_secret_access_key   = var.aws_secret_access_key
@@ -28,7 +27,7 @@ data "template_file" "user_data_server" {
 
 data "aws_ami" "ubuntu" {
   filter {
-    name  = "name"
+    name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
   }
 
@@ -61,7 +60,7 @@ resource "aws_instance" "app" {
     delete_on_termination = "true"
   }
 
-  user_data            = data.template_file.user_data_server.rendered
+  user_data = data.template_file.user_data_server.rendered
 
   metadata_options {
     http_endpoint          = "enabled"
@@ -88,7 +87,7 @@ resource "aws_lb_listener" "app_https_listener" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn = data.aws_acm_certificate.chuspace.arn
+  certificate_arn   = data.aws_acm_certificate.chuspace.arn
 
   default_action {
     type = "forward"
@@ -118,10 +117,10 @@ resource "aws_lb_listener" "app_http_listener" {
 }
 
 resource "aws_lb_target_group" "app_lb_target" {
-  name              = "chuspace-docker-app-target"
-  port              = 3000
-  protocol          = "HTTP"
-  vpc_id            = var.vpc_id
+  name     = "chuspace-docker-app-target"
+  port     = 3000
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
 
   stickiness {
     enabled     = true
@@ -130,16 +129,16 @@ resource "aws_lb_target_group" "app_lb_target" {
   }
 
   health_check {
-    port      = 3000
-    path      = "/"
-    matcher   = "200,301,302"
+    port    = 3000
+    path    = "/"
+    matcher = "200,301,302"
   }
 }
 
 resource "aws_lb_target_group_attachment" "app_lb_target_attachment" {
-  count               = var.server_count
-  target_group_arn    = aws_lb_target_group.app_lb_target.arn
-  target_id           = element(split(",", join(",", aws_instance.app.*.id)), count.index)
-  port                = 3000
+  count            = var.server_count
+  target_group_arn = aws_lb_target_group.app_lb_target.arn
+  target_id        = element(split(",", join(",", aws_instance.app.*.id)), count.index)
+  port             = 3000
 }
 
