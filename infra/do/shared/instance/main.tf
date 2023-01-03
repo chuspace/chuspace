@@ -48,7 +48,7 @@ resource "digitalocean_droplet" "app" {
   }
 
   provisioner "local-exec" {
-    command = "./chu production healthcheck ${self.ipv4_address}"
+    command = "./healthcheck ${self.ipv4_address}"
   }
 }
 
