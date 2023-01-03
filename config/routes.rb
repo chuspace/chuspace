@@ -13,7 +13,7 @@ Rails.application.routes.draw do
         end
       route_for(route, blob)
     else
-      File.join(Rails.application.credentials.app.fetch('asset_cdn') { 'https://chuspace.com' }, blob.key)
+      File.join(Rails.application.credentials.app.fetch(:asset_cdn) { 'https://chuspace.com' }, blob.key)
     end
   end
 
