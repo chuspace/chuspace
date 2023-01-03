@@ -1,10 +1,10 @@
-FROM ruby:3.1.2-alpine
+FROM ruby:3.1.3-alpine
 
 ENV LANG=C.UTF-8 \
   BUNDLE_JOBS=4 \
   BUNDLE_RETRY=3 \
-  RAILS_ENV=production \
-  NODE_ENV=production \
+  RAILS_ENV=$RAILS_ENV \
+  NODE_ENV=$RAILS_ENV \
   RAILS_LOG_TO_STDOUT=enabled \
   BOOTSNAP_CACHE_DIR='tmp/bootsnap-cache' \
   RAILS_SERVE_STATIC_FILES='yes' \
@@ -14,9 +14,7 @@ ENV LANG=C.UTF-8 \
   BUNDLE_BIN=$GEM_HOME/gems/bin \
   PATH=$GEM_HOME/bin:$BUNDLE_BIN:$PATH \
   ASSET_HOST=https://assets.chuspace.com
-
-ARG REFRESHED_AT
-ENV REFRESHED_AT $REFRESHED_AT
+  RAILS_MASTER_KEY=$RAILS_MASTER_KEY
 
 RUN apk del gmp-dev libstdc++ \
   && apk -U upgrade \
@@ -45,7 +43,7 @@ WORKDIR $RAILS_ROOT
 # bundle and yarn install
 COPY Gemfile Gemfile.lock package.json yarn.lock ./
 RUN gem install bundler && bundle check || bundle install --without development test
-RUN rm -rf node_modules && yarn install --check-files --frozen-lockfile
+RUN yarn install --check-files --frozen-lockfile
 
 COPY . $RAILS_ROOT
 
