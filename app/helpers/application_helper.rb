@@ -2,7 +2,7 @@
 
 module ApplicationHelper
   def asset_cdn_url(path)
-    "#{ENV['ASSET_HOST']}/#{path}"
+    "#{Rails.application.credentials.app.fetch('asset_cdn')}/#{path}"
   end
 
   def logo
