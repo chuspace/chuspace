@@ -25,6 +25,15 @@ RUN apk del gmp-dev libstdc++ \
 WORKDIR /src/app
 COPY . /src/app
 
-RUN gem install bundler && bundle check || bundle install --without development test
-RUN yarn install --check-files --frozen-lockfile
-RUN bundle exec assets:clobber && bundle exec assets:precompile && yarn cache clean
+ENV RAILS_ENV=production \
+  RAILS_MASTER_KEY=$RAILS_MASTER_KEY \
+  NODE_ENV=production \
+  RAILS_LOG_TO_STDOUT=enabled \
+  BOOTSNAP_CACHE_DIR='tmp/bootsnap-cache' \
+  RAILS_SERVE_STATIC_FILES='yes'
+
+RUN bundle config set --local path '/usr/local/bundle' && bundle config set --local with "${RAILS_ENV}" && bundle config set --local without 'development test'
+RUN gem install bundler
+RUN bundle install --jobs=4 --retry=5
+RUN yarn install
+RUN bin/rails assets:clobber && bin/rails assets:precompile
